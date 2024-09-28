@@ -32,4 +32,8 @@ public final class ImageFamilyDao {
         return self.impl.getFamilies(imageId: imageId)
     }
     
+    func getFamilyIds(imageIds:[String]) -> [String] {
+        return self.impl.getFamilyIds(imageIds: imageIds)
+    }
+    
 }

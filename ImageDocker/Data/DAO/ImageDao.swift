@@ -227,6 +227,18 @@ public final class ImageRecordDao {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
     }
     
+    func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState {
+        return self.impl.unlinkImageFamily(imageId: imageId, familyId: familyId)
+    }
+    
+    func unlinkImageFamilies(imageId:String) -> ExecuteState {
+        return self.impl.unlinkImageFamilies(imageId: imageId)
+    }
+    
+    func unlinkImageFamilies(familyId:String) -> ExecuteState {
+        return self.impl.unlinkImageFamilies(familyId: familyId)
+    }
+    
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
         return self.impl.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: familyName, owner: owner)
     }

@@ -14,12 +14,31 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     
     let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Family")
     
+    // MARK: - VIEW
+    
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil
     private var tableViewController:TwoColumnTableViewController? = nil
     
     var flowListItems:[String:ImageFlowListItemViewController] = [:]
+    
+    // MARK: - EDIT
+    
+    @IBOutlet weak var editTableView: NSTableView!
+    @IBOutlet weak var treeView: NSOutlineView!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var progressLabel: NSTextField!
+    @IBOutlet weak var btnApply: NSButton!
+    
+    private var editTableViewController:TwoColumnTableViewController? = nil
+    var treeViewController: FamilyTreeViewControllerWrapper? = nil
+    
+    // MARK: - MANAGE
+    
+    @IBOutlet weak var manageTreeView: NSOutlineView!
+    var manageTreeViewController: FamilyTreeViewControllerWrapper? = nil
+    
     
     init() {
         super.init(nibName: "ImageFamilyEditViewController", bundle: nil)
@@ -36,19 +55,48 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         
         self.tableViewController = TwoColumnTableViewController()
         self.tableViewController?.table = self.tableView
+        
+        self.editTableViewController = TwoColumnTableViewController()
+        self.editTableViewController?.table = self.editTableView
+        
+        self.treeViewController = FamilyTreeViewControllerWrapper(self.treeView, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
+            print("tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+            self.updateCheckedAmount()
+        })
+        self.progressIndicator.isHidden = true
+        self.updateCheckedAmount()
+        
     }
     
-    // MARK: - STACK ITEMS
+    // MARK: - VIEW
+    
+    func getLinkedFamilyIds() -> [String] {
+        let imageIds = self.flowListItems.keys.sorted()
+        
+        return ImageFamilyDao.default.getFamilyIds(imageIds: imageIds)
+    }
+    
+    func checkLinkedFamilies() {
+        self.treeViewController?.uncheckItems()
+        self.treeViewController?.setCheckedItems(ids: self.getLinkedFamilyIds())
+        self.updateCheckedAmount()
+    }
+    
+    func updateCheckedAmount() {
+        if let vc = self.treeViewController {
+            self.progressLabel.stringValue = "Selected \(vc.getCheckedItems().count) items"
+        }
+    }
     
     func collectImagesDiff() {
         DispatchQueue.global().async {
-            
             var array:[[String]] = []
             for vc in self.flowListItems.values {
                 if let image = vc.data {
                     array.append(self.getText(image: image))
                 }
             }
+            
             let diff = ArrayDiff()
             let occurances = diff.calculateOccurance(array)
             
@@ -56,13 +104,12 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             for o in occurances.sorted(by: { d1, d2 in
                 return d1.value > d2.value
             }) {
-                grid.append(("\(o.value * 100) %", o.key))
+                grid.append(("\(String(format: "%0.2f", o.value * 100)) %", o.key))
             }
-            print("collectImagesDiff:")
-            print(grid)
             
             DispatchQueue.main.async {
                 self.tableViewController?.load(grid)
+                self.editTableViewController?.load(grid)
             }
         }
     }
@@ -84,6 +131,8 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         }
     }
     
+    // MARK: STACK ITEMS
+    
     /// Used to add a particular view controller as an item to our stack view.
     func addImageFlowListItem(imageFile:ImageFile) {
         
@@ -100,8 +149,9 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
                                     content: self.getText(image: image).joined(separator: ", "))
             
             self.flowListItems[image.id ?? ""] = viewController
-            
+//            print("addImageFlowListItem, id:\(image.id ?? "") , total:\(self.flowListItems.count)")
             self.collectImagesDiff()
+            self.checkLinkedFamilies()
         }
         
     }
@@ -115,6 +165,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             self.flowListItems.removeValue(forKey: image.id ?? "")
             
             self.collectImagesDiff()
+            self.checkLinkedFamilies()
         }
     }
     
@@ -127,7 +178,59 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.flowListItems.removeAll()
         
         self.collectImagesDiff()
+        self.checkLinkedFamilies()
     }
+    
+    // MARK: - EDIT
+    fileprivate var accumulator:Accumulator?
+    
+    @IBAction func onButtonApplyClicked(_ sender: NSButton) {
+        let imageIds = self.flowListItems.keys.sorted()
+        
+        if imageIds.isEmpty {
+            return
+        }
+        
+        let checkedGroups = self.treeViewController?.getCheckedItems() ?? []
+        
+        let checkedGroupIds = checkedGroups.map { g in
+            return g.id
+        }
+//        self.logger.log("selected images: \(imageIds)")
+//        self.logger.log("checked families: \(checkedGroupIds)")
+        
+        self.btnApply.isEnabled = false
+        
+        self.accumulator = Accumulator(target: imageIds.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.progressLabel)
+        
+        DispatchQueue.global().async {
+            for imageId in imageIds {
+                guard imageId != "" else {continue}
+                
+                // unlink families
+                let _ = ImageRecordDao.default.unlinkImageFamilies(imageId: imageId)
+                
+                // link families
+                for peopleGroup in checkedGroups {
+                    if let owner = peopleGroup.parent {
+                        let familyId = peopleGroup.id
+                        let ownerId = owner.id
+                        let _ = ImageRecordDao.default.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: peopleGroup.name, owner: owner.nickname)
+                    }else{
+                        self.logger.log(.error, "PeopleGroup.parent is empty: PeopleGroup:\(peopleGroup.name), Image.id:\(imageId)")
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    let _ = self.accumulator?.add("")
+                }
+            }
+            DispatchQueue.main.async {
+                self.btnApply.isEnabled = true
+            }
+        }
+    }
+    
 }
 
 protocol ImageFlowListItemEditor {

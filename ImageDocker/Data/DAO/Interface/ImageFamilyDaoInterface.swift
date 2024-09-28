@@ -12,4 +12,6 @@ protocol ImageFamilyDaoInterface {
     
     func getFamilies(imageId:String) -> [ImageFamily]
     
+    func getFamilyIds(imageIds:[String]) -> [String]
+    
 }

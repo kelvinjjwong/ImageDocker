@@ -241,7 +241,23 @@ class ImageFile {
         loadMetaInfoFromDatabase()
         self.logger.timecost("[ImageFile.init from database][loadMetaInfoFromDatabase] time cost", fromDate: startTime_loadMetaInfoFromDatabase)
         
-        var needSave:Bool = false
+        
+        // ensure image has id
+        if let imageData = self.imageData {
+            if let id = imageData.id {
+            }else{
+                self.logger.log(.warning, "[ImageFile.init from database] image.id is nil, path:\(image.path)")
+                // generate imageId
+                let (executeState_generateId, imageId) = ImageRecordDao.default.generateImageIdByContainerIdAndSubPath(containerId: imageData.containerId, subPath: imageData.subPath)
+                if executeState_generateId != .OK {
+                    self.logger.log(.error, "[ImageFile.init from database] Unable to generateImageIdByContainerIdAndSubPath, containerId:\(imageData.containerId), subPath:\(imageData.subPath)")
+                }else{
+                    self.logger.log(.trace, "[ImageFile.init from database] generated UUID for image, imageId:\(imageId), containerId:\(imageData.containerId), subPath:\(imageData.subPath)")
+                    imageData.id = imageId
+                    self.imageData?.id = imageId
+                }
+            }
+        }
         
         if self.imageData?.dateTimeFromFilename == nil {
             let startTime_recognizeDateTimeFromFilename = Date()
@@ -276,6 +292,9 @@ class ImageFile {
             }
             self.logger.timecost("[ImageFile.init from database][recognizeDateTimeFromFilename] time cost", fromDate: startTime_recognizeDateTimeFromFilename)
         }
+        
+        
+        var needSave:Bool = false
         
         if self.imageData?.imageSource == nil {
             

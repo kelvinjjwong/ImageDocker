@@ -8,27 +8,51 @@
 
 import Cocoa
 
-class CoreMember {
+class CoreMember : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var nickname:String = ""
     var isChecked = false
     
     var groups:[PeopleGroup] = []
+    
+    public func getId() -> String {
+        return self.id
+    }
+    
+    public func getText() -> String {
+        return self.nickname
+    }
+    
+    public func setCheckState(state:Bool) {
+        self.isChecked = state
+    }
 }
 
-class PeopleGroup {
+class PeopleGroup : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var parent:CoreMember? = nil
     var members:[PeopleGroupMember] = []
     var isChecked = false
     
+    public func getId() -> String {
+        return self.id
+    }
+    
+    public func getText() -> String {
+        return self.name
+    }
+    
+    public func setCheckState(state:Bool) {
+        self.isChecked = state
+    }
+    
     
     fileprivate static let default_group_category = "亲友"
 }
 
-class PeopleGroupMember {
+class PeopleGroupMember : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var nickname:String = ""
@@ -36,6 +60,18 @@ class PeopleGroupMember {
     var groupName:String = ""
     var parent:PeopleGroup? = nil
     var isChecked = false
+    
+    public func getId() -> String {
+        return self.id
+    }
+    
+    public func getText() -> String {
+        return self.nickname
+    }
+    
+    public func setCheckState(state:Bool) {
+        self.isChecked = state
+    }
 }
 
 class PeopleManageViewController: NSViewController {
@@ -292,24 +328,37 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     
     var isEditing = false
     var table:NSTableView? = nil
-    var nodeData:Any? = nil
+    var nodeData:TreeNodeData? = nil
     var isChecked = false
+    var onCheckStateChanged:((Bool,Bool,String,String) -> Void)?
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
         if let item = nodeData as? CoreMember {
             print("checkbox: core member: \(item.nickname) , state: \(sender.state == .on)")
+            let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
+            if ov != item.isChecked {
+                self.onCheckStateChanged?(ov, item.isChecked, "CoreMember", item.id)
+            }
         }
         if let item = nodeData as? PeopleGroup {
             print("checkbox: people group: \(item.name) , state: \(sender.state == .on)")
+            let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
+            if ov != item.isChecked {
+                self.onCheckStateChanged?(ov, item.isChecked, "PeopleGroup", item.id)
+            }
         }
         if let item = nodeData as? PeopleGroupMember {
             print("checkbox: people: \(item.id) , state: \(sender.state == .on)")
+            let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
+            if ov != item.isChecked {
+                self.onCheckStateChanged?(ov, item.isChecked, "PeopleGroupMember", item.id)
+            }
         }
     }
     

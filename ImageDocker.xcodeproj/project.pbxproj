@@ -65,6 +65,7 @@
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E1D49D524BBE47700353C1C /* ImageDBCloner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */; };
 		8E1D49D724BBF04B00353C1C /* ToggleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */; };
+		8E1E3AB92CA7418C00D2A34E /* FamilyTreeViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3AB82CA7416700D2A34E /* FamilyTreeViewControllerWrapper.swift */; };
 		8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F03F25DC0291003B585F /* ImageMapView.swift */; };
 		8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E27F04025DC0291003B585F /* ImageMapView.xib */; };
 		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
@@ -440,6 +441,7 @@
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDBCloner.swift; sourceTree = "<group>"; };
 		8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleGroup.swift; sourceTree = "<group>"; };
+		8E1E3AB82CA7416700D2A34E /* FamilyTreeViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyTreeViewControllerWrapper.swift; sourceTree = "<group>"; };
 		8E27F03F25DC0291003B585F /* ImageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMapView.swift; sourceTree = "<group>"; };
 		8E27F04025DC0291003B585F /* ImageMapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageMapView.xib; sourceTree = "<group>"; };
 		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
@@ -967,6 +969,7 @@
 		8E3EC3B8214DB235004B6125 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
+				8E1E3AB82CA7416700D2A34E /* FamilyTreeViewControllerWrapper.swift */,
 				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
 				8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */,
 				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
@@ -1946,6 +1949,7 @@
 				8E481493277DF6570097493E /* Words+Tree+Places.swift in Sources */,
 				8EFA02E3243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
+				8E1E3AB92CA7418C00D2A34E /* FamilyTreeViewControllerWrapper.swift in Sources */,
 				8EFA02ED243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift in Sources */,
 				8EB271792340D8A3003BF3AF /* ViewController+PreviewArea.swift in Sources */,
 				8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */,

@@ -104,6 +104,12 @@ protocol ImageRecordDaoInterface {
     
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState
     
+    func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState
+    
+    func unlinkImageFamilies(imageId:String) -> ExecuteState
+    
+    func unlinkImageFamilies(familyId:String) -> ExecuteState
+    
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState
     
     func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState

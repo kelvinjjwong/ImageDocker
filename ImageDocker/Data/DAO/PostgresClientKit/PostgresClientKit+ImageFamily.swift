@@ -8,6 +8,7 @@
 
 import Foundation
 import LoggerFactory
+import PostgresModelFactory
 
 class ImageFamilyDaoPostgresCK : ImageFamilyDaoInterface {
     
@@ -21,6 +22,25 @@ class ImageFamilyDaoPostgresCK : ImageFamilyDaoInterface {
             self.logger.log(.error, error)
             return []
         }
+    }
+    
+    func getFamilyIds(imageIds:[String]) -> [String] {
+        if imageIds.isEmpty {
+            return []
+        }
+        let db = PostgresConnection.database()
+        final class TempRecord : DatabaseRecord {
+            var familyId: String = ""
+        }
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: """
+            SELECT DISTINCT "familyId" from "ImageFamily" where "imageId" in (\(imageIds.joinedSingleQuoted(separator: ",")))
+            """)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        return records.map { $0.familyId }
     }
     
 }

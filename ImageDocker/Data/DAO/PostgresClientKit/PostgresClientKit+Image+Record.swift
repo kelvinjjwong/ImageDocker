@@ -403,6 +403,50 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    
+    
+    func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            delete from "ImageFamily" where "imageId" = $1 and "familyId" = $2
+            """, parameterValues: [imageId, familyId])
+            return .OK
+        }catch{
+            self.logger.log(.error, "[unlinkImageFamily]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "unlinkImageFamily", message: "\(error)")
+            return .ERROR
+        }
+    }
+    
+    func unlinkImageFamilies(imageId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            delete from "ImageFamily" where "imageId" = $1
+            """, parameterValues: [imageId])
+            return .OK
+        }catch{
+            self.logger.log(.error, "[unlinkImageFamilies]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "unlinkImageFamilies", message: "\(error)")
+            return .ERROR
+        }
+    }
+    
+    func unlinkImageFamilies(familyId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            delete from "ImageFamily" where "familyId" = $1
+            """, parameterValues: [familyId])
+            return .OK
+        }catch{
+            self.logger.log(.error, "[unlinkImageFamilies]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "unlinkImageFamilies", message: "\(error)")
+            return .ERROR
+        }
+    }
+    
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
         let db = PostgresConnection.database()
         

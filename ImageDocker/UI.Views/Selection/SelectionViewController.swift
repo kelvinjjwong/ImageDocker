@@ -401,6 +401,18 @@ class SelectionViewController : NSViewController {
 //        self.chbSelectAll.state = NSButton.StateValue.off
     }
     
+    func removeOneFromSelectionArea(_ imageFile:ImageFile) {
+        // remove from editors
+        for editor in editors {
+            editor.removeImageFlowListItem(imageFile: imageFile)
+        }
+        
+        self.collectionViewController.imagesLoader.removeItem(imageFile)
+        self.collectionViewController.imagesLoader.reorganizeItems()
+        //self.selectionViewController.collectionView.reloadData()
+        self.selectionCollectionView.reloadData()
+    }
+    
     func cleanSomeFromSelectionArea() {
         // collect which to be removed from selection
         var images:[ImageFile] = [ImageFile]()

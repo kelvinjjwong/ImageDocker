@@ -386,10 +386,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //self.logger.log("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
-            self.selectionViewController.collectionViewController.imagesLoader.removeItem(imageFile)
-            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
-            //self.selectionViewController.collectionView.reloadData()
-            self.selectionViewController.selectionCollectionView.reloadData()
+            self.selectionViewController.removeOneFromSelectionArea(imageFile)
             
             if !checkBySection {
                 uncheckSectionIfAllItemsUnchecked(item)
