@@ -28,6 +28,10 @@ public class CoreMember : TreeNodeData {
         self.isChecked = state
     }
     
+    public func checked() -> Bool {
+        return self.isChecked
+    }
+    
     public func isCheckable() -> Bool {
         return false
     }
@@ -38,6 +42,10 @@ public class CoreMember : TreeNodeData {
     
     public func actionIcon() -> NSImage {
         return NSImage.init(named: NSImage.addTemplateName)!
+    }
+    
+    public func isEditable() -> Bool {
+        return false
     }
 }
 
@@ -60,6 +68,10 @@ public class PeopleGroup : TreeNodeData {
         self.isChecked = state
     }
     
+    public func checked() -> Bool {
+        return self.isChecked
+    }
+    
     public func isCheckable() -> Bool {
         return true
     }
@@ -70,6 +82,10 @@ public class PeopleGroup : TreeNodeData {
     
     public func actionIcon() -> NSImage {
         return Icons.remove
+    }
+    
+    public func isEditable() -> Bool {
+        return true
     }
     
     
@@ -97,6 +113,10 @@ public class PeopleGroupMember : TreeNodeData {
         self.isChecked = state
     }
     
+    public func checked() -> Bool {
+        return self.isChecked
+    }
+    
     public func isCheckable() -> Bool {
         return true
     }
@@ -107,6 +127,10 @@ public class PeopleGroupMember : TreeNodeData {
     
     public func actionIcon() -> NSImage {
         return Icons.remove
+    }
+    
+    public func isEditable() -> Bool {
+        return false
     }
 }
 

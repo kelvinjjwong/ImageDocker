@@ -316,34 +316,7 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
     
     public func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("treeItem"), owner: self) as! PeopleManageCheckableTableCellView
-        if let item = item as? CoreMember {
-            cell.table = outlineView
-            cell.row = outlineView.row(forItem: item)
-            cell.nodeData = item
-            cell.textField!.stringValue = item.getText()
-            cell.imageView!.image = item.nodeIcon()
-            cell.checkbox.isEnabled = item.isCheckable()
-            cell.checkbox.isHidden = !item.isCheckable()
-//            print("refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
-            cell.checkbox.state = item.isChecked ? .on : .off
-            cell.removeButton.isEnabled = self.removable
-            cell.removeButton.isHidden = !self.removable
-            cell.removeButton.image = item.actionIcon()
-            cell.editButton.isEnabled = false
-            cell.editButton.isHidden = true
-            cell.textField?.isEditable = false
-            cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
-                self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
-            }
-            cell.afterChange = {
-                self.afterChange?()
-            }
-            if item.isCheckable() {
-                self.addCheckableNode(item: cell)
-            }
-            return cell
-        }
-        if let item = item as? PeopleGroup {
+        if let item = item as? TreeNodeData {
             cell.table = outlineView
             cell.row = outlineView.row(forItem: item)
             cell.nodeData = item
@@ -352,39 +325,12 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.checkbox.isEnabled = item.isCheckable() && self.checkable
             cell.checkbox.isHidden = !(item.isCheckable() && self.checkable)
 //            print("refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
-            cell.checkbox.state = item.isChecked ? .on : .off
+            cell.checkbox.state = item.checked() ? .on : .off
             cell.removeButton.isEnabled = self.removable
             cell.removeButton.isHidden = !self.removable
             cell.removeButton.image = item.actionIcon()
-            cell.editButton.isEnabled = self.editable
-            cell.editButton.isHidden = !self.editable
-            cell.textField?.isEditable = false
-            cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
-                self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
-            }
-            cell.afterChange = {
-                self.afterChange?()
-            }
-            if item.isCheckable() {
-                self.addCheckableNode(item: cell)
-            }
-            return cell
-        }
-        if let item = item as? PeopleGroupMember {
-            cell.table = outlineView
-            cell.row = outlineView.row(forItem: item)
-            cell.nodeData = item
-            cell.textField!.stringValue = item.getText()
-            cell.imageView!.image = item.nodeIcon()
-            cell.checkbox.isEnabled = false
-            cell.checkbox.isHidden = true
-//            print("refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
-            cell.checkbox.state = item.isChecked ? .on : .off
-            cell.removeButton.isEnabled = item.isCheckable() && self.removable
-            cell.removeButton.isHidden = !(item.isCheckable() && self.checkable)
-            cell.removeButton.image = item.actionIcon()
-            cell.editButton.isEnabled = self.editable
-            cell.editButton.isHidden = !self.editable
+            cell.editButton.isEnabled = item.isEditable() && self.editable
+            cell.editButton.isHidden = !(item.isEditable() && self.editable)
             cell.textField?.isEditable = false
             cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
                 self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
@@ -439,4 +385,8 @@ public protocol TreeNodeData {
     func nodeIcon() -> NSImage
     
     func actionIcon() -> NSImage
+    
+    func isEditable() -> Bool
+    
+    func checked() -> Bool
 }
