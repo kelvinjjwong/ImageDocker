@@ -385,23 +385,19 @@ extension ViewController {
     
     internal func loadImageDescription(_ img:ImageFile){
         if let image = self.img.imageData {
-            var people = ""
+            var family = ""
             if let id = image.id {
-//                let faces = FaceDao.default.getFaceCrops(imageId: id)
-//                for face in faces {
-//                    if let peopleId = face.peopleId, peopleId != "" {
-//                        var name = FaceTask.default.people(id: peopleId)
-//                        if name == "" {
-//                            name = "(unknown)"
-//                        }
-//                        people += "\(name) "
-//                    }
-//                }
+                let families = ImageFamilyDao.default.getFamilies(imageId: id)
+                var fam:[String] = []
+                for f in families {
+                    fam.append("\(f.owner)的\(f.familyName)")
+                }
+                family = fam.joined(separator: ", ")
             }
             self.lblImageDescription.stringValue = """
-            \(people) \(image.shortDescription ?? "")
+            \(family) \(image.shortDescription ?? "")
             \(image.longDescription ?? "")
-            """
+            """.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
     

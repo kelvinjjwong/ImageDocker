@@ -198,9 +198,9 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         
         let checkedGroups = self.treeViewController?.getCheckedItems() ?? []
         
-        let checkedGroupIds = checkedGroups.map { g in
-            return g.id
-        }
+//        let checkedGroupIds = checkedGroups.map { g in
+//            return g.id
+//        }
 //        self.logger.log("selected images: \(imageIds)")
 //        self.logger.log("checked families: \(checkedGroupIds)")
         

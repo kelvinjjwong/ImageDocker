@@ -4922,11 +4922,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             <objects>
                 <viewController storyboardIdentifier="ImagePreviewController" id="qiw-dL-OGM" customClass="ImagePreviewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="qsW-OV-TMW">
-                        <rect key="frame" x="0.0" y="0.0" width="575" height="449"/>
+                        <rect key="frame" x="0.0" y="0.0" width="575" height="426"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="0gW-xQ-8Nz">
-                                <rect key="frame" x="0.0" y="41" width="575" height="408"/>
+                                <rect key="frame" x="0.0" y="40" width="575" height="386"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="408" id="Owz-NZ-7SY"/>
                                     <constraint firstAttribute="width" constant="575" id="YQh-d8-5f3"/>
@@ -4936,7 +4936,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ptd-Ew-fxV">
                                 <rect key="frame" x="63" y="0.0" width="449" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="rd5-eJ-vSv"/>
+                                    <constraint firstAttribute="height" constant="40" id="Bx8-Ld-9CP"/>
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="0Af-u2-okp">
                                     <font key="font" metaFont="system"/>
@@ -4945,7 +4945,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SmO-fP-RNM">
-                                <rect key="frame" x="0.0" y="4" width="32" height="32"/>
+                                <rect key="frame" x="0.0" y="3" width="32" height="32"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="edit" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Y9n-KA-y42">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -4959,7 +4959,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8La-HV-qNt">
-                                <rect key="frame" x="32" y="4" width="32" height="32"/>
+                                <rect key="frame" x="32" y="3" width="32" height="32"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="copy" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="a5n-gH-gk7">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -4973,7 +4973,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mwk-3f-UCg">
-                                <rect key="frame" x="543" y="4" width="32" height="32"/>
+                                <rect key="frame" x="543" y="3" width="32" height="32"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="rotate_clockwise" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="pWV-vL-QPV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -4987,7 +4987,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hb0-9d-G40">
-                                <rect key="frame" x="511" y="4" width="32" height="32"/>
+                                <rect key="frame" x="511" y="3" width="32" height="32"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="rotate_counter_clockwise" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="x0q-gg-Kzv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -5004,18 +5004,18 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <constraints>
                             <constraint firstItem="Mwk-3f-UCg" firstAttribute="leading" secondItem="Hb0-9d-G40" secondAttribute="trailing" id="0Qy-9R-HuV"/>
                             <constraint firstItem="0gW-xQ-8Nz" firstAttribute="top" secondItem="qsW-OV-TMW" secondAttribute="top" id="A97-G7-n8o"/>
+                            <constraint firstAttribute="bottom" secondItem="ptd-Ew-fxV" secondAttribute="bottom" id="B7P-ov-03I"/>
                             <constraint firstItem="SmO-fP-RNM" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="DXp-q1-CWp"/>
                             <constraint firstItem="8La-HV-qNt" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="DoO-k4-NxX"/>
                             <constraint firstItem="ptd-Ew-fxV" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" constant="65" id="Esa-he-SL8"/>
                             <constraint firstItem="0gW-xQ-8Nz" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" id="Gp3-W3-pu1"/>
-                            <constraint firstItem="ptd-Ew-fxV" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="1" id="SQe-fC-tk5"/>
+                            <constraint firstItem="ptd-Ew-fxV" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" id="SQe-fC-tk5"/>
                             <constraint firstAttribute="trailing" secondItem="ptd-Ew-fxV" secondAttribute="trailing" constant="65" id="UMi-5Q-zvq"/>
                             <constraint firstAttribute="trailing" secondItem="Mwk-3f-UCg" secondAttribute="trailing" id="YQN-zZ-S9c"/>
                             <constraint firstAttribute="trailing" secondItem="0gW-xQ-8Nz" secondAttribute="trailing" id="clX-hJ-OMc"/>
                             <constraint firstItem="8La-HV-qNt" firstAttribute="leading" secondItem="SmO-fP-RNM" secondAttribute="trailing" id="kzf-96-UR0"/>
                             <constraint firstItem="SmO-fP-RNM" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" id="lQQ-Zg-3hc"/>
                             <constraint firstItem="Hb0-9d-G40" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="nD3-zm-tDS"/>
-                            <constraint firstAttribute="bottom" secondItem="ptd-Ew-fxV" secondAttribute="bottom" id="ngl-OQ-AIt"/>
                             <constraint firstItem="Mwk-3f-UCg" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="qkm-mf-nvW"/>
                         </constraints>
                     </view>
