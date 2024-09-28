@@ -69,7 +69,7 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     }
     
     func getText(image:Image) -> String {
-        return image.event ?? "(没有活动)"
+        return image.event ?? Words.empty_event.word()
     }
     
     /// Used to add a particular view controller as an item to our stack view.

@@ -390,7 +390,7 @@ extension ViewController {
                 let families = ImageFamilyDao.default.getFamilies(imageId: id)
                 var fam:[String] = []
                 for f in families {
-                    fam.append("\(f.owner)的\(f.familyName)")
+                    fam.append(Words.who_and_family.fill(arguments: f.owner, f.familyName))
                 }
                 family = fam.joined(separator: ", ")
             }

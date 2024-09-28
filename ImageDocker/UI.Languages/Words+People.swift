@@ -45,4 +45,29 @@ extension Words {
         chs: "%s的%s"
     )
     
+    static let who_and_family = Localize(
+        eng: "%s & %s",
+        chs: "%s和%s"
+    )
+    
+    static let selected_items = Localize(
+        eng: "Selected %s items",
+        chs: "已选 %s 项"
+    )
+    
+    static let empty_family = Localize(
+        eng: "(Not linked)",
+        chs: "(没有指定)"
+    )
+    
+    static let empty_event = Localize(
+        eng: "(No event)",
+        chs: "(没有活动)"
+    )
+    
+    static let empty_note = Localize(
+        eng: "(No note)",
+        chs: "(没有描述)"
+    )
+    
 }

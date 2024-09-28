@@ -89,7 +89,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     
     func updateCheckedAmount() {
         if let vc = self.treeViewController {
-            self.progressLabel.stringValue = "Selected \(vc.getCheckedItems().count) items"
+            self.progressLabel.stringValue = Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)")
         }
     }
     
@@ -125,14 +125,14 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             if families.count > 0 {
                 var list:[String] = []
                 for f in families {
-                    list.append("\(f.owner)的\(f.familyName)")
+                    list.append(Words.who_and_family.fill(arguments: f.owner, f.familyName))
                 }
                 return list.sorted()
             }else{
-                return ["(没有指定)"]
+                return [Words.empty_family.word()]
             }
         }else{
-            return ["(没有指定)"]
+            return [Words.empty_family.word()]
         }
     }
     

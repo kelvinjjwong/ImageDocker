@@ -70,7 +70,7 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
     }
     
     func getText(image:Image) -> String {
-        return image.shortDescription ?? "(没有描述)"
+        return image.shortDescription ?? Words.empty_note.word()
     }
     
     /// Used to add a particular view controller as an item to our stack view.
