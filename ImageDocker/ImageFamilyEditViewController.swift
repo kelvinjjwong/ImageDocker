@@ -32,12 +32,12 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     @IBOutlet weak var btnApply: NSButton!
     
     private var editTableViewController:TwoColumnTableViewController? = nil
-    var treeViewController: FamilyTreeViewControllerWrapper? = nil
+    var treeViewController: CheckableTreeViewControllerWrapper? = nil
     
     // MARK: - MANAGE
     
     @IBOutlet weak var manageTreeView: NSOutlineView!
-    var manageTreeViewController: FamilyTreeViewControllerWrapper? = nil
+    var manageTreeViewController: CheckableTreeViewControllerWrapper? = nil
     
     
     init() {
@@ -59,7 +59,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.editTableViewController = TwoColumnTableViewController()
         self.editTableViewController?.table = self.editTableView
         
-        self.treeViewController = FamilyTreeViewControllerWrapper(self.treeView, checkable: true, dataLoader: {
+        self.treeViewController = CheckableTreeViewControllerWrapper(self.treeView, checkable: true, dataLoader: {
             return self.loadPeopleGroups()
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
             print("tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
@@ -68,7 +68,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.progressIndicator.isHidden = true
         self.updateCheckedAmount()
         
-        self.manageTreeViewController = FamilyTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true, dataLoader: {
+        self.manageTreeViewController = CheckableTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true, dataLoader: {
             return self.loadPeopleGroups()
         }, afterChange: {
             print("after change tree view")

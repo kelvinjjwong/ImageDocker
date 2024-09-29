@@ -8,7 +8,7 @@
 import Cocoa
 import LoggerFactory
 
-public class FamilyTreeViewControllerWrapper : NSViewController {
+public class CheckableTreeViewControllerWrapper : NSViewController {
     
     private let logger = LoggerFactory.get(category: "FamilyTreeViewController")
     
@@ -137,7 +137,7 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
 }
 
 
-extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
+extension CheckableTreeViewControllerWrapper: NSOutlineViewDataSource {
 
     public func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
 
@@ -209,7 +209,7 @@ extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
     }
 }
 
-extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
+extension CheckableTreeViewControllerWrapper : NSOutlineViewDelegate {
     
     public func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("treeItem"), owner: self) as! CheckableTableCellView
