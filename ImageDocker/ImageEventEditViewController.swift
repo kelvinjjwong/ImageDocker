@@ -34,6 +34,18 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     
     
     // MARK: - MANAGE
+    @IBOutlet weak var manageTreeView: NSOutlineView!
+    @IBOutlet weak var manageEventBox: NSBox!
+    @IBOutlet weak var lblEventName: NSTextField!
+    @IBOutlet weak var txtEventName: NSTextField!
+    @IBOutlet weak var lblEventCategory: NSTextField!
+    @IBOutlet weak var ddlEventCategory: NSComboBox!
+    @IBOutlet weak var btnSaveEvent: NSButton!
+    @IBOutlet weak var btnDeleteEvent: NSButton!
+    @IBOutlet weak var tblCheckableOwners: NSTableView!
+    
+    var manageTreeViewController: CheckableTreeViewControllerWrapper? = nil
+    
     
     init() {
         super.init(nibName: "ImageEventEditViewController", bundle: nil)
@@ -63,6 +75,11 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
         })
         self.progressIndicator.isHidden = true
         self.updateCheckedAmount()
+        
+        
+        self.manageTreeViewController = CheckableTreeViewControllerWrapper(self.manageTreeView, editable: true, dataLoader: {
+            return self.loadEvents()
+        })
     }
     
     // MARK: - VIEW
@@ -92,6 +109,7 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
             
             DispatchQueue.main.async {
                 self.tableViewController?.load(grid)
+                self.editTableViewController?.load(grid)
             }
         }
     }
@@ -215,4 +233,12 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     }
     
     // MARK: - MANAGE
+    
+    @IBAction func onButtonSaveClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onButtonDeleteClicked(_ sender: NSButton) {
+    }
+    
+    
 }
