@@ -4601,13 +4601,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bbz-zr-ygH">
-                                                    <rect key="frame" x="0.0" y="5" width="571" height="313"/>
+                                                    <rect key="frame" x="0.0" y="5" width="571" height="303"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="PO3-tL-kZs">
-                                                        <rect key="frame" x="0.0" y="0.0" width="571" height="313"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="571" height="303"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="aSi-sL-K81" id="8je-mN-jIB">
-                                                                <rect key="frame" x="0.0" y="0.0" width="571" height="313"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="571" height="303"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                                                 <color key="backgroundColor" name="LightGray"/>
@@ -4732,13 +4732,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     </scroller>
                                                 </scrollView>
                                                 <box title="Event" translatesAutoresizingMaskIntoConstraints="NO" id="OkH-SD-VA9">
-                                                    <rect key="frame" x="-3" y="314" width="577" height="104"/>
+                                                    <rect key="frame" x="-3" y="304" width="577" height="114"/>
                                                     <view key="contentView" id="sTs-8y-jS6">
-                                                        <rect key="frame" x="4" y="5" width="569" height="84"/>
+                                                        <rect key="frame" x="4" y="5" width="569" height="94"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ykB-SU-Krt">
-                                                                <rect key="frame" x="120" y="46" width="60" height="16"/>
+                                                                <rect key="frame" x="120" y="56" width="60" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="56" id="itL-lB-utg"/>
                                                                 </constraints>
@@ -4749,7 +4749,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8b-Ke-HQm">
-                                                                <rect key="frame" x="186" y="46" width="303" height="21"/>
+                                                                <rect key="frame" x="186" y="56" width="303" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="ZKx-mg-oaj">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -4757,7 +4757,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9zE-Ms-3Wa">
-                                                                <rect key="frame" x="120" y="20" width="60" height="16"/>
+                                                                <rect key="frame" x="120" y="30" width="60" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="56" id="C0A-mi-1Vf"/>
                                                                 </constraints>
@@ -4768,7 +4768,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </textFieldCell>
                                                             </textField>
                                                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v9y-on-U1L">
-                                                                <rect key="frame" x="185" y="14" width="134" height="23"/>
+                                                                <rect key="frame" x="185" y="24" width="134" height="23"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="130" id="lH8-jo-e9D"/>
                                                                 </constraints>
@@ -4784,7 +4784,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </comboBoxCell>
                                                             </comboBox>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OHU-iU-tcZ">
-                                                                <rect key="frame" x="487" y="5" width="79" height="32"/>
+                                                                <rect key="frame" x="487" y="15" width="79" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b8m-JD-iUO">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -4798,13 +4798,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpm-yS-HBd">
-                                                                <rect key="frame" x="0.0" y="3" width="114" height="78"/>
+                                                                <rect key="frame" x="0.0" y="3" width="114" height="88"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="Er0-Mf-WxK">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="114" height="78"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="114" height="88"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" viewBased="YES" id="zmZ-bf-Ywu">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="114" height="78"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="114" height="88"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="LightGray"/>
@@ -4892,7 +4892,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </scroller>
                                                             </scrollView>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bd3-tM-Wvt">
-                                                                <rect key="frame" x="487" y="40" width="79" height="32"/>
+                                                                <rect key="frame" x="487" y="50" width="79" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cj4-o5-i6s">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -4927,7 +4927,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         </constraints>
                                                     </view>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="100" id="Tsx-O5-vwU"/>
+                                                        <constraint firstAttribute="height" constant="110" id="Tsx-O5-vwU"/>
                                                     </constraints>
                                                 </box>
                                             </subviews>

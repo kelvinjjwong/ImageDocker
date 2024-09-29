@@ -45,6 +45,8 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     @IBOutlet weak var tblCheckableOwners: NSTableView!
     
     var manageTreeViewController: CheckableTreeViewControllerWrapper? = nil
+    var ownersTableController : DictionaryTableViewController!
+    var eventCategoryListController : TextListViewPopupController!
     
     
     init() {
@@ -80,6 +82,14 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
         self.manageTreeViewController = CheckableTreeViewControllerWrapper(self.manageTreeView, editable: true, dataLoader: {
             return self.loadEvents()
         })
+        
+        self.ownersTableController = DictionaryTableViewController(self.tblCheckableOwners)
+        self.ownersTableController.enableCheckboxes()
+        self.ownersTableController.load(self.loadOwners(), afterLoaded: {
+        })
+        
+        self.eventCategoryListController = TextListViewPopupController(self.ddlEventCategory)
+        self.eventCategoryListController.load(self.getEventCategories())
     }
     
     // MARK: - VIEW
@@ -233,6 +243,23 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     }
     
     // MARK: - MANAGE
+    
+    func loadOwners() -> [[String:String]] {
+        var list:[[String:String]] = []
+        let coreMembers = FaceDao.default.getCoreMembers()
+        for coreMember in coreMembers {
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = coreMember.shortName ?? coreMember.name
+            item["id"] = coreMember.id
+            list.append(item)
+        }
+        return list
+    }
+    
+    func getEventCategories() -> [String] {
+        return EventDao.default.getEventCategories()
+    }
     
     @IBAction func onButtonSaveClicked(_ sender: NSButton) {
     }
