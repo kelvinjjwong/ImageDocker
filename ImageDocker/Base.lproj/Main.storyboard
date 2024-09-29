@@ -4522,7 +4522,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         </textFieldCell>
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
-                                                                            <tableCellView identifier="treeItem" id="XU2-24-ORP" customClass="PeopleManageCheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
+                                                                            <tableCellView identifier="treeItem" id="XU2-24-ORP" customClass="CheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
                                                                                 <rect key="frame" x="18" y="0.0" width="395" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
@@ -4786,7 +4786,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         </textFieldCell>
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
-                                                                            <tableCellView identifier="treeItem" id="O6t-ak-9pp" customClass="PeopleManageCheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
+                                                                            <tableCellView identifier="treeItem" id="O6t-ak-9pp" customClass="CheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
                                                                                 <rect key="frame" x="18" y="0.0" width="395" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>

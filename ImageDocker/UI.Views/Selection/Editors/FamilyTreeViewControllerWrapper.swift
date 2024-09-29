@@ -26,7 +26,7 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
     
     private var coreMembers:[TreeNodeData] = []
     
-    private var checkableItems:[String : PeopleManageCheckableTableCellView] = [:]
+    private var checkableItems:[String : CheckableTableCellView] = [:]
     
     public init(_ treeView: NSOutlineView,
                 editable:Bool = false,
@@ -120,7 +120,7 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
         
     }
     
-    func addCheckableNode(item: PeopleManageCheckableTableCellView) {
+    func addCheckableNode(item: CheckableTableCellView) {
         if let nodeData = item.nodeData {
 //            print("addCheckableNode id:\(nodeData.getId())")
             self.checkableItems[nodeData.getId()] = item
@@ -212,7 +212,7 @@ extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
 extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
     
     public func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
-        let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("treeItem"), owner: self) as! PeopleManageCheckableTableCellView
+        let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("treeItem"), owner: self) as! CheckableTableCellView
         if let item = item as? TreeNodeData {
             cell.table = outlineView
             cell.row = outlineView.row(forItem: item)

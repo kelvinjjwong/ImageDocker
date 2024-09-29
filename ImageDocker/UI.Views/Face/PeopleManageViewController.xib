@@ -132,7 +132,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="treeItem" id="8Cz-c4-snw" customClass="PeopleManageCheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
+                                                        <tableCellView identifier="treeItem" id="8Cz-c4-snw" customClass="CheckableTableCellView" customModule="ImageDocker" customModuleProvider="target">
                                                             <rect key="frame" x="8" y="0.0" width="195" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
