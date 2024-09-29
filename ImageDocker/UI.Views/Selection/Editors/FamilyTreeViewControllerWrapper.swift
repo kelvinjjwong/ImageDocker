@@ -14,6 +14,9 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
     
     private var treeView: NSOutlineView!
     
+    private var dataLoader:(() -> [TreeNodeData])?
+    private var onDropTreeNode:(([TreeNodeData], Any?, String) -> Bool)?
+    
     private var editable = false
     private var removable = false
     private var afterChange:(() -> Void)?
@@ -21,12 +24,21 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
     private var checkable = false
     private var onCheckStateChanged:((Bool,Bool,String,String) -> Void)?
     
-    private var coreMembers:[CoreMember] = []
+    private var coreMembers:[TreeNodeData] = []
     
     private var checkableItems:[String : PeopleManageCheckableTableCellView] = [:]
     
-    public init(_ treeView: NSOutlineView, editable:Bool = false, removable:Bool = false, afterChange:(() -> Void)? = nil, checkable:Bool = false, onCheckStateChanged:((Bool,Bool,String,String) -> Void)? = nil) {
+    public init(_ treeView: NSOutlineView,
+                editable:Bool = false,
+                removable:Bool = false,
+                checkable:Bool = false,
+                dataLoader:@escaping (() -> [TreeNodeData]),
+                afterChange:(() -> Void)? = nil,
+                onCheckStateChanged:((Bool,Bool,String,String) -> Void)? = nil,
+                onDropTreeNode:(([TreeNodeData], Any?, String) -> Bool)? = nil) {
         super.init(nibName: nil, bundle: nil)
+        self.dataLoader = dataLoader
+        self.onDropTreeNode = onDropTreeNode
         self.treeView = treeView
         self.editable = editable
         self.removable = removable
@@ -52,91 +64,24 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
     
     public func reloadNodes() {
         print("tree view reload nodes")
-        let checkedIds = self.getCheckedItems().map { $0.id }
+        let checkedIds = self.getCheckedItems().map { $0.getId() }
         self.removeAllCheckableNodes()
-        self.coreMembers = self.loadPeopleGroups()
+        
+        if let dataLoader = self.dataLoader {
+            self.coreMembers = dataLoader()
+        }
         
         self.treeView.reloadData()
         self.treeView.expandItem(nil, expandChildren: true)
         self.setCheckedItems(ids: checkedIds)
     }
     
-    private func loadPeopleGroups() -> [CoreMember] {
-        
-        var peopleIdToPeople:[String:People] = [:]
-        let people = FaceDao.default.getPeople()
-        
-        for p in people {
-            peopleIdToPeople[p.id] = p
-        }
-        
-        var familyIdToPeople:[String:[PeopleGroupMember]] = [:]
-        let familyMembers = FaceDao.default.getFamilyMembers()
-        for fm in familyMembers {
-            if let family = familyIdToPeople[fm.familyId] {
-                if let p = peopleIdToPeople[fm.peopleId] {
-                    let pgm = PeopleGroupMember()
-                    pgm.id = p.id
-                    pgm.name = p.name
-                    pgm.nickname = p.shortName ?? p.name
-                    // FIXME: load pgm.isChecked from db
-                    familyIdToPeople[fm.familyId]?.append(pgm)
-                }
-            }else{
-                familyIdToPeople[fm.familyId] = []
-                if let p = peopleIdToPeople[fm.peopleId] {
-                    let pgm = PeopleGroupMember()
-                    pgm.id = p.id
-                    pgm.name = p.name
-                    pgm.nickname = p.shortName ?? p.name
-                    // FIXME: load pgm.isChecked from db
-                    familyIdToPeople[fm.familyId]?.append(pgm)
-                }
-            }
-        }
-        
-        var families:[String:[Family]] = [:]
-        let fs = FaceDao.default.getFamilies()
-        for f in fs {
-            if let fam = families[f.owner] {
-                families[f.owner]?.append(f)
-            }else{
-                families[f.owner] = []
-                families[f.owner]?.append(f)
-            }
-        }
-        
-        var coreMembers:[CoreMember] = []
-        let ms = FaceDao.default.getCoreMembers()
-        for m in ms {
-            let coreMember = CoreMember()
-            coreMember.id = m.id
-            coreMember.name = m.name
-            coreMember.nickname = m.shortName ?? m.name
-            coreMember.groups = []
-            
-            if let fam = families[coreMember.id] {
-                for f in fam {
-                    let group = PeopleGroup()
-                    group.id = f.id
-                    group.name = f.name
-                    group.parent = coreMember
-                    group.members = []
-                    coreMember.groups.append(group)
-                }
-            }
-            
-            coreMembers.append(coreMember)
-        }
-        return coreMembers
-        
-    }
     
-    func getCheckedItems() -> [PeopleGroup] {
-        var checkedGroups:[PeopleGroup] = []
+    func getCheckedItems() -> [TreeNodeData] {
+        var checkedGroups:[TreeNodeData] = []
         for cm in self.coreMembers {
-            for g in cm.groups {
-                if g.isChecked {
+            for g in cm.getChildren() {
+                if g.checked() {
                     checkedGroups.append(g)
                 }
             }
@@ -199,13 +144,11 @@ extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
         if item == nil { // root
             return self.coreMembers.count
         }
-
-        if let item = item as? CoreMember {
-            return item.groups.count
-        }
         
-        if let item = item as? PeopleGroup {
-            return item.members.count
+        if let item = item as? TreeNodeData {
+            if item.expandable() {
+                return item.getChildren().count
+            }
         }
 
         return 0 // anything else
@@ -215,25 +158,19 @@ extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
         if item == nil { // root
             return self.coreMembers[index]
         }
-
-        if let item = item as? CoreMember {
-            return item.groups[index]
-        }
         
-        if let item = item as? PeopleGroup {
-            return item.members[index]
+        if let item = item as? TreeNodeData {
+            if item.expandable() {
+                return item.getChildren()[index]
+            }
         }
 
         return "ERROR_PARENT_ITEM"
     }
     
     public func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
-        if let item = item as? CoreMember {
-            return item.groups.count > 0
-        }
-        
-        if let item = item as? PeopleGroup {
-            return item.members.count > 0
+        if let item = item as? TreeNodeData {
+            return item.expandable() && item.getChildren().count > 0
         }
         
         // otherwise
@@ -264,51 +201,11 @@ extension FamilyTreeViewControllerWrapper: NSOutlineViewDataSource {
               let draggedString = String(data: draggedData, encoding: .utf8)
         else {return false}
         
-        var peopleGroupId = ""
-        var peopleGroupName = ""
-        if let peopleGroup = destination as? PeopleGroup {
-            peopleGroupId = peopleGroup.id
-            peopleGroupName = peopleGroup.name
-        }else if let pgm = destination as? PeopleGroupMember {
-            peopleGroupId = pgm.groupId
-            peopleGroupName = pgm.groupName
-        }else {
+        if let onDropTreeNode = self.onDropTreeNode {
+            return onDropTreeNode(self.coreMembers, destination, draggedString)
+        }else{
             return false
         }
-        
-        print("dragged \(draggedString) to group:\(peopleGroupName)")
-        
-        let json = JSON.init(parseJSON: draggedString)
-        
-        let newMember = PeopleGroupMember()
-        newMember.id = json["id"].stringValue
-        newMember.name = json["name"].stringValue
-        newMember.nickname = json["nickName"].stringValue
-        newMember.groupId = peopleGroupId
-        newMember.groupName = peopleGroupName
-        
-        for coreMember in self.coreMembers {
-            for peopleGroup in coreMember.groups {
-                if peopleGroup.id == peopleGroupId {
-                    if !peopleGroup.members.contains(where: { member in
-                        return member.id == newMember.id
-                    }){
-                        newMember.parent = peopleGroup
-                        peopleGroup.members.append(newMember)
-                        
-                        // save to db, append group member
-                        let _ = FaceDao.default.saveFamilyMember(peopleId: newMember.id, familyId: peopleGroup.id)
-                        
-                        self.treeView.deselectAll(nil)
-                        self.treeView.reloadData()
-                        self.treeView.expandItem(nil, expandChildren: true)
-                    }
-                    break
-                }
-            }
-        }
-        
-        return true
     }
 }
 
