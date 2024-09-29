@@ -22,31 +22,13 @@ public class CheckableTableCellView: NSTableCellView {
     var afterChange:(() -> Void)?
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
-        if let item = nodeData as? CoreMember {
-            print("checkbox: core member: \(item.nickname) , state: \(sender.state == .on)")
-            let ov = item.isChecked
+        if let item = nodeData {
+            print("checkbox: people: \(item.getId()) , \(String(describing: type(of: item))), state: \(sender.state == .on)")
+            let ov = item.checked()
             self.isChecked = (sender.state == .on)
-            item.isChecked = (sender.state == .on)
-            if ov != item.isChecked {
-                self.onCheckStateChanged?(ov, item.isChecked, "CoreMember", item.id)
-            }
-        }
-        if let item = nodeData as? PeopleGroup {
-            print("checkbox: people group: \(item.name) , state: \(sender.state == .on)")
-            let ov = item.isChecked
-            self.isChecked = (sender.state == .on)
-            item.isChecked = (sender.state == .on)
-            if ov != item.isChecked {
-                self.onCheckStateChanged?(ov, item.isChecked, "PeopleGroup", item.id)
-            }
-        }
-        if let item = nodeData as? PeopleGroupMember {
-            print("checkbox: people: \(item.id) , state: \(sender.state == .on)")
-            let ov = item.isChecked
-            self.isChecked = (sender.state == .on)
-            item.isChecked = (sender.state == .on)
-            if ov != item.isChecked {
-                self.onCheckStateChanged?(ov, item.isChecked, "PeopleGroupMember", item.id)
+            item.setCheckState(state: (sender.state == .on))
+            if ov != item.checked() {
+                self.onCheckStateChanged?(ov, item.checked(), String(describing: type(of: item)), item.getId())
             }
         }
     }
@@ -133,9 +115,9 @@ public class CheckableTableCellView: NSTableCellView {
                 self.isEditing = false
                 self.editButton.image = Icons.edit
                 
-                let newGroupName = self.textField?.stringValue ?? item.name
+                let newGroupName = self.textField?.stringValue ?? item.getText()
                 
-                if newGroupName != item.name {
+                if newGroupName != item.getText() {
                     // save to db, change group name
                     if let family = FaceDao.default.getFamily(id: item.id) {
                         family.name = newGroupName
