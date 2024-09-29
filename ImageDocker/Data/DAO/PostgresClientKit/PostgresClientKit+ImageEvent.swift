@@ -403,5 +403,54 @@ select "name" from "ImageEvent" where "category" in (\(categories.joinedSingleQu
         }
         return result
     }
+    
+    func getEventsByOwner(ownerId:String) -> [(String, String, String, String, String)] {
+        var result:[(String, String, String, String, String)] = []
+        final class TempRecord : DatabaseRecord {
+            var category:String = ""
+            var name:String = ""
+            var ownerNickname:String = ""
+            var owner2Nickname:String = ""
+            var owner3Nickname:String = ""
+        }
+        let db = PostgresConnection.database()
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+select DISTINCT "category", "name", "ownerNickname", "owner2Nickname", "owner3Nickname" from "ImageEvent" where "ownerId" = '\(ownerId)' or "owner2Id" = '\(ownerId)' or "owner3Id" = '\(ownerId)' order by "name"
+""")
+            for row in records {
+                result.append((row.category, row.name, row.ownerNickname, row.owner2Nickname, row.owner3Nickname))
+            }
+        }catch{
+            self.logger.log(.error, error)
+        }
+        return result
+    }
+    
+    func getEvents(imageIds:[String]) -> [String]  {
+        if imageIds.isEmpty {
+            return []
+        }
+        var result:[String] = []
+        final class TempRecord : DatabaseRecord {
+            var event:String? = nil
+        }
+        let db = PostgresConnection.database()
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+select DISTINCT "event" from "Image" where "id" in (\(imageIds.joinedSingleQuoted(separator: ","))) order by "event"
+""")
+            for row in records {
+                if let ev = row.event {
+                    result.append(ev)
+                }
+            }
+        }catch{
+            self.logger.log(.error, error)
+        }
+        print("getEvents(imageIds: \(imageIds)")
+        print(result)
+        return result
+    }
 
 }

@@ -37,4 +37,8 @@ protocol EventDaoInterface {
     func importEventsFromImages()
     
     func getEventsByCategories(categories:[String]) -> [String]
+    
+    func getEventsByOwner(ownerId:String) -> [(String, String, String, String, String)]
+    
+    func getEvents(imageIds:[String]) -> [String] 
 }

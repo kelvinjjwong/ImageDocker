@@ -39,6 +39,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     @IBOutlet weak var manageTreeView: NSOutlineView!
     var manageTreeViewController: CheckableTreeViewControllerWrapper? = nil
     
+    // MARK: - INIT
     
     init() {
         super.init(nibName: "ImageFamilyEditViewController", bundle: nil)
@@ -78,142 +79,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     }
     
     
-    private func loadPeopleGroups() -> [CoreMember] {
-        
-        var peopleIdToPeople:[String:People] = [:]
-        let people = FaceDao.default.getPeople()
-        
-        for p in people {
-            peopleIdToPeople[p.id] = p
-        }
-        
-        var familyIdToPeople:[String:[PeopleGroupMember]] = [:]
-        let familyMembers = FaceDao.default.getFamilyMembers()
-        for fm in familyMembers {
-            if let family = familyIdToPeople[fm.familyId] {
-                if let p = peopleIdToPeople[fm.peopleId] {
-                    let pgm = PeopleGroupMember()
-                    pgm.id = p.id
-                    pgm.name = p.name
-                    pgm.nickname = p.shortName ?? p.name
-                    // FIXME: load pgm.isChecked from db
-                    familyIdToPeople[fm.familyId]?.append(pgm)
-                }
-            }else{
-                familyIdToPeople[fm.familyId] = []
-                if let p = peopleIdToPeople[fm.peopleId] {
-                    let pgm = PeopleGroupMember()
-                    pgm.id = p.id
-                    pgm.name = p.name
-                    pgm.nickname = p.shortName ?? p.name
-                    // FIXME: load pgm.isChecked from db
-                    familyIdToPeople[fm.familyId]?.append(pgm)
-                }
-            }
-        }
-        
-        var families:[String:[Family]] = [:]
-        let fs = FaceDao.default.getFamilies()
-        for f in fs {
-            if let fam = families[f.owner] {
-                families[f.owner]?.append(f)
-            }else{
-                families[f.owner] = []
-                families[f.owner]?.append(f)
-            }
-        }
-        
-        var coreMembers:[CoreMember] = []
-        let ms = FaceDao.default.getCoreMembers()
-        for m in ms {
-            let coreMember = CoreMember()
-            coreMember.id = m.id
-            coreMember.name = m.name
-            coreMember.nickname = m.shortName ?? m.name
-            coreMember.groups = []
-            
-            if let fam = families[coreMember.id] {
-                for f in fam {
-                    let group = PeopleGroup()
-                    group.id = f.id
-                    group.name = f.name
-                    group.parent = coreMember
-                    group.members = []
-                    coreMember.groups.append(group)
-                }
-            }
-            
-            coreMembers.append(coreMember)
-        }
-        return coreMembers
-        
-    }
-    
-    private func onDragFamilyDropToTreeNode(treeNodes:[TreeNodeData], destination:Any?, draggedString:String) -> Bool {
-        let json = JSON.init(parseJSON: draggedString)
-        
-        var peopleGroupId = ""
-        var peopleGroupName = ""
-        if let peopleGroup = destination as? PeopleGroup {
-            peopleGroupId = peopleGroup.id
-            peopleGroupName = peopleGroup.name
-        }else if let pgm = destination as? PeopleGroupMember {
-            peopleGroupId = pgm.groupId
-            peopleGroupName = pgm.groupName
-        }else {
-            return false
-        }
-        print("dragged \(draggedString) to group:\(peopleGroupName)")
-        
-        let newMember = PeopleGroupMember()
-        newMember.id = json["id"].stringValue
-        newMember.name = json["name"].stringValue
-        newMember.nickname = json["nickName"].stringValue
-        newMember.groupId = peopleGroupId
-        newMember.groupName = peopleGroupName
-        
-        for coreMember in treeNodes {
-            for peopleGroup in coreMember.getChildren() {
-                if peopleGroup.getId() == peopleGroupId {
-                    if !peopleGroup.getChildren().contains(where: { member in
-                        return member.getId() == newMember.id
-                    }){
-                        newMember.setParent(peopleGroup)
-                        peopleGroup.addChild(newMember)
-                        
-                        // save to db, append group member
-                        let _ = FaceDao.default.saveFamilyMember(peopleId: newMember.id, familyId: peopleGroup.getId())
-                        
-                        self.treeView.deselectAll(nil)
-                        self.treeView.reloadData()
-                        self.treeView.expandItem(nil, expandChildren: true)
-                    }
-                    break
-                }
-            }
-        }
-        return true
-    }
-    
     // MARK: - VIEW
-    
-    func getLinkedFamilyIds() -> [String] {
-        let imageIds = self.flowListItems.keys.sorted()
-        
-        return ImageFamilyDao.default.getFamilyIds(imageIds: imageIds)
-    }
-    
-    func checkLinkedFamilies() {
-        self.treeViewController?.uncheckItems()
-        self.treeViewController?.setCheckedItems(ids: self.getLinkedFamilyIds())
-        self.updateCheckedAmount()
-    }
-    
-    func updateCheckedAmount() {
-        if let vc = self.treeViewController {
-            self.progressLabel.stringValue = Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)")
-        }
-    }
     
     func collectImagesDiff() {
         DispatchQueue.global().async {
@@ -309,6 +175,142 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     }
     
     // MARK: - EDIT
+    
+    private func loadPeopleGroups() -> [CoreMember] {
+        
+        var peopleIdToPeople:[String:People] = [:]
+        let people = FaceDao.default.getPeople()
+        
+        for p in people {
+            peopleIdToPeople[p.id] = p
+        }
+        
+        var familyIdToPeople:[String:[PeopleGroupMember]] = [:]
+        let familyMembers = FaceDao.default.getFamilyMembers()
+        for fm in familyMembers {
+            if let family = familyIdToPeople[fm.familyId] {
+                if let p = peopleIdToPeople[fm.peopleId] {
+                    let pgm = PeopleGroupMember()
+                    pgm.id = p.id
+                    pgm.name = p.name
+                    pgm.nickname = p.shortName ?? p.name
+                    // FIXME: load pgm.isChecked from db
+                    familyIdToPeople[fm.familyId]?.append(pgm)
+                }
+            }else{
+                familyIdToPeople[fm.familyId] = []
+                if let p = peopleIdToPeople[fm.peopleId] {
+                    let pgm = PeopleGroupMember()
+                    pgm.id = p.id
+                    pgm.name = p.name
+                    pgm.nickname = p.shortName ?? p.name
+                    // FIXME: load pgm.isChecked from db
+                    familyIdToPeople[fm.familyId]?.append(pgm)
+                }
+            }
+        }
+        
+        var families:[String:[Family]] = [:]
+        let fs = FaceDao.default.getFamilies()
+        for f in fs {
+            if let fam = families[f.owner] {
+                families[f.owner]?.append(f)
+            }else{
+                families[f.owner] = []
+                families[f.owner]?.append(f)
+            }
+        }
+        
+        var coreMembers:[CoreMember] = []
+        let ms = FaceDao.default.getCoreMembers()
+        for m in ms {
+            let coreMember = CoreMember()
+            coreMember.id = m.id
+            coreMember.name = m.name
+            coreMember.nickname = m.shortName ?? m.name
+            coreMember.groups = []
+            
+            if let fam = families[coreMember.id] {
+                for f in fam {
+                    let group = PeopleGroup()
+                    group.id = f.id
+                    group.name = f.name
+                    group.parent = coreMember
+                    group.members = []
+                    coreMember.groups.append(group)
+                }
+            }
+            
+            coreMembers.append(coreMember)
+        }
+        return coreMembers
+        
+    }
+    
+    func getLinkedFamilyIds() -> [String] {
+        let imageIds = self.flowListItems.keys.sorted()
+        
+        return ImageFamilyDao.default.getFamilyIds(imageIds: imageIds)
+    }
+    
+    func checkLinkedFamilies() {
+        self.treeViewController?.uncheckItems()
+        self.treeViewController?.setCheckedItems(ids: self.getLinkedFamilyIds())
+        self.updateCheckedAmount()
+    }
+    
+    func updateCheckedAmount() {
+        if let vc = self.treeViewController {
+            self.progressLabel.stringValue = Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)")
+        }
+    }
+    
+    private func onDragFamilyDropToTreeNode(treeNodes:[TreeNodeData], destination:Any?, draggedString:String) -> Bool {
+        let json = JSON.init(parseJSON: draggedString)
+        
+        var peopleGroupId = ""
+        var peopleGroupName = ""
+        if let peopleGroup = destination as? PeopleGroup {
+            peopleGroupId = peopleGroup.id
+            peopleGroupName = peopleGroup.name
+        }else if let pgm = destination as? PeopleGroupMember {
+            peopleGroupId = pgm.groupId
+            peopleGroupName = pgm.groupName
+        }else {
+            return false
+        }
+        print("dragged \(draggedString) to group:\(peopleGroupName)")
+        
+        let newMember = PeopleGroupMember()
+        newMember.id = json["id"].stringValue
+        newMember.name = json["name"].stringValue
+        newMember.nickname = json["nickName"].stringValue
+        newMember.groupId = peopleGroupId
+        newMember.groupName = peopleGroupName
+        
+        for coreMember in treeNodes {
+            for peopleGroup in coreMember.getChildren() {
+                if peopleGroup.getId() == peopleGroupId {
+                    if !peopleGroup.getChildren().contains(where: { member in
+                        return member.getId() == newMember.id
+                    }){
+                        newMember.setParent(peopleGroup)
+                        peopleGroup.addChild(newMember)
+                        
+                        // save to db, append group member
+                        let _ = FaceDao.default.saveFamilyMember(peopleId: newMember.id, familyId: peopleGroup.getId())
+                        
+                        self.treeView.deselectAll(nil)
+                        self.treeView.reloadData()
+                        self.treeView.expandItem(nil, expandChildren: true)
+                    }
+                    break
+                }
+            }
+        }
+        return true
+    }
+    
     fileprivate var accumulator:Accumulator?
     
     @IBAction func onButtonApplyClicked(_ sender: NSButton) {

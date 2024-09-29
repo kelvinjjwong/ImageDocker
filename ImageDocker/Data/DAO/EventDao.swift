@@ -80,4 +80,12 @@ class EventDao {
     func getEventsByCategories(categories:[String]) -> [String] {
         return self.impl.getEventsByCategories(categories: categories)
     }
+    
+    func getEventsByOwner(ownerId:String) -> [(String, String, String, String, String)] {
+        return self.impl.getEventsByOwner(ownerId: ownerId)
+    }
+    
+    func getEvents(imageIds:[String]) -> [String] {
+        return self.impl.getEvents(imageIds: imageIds)
+    }
 }
