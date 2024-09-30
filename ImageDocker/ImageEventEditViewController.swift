@@ -305,7 +305,8 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
                                                                                                               self.managingEventId,
                                                                                                               name),
                                                               choice1: Words.dialog_new.word(),
-                                                              choice2: Words.dialog_update.word())
+                                                              choice2: Words.dialog_update.word(),
+                                                              width: 600)
             if alertResponse == .alertSecondButtonReturn { // update existing, rename
                 
                 if let ev = EventDao.default.getEvent(name: name) {

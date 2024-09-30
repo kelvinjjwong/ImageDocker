@@ -4844,7 +4844,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="name" width="340" minWidth="40" maxWidth="1000" id="1Jz-Zw-V39">
+                                                                    <tableColumn identifier="name" width="310" minWidth="200" maxWidth="1000" id="1Jz-Zw-V39">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4857,11 +4857,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="7jV-KR-Yq8">
-                                                                                <rect key="frame" x="93" y="0.0" width="340" height="24"/>
+                                                                                <rect key="frame" x="93" y="0.0" width="310" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3w-KK-gFb">
-                                                                                        <rect key="frame" x="0.0" y="4" width="340" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="310" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="1QL-iU-PeX">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -4876,7 +4876,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="owners" width="105" minWidth="10" maxWidth="200" id="PCo-h6-tQ6">
+                                                                    <tableColumn identifier="owners" width="120" minWidth="120" maxWidth="200" id="PCo-h6-tQ6">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Owners">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4889,11 +4889,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="U0h-h3-Pom">
-                                                                                <rect key="frame" x="450" y="0.0" width="102" height="17"/>
+                                                                                <rect key="frame" x="420" y="0.0" width="117" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcj-t2-JvI">
-                                                                                        <rect key="frame" x="0.0" y="1" width="102" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="1" width="117" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="15c-89-4wc">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
