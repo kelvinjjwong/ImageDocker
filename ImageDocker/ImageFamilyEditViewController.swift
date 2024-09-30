@@ -71,6 +71,86 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         
         self.manageTreeViewController = CheckableTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true, dataLoader: {
             return self.loadPeopleGroups()
+        }, onEditNodeInline: { newValue, treeNode in
+            
+            // save to db, change group name
+            if let item = treeNode as? PeopleGroup, let family = FaceDao.default.getFamily(id: item.getId()) {
+                family.name = newValue
+                let _ = FaceDao.default.saveFamily(familyId: family.id, name: family.name, type: family.category ?? PeopleGroup.default_group_category, owner: family.owner)
+                
+                if let coreMember = item.parent {
+                    for peopleGroup in coreMember.groups {
+                        if peopleGroup.getId() == item.getId() {
+                            peopleGroup.name = newValue
+                        }
+                    }
+                }
+                
+                return true
+            }
+            return false
+            
+        }, onRemoveNode: { treeNode in
+            
+            if let item = treeNode as? CoreMember {
+                print("add empty people group for: \(item.nickname)")
+                let idx = item.groups.count + 1
+                let groupId = "\(item.id)_group_\(idx)"
+                let groupName = "\(Words.new_people_group.word()) \(idx)"
+                let peopleGroup = PeopleGroup()
+                peopleGroup.id = groupId
+                peopleGroup.name = groupName
+                peopleGroup.parent = item
+                peopleGroup.members = []
+                
+                item.groups.append(peopleGroup)
+                
+                // save to db, append group to core member
+                if let persisted_groupId = FaceDao.default.saveFamily(name: peopleGroup.name, type: PeopleGroup.default_group_category, owner: item.id) {
+                    peopleGroup.id = persisted_groupId
+                }
+                
+                return true
+                
+            }
+            if let item = treeNode as? PeopleGroup {
+                print("remove people group: \(item.name)")
+                
+                // delete people group
+                
+                if let coreMember = item.parent {
+                    coreMember.groups.removeAll { group in
+                        return group.id == item.id
+                    }
+                    
+                    // save to db, delete group and all group members
+                    let executeState = FaceDao.default.deleteFamily(id: item.id)
+                    
+                    if executeState == .OK {
+                        return true
+                    }
+                    
+                }
+            }
+            if let item = treeNode as? PeopleGroupMember {
+                print("remove people: \(item.id)")
+                
+                if let peopleGroup = item.parent {
+                    peopleGroup.members.removeAll { member in
+                        return member.id == item.id
+                    }
+                    
+                    // save to db, delete group member
+                    let executeState = FaceDao.default.deleteFamilyMember(peopleId: item.id, familyId: peopleGroup.id)
+                    
+                    if executeState == .OK {
+                        return true
+                    }
+                    
+                }
+            }
+            return false
+            
         }, afterChange: {
             print("after change tree view")
             self.treeViewController?.reloadNodes()

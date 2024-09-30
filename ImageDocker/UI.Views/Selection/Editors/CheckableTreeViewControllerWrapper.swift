@@ -19,6 +19,12 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
     
     private var editable = false
     private var removable = false
+    
+    private var isEditInline = true
+    private var onEditNodeInline:((String,TreeNodeData) -> Bool)?
+    private var onEditNode:((TreeNodeData) -> Bool)?
+    private var onRemoveNode:((TreeNodeData) -> Bool)?
+    
     private var afterChange:(() -> Void)?
     
     private var checkable = false
@@ -32,7 +38,11 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
                 editable:Bool = false,
                 removable:Bool = false,
                 checkable:Bool = false,
+                isEditNodeInline:Bool = true,
                 dataLoader:@escaping (() -> [TreeNodeData]),
+                onEditNodeInline:((String,TreeNodeData) -> Bool)? = nil,
+                onEditNode:((TreeNodeData) -> Bool)? = nil,
+                onRemoveNode:((TreeNodeData) -> Bool)? = nil,
                 afterChange:(() -> Void)? = nil,
                 onCheckStateChanged:((Bool,Bool,String,String) -> Void)? = nil,
                 onDropTreeNode:(([TreeNodeData], Any?, String) -> Bool)? = nil) {
@@ -42,6 +52,10 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         self.treeView = treeView
         self.editable = editable
         self.removable = removable
+        self.isEditInline = isEditNodeInline
+        self.onEditNodeInline = onEditNodeInline
+        self.onEditNode = onEditNode
+        self.onRemoveNode = onRemoveNode
         self.afterChange = afterChange
         self.checkable = checkable
         self.onCheckStateChanged = onCheckStateChanged
@@ -268,6 +282,16 @@ extension CheckableTreeViewControllerWrapper : NSOutlineViewDelegate {
             }
             cell.afterChange = {
                 self.afterChange?()
+            }
+            cell.isEditInline = true
+            cell.onEditNodeInline = { newValue, treeNode in
+                return self.onEditNodeInline?(newValue, treeNode) ?? false
+            }
+            cell.onEditNode = { treeNode in
+                return self.onEditNode?(treeNode) ?? false
+            }
+            cell.onRemoveNode = { treeNode in
+                return self.onRemoveNode?(treeNode) ?? false
             }
             if item.isCheckable() {
                 self.addCheckableNode(node: item, item: cell)

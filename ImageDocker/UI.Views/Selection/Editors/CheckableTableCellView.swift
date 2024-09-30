@@ -19,6 +19,10 @@ public class CheckableTableCellView: NSTableCellView {
     var nodeData:TreeNodeData? = nil
     var isChecked = false
     var onCheckStateChanged:((Bool,Bool,String,String) -> Void)?
+    var isEditInline = true
+    var onEditNodeInline:((String,TreeNodeData) -> Bool)?
+    var onEditNode:((TreeNodeData) -> Bool)?
+    var onRemoveNode:((TreeNodeData) -> Bool)?
     var afterChange:(() -> Void)?
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
@@ -34,118 +38,58 @@ public class CheckableTableCellView: NSTableCellView {
     }
     
     @IBAction func onRemoveClicked(_ sender: NSButton) { // on update or remove, shared button
-        if let item = nodeData as? CoreMember {
-            print("add empty people group for: \(item.nickname)")
-            let idx = item.groups.count + 1
-            let groupId = "\(item.id)_group_\(idx)"
-            let groupName = "\(Words.new_people_group.word()) \(idx)"
-            let peopleGroup = PeopleGroup()
-            peopleGroup.id = groupId
-            peopleGroup.name = groupName
-            peopleGroup.parent = item
-            peopleGroup.members = []
-            
-            item.groups.append(peopleGroup)
-            
-            // save to db, append group to core member
-            if let persisted_groupId = FaceDao.default.saveFamily(name: peopleGroup.name, type: PeopleGroup.default_group_category, owner: item.id) {
-                peopleGroup.id = persisted_groupId
-            }
-            
-            
-            if let table = self.table {
-                table.deselectAll(nil)
-                table.reloadData()
-            }
-            self.afterChange?()
-            
-        }
-        if let item = nodeData as? PeopleGroup {
-            print("remove people group: \(item.name) , state: \(sender.state == .on)")
-            
-            // delete people group
-            
-            if let coreMember = item.parent {
-                coreMember.groups.removeAll { group in
-                    return group.id == item.id
-                }
-                
-                // save to db, delete group and all group members
-                let _ = FaceDao.default.deleteFamily(id: item.id)
-                
+        if let onRemoveNode = self.onRemoveNode, let item = nodeData {
+            if onRemoveNode(item) {
                 if let table = self.table {
                     table.deselectAll(nil)
                     table.reloadData()
                 }
                 self.afterChange?()
-                
             }
         }
-        if let item = nodeData as? PeopleGroupMember {
-            print("remove people: \(item.id) , state: \(sender.state == .on)")
-            
-            if let peopleGroup = item.parent {
-                peopleGroup.members.removeAll { member in
-                    return member.id == item.id
-                }
-                
-                // save to db, delete group member
-                let _ = FaceDao.default.deleteFamilyMember(peopleId: item.id, familyId: peopleGroup.id)
-                
-                if let table = self.table {
-                    table.deselectAll(nil)
-                    table.reloadData()
-                }
-                self.afterChange?()
-                
-            }
-        }
+        
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {
         
-        if let item = nodeData as? PeopleGroup {
+        if let item = nodeData {
             
-            if self.isEditing {
-                // save editing
-                if let textField = self.textField, let editor = textField.currentEditor() {
-                    textField.endEditing(editor)
-                }
-                self.textField?.isEditable = false
-                self.isEditing = false
-                self.editButton.image = Icons.edit
+            if self.isEditInline {
                 
-                let newGroupName = self.textField?.stringValue ?? item.getText()
-                
-                if newGroupName != item.getText() {
-                    // save to db, change group name
-                    if let family = FaceDao.default.getFamily(id: item.id) {
-                        family.name = newGroupName
-                        let _ = FaceDao.default.saveFamily(familyId: family.id, name: family.name, type: family.category ?? PeopleGroup.default_group_category, owner: family.owner)
+                if self.isEditing {
+                    // save editing
+                    if let textField = self.textField, let editor = textField.currentEditor() {
+                        textField.endEditing(editor)
+                    }
+                    self.textField?.isEditable = false
+                    self.isEditing = false
+                    self.editButton.image = Icons.edit
+                    
+                    let newGroupName = self.textField?.stringValue ?? item.getText()
+                    
+                    if newGroupName != item.getText() {
                         
-                        if let coreMember = item.parent {
-                            for peopleGroup in coreMember.groups {
-                                if peopleGroup.id == item.id {
-                                    peopleGroup.name = newGroupName
+                        if let onEditNodeInline = self.onEditNodeInline {
+                            if onEditNodeInline(newGroupName, item) {
+                                if let table = self.table {
+                                    table.deselectAll(nil)
+                                    table.reloadData()
                                 }
+                                self.afterChange?()
                             }
                         }
-                        
-                        if let table = self.table {
-                            table.deselectAll(nil)
-                            table.reloadData()
-                        }
-                        self.afterChange?()
                     }
+                }else{
+                    // start editing
+                    self.textField?.isEditable = true
+                    if let table = self.table {
+                        table.editColumn(0, row: self.row, with: nil, select: false)
+                    }
+                    self.isEditing = true
+                    self.editButton.image = Icons.saveEdit
                 }
             }else{
-                // start editing
-                self.textField?.isEditable = true
-                if let table = self.table {
-                    table.editColumn(0, row: self.row, with: nil, select: false)
-                }
-                self.isEditing = true
-                self.editButton.image = Icons.saveEdit
+                let _ = self.onEditNode?(item)
             }
         }
     }
