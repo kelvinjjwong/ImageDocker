@@ -346,6 +346,16 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         }
     }
     
+    func getPerson(nickname: String) -> People? {
+        let db = PostgresConnection.database()
+        do {
+            return try People.fetchOne(db, parameters: ["shortName" : nickname])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
+    }
+    
     func savePersonName(id: String, name: String, shortName: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {

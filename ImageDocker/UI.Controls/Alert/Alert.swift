@@ -10,22 +10,47 @@ import Cocoa
 
 struct Alert {
     
-    static func dialogOKCancel(question: String, text: String, width:Int = 0, image:NSImage? = nil) -> Bool {
+    static func dialogTwoChoiceOrCancel(question: String, choice1:String, choice2:String, width:Int = 0, image:NSImage? = nil) -> NSApplication.ModalResponse {
         let alert = NSAlert()
-        alert.messageText = "\(question)\n\n\(text)\n\n"
+        alert.messageText = question
 //        alert.informativeText = text
         alert.alertStyle = .warning
         if width > 200 {
             alert.accessoryView = NSView(frame: NSMakeRect(0, 0, CGFloat(width), 0))
         }
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: choice1)
+        alert.addButton(withTitle: choice2)
+        alert.addButton(withTitle: Words.dialog_cancel.word())
+        
+        if let icon = image {
+            alert.icon = icon
+        }
+        
+        return alert.runModal()
+        
+    }
+    
+    static func dialogOKCancel(question: String, text: String = "", width:Int = 0, image:NSImage? = nil) -> Bool {
+        let alert = NSAlert()
+        if text != "" {
+            alert.messageText = "\(question)\n\n\(text)\n\n"
+        }else{
+            alert.messageText = question
+        }
+//        alert.informativeText = text
+        alert.alertStyle = .warning
+        if width > 200 {
+            alert.accessoryView = NSView(frame: NSMakeRect(0, 0, CGFloat(width), 0))
+        }
+        alert.addButton(withTitle: Words.dialog_ok.word())
+        alert.addButton(withTitle: Words.dialog_cancel.word())
         
         if let icon = image {
             alert.icon = icon
         }
         
         return alert.runModal() == .alertFirstButtonReturn
+        
     }
     
     static func invalidBaiduMapAK() {
@@ -113,6 +138,24 @@ struct Alert {
         alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
         alert.messageText = NSLocalizedString(message,
                                               comment: message)
+        alert.runModal()
+    }
+    
+    static func criticalAlert(message:String) {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString(message,
+                                              comment: message)
+        alert.alertStyle = .critical
+        alert.runModal()
+    }
+    
+    static func warning(message:String) {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString(message,
+                                              comment: message)
+        alert.alertStyle = .warning
         alert.runModal()
     }
 }

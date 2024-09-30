@@ -283,7 +283,7 @@ extension CheckableTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.afterChange = {
                 self.afterChange?()
             }
-            cell.isEditInline = true
+            cell.isEditInline = self.isEditInline
             cell.onEditNodeInline = { newValue, treeNode in
                 return self.onEditNodeInline?(newValue, treeNode) ?? false
             }

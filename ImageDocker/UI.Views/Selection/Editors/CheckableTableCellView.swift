@@ -51,6 +51,7 @@ public class CheckableTableCellView: NSTableCellView {
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {
+        print("clicked edit button")
         
         if let item = nodeData {
             
@@ -89,8 +90,11 @@ public class CheckableTableCellView: NSTableCellView {
                     self.editButton.image = Icons.saveEdit
                 }
             }else{
+                print("CheckableTableCellView onEdit outside, closure is nil ? \(self.onEditNode == nil)")
                 let _ = self.onEditNode?(item)
             }
+        }else{
+            print("CheckableTableCellView onEdit: nodeData is nil")
         }
     }
     

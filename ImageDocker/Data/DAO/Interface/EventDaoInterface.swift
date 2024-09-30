@@ -12,7 +12,9 @@ protocol EventDaoInterface {
     
     func getOrCreateEvent(name:String) -> ImageEvent
     
-    func updateEventDetail(event:ImageEvent)
+    func createEvent(event:ImageEvent) -> ExecuteState
+    
+    func updateEventDetail(event:ImageEvent) -> ExecuteState
     
     func getAllEvents() -> [ImageEvent]
     
@@ -40,5 +42,7 @@ protocol EventDaoInterface {
     
     func getEventsByOwner(ownerId:String) -> [(String, String, String, String, String)]
     
-    func getEvents(imageIds:[String]) -> [String] 
+    func getEvents(imageIds:[String]) -> [String]
+    
+    func getEvent(name:String) -> ImageEvent?
 }

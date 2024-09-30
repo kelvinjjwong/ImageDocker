@@ -31,7 +31,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         
     }
     
-    func updateEventDetail(event:ImageEvent){
+    func createEvent(event:ImageEvent) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try event.save(db)
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+    }
+    
+    func updateEventDetail(event:ImageEvent) -> ExecuteState{
         let db = PostgresConnection.database()
         do {
             if let rec = try ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
@@ -53,10 +64,13 @@ class EventDaoPostgresCK : EventDaoInterface {
                 rec.owner3Nickname = event.owner3Nickname
                 rec.owner3Id = event.owner3Id
                 try rec.save(db)
+                return .OK
             }
         }catch{
             self.logger.log(.error, error)
+            return .ERROR
         }
+        return .ERROR
     }
     
     func getAllEvents() -> [ImageEvent] {
@@ -451,6 +465,17 @@ select DISTINCT "event" from "Image" where "id" in (\(imageIds.joinedSingleQuote
         print("getEvents(imageIds: \(imageIds)")
         print(result)
         return result
+    }
+    
+    func getEvent(name:String) -> ImageEvent? {
+        let db = PostgresConnection.database()
+        
+        do {
+            return try ImageEvent.fetchOne(db, parameters: ["name": name])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
 
 }

@@ -42,6 +42,4 @@ struct Words {
     
     
     
-    
-    
 }

@@ -68,6 +68,8 @@
 		8E1E3AB92CA7418C00D2A34E /* CheckableTreeViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3AB82CA7416700D2A34E /* CheckableTreeViewControllerWrapper.swift */; };
 		8E1E3ABB2CA8A61A00D2A34E /* TreeNodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3ABA2CA8A61300D2A34E /* TreeNodeData.swift */; };
 		8E1E3ABD2CA8DB4400D2A34E /* CheckableTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3ABC2CA8DB3200D2A34E /* CheckableTableCellView.swift */; };
+		8E1E3ABF2CAAF53400D2A34E /* SearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3ABE2CAAF53200D2A34E /* SearchableTableViewController.swift */; };
+		8E1E3AC12CAAFAB800D2A34E /* Words+AlertDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1E3AC02CAAFAAD00D2A34E /* Words+AlertDialog.swift */; };
 		8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F03F25DC0291003B585F /* ImageMapView.swift */; };
 		8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E27F04025DC0291003B585F /* ImageMapView.xib */; };
 		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
@@ -446,6 +448,8 @@
 		8E1E3AB82CA7416700D2A34E /* CheckableTreeViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckableTreeViewControllerWrapper.swift; sourceTree = "<group>"; };
 		8E1E3ABA2CA8A61300D2A34E /* TreeNodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeNodeData.swift; sourceTree = "<group>"; };
 		8E1E3ABC2CA8DB3200D2A34E /* CheckableTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckableTableCellView.swift; sourceTree = "<group>"; };
+		8E1E3ABE2CAAF53200D2A34E /* SearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchableTableViewController.swift; sourceTree = "<group>"; };
+		8E1E3AC02CAAFAAD00D2A34E /* Words+AlertDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+AlertDialog.swift"; sourceTree = "<group>"; };
 		8E27F03F25DC0291003B585F /* ImageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMapView.swift; sourceTree = "<group>"; };
 		8E27F04025DC0291003B585F /* ImageMapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageMapView.xib; sourceTree = "<group>"; };
 		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
@@ -973,6 +977,7 @@
 		8E3EC3B8214DB235004B6125 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
+				8E1E3ABE2CAAF53200D2A34E /* SearchableTableViewController.swift */,
 				8E1E3ABC2CA8DB3200D2A34E /* CheckableTableCellView.swift */,
 				8E1E3AB82CA7416700D2A34E /* CheckableTreeViewControllerWrapper.swift */,
 				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
@@ -1010,6 +1015,7 @@
 			children = (
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
+				8E1E3AC02CAAFAAD00D2A34E /* Words+AlertDialog.swift */,
 				8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */,
 				8E3614FC2AC5933B001DF482 /* Words+People.swift */,
 				8E481486277DAFF10097493E /* Words+Splash.swift */,
@@ -2055,6 +2061,7 @@
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */,
+				8E1E3AC12CAAFAB800D2A34E /* Words+AlertDialog.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */,
 				8EF92DF42460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift in Sources */,
@@ -2142,6 +2149,7 @@
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
+				8E1E3ABF2CAAF53400D2A34E /* SearchableTableViewController.swift in Sources */,
 				5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */,
 				8E5B76822ACD45CB00AD8D03 /* PeopleSelectionViewController.swift in Sources */,
 				8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */,

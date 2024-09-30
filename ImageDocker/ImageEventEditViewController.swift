@@ -34,7 +34,6 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     
     
     // MARK: - MANAGE
-    @IBOutlet weak var manageTreeView: NSOutlineView!
     @IBOutlet weak var manageEventBox: NSBox!
     @IBOutlet weak var lblEventName: NSTextField!
     @IBOutlet weak var txtEventName: NSTextField!
@@ -44,10 +43,14 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     @IBOutlet weak var btnDeleteEvent: NSButton!
     @IBOutlet weak var tblCheckableOwners: NSTableView!
     
-    var manageTreeViewController: CheckableTreeViewControllerWrapper? = nil
+    @IBOutlet weak var tblEvents: NSTableView!
+    @IBOutlet weak var txtSearchEvent: NSSearchField!
+    @IBOutlet weak var btnReloadEvents: NSButton!
+    
     var ownersTableController : DictionaryTableViewController!
     var eventCategoryListController : TextListViewPopupController!
-    
+    var manageTableViewController : SearchableTableViewController!
+    var managingEventId:String = ""
     
     init() {
         super.init(nibName: "ImageEventEditViewController", bundle: nil)
@@ -78,11 +81,6 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
         self.progressIndicator.isHidden = true
         self.updateCheckedAmount()
         
-        
-        self.manageTreeViewController = CheckableTreeViewControllerWrapper(self.manageTreeView, editable: true, dataLoader: {
-            return self.loadEvents()
-        })
-        
         self.ownersTableController = DictionaryTableViewController(self.tblCheckableOwners)
         self.ownersTableController.enableCheckboxes()
         self.ownersTableController.load(self.loadOwners(), afterLoaded: {
@@ -90,6 +88,37 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
         
         self.eventCategoryListController = TextListViewPopupController(self.ddlEventCategory)
         self.eventCategoryListController.load(self.getEventCategories())
+        
+        self.manageTableViewController = SearchableTableViewController(table: self.tblEvents,
+                                                                       search: self.txtSearchEvent,
+                                                                       onReloadRecords: { keyword in
+            var events:[ImageEvent] = []
+            if keyword == "" {
+                events = EventDao.default.getEvents()
+            }else{
+                events = EventDao.default.getEvents(byName: keyword)
+            }
+            var results:[[String:String]] = []
+            for e in events {
+                var r:[String:String] = [:]
+                r["category"] = e.category
+                r["name"] = e.name
+                var owners:[String] = []
+                if e.ownerNickname != "" {owners.append(e.ownerNickname)}
+                if e.owner2Nickname != "" {owners.append(e.owner2Nickname)}
+                if e.owner3Nickname != "" {owners.append(e.owner3Nickname)}
+                r["owners"] = owners.joined(separator: ",")
+                results.append(r)
+            }
+            return results
+        }, onSelectRow: { record in
+            self.txtEventName.stringValue = record["name"] ?? ""
+            self.eventCategoryListController.select(record["category"] ?? "")
+            let owners = (record["owners"] ?? "").components(separatedBy: ",")
+            self.ownersTableController.setCheckedItems(column: "name", from: owners)
+            
+            self.managingEventId = record["name"] ?? ""
+        })
     }
     
     // MARK: - VIEW
@@ -208,9 +237,15 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
                 if coreMember.getText() == category || eventName.contains(find: category) {
                     partCategory = ""
                 }
-                group.name = "\(eventName) \(partOwner) \(partCategory)".trimmingCharacters(in: .whitespacesAndNewlines)
+                var name = "\(eventName) \(partOwner) \(partCategory)".trimmingCharacters(in: .whitespacesAndNewlines)
+                if name.count > 30 {
+                    name = "\(name[0..<30])..."
+                }
+                group.name = name
                 group.parent = coreMember
                 group.members = []
+                
+                print("Add event: id:\(group.id) name:\(group.name)")
                 coreMember.groups.append(group)
             }
             
@@ -262,10 +297,192 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     }
     
     @IBAction func onButtonSaveClicked(_ sender: NSButton) {
+        let name = self.txtEventName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let category = self.ddlEventCategory.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let owners = self.ownersTableController.getCheckedItems(column: "name")
+        if self.managingEventId != name {
+            let alertResponse = Alert.dialogTwoChoiceOrCancel(question: Words.dialog_event_new_or_update.fill(arguments: name,
+                                                                                                              self.managingEventId,
+                                                                                                              name),
+                                                              choice1: Words.dialog_new.word(),
+                                                              choice2: Words.dialog_update.word())
+            if alertResponse == .alertSecondButtonReturn { // update existing, rename
+                
+                if let ev = EventDao.default.getEvent(name: name) {
+                    ev.name = name
+                    ev.category = category
+                    
+                    ev.owner = ""
+                    ev.owner2 = ""
+                    ev.owner3 = ""
+                    ev.ownerId = ""
+                    ev.owner2Id = ""
+                    ev.owner3Id = ""
+                    ev.ownerNickname = ""
+                    ev.owner2Nickname = ""
+                    ev.owner3Nickname = ""
+                    if owners.count >= 3 {
+                        if let owner3 = FaceDao.default.getPerson(nickname: owners[2]) {
+                            ev.owner3Id = owner3.id
+                            ev.owner3 = owner3.name
+                            ev.owner3Nickname = owner3.shortName ?? owner3.name
+                        }
+                    }
+                    if owners.count >= 2 {
+                        if let owner2 = FaceDao.default.getPerson(nickname: owners[1]) {
+                            ev.owner2Id = owner2.id
+                            ev.owner2 = owner2.name
+                            ev.owner2Nickname = owner2.shortName ?? owner2.name
+                        }
+                    }
+                    if owners.count >= 1 {
+                        if let owner1 = FaceDao.default.getPerson(nickname: owners[0]) {
+                            ev.ownerId = owner1.id
+                            ev.owner = owner1.name
+                            ev.ownerNickname = owner1.shortName ?? owner1.name
+                        }
+                    }
+                    
+                    let renameState = EventDao.default.renameEvent(oldName: self.managingEventId, newName: name)
+                    if renameState == .OK {
+                        self.managingEventId = name
+                        
+                        let executeState = EventDao.default.updateEventDetail(event: ev)
+                        
+                        if executeState == .OK {
+                            self.manageTableViewController.refreshRecords()
+                        }else{
+                            Alert.criticalAlert(message: "Error: Failed to update event, please check log.")
+                        }
+                    }else{
+                        Alert.criticalAlert(message: "Error: Failed to rename event, please check log.")
+                    }
+                }else{
+                    Alert.criticalAlert(message: "Error: Unable to find this event, please check log and database.")
+                }
+                
+            }else if alertResponse == .alertFirstButtonReturn { // create
+                let ev = ImageEvent()
+                ev.name = name
+                ev.category = category
+                
+                ev.owner = ""
+                ev.owner2 = ""
+                ev.owner3 = ""
+                ev.ownerId = ""
+                ev.owner2Id = ""
+                ev.owner3Id = ""
+                ev.ownerNickname = ""
+                ev.owner2Nickname = ""
+                ev.owner3Nickname = ""
+                if owners.count >= 3 {
+                    if let owner3 = FaceDao.default.getPerson(nickname: owners[2]) {
+                        ev.owner3Id = owner3.id
+                        ev.owner3 = owner3.name
+                        ev.owner3Nickname = owner3.shortName ?? owner3.name
+                    }
+                }
+                if owners.count >= 2 {
+                    if let owner2 = FaceDao.default.getPerson(nickname: owners[1]) {
+                        ev.owner2Id = owner2.id
+                        ev.owner2 = owner2.name
+                        ev.owner2Nickname = owner2.shortName ?? owner2.name
+                    }
+                }
+                if owners.count >= 1 {
+                    if let owner1 = FaceDao.default.getPerson(nickname: owners[0]) {
+                        ev.ownerId = owner1.id
+                        ev.owner = owner1.name
+                        ev.ownerNickname = owner1.shortName ?? owner1.name
+                    }
+                }
+                
+                let executeState = EventDao.default.createEvent(event: ev)
+                
+                if executeState == .OK {
+                    self.manageTableViewController.refreshRecords()
+                }else{
+                    Alert.criticalAlert(message: "Error: Failed to create event, please check log.")
+                }
+            }
+        }else{ // same name, update existing
+            if Alert.dialogOKCancel(question: Words.dialog_event_update.word()) {
+                if let ev = EventDao.default.getEvent(name: name) {
+                    ev.name = name
+                    ev.category = category
+                    
+                    ev.owner = ""
+                    ev.owner2 = ""
+                    ev.owner3 = ""
+                    ev.ownerId = ""
+                    ev.owner2Id = ""
+                    ev.owner3Id = ""
+                    ev.ownerNickname = ""
+                    ev.owner2Nickname = ""
+                    ev.owner3Nickname = ""
+                    if owners.count >= 3 {
+                        if let owner3 = FaceDao.default.getPerson(nickname: owners[2]) {
+                            ev.owner3Id = owner3.id
+                            ev.owner3 = owner3.name
+                            ev.owner3Nickname = owner3.shortName ?? owner3.name
+                        }
+                    }
+                    if owners.count >= 2 {
+                        if let owner2 = FaceDao.default.getPerson(nickname: owners[1]) {
+                            ev.owner2Id = owner2.id
+                            ev.owner2 = owner2.name
+                            ev.owner2Nickname = owner2.shortName ?? owner2.name
+                        }
+                    }
+                    if owners.count >= 1 {
+                        if let owner1 = FaceDao.default.getPerson(nickname: owners[0]) {
+                            ev.ownerId = owner1.id
+                            ev.owner = owner1.name
+                            ev.ownerNickname = owner1.shortName ?? owner1.name
+                        }
+                    }
+                    
+                    let executeState = EventDao.default.updateEventDetail(event: ev)
+                    
+                    if executeState == .OK {
+                        self.manageTableViewController.refreshRecords()
+                    }else{
+                        Alert.criticalAlert(message: "Error: Failed to update event, please check log.")
+                    }
+                }else{
+                    Alert.criticalAlert(message: "Error: Unable to find this event, please check log and database.")
+                }
+            }
+        }
     }
     
     @IBAction func onButtonDeleteClicked(_ sender: NSButton) {
+        let name = self.txtEventName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if let _ = EventDao.default.getEvent(name: name) {
+            if Alert.dialogOKCancel(question: Words.dialog_event_delete.word()) {
+                let executeState = EventDao.default.deleteEvent(name: name)
+                
+                if executeState == .OK {
+                    self.manageTableViewController.refreshRecords()
+                }else{
+                    Alert.criticalAlert(message: "Error: Failed to delete event, please check log.")
+                }
+            }
+        }else{
+            Alert.criticalAlert(message: "Error: Unable to find this event, please check log and database.")
+        }
+    }
+    
+    
+    @IBAction func onButtonReloadClicked(_ sender: NSButton) {
+        self.manageTableViewController.refreshRecords()
+    }
+    
+    @IBAction func onSearchEventsAction(_ sender: NSSearchField) {
+        self.manageTableViewController.refreshRecords()
     }
     
     
 }
+

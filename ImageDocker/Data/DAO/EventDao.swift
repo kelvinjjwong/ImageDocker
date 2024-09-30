@@ -29,7 +29,11 @@ class EventDao {
         return self.impl.getOrCreateEvent(name: name)
     }
     
-    func updateEventDetail(event:ImageEvent){
+    func createEvent(event:ImageEvent) -> ExecuteState {
+        return self.impl.createEvent(event: event)
+    }
+    
+    func updateEventDetail(event:ImageEvent) -> ExecuteState {
         return self.impl.updateEventDetail(event: event)
     }
     
@@ -87,5 +91,9 @@ class EventDao {
     
     func getEvents(imageIds:[String]) -> [String] {
         return self.impl.getEvents(imageIds: imageIds)
+    }
+    
+    func getEvent(name:String) -> ImageEvent? {
+        return self.impl.getEvent(name: name)
     }
 }
