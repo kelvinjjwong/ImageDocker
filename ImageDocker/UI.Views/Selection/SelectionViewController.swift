@@ -18,11 +18,7 @@ class SelectionViewController : NSViewController {
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
     
     @IBOutlet weak var btnBatchEditorToolbarSwitcher: NSButton!
-    @IBOutlet weak var comboEventList: NSComboBox!
-    @IBOutlet weak var btnAssignEvent: NSButton!
-    @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnDatePicker: NSButton!
-    @IBOutlet weak var btnNotes: NSButton!
     @IBOutlet weak var btnDuplicates: NSPopUpButton!
     @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
     
@@ -40,8 +36,6 @@ class SelectionViewController : NSViewController {
     var selectImage: ( (ImageFile) -> Void )?
     var getMainCollectionVisibleItems: ( () -> [CollectionViewItem] )?
     var selectAllInMainCollectionView: ( (Bool) -> Void )?
-    
-    var eventListController:EventListComboController!
     
     var calendarPopover:NSPopover? = nil
     var calendarViewController:DateTimeViewController!
@@ -69,14 +63,9 @@ class SelectionViewController : NSViewController {
         
         batchEditIndicator.isDisplayedWhenStopped = false
         batchEditIndicator.isHidden = true
-        comboEventList.isEditable = false
 //        comboPlaceList.isEditable = false
         self.btnShare.sendAction(on: .leftMouseDown)
 //        self.logger.log("Loading view - setup event list")
-        setupEventList()
-        self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboEventList.backgroundColor = Colors.DeepDarkGray
         self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -87,14 +76,11 @@ class SelectionViewController : NSViewController {
     }
     
     func applyLocalization() {
-        self.btnAssignEvent.title = Words.assignEvent.word()
         self.btnDatePicker.title = Words.changeDate.word()
-        self.btnNotes.title = Words.writeNotes.word()
         self.btnDuplicates.title = Words.duplicates.word()
         self.btnDuplicates.image = Icons.duplicates
         self.btnDuplicates.item(at: 0)?.image = Icons.duplicates
         self.selectionCheckAllBox.title = Words.selectAll.word()
-        self.btnPeople.title = Words.peopleManage.word()
     }
     
     func openDatePicker(with referenceDate:String? = nil) {
@@ -114,30 +100,6 @@ class SelectionViewController : NSViewController {
         self.switchSelectionToolbar()
     }
     
-    @IBAction func onAssignEventButtonClicked(_ sender: Any) {
-        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
-            if let image = imageFile.imageData, let imageId = image.id {
-                return imageId
-            }else{
-                return ""
-            }
-        }
-        self.logger.log("selected image ids: \(selectedImageIds)")
-        self.assignEvent()
-    }
-    
-    @IBAction func onButtonPeopleClicked(_ sender: NSButton) {
-        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
-            if let image = imageFile.imageData, let imageId = image.id {
-                return imageId
-            }else{
-                return ""
-            }
-        }
-        self.logger.log("selected image ids: \(selectedImageIds)")
-        self.openPeopleSelection(sender)
-    }
-    
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
         let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
             if let image = imageFile.imageData, let imageId = image.id {
@@ -148,18 +110,6 @@ class SelectionViewController : NSViewController {
         }
         self.logger.log("selected image ids: \(selectedImageIds)")
         self.openDatePicker(sender)
-    }
-    
-    @IBAction func onButtonNotesClicked(_ sender: NSButton) {
-        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
-            if let image = imageFile.imageData, let imageId = image.id {
-                return imageId
-            }else{
-                return ""
-            }
-        }
-        self.logger.log("selected image ids: \(selectedImageIds)")
-        self.openNoteWriter(sender)
     }
     
     @IBAction func onButtonDuplicatesClicked(_ sender: NSPopUpButton) {
@@ -329,7 +279,6 @@ class SelectionViewController : NSViewController {
         self.selectionCheckAllBox.isHidden = true
         self.btnRemoveSelection.isHidden = true
         self.btnRemoveAllSelection.isHidden = true
-        self.btnPeople.isHidden = true
     }
     
     func showSelectionToolbar() {
@@ -340,7 +289,6 @@ class SelectionViewController : NSViewController {
         self.selectionCheckAllBox.isHidden = false
         self.btnRemoveSelection.isHidden = false
         self.btnRemoveAllSelection.isHidden = false
-        self.btnPeople.isHidden = false
         
     }
     
@@ -364,18 +312,12 @@ class SelectionViewController : NSViewController {
     }
     
     func hideSelectionBatchEditors() {
-        self.comboEventList.isHidden = true
-        self.btnAssignEvent.isHidden = true
         self.btnDatePicker.isHidden = true
-        self.btnNotes.isHidden = true
         self.btnDuplicates.isHidden = true
     }
     
     func showSelectionBatchEditors() {
-        self.comboEventList.isHidden = false
-        self.btnAssignEvent.isHidden = false
         self.btnDatePicker.isHidden = false
-        self.btnNotes.isHidden = false
         self.btnDuplicates.isHidden = false
     }
     

@@ -3208,66 +3208,14 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <rect key="frame" x="0.0" y="0.0" width="1312" height="224"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="RTC-0r-AYp">
-                                <rect key="frame" x="0.0" y="206" width="1312" height="18"/>
-                                <subviews>
-                                    <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
-                                        <rect key="frame" x="-1" y="-3" width="254" height="22"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="250" id="KDF-ql-pIb"/>
-                                            <constraint firstAttribute="height" constant="19" id="i3V-Iw-rTy"/>
-                                        </constraints>
-                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="8CH-Aa-93G">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </comboBoxCell>
-                                    </comboBox>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xCg-De-lnA">
-                                        <rect key="frame" x="248" y="-8" width="94" height="32"/>
-                                        <buttonCell key="cell" type="push" title="Assign" bezelStyle="rounded" image="NSLeftFacingTriangleTemplate" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gC1-GR-U1c">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="80" id="bIZ-4r-DIe"/>
-                                            <constraint firstAttribute="height" constant="20" id="cKa-4R-eQ4"/>
-                                        </constraints>
-                                        <connections>
-                                            <action selector="onAssignEventButtonClicked:" target="ZvP-SA-CoE" id="Hyg-6u-1Uf"/>
-                                        </connections>
-                                    </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pRY-Hw-lJW">
-                                        <rect key="frame" x="338" y="-8" width="99" height="32"/>
-                                        <buttonCell key="cell" type="push" title="People" bezelStyle="rounded" image="people" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HE7-nF-m5K">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="85" id="pGq-RI-wPs"/>
-                                        </constraints>
-                                        <connections>
-                                            <action selector="onButtonPeopleClicked:" target="ZvP-SA-CoE" id="i3e-eB-9OA"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="5" id="Bep-cL-pum"/>
-                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="RTC-0r-AYp" secondAttribute="leading" id="TzS-ct-lM7"/>
-                                    <constraint firstItem="pRY-Hw-lJW" firstAttribute="top" secondItem="RTC-0r-AYp" secondAttribute="top" constant="-1" id="bs8-TV-w0E"/>
-                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="RTC-0r-AYp" secondAttribute="top" id="hUv-QG-8Zs"/>
-                                    <constraint firstItem="pRY-Hw-lJW" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="rsA-jN-nCf"/>
-                                    <constraint firstItem="xCg-De-lnA" firstAttribute="top" secondItem="RTC-0r-AYp" secondAttribute="top" constant="-1" id="tk1-XZ-Ft5"/>
-                                </constraints>
-                            </customView>
                             <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
-                                <rect key="frame" x="0.0" y="25" width="1312" height="179"/>
+                                <rect key="frame" x="0.0" y="25" width="1312" height="199"/>
                                 <clipView key="contentView" id="ueq-7S-QM2">
-                                    <rect key="frame" x="0.0" y="0.0" width="1312" height="179"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1312" height="199"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <collectionView identifier="selectionCollectionView" selectable="YES" allowsMultipleSelection="YES" id="ZyN-Zd-qQf">
-                                            <rect key="frame" x="0.0" y="0.0" width="1312" height="179"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1312" height="199"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="mUq-KW-nzo">
                                                 <size key="itemSize" width="50" height="50"/>
@@ -3317,21 +3265,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <action selector="onButtonDatePickerClicked:" target="ZvP-SA-CoE" id="VR9-1S-FZD"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Bs-pz-4CN">
-                                        <rect key="frame" x="115" y="-7" width="88" height="32"/>
-                                        <buttonCell key="cell" type="push" title="Notes" bezelStyle="rounded" image="edit" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mlb-9Y-BIF">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="3t8-HB-w8J"/>
-                                        </constraints>
-                                        <connections>
-                                            <action selector="onButtonNotesClicked:" target="ZvP-SA-CoE" id="f9c-wU-mzv"/>
-                                        </connections>
-                                    </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JAQ-3Z-0MW">
-                                        <rect key="frame" x="194" y="-7" width="124" height="32"/>
+                                        <rect key="frame" x="120" y="-7" width="124" height="32"/>
                                         <popUpButtonCell key="cell" type="push" title="Duplicate" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="7hi-2u-8xh" id="92P-Oj-IXC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" usesAppearanceFont="YES"/>
@@ -3363,7 +3298,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </popUpButton>
                                     <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
-                                        <rect key="frame" x="321" y="-1" width="120" height="20"/>
+                                        <rect key="frame" x="247" y="-1" width="120" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="Xpt-Ff-Zm4"/>
                                             <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
@@ -3373,11 +3308,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 <constraints>
                                     <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="JAQ-3Z-0MW" secondAttribute="trailing" constant="10" id="BKg-E0-2ZG"/>
                                     <constraint firstItem="JAQ-3Z-0MW" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="EfL-DW-Yer"/>
-                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="leading" secondItem="qYv-ia-zVJ" secondAttribute="trailing" constant="5" id="G6x-bR-lhW"/>
-                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="Qs4-dm-Fv8"/>
                                     <constraint firstAttribute="height" constant="20" id="aTE-Sc-kmY"/>
+                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="leading" secondItem="qYv-ia-zVJ" secondAttribute="trailing" constant="10" id="dsZ-Fb-qc5"/>
                                     <constraint firstItem="9ri-yc-r9m" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" constant="2" id="eJt-7I-G9x"/>
-                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="leading" secondItem="9Bs-pz-4CN" secondAttribute="trailing" constant="5" id="jVR-9X-A4X"/>
                                     <constraint firstItem="qYv-ia-zVJ" firstAttribute="leading" secondItem="UBE-X3-xaP" secondAttribute="leading" id="ncK-aI-Rp5"/>
                                     <constraint firstItem="qYv-ia-zVJ" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="tod-Ju-Yhn"/>
                                 </constraints>
@@ -3479,17 +3412,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="UWC-ys-zX6" secondAttribute="bottom" constant="1" id="5rt-cC-Own"/>
                             <constraint firstAttribute="bottom" secondItem="UBE-X3-xaP" secondAttribute="bottom" constant="2" id="KsK-Hj-NXQ"/>
-                            <constraint firstItem="RTC-0r-AYp" firstAttribute="top" secondItem="7Oc-5w-GcI" secondAttribute="top" id="RiY-2H-raR"/>
-                            <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="7Oc-5w-GcI" secondAttribute="top" constant="20" symbolic="YES" id="Toj-Df-Y7Y"/>
+                            <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="7Oc-5w-GcI" secondAttribute="top" id="Toj-Df-Y7Y"/>
                             <constraint firstAttribute="trailing" secondItem="UWC-ys-zX6" secondAttribute="trailing" id="UyJ-fR-rrB"/>
-                            <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="RTC-0r-AYp" secondAttribute="bottom" constant="2" id="aPI-TZ-d26"/>
                             <constraint firstItem="UWC-ys-zX6" firstAttribute="leading" secondItem="UBE-X3-xaP" secondAttribute="trailing" id="cky-v7-BkV"/>
                             <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="gDr-rD-jLf"/>
                             <constraint firstItem="UBE-X3-xaP" firstAttribute="leading" secondItem="ltZ-4C-dje" secondAttribute="trailing" id="h70-kk-8fg"/>
                             <constraint firstItem="ltZ-4C-dje" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="hmV-MQ-Zx4"/>
                             <constraint firstItem="UWC-ys-zX6" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="2" id="jmG-fC-CQg"/>
-                            <constraint firstAttribute="trailing" secondItem="RTC-0r-AYp" secondAttribute="trailing" id="kXi-9G-wlz"/>
-                            <constraint firstItem="RTC-0r-AYp" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="seQ-kL-qqy"/>
                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" id="vBo-4m-mGH"/>
                             <constraint firstAttribute="bottom" secondItem="ltZ-4C-dje" secondAttribute="bottom" constant="2" id="wby-Ww-QQh"/>
                             <constraint firstItem="ltZ-4C-dje" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="zDs-6v-pFb"/>
@@ -3497,19 +3426,15 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                     </view>
                     <connections>
                         <outlet property="batchEditIndicator" destination="9ri-yc-r9m" id="Q1o-yH-xLM"/>
-                        <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="5y3-cc-OJK"/>
                         <outlet property="btnBatchEditorToolbarSwitcher" destination="ltZ-4C-dje" id="dGf-X9-tHo"/>
                         <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="msL-oY-kw4"/>
                         <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="MbY-7G-cua"/>
                         <outlet property="btnDuplicates" destination="JAQ-3Z-0MW" id="Lqb-R5-oKw"/>
                         <outlet property="btnHide" destination="QJ8-hF-79J" id="Ieu-6o-wPH"/>
-                        <outlet property="btnNotes" destination="9Bs-pz-4CN" id="WkP-yT-djh"/>
-                        <outlet property="btnPeople" destination="pRY-Hw-lJW" id="dLD-1k-6KI"/>
                         <outlet property="btnRemoveAllSelection" destination="Tuu-5h-g9B" id="bAF-g1-onn"/>
                         <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="toz-mc-vTE"/>
                         <outlet property="btnShare" destination="0by-PK-DjP" id="sPW-22-uTb"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="F3P-9L-R4d"/>
-                        <outlet property="comboEventList" destination="UJe-CL-XGt" id="p0u-Fa-zxw"/>
                         <outlet property="selectionCheckAllBox" destination="CaM-Tw-R04" id="9Ix-ip-xhZ"/>
                         <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="eY4-rC-oDn"/>
                     </connections>
@@ -5891,7 +5816,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="NSFollowLinkFreestandingTemplate" width="20" height="20"/>
         <image name="NSGoLeftTemplate" width="12" height="17"/>
-        <image name="NSLeftFacingTriangleTemplate" width="12" height="17"/>
         <image name="NSListViewTemplate" width="21" height="15"/>
         <image name="NSRefreshTemplate" width="18" height="21"/>
         <image name="NSRevealFreestandingTemplate" width="20" height="20"/>
@@ -5914,7 +5838,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
         <image name="hide" width="17" height="15"/>
         <image name="map" width="16" height="16"/>
         <image name="notification" width="24" height="24"/>
-        <image name="people" width="16" height="16"/>
         <image name="rotate_clockwise" width="16" height="16"/>
         <image name="rotate_counter_clockwise" width="16" height="16"/>
         <image name="smile" width="15" height="15"/>
