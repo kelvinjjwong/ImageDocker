@@ -51,9 +51,6 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnTogglePreviewPanel: NSButton!
     
-    
-    @IBOutlet weak var btnManageEvents: NSButton!
-    @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnImageOptions: NSPopUpButton!
     
     // MARK: Layout
@@ -536,7 +533,6 @@ class ViewController: NSViewController {
         self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -562,9 +558,6 @@ class ViewController: NSViewController {
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()
-        
-        self.btnPeople.title = Words.peopleManage.word()
-        self.btnManageEvents.title = Words.manageEvents.word()
     }
     
     internal var startupAggregateFlag: Int = 0 {
