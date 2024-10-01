@@ -403,7 +403,69 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    func updateImageShortDescription(shortDescription:String, imageIds:[String]) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "shortDescription" = $1 WHERE id in (\(imageIds.joinedSingleQuoted(separator: ",")))
+            """, parameterValues: [shortDescription])
+        }catch{
+            self.logger.log(.error, "[updateImageShortDescription]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageShortDescription", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
     
+    func updateImageLongDescription(longDescription:String, imageIds:[String]) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "longDescription" = $1 WHERE id in (\(imageIds.joinedSingleQuoted(separator: ",")))
+            """, parameterValues: [longDescription])
+        }catch{
+            self.logger.log(.error, "[updateImageLongDescription]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageLongDescription", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func updateImageShortAndLongDescription(shortDescription:String, longDescription:String, imageIds:[String]) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "shortDescription" = $1, "longDescription" = $2 WHERE id in (\(imageIds.joinedSingleQuoted(separator: ",")))
+            """, parameterValues: [shortDescription, longDescription])
+        }catch{
+            self.logger.log(.error, "[updateImageShortDescription]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageShortDescription", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    // MARK: UPDATE EVENT
+    
+    func updateEvent(imageId:String, event:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "event" = $1 WHERE id = $2
+            """, parameterValues: [event, imageId])
+        }catch{
+            self.logger.log(.error, "[updateEvent]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateEvent", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    // MARK: UPDATE FAMILY
     
     func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState {
         let db = PostgresConnection.database()

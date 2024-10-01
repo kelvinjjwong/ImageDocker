@@ -14,6 +14,8 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     
     let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Family")
     
+    @IBOutlet weak var tabs: NSTabView!
+    
     // MARK: - VIEW
     
     @IBOutlet weak var tableView: NSTableView!
@@ -30,6 +32,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var progressLabel: NSTextField!
     @IBOutlet weak var btnApply: NSButton!
+    var onApplyCompleted: (() -> Void)?
     
     private var editTableViewController:TwoColumnTableViewController? = nil
     var treeViewController: CheckableTreeViewControllerWrapper? = nil
@@ -155,6 +158,12 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             print("after change tree view")
             self.treeViewController?.reloadNodes()
         })
+        
+        self.btnApply.title = Words.notes_apply.word()
+        
+        self.tabs.tabViewItems[0].label = Words.editor_tab_view.word()
+        self.tabs.tabViewItems[1].label = Words.editor_tab_edit.word()
+        self.tabs.tabViewItems[2].label = Words.editor_tab_manage.word()
         
     }
     
@@ -408,36 +417,39 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
 //        self.logger.log("selected images: \(imageIds)")
 //        self.logger.log("checked families: \(checkedGroupIds)")
         
-        self.btnApply.isEnabled = false
-        
-        self.accumulator = Accumulator(target: imageIds.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.progressLabel)
-        
-        DispatchQueue.global().async {
-            for imageId in imageIds {
-                guard imageId != "" else {continue}
-                
-                // unlink families
-                let _ = ImageRecordDao.default.unlinkImageFamilies(imageId: imageId)
-                
-                // link families
-                for peopleGroup in checkedGroups {
-                    if let peopleGroup = peopleGroup as? PeopleGroup {
-                        if let owner = peopleGroup.parent {
-                            let familyId = peopleGroup.getId()
-                            let ownerId = owner.getId()
-                            let _ = ImageRecordDao.default.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: peopleGroup.name, owner: owner.nickname)
-                        }else{
-                            self.logger.log(.error, "PeopleGroup.parent is empty: PeopleGroup:\(peopleGroup.name), Image.id:\(imageId)")
+        if Alert.dialogOKCancel(question: Words.dialog_update_images.word()) {
+            self.btnApply.isEnabled = false
+            
+            self.accumulator = Accumulator(target: imageIds.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.progressLabel)
+            
+            DispatchQueue.global().async {
+                for imageId in imageIds {
+                    guard imageId != "" else {continue}
+                    
+                    // unlink families
+                    let _ = ImageRecordDao.default.unlinkImageFamilies(imageId: imageId)
+                    
+                    // link families
+                    for peopleGroup in checkedGroups {
+                        if let peopleGroup = peopleGroup as? PeopleGroup {
+                            if let owner = peopleGroup.parent {
+                                let familyId = peopleGroup.getId()
+                                let ownerId = owner.getId()
+                                let _ = ImageRecordDao.default.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: peopleGroup.name, owner: owner.nickname)
+                            }else{
+                                self.logger.log(.error, "PeopleGroup.parent is empty: PeopleGroup:\(peopleGroup.name), Image.id:\(imageId)")
+                            }
                         }
                     }
+                    
+                    DispatchQueue.main.async {
+                        let _ = self.accumulator?.add("")
+                    }
                 }
-                
                 DispatchQueue.main.async {
-                    let _ = self.accumulator?.add("")
+                    self.btnApply.isEnabled = true
+                    self.onApplyCompleted?()
                 }
-            }
-            DispatchQueue.main.async {
-                self.btnApply.isEnabled = true
             }
         }
     }

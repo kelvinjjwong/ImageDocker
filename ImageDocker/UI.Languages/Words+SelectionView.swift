@@ -24,4 +24,20 @@ extension Words {
         eng: "Events",
         chs: "活动"
     )
+    
+    static let editor_tab_view = Localize(
+        eng: "View",
+        chs: "检视"
+    )
+    
+    static let editor_tab_edit = Localize(
+        eng: "Edit",
+        chs: "变更"
+    )
+    
+    static let editor_tab_manage = Localize(
+        eng: "Manage",
+        chs: "增删改"
+    )
+
 }

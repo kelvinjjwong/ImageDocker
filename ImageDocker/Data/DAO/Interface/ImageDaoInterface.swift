@@ -102,7 +102,17 @@ protocol ImageRecordDaoInterface {
     
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState
     
-    func updateImageRotation(path:String, rotation:Int) -> ExecuteState
+    func updateImageShortDescription(shortDescription:String, imageIds:[String]) -> ExecuteState 
+    
+    func updateImageLongDescription(longDescription:String, imageIds:[String]) -> ExecuteState
+    
+    func updateImageShortAndLongDescription(shortDescription:String, longDescription:String, imageIds:[String]) -> ExecuteState// MARK: UPDATE EVENT
+    
+    // MARK: - EVENT
+    
+    func updateEvent(imageId:String, event:String) -> ExecuteState
+    
+    // MARK: - FAMILY
     
     func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState
     
@@ -111,6 +121,12 @@ protocol ImageRecordDaoInterface {
     func unlinkImageFamilies(familyId:String) -> ExecuteState
     
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState
+    
+    // MARK: - ROTATION
+    
+    func updateImageRotation(path:String, rotation:Int) -> ExecuteState
+    
+    // MARK: - PATH
     
     func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState
     

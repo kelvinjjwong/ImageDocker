@@ -14,6 +14,8 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     
     let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Event")
     
+    @IBOutlet weak var tabs: NSTabView!
+    
     // MARK: - VIEW
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var stackView: NSStackView!
@@ -28,6 +30,7 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     @IBOutlet weak var btnApply: NSButton!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var progressLabel: NSTextField!
+    var onApplyCompleted: (() -> Void)?
     
     private var editTableViewController:TwoColumnTableViewController? = nil
     var treeViewController: CheckableTreeViewControllerWrapper? = nil
@@ -119,6 +122,15 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
             
             self.managingEventId = record["name"] ?? ""
         })
+        
+        self.btnApply.title = Words.notes_apply.word()
+        self.btnSaveEvent.title = Words.dialog_save.word()
+        self.btnDeleteEvent.title = Words.dialog_delete.word()
+        self.btnReloadEvents.title = Words.dialog_reload.word()
+        
+        self.tabs.tabViewItems[0].label = Words.editor_tab_view.word()
+        self.tabs.tabViewItems[1].label = Words.editor_tab_edit.word()
+        self.tabs.tabViewItems[2].label = Words.editor_tab_manage.word()
     }
     
     // MARK: - VIEW
@@ -275,6 +287,49 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     fileprivate var accumulator:Accumulator?
     
     @IBAction func onButtonApplyClicked(_ sender: NSButton) {
+        let imageIds = self.flowListItems.keys.sorted()
+        
+        if imageIds.isEmpty {
+            return
+        }
+        
+        let _eventIds = self.treeViewController?.getCheckedItems().map({ treeNode in
+            return treeNode.getId()
+        }) ?? []
+        
+        var eventIds:Set<String> = []
+        for ev in _eventIds {
+            if ev != "" {
+                eventIds.insert(ev)
+            }
+        }
+        
+        if eventIds.count > 1 {
+            Alert.warning(message: Words.warning_should_not_select_multiple_items.word())
+            return
+        }
+        let eventId = eventIds.first ?? ""
+        
+        if Alert.dialogOKCancel(question: Words.dialog_update_images.word()) {
+            
+            self.btnApply.isEnabled = false
+            
+            self.accumulator = Accumulator(target: imageIds.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.progressLabel)
+            
+            DispatchQueue.global().async {
+                for imageId in imageIds {
+                    let _ = ImageRecordDao.default.updateEvent(imageId: imageId, event: eventId)
+                    
+                    DispatchQueue.main.async {
+                        let _ = self.accumulator?.add("")
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.btnApply.isEnabled = true
+                    self.onApplyCompleted?()
+                }
+            }
+        }
     }
     
     // MARK: - MANAGE

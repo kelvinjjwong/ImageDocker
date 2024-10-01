@@ -227,6 +227,26 @@ public final class ImageRecordDao {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
     }
     
+    func updateImageShortDescription(shortDescription:String, imageIds:[String]) -> ExecuteState {
+        return self.impl.updateImageShortDescription(shortDescription: shortDescription, imageIds: imageIds)
+    }
+    
+    func updateImageLongDescription(longDescription:String, imageIds:[String]) -> ExecuteState {
+        return self.impl.updateImageLongDescription(longDescription: longDescription, imageIds: imageIds)
+    }
+    
+    func updateImageShortAndLongDescription(shortDescription:String, longDescription:String, imageIds:[String]) -> ExecuteState {
+        return self.impl.updateImageShortAndLongDescription(shortDescription: shortDescription, longDescription: longDescription, imageIds: imageIds)
+    }
+    
+    // MARK: UPDATE EVENT
+    
+    func updateEvent(imageId:String, event:String) -> ExecuteState {
+        return self.impl.updateEvent(imageId: imageId, event: event)
+    }
+    
+    // MARK: UPDATE FAMILY
+    
     func unlinkImageFamily(imageId:String, familyId:String) -> ExecuteState {
         return self.impl.unlinkImageFamily(imageId: imageId, familyId: familyId)
     }
@@ -243,6 +263,8 @@ public final class ImageRecordDao {
         return self.impl.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: familyName, owner: owner)
     }
     
+    // MARK: UPDATE ROTATION
+    
     /// - caller:
     ///   - ImagePreviewController.onRotateClickwiseClicked()
     ///   - ImagePreviewController.onRotateCounterClockerwiseClicked()
@@ -252,6 +274,8 @@ public final class ImageRecordDao {
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState {
         return self.impl.updateImageRotation(path: path, rotation: rotation)
     }
+    
+    // MARK: UPDATE PATH
     
     func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState {
         return self.impl.updateImagePaths(id: id, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath)

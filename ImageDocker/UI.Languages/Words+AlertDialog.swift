@@ -21,6 +21,21 @@ extension Words {
         chs: "取消"
     )
     
+    static let dialog_save = Localize (
+        eng: "Save",
+        chs: "保存"
+    )
+    
+    static let dialog_delete = Localize (
+        eng: "Delete",
+        chs: "删除"
+    )
+    
+    static let dialog_reload = Localize (
+        eng: "Reload",
+        chs: "刷新"
+    )
+    
     static let dialog_new = Localize (
         eng: "New",
         chs: "新建"
@@ -49,5 +64,15 @@ extension Words {
     static let dialog_event_delete = Localize(
         eng: "Are you sure to delete an existing event?",
         chs: "这将 [删除] 这个活动，是否确定？"
+    )
+    
+    static let warning_should_not_select_multiple_items = Localize(
+        eng: "Should not select multiple items",
+        chs: "请检查并取消多选"
+    )
+    
+    static let dialog_update_images = Localize(
+        eng: "Are you sure to update selected images?",
+        chs: "是否确定 [批量修改] 选中的这些照片？"
     )
 }
