@@ -202,7 +202,7 @@ class ContainerDetailViewController: NSViewController {
             end = total
         }
         self.lblShowsItems.stringValue = "\(start) - \(end)"
-        self.logger.log("divided pages \(self.pages)")
+        self.logger.log(.trace, "divided pages \(self.pages)")
     }
     
     /// deprecate

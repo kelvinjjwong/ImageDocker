@@ -78,7 +78,7 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
         self.treeViewController = CheckableTreeViewControllerWrapper(self.editTreeView, checkable: true, dataLoader: {
             return self.loadEvents()
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
-            print("tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+            self.logger.log(.trace, "tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             self.updateCheckedAmount()
         })
         self.progressIndicator.isHidden = true
@@ -155,8 +155,8 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
             }) {
                 grid.append(("\(o.value * 100) %", o.key))
             }
-            print("collectImagesDiff:")
-            print(grid)
+            self.logger.log(.trace, "collectImagesDiff:")
+            self.logger.log(.trace, grid)
             
             DispatchQueue.main.async {
                 self.tableViewController?.load(grid)
@@ -257,7 +257,7 @@ class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
                 group.parent = coreMember
                 group.members = []
                 
-                print("Add event: id:\(group.id) name:\(group.name)")
+                self.logger.log(.trace, "Add event: id:\(group.id) name:\(group.name)")
                 coreMember.groups.append(group)
             }
             

@@ -130,7 +130,7 @@ final class BaiduLocation {
                     }
                 }else{
                     
-                    //self.logger.log("RECEIVED BAIDU LOCATION at \(Date())")
+                    //self.logger.log(.trace, "RECEIVED BAIDU LOCATION at \(Date())")
                     
                     location.address = json!["result"]["formatted_address"].description
                     location.businessCircle = json!["result"]["business"].description
@@ -162,7 +162,7 @@ final class BaiduLocation {
     }
     
     public static func queryForMap(coordinateBD: Coord, view:WKWebView, zoom: Int){
-        //self.logger.log("START REQUEST MAP")
+        //self.logger.log(.trace, "START REQUEST MAP")
         let width:Int = Int(min(CGFloat(512), view.frame.size.width))
         let height:Int = 490 //Int(min(CGFloat(512), view.frame.size.height))
         let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: coordinateBD.latitude, lon: coordinateBD.longitude)

@@ -7,8 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class SplashViewController: NSViewController {
+    
+    let logger = LoggerFactory.get(category: "Startup", subCategory: "Splash")
     
     // MARK: PROPERTIES
     @IBOutlet weak var lblMessage: NSTextField!
@@ -58,21 +61,21 @@ class SplashViewController: NSViewController {
             
             if (visibleFrame.origin.x > screenFrame.origin.x) {
                 self.onScreenDockHeightDetected(position: "LEFT", height: Int(visibleFrame.origin.x - screenFrame.origin.x))
-                print("[SPLASH-VIEW] Dock is positioned on the LEFT")
-                print("[SPLASH-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
+                self.logger.log(.trace, "[SPLASH-VIEW] Dock is positioned on the LEFT")
+                self.logger.log(.trace, "[SPLASH-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
             } else if (visibleFrame.origin.y > screenFrame.origin.y) {
                 self.onScreenDockHeightDetected(position: "BOTTOM", height: Int(visibleFrame.origin.y - screenFrame.origin.y))
-                print("[SPLASH-VIEW] Dock is positioned on the BOTTOM")
-                print("[SPLASH-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
+                self.logger.log(.trace, "[SPLASH-VIEW] Dock is positioned on the BOTTOM")
+                self.logger.log(.trace, "[SPLASH-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
             } else if (visibleFrame.size.width < screenFrame.size.width) {
                 self.onScreenDockHeightDetected(position: "RIGHT", height: Int(screenFrame.size.width - visibleFrame.size.width))
             } else {
                 self.onScreenDockHeightDetected(position: "HIDDEN", height: 0)
-                print("[SPLASH-VIEW] Dock is HIDDEN");
+                self.logger.log(.trace, "[SPLASH-VIEW] Dock is HIDDEN");
             }
         }else {
             self.onScreenDockHeightDetected(position: "N/A", height: -1)
-            print ("[SPLASH-VIEW] CANNOT DETECT DOCK")
+            self.logger.log(.trace, "[SPLASH-VIEW] CANNOT DETECT DOCK")
         }
     }
     
@@ -129,7 +132,7 @@ class SplashViewController: NSViewController {
     }
     
     @objc func beginSubProgress(notification:Notification){
-//        self.logger.log("BEGIN SUB PROGRESS")
+//        self.logger.log(.trace, "BEGIN SUB PROGRESS")
         DispatchQueue.main.async {
             self.subProgressIndicator.minValue = 0
             self.subProgressIndicator.maxValue = 100
@@ -144,14 +147,14 @@ class SplashViewController: NSViewController {
     
     @objc func increSubProgress(notification:Notification){
         
-//        self.logger.log("INCREASE SUB PROGRESS BY 1")
+//        self.logger.log(.trace, "INCREASE SUB PROGRESS BY 1")
         DispatchQueue.main.async {
             self.subProgressIndicator.increment(by: 1)
             let value = Int(self.subProgressIndicator.doubleValue)
             let total = Int(self.subProgressIndicator.maxValue)
             self.lblSubProgress.stringValue = "\(value) / \(total)"
             
-//            self.logger.log("value=\(value), total=\(total)")
+//            self.logger.log(.trace, "value=\(value), total=\(total)")
             
             if value == total {
                 self.lblSubMessage.isHidden = true
@@ -170,7 +173,7 @@ class SplashViewController: NSViewController {
     @objc func setTotalOfSubProgress(notification:Notification){
         if let obj = notification.object {
             let total = obj as? Int ?? 0
-//            self.logger.log("SET SUB TOTAL TO \(total)")
+//            self.logger.log(.trace, "SET SUB TOTAL TO \(total)")
             DispatchQueue.main.async {
                 self.subProgressIndicator.minValue = 0
                 self.subProgressIndicator.maxValue = Double(total)
@@ -197,7 +200,7 @@ class SplashViewController: NSViewController {
         DispatchQueue.main.async {
             self.lblMessage.stringValue = value
             
-//            self.logger.log("progressStage=\(self.progressStage)")
+//            self.logger.log(.trace, "progressStage=\(self.progressStage)")
             
             if self.progressStage != progress {
                 // progress indicator + 1
@@ -209,8 +212,8 @@ class SplashViewController: NSViewController {
                 
                 self.progressStage = progress
                 
-//                self.logger.log("message=\(value)")
-//                self.logger.log("progress=\(progress), step=\(self.progressStep), end=\(self.progressEnd)")
+//                self.logger.log(.trace, "message=\(value)")
+//                self.logger.log(.trace, "progress=\(progress), step=\(self.progressStep), end=\(self.progressEnd)")
                 
                 if self.progressStep >= self.progressEnd {
                     self.onCompleted()

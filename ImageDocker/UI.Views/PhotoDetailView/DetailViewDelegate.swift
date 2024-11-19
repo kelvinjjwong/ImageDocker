@@ -37,7 +37,7 @@ extension ViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup:Bool = false) {
-        self.logger.log("LOCATION ALERT: \(status) : \(message)")
+        self.logger.log(.trace, "LOCATION ALERT: \(status) : \(message)")
     }
     
     

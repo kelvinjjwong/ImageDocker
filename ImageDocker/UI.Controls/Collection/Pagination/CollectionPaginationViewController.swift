@@ -123,7 +123,7 @@ class CollectionPaginationViewController: NSViewController {
     @IBAction func onLoadClicked(_ sender: NSButton) {
         self.countImages()
         self.calculatePages()
-        self.logger.log("CALL ONLOAD")
+        self.logger.log(.trace, "CALL ONLOAD")
         self.onLoad(self.pageSize, self.currentPage)
     }
     
@@ -170,7 +170,7 @@ class CollectionPaginationViewController: NSViewController {
             self.currentPage,
             self.pages
         )
-        self.logger.log("divided pages \(self.pages)")
+        self.logger.log(.trace, "divided pages \(self.pages)")
     }
     
 }

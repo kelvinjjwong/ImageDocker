@@ -348,7 +348,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         \(pagination)
         """
         
-        self.logger.log("sql for export images:")
+        self.logger.log(.trace, "sql for export images:")
         self.logger.log(sql)
         
         return sql
@@ -450,12 +450,12 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
             SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
             """)
             if count < 1 {
-                self.logger.log("insert log \(imageId) \(profileId)")
+                self.logger.log(.trace, "insert log \(imageId) \(profileId)")
                 try db.execute(sql: """
                 INSERT INTO "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMd5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 't', '')
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
             }else{
-                self.logger.log("update log \(imageId) \(profileId)")
+                self.logger.log(.trace, "update log \(imageId) \(profileId)")
                 try db.execute(sql: """
                 UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMd5" = $4, "state" = 't', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])

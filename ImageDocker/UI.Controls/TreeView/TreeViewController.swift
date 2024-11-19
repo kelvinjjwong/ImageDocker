@@ -67,9 +67,9 @@ class TreeViewController : StackBodyViewController {
     
     // show roots
     func show() {
-        self.logger.log("show tree: \(self.stackTitle)")
+        self.logger.log(.trace, "show tree: \(self.stackTitle)")
         let condition = SearchCondition.get(from: stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
-        self.logger.log("[\(self.stackTitle)] condition: \(condition)")
+        self.logger.log(.trace, "[\(self.stackTitle)] condition: \(condition)")
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
                 let (treeNodes, message, messageType) = self.collectionLoader!(nil, condition)
@@ -269,13 +269,13 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                 let (treeNodes, message, messageType) = self.collectionLoader!(item, condition)
                 
                 if treeNodes.count > 0 {
-                    self.logger.log("loaded \(treeNodes.count) child nodes")
+                    self.logger.log(.trace, "loaded \(treeNodes.count) child nodes")
                     DispatchQueue.main.async {
-                        self.logger.log("adding children to tree node")
+                        self.logger.log(.trace, "adding children to tree node")
                         item.removeAllChildren()
                         let startTime = Date()
                         for node in treeNodes {
-//                            self.logger.log("adding tree node \(node.name)")
+//                            self.logger.log(.trace, "adding tree node \(node.name)")
                             item.addChild(collection: node)
                         }
                         self.logger.timecost("tree collection insertion", fromDate: startTime)
@@ -283,7 +283,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                         self.outlineView.expandItem(item)
                     }
                 }else{
-                    self.logger.log("loaded 0 child nodes")
+                    self.logger.log(.trace, "loaded 0 child nodes")
                 }
                 if let msg = message {
                     if let msgType = messageType {
@@ -297,7 +297,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        //self.logger.log("calling should expand item logic")
+        //self.logger.log(.trace, "calling should expand item logic")
         if let node = item as? TreeCollection {
             if node.children.count == 0 {
                 self.expandTreeNode(node)

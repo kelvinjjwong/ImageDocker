@@ -391,7 +391,7 @@
 //                }
 //            }
 //        }
-//        self.logger.log("my relationships: \(myRelationships.count)")
+//        self.logger.log(.trace, "my relationships: \(myRelationships.count)")
 //        self.relationshipTableController.load(myRelationships)
 //    }
 //
@@ -536,7 +536,7 @@
 //    }
 //
 //    fileprivate func onDifferentPersonClicked(id:String, name:String){
-////        self.logger.log("selected \(id) \(name)")
+////        self.logger.log(.trace, "selected \(id) \(name)")
 ////        self.lblFaceDescription.stringValue = ""
 ////
 ////        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
@@ -557,7 +557,7 @@
 ////                        c.locked = true
 //////                    }
 ////                    let _ = FaceDao.default.saveFaceCrop(c)
-////                    self.logger.log("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
+////                    self.logger.log(.trace, "Face crop \(crop.id) assigned as [\(name)], updated into DB.")
 ////
 ////                    if let person = FaceDao.default.getPerson(id: id) {
 ////                        DispatchQueue.main.async {
@@ -574,17 +574,17 @@
 //
 //    fileprivate func onRecognizeUnknownClicked(id:String) {
 //        // TODO FUNCTION
-////        self.logger.log("selected menu: \(id)")
+////        self.logger.log(.trace, "selected menu: \(id)")
 ////        self.lblProgressMessage.stringValue = "Recognizing..."
 ////        var faces:[ImageFace] = []
 ////        if id == "all" {
 ////            faces = FaceDao.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
 ////        }else if id == "selected" {
 ////            if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
-////                self.logger.log("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
+////                self.logger.log(.trace, "selection at \(self.selectedCategory),\(self.selectedSubCategory)")
 ////                faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
 ////            }else{
-////                self.logger.log("no selection")
+////                self.logger.log(.trace, "no selection")
 ////                self.lblProgressMessage.stringValue = "No category is selected."
 ////                return
 ////            }
@@ -593,7 +593,7 @@
 ////        }
 ////        if faces.count == 0 {
 ////            self.lblProgressMessage.stringValue = "No face need to be recognized."
-////            self.logger.log("no faces need to be recognized")
+////            self.logger.log(.trace, "no faces need to be recognized")
 ////            return
 ////        }
 ////        var peopleName:[String:String] = [:]
@@ -624,7 +624,7 @@
 ////                            c.recognizeVersion = "\(version)"
 ////                        }
 ////                        let _ = FaceDao.default.saveFaceCrop(c)
-////                        self.logger.log("Face crop \(face.id) recognized as [\(name)], updated into DB.")
+////                        self.logger.log(.trace, "Face crop \(face.id) recognized as [\(name)], updated into DB.")
 ////                        k += 1
 ////                        DispatchQueue.main.async {
 ////                            let personName = peopleName[name] ?? name
@@ -641,7 +641,7 @@
 ////                self.lblProgressMessage.stringValue = "Recognized \(k) faces. \(total-k) unrecognized."
 ////            }
 ////        }
-//        self.logger.log("TODO")
+//        self.logger.log(.trace, "TODO")
 //    }
 //
 //    // MARK: ACTION
@@ -727,10 +727,10 @@
 ////            if let window = self.theaterWindowController.window {
 ////                if self.theaterWindowController.isWindowLoaded {
 ////                    window.makeKeyAndOrderFront(self)
-////                    self.logger.log("order to front")
+////                    self.logger.log(.trace, "order to front")
 ////                }else{
 ////                    self.theaterWindowController.showWindow(self)
-////                    self.logger.log("show window")
+////                    self.logger.log(.trace, "show window")
 ////                }
 ////                let vc = window.contentViewController as! TheaterViewController
 ////                vc.viewInit(image: imageFile)
@@ -749,29 +749,29 @@
 ////                        do {
 ////                            try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
 ////                        }catch{
-////                            self.logger.log("Unable to create directory at \(targetFolder.path)")
+////                            self.logger.log(.trace, "Unable to create directory at \(targetFolder.path)")
 ////                            self.logger.log(error)
 ////                        }
 ////                        let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
 ////                        do {
 ////                            try FileManager.default.copyItem(at: source, to: target)
-////                            self.logger.log("Copied sample file from [\(source.path)] to [\(target.path)]")
+////                            self.logger.log(.trace, "Copied sample file from [\(source.path)] to [\(target.path)]")
 ////                        }catch{
-////                            self.logger.log("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
+////                            self.logger.log(.trace, "Unable to copy sample file from [\(source.path)] to [\(target.path)]")
 ////                            self.logger.log(error)
 ////                        }
 ////                    }else{
 ////                        do {
 ////                            try FileManager.default.removeItem(at: target)
 ////                        }catch{
-////                            self.logger.log("Failed to delete sample file: \(target.path)")
+////                            self.logger.log(.trace, "Failed to delete sample file: \(target.path)")
 ////                            self.logger.log(error)
 ////                        }
 ////                    }
 ////                }
 ////            }
 ////        }
-//        self.logger.log("TODO")
+//        self.logger.log(.trace, "TODO")
 //    }
 //
 //    @IBAction func onChangeFamilyNameClicked(_ sender: NSButton) {
@@ -860,7 +860,7 @@
 ////                                c.recognizeVersion = "\(version)"
 ////                            }
 ////                            let _ = FaceDao.default.saveFaceCrop(c)
-////                            self.logger.log("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
+////                            self.logger.log(.trace, "Face crop \(crop.id) recognized as [\(name)], updated into DB.")
 ////
 ////                            if let person = FaceDao.default.getPerson(id: name) {
 ////                                DispatchQueue.main.async {
@@ -882,7 +882,7 @@
 ////
 ////            }
 ////        }
-//        self.logger.log("TO BE DEMISED")
+//        self.logger.log(.trace, "TO BE DEMISED")
 //    }
 //
 //    fileprivate var totalSamples = 0
@@ -902,12 +902,12 @@
 ////                            let parts = line.components(separatedBy: " ")
 ////                            if let total = Int(parts[1]) {
 ////                                self.totalSamples = total
-////                                self.logger.log("total \(total) samples")
+////                                self.logger.log(.trace, "total \(total) samples")
 ////                                DispatchQueue.main.async {
 ////                                    self.lblProgressMessage.stringValue = "Preparing trainer..."
 ////                                }
 ////                            }else{
-////                                self.logger.log("unable to get total number from \(line)")
+////                                self.logger.log(.trace, "unable to get total number from \(line)")
 ////                            }
 ////                        }else if line.starts(with: "PROCESSING IMAGE ") {
 ////                            let parts = line.components(separatedBy: " ")
@@ -915,7 +915,7 @@
 ////                            let dividen = numbers.components(separatedBy: "/")
 ////                            let number = dividen[0]
 ////                            let name = parts[5]
-////                            self.logger.log("processing \(number), recognized as \(name)")
+////                            self.logger.log(.trace, "processing \(number), recognized as \(name)")
 ////                            DispatchQueue.main.async {
 ////                                self.lblProgressMessage.stringValue = "Processing sample No.\(number)..."
 ////                            }
@@ -930,7 +930,7 @@
 ////            })
 ////        }
 //
-//        self.logger.log("TO BE DEMISED")
+//        self.logger.log(.trace, "TO BE DEMISED")
 //    }
 //
 //    @IBAction func onRecognizeAllClicked(_ sender: NSButton) {
@@ -942,12 +942,12 @@
 ////            menu.append((year, "Unknown faces in \(year)"))
 ////        }
 ////        for a in menu {
-////            self.logger.log("menu: \(a)")
+////            self.logger.log(.trace, "menu: \(a)")
 ////        }
 ////        self.menuRecognizeUnknown.load(menu)
 ////        self.menuRecognizeUnknown.show(sender)
 //
-//        self.logger.log("TO BE DEMISED")
+//        self.logger.log(.trace, "TO BE DEMISED")
 //    }
 //
 //    @IBAction func onChkLockClicked(_ sender: NSButton) {

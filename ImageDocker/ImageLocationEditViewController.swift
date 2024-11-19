@@ -141,7 +141,7 @@ class ImageLocationEditViewController : NSViewController {
             }
         }
 //        else{
-//            self.logger.log("img has no coord")
+//            self.logger.log(.trace, "img has no coord")
 //        }
     }
     
@@ -164,8 +164,8 @@ class ImageLocationEditViewController : NSViewController {
             self.possibleLocation?.address = self.readImageLocationMeta(title: "Address")
             self.possibleLocation?.addressDescription = self.readImageLocationMeta(title: "Description")
             
-            //self.logger.log("possible location address: \(possibleLocation?.address ?? "")")
-            //self.logger.log("possible location place: \(possibleLocation?.place ?? "")")
+            //self.logger.log(.trace, "possible location address: \(possibleLocation?.address ?? "")")
+            //self.logger.log(.trace, "possible location place: \(possibleLocation?.place ?? "")")
             
             
             self.locationSearcher.stringValue = ""
@@ -175,7 +175,7 @@ class ImageLocationEditViewController : NSViewController {
             BaiduLocation.queryForAddress(coordinateBD: sampleImage.location.coordinateBD!, locationConsumer: self, textConsumer: self.locationTextDelegate!)
             BaiduLocation.queryForMap(coordinateBD: sampleImage.location.coordinateBD!, view: self.locationWebView, zoom: self.zoomSize)
         }else{
-            self.logger.log("sample image file is not selected")
+            self.logger.log(.trace, "sample image file is not selected")
         }
     }
     
@@ -222,7 +222,7 @@ class ImageLocationEditViewController : NSViewController {
                         imageInSelection!.assignLocation(location: location)
                     }
                     
-                    //self.logger.log("place after assign location: \(item.place)")
+                    //self.logger.log(.trace, "place after assign location: \(item.place)")
                     let _ = item.save()
                 }
                 let _ = accumulator.add()
@@ -230,7 +230,7 @@ class ImageLocationEditViewController : NSViewController {
             self.reloadSelectionView?()
             self.reloadCollectionView?()
         }else{
-            self.logger.log("selectionViewController is not linked to ImageLocationEditViewController")
+            self.logger.log(.trace, "selectionViewController is not linked to ImageLocationEditViewController")
         }
     }
     
@@ -270,7 +270,7 @@ extension ImageLocationEditViewController: CoordinateConsumer {
     }
     
     func alert(status: Int, message: String) {
-        self.logger.log("\(status) : \(message)")
+        self.logger.log(.trace, "\(status) : \(message)")
     }
 }
 
@@ -299,7 +299,7 @@ extension ImageLocationEditViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup:Bool = false) {
-        self.logger.log("LOCATION ALERT: \(status) : \(message)")
+        self.logger.log(.trace, "LOCATION ALERT: \(status) : \(message)")
     }
     
     
@@ -353,7 +353,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
         
-        //self.logger.log("SubString = \(string)")
+        //self.logger.log(.trace, "SubString = \(string)")
         
         for place in places {
             let state = place.name
@@ -362,7 +362,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
                 // only use first part of the strings in the list with length of the search string
                 let statePartialStr = state.lowercased()[state.lowercased().startIndex..<state.lowercased().index(state.lowercased().startIndex, offsetBy: string.count)]
                 if statePartialStr.range(of: string.lowercased()) != nil {
-                    //self.logger.log("SubString Match = \(state)")
+                    //self.logger.log(.trace, "SubString Match = \(state)")
                     return state
                 }
             }

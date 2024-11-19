@@ -44,13 +44,6 @@ class ExportConfigurationViewController: NSViewController {
     
     var eventCategoriesTableController : DictionaryTableViewController!
     
-    @IBOutlet weak var chkFamilies: NSButton!
-    @IBOutlet weak var chkIncludeFamily: NSButton!
-    @IBOutlet weak var chkExcludeFamily: NSButton!
-    @IBOutlet weak var tblFamily: NSTableView!
-    
-    var familyTableController : DictionaryTableViewController!
-    
     @IBOutlet weak var chkOverwriteDuplicate: NSButton!
     @IBOutlet weak var chkDeviceNameSuffix: NSButton!
     @IBOutlet weak var chkDeviceModelSuffix: NSButton!
@@ -86,14 +79,13 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var boxName: NSBox!
     @IBOutlet weak var boxAction: NSBox!
     @IBOutlet weak var boxRepositories: NSBox!
-    @IBOutlet weak var boxFamilies: NSBox!
     
     
     @IBOutlet weak var boxEventCategories: NSBox!
     @IBOutlet weak var chkEventCategories: NSButton!
     @IBOutlet weak var chkIncludeEventCategories: NSButton!
     @IBOutlet weak var chkExcludeEventCategories: NSButton!
-    @IBOutlet weak var tblEventCategories: NSTableView!
+    @IBOutlet weak var treeEvents: NSOutlineView!
     
     var repoNames:[String:String] = [:]
     
@@ -129,21 +121,17 @@ class ExportConfigurationViewController: NSViewController {
         self.lblProfileToRepository.stringValue = Words.export_profile_to_directory.word()
         
         self.btnSave.title = Words.export_profile_save.word()
-        self.btnClean.title = Words.export_profile_clean_fields.word()
-        self.btnAssign.title = Words.export_profile_assign_to_directory.word()
-        self.btnGoto.title = Words.export_profile_goto_to_directory.word()
+//        self.btnClean.title = Words.export_profile_clean_fields.word()
+//        self.btnAssign.title = Words.export_profile_assign_to_directory.word()
+//        self.btnGoto.title = Words.export_profile_goto_to_directory.word()
         
         self.boxRepositories.title = Words.export_profile_repositories.word()
         self.chkRepository.title = Words.export_profile_has_limit.word()
-        self.boxFamilies.title = Words.export_profile_families.word()
-        self.chkFamilies.title = Words.export_profile_has_limit.word()
-        self.boxEventCategories.title = Words.export_profile_event_categories.word()
+        self.boxEventCategories.title = Words.export_profile_events.word()
         self.chkEventCategories.title = Words.export_profile_has_limit.word()
         
         self.chkIncludeRepository.title = Words.export_profile_include.word()
         self.chkExcludeRepository.title = Words.export_profile_exclude.word()
-        self.chkIncludeFamily.title = Words.export_profile_include.word()
-        self.chkExcludeFamily.title = Words.export_profile_exclude.word()
         self.chkIncludeEventCategories.title = Words.export_profile_include.word()
         self.chkExcludeEventCategories.title = Words.export_profile_exclude.word()
         
@@ -159,7 +147,6 @@ class ExportConfigurationViewController: NSViewController {
         self.chkDeviceNameSuffix.title = Words.export_profile_when_filename_is_duplicated_use_device_name_as_suffix.word()
         self.chkDeviceModelSuffix.title = Words.export_profile_when_filename_is_duplicated_use_device_model_as_suffix.word()
         self.chkNumberSuffix.title = Words.export_profile_when_filename_is_duplicated_use_number_as_suffix.word()
-        
         self.chkNoSubFolder.title = Words.export_profile_sub_folder_no_subfolder.word()
         self.chkDateEventSubFolder.title = Words.export_profile_sub_folder_year_month_event.word()
         self.chkEventSubFolder.title = Words.export_profile_sub_folder_event.word()
@@ -205,7 +192,7 @@ class ExportConfigurationViewController: NSViewController {
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
-        self.logger.log("view did load")
+        self.logger.log(.trace, "view did load")
     }
     
     func refreshMountedVolumes(append items:[String] = []) {
@@ -239,11 +226,8 @@ class ExportConfigurationViewController: NSViewController {
         self.repositoryTableController.load(self.loadRepositoryOwners(), afterLoaded: {
         })
         
-        self.eventCategoriesTableController.load(self.loadEventCategories(), afterLoaded: {
-        })
-        
-        self.familyTableController.load(self.loadFamilies(), afterLoaded: {
-        })
+//        self.eventCategoriesTableController.load(self.loadEventCategories(), afterLoaded: {
+//        })
     }
     
     private func toggleButtons(state: Bool) {
@@ -262,12 +246,10 @@ class ExportConfigurationViewController: NSViewController {
         self.btnCopySQLToClipboard.isEnabled = state
         
         self.chkRepository.isEnabled = state
-        self.chkFamilies.isEnabled = state
         self.chkEventCategories.isEnabled = state
         
         if state {
             self.repositoryTableController.enableCheckboxes()
-            self.familyTableController.enableCheckboxes()
             self.eventCategoriesTableController.enableCheckboxes()
             
             self.toggleGroup_Repository.enable()
@@ -276,7 +258,6 @@ class ExportConfigurationViewController: NSViewController {
             
         }else{
             self.repositoryTableController.disableCheckboxes()
-            self.familyTableController.disableCheckboxes()
             self.eventCategoriesTableController.disableCheckboxes()
             
             self.toggleGroup_Repository.disable()
@@ -325,7 +306,6 @@ class ExportConfigurationViewController: NSViewController {
         
         self.toggleRepository(true, uncheckAll: true)
         self.toggleEventCategory(true, uncheckAll: true)
-        self.toggleFamily(true, uncheckAll: true)
         
         self.btnExport.isEnabled = false
     }
@@ -353,12 +333,12 @@ class ExportConfigurationViewController: NSViewController {
         if repos.hasPrefix("include:") {
             self.toggleGroup_Repository.selected = "include"
             let value = repos.replacingFirstOccurrence(of: "include:", with: "")
-            self.logger.log("repo: \(value)")
+            self.logger.log(.trace, "repo: \(value)")
             self.repositoryTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }else if repos.hasPrefix("exclude:") {
             self.toggleGroup_Repository.selected = "exclude"
             let value = repos.replacingFirstOccurrence(of: "exclude:", with: "")
-            self.logger.log("repo: \(value)")
+            self.logger.log(.trace, "repo: \(value)")
             self.repositoryTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }
         if !profile.specifyRepository {
@@ -375,12 +355,12 @@ class ExportConfigurationViewController: NSViewController {
         if eventCategories.hasPrefix("include:") {
             self.toggleGroup_EventCategory.selected = "include"
             let value = eventCategories.replacingFirstOccurrence(of: "include:", with: "")
-            self.logger.log("eventCategory: \(value)")
+            self.logger.log(.trace, "eventCategory: \(value)")
             self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
         }else if eventCategories.hasPrefix("exclude:") {
             self.toggleGroup_EventCategory.selected = "exclude"
             let value = eventCategories.replacingFirstOccurrence(of: "exclude:", with: "")
-            self.logger.log("eventCategory: \(value)")
+            self.logger.log(.trace, "eventCategory: \(value)")
             self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
         }
         if !specifyEventCategory {
@@ -391,34 +371,12 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_EventCategory.enable()
         }
         
-        self.chkFamilies.state = profile.specifyFamily ? .on : .off
-        let family = profile.family
-        if family.hasPrefix("include:") {
-            self.toggleGroup_Family.selected = "include"
-            let value = family.replacingFirstOccurrence(of: "include:", with: "")
-            self.logger.log("family: \(value)")
-            self.familyTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
-        }else if family.hasPrefix("exclude:") {
-            self.toggleGroup_Family.selected = "exclude"
-            let value = family.replacingFirstOccurrence(of: "exclude:", with: "")
-            self.logger.log("family: \(value)")
-            self.familyTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
-        }
-        if !profile.specifyFamily {
-            self.familyTableController.disableCheckboxes()
-            self.toggleGroup_Family.disable()
-        }else{
-            self.familyTableController.enableCheckboxes()
-            self.toggleGroup_Family.enable()
-        }
-        
     }
     
     @IBAction func onCleanClicked(_ sender: NSButton) {
         self.cleanFields()
         self.repositoryTableController.uncheckAll()
         self.eventCategoriesTableController.uncheckAll()
-        self.familyTableController.uncheckAll()
     }
     
     
@@ -460,27 +418,16 @@ class ExportConfigurationViewController: NSViewController {
                 }
             }
         }
-        self.logger.log("selected category: \(eventCategories)")
-        
-        if self.chkFamilies.state == .on {
-            let checked = self.familyTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
-            if checked != "" {
-                if self.chkIncludeFamily.state == .on {
-                    family = "include:\(checked)"
-                }else if self.chkExcludeFamily.state == .on {
-                    family = "exclude:\(checked)"
-                }
-            }
-        }
+        self.logger.log(.trace, "selected category: \(eventCategories)")
         
         profile.name = name
         profile.targetVolume = targetVolume
         profile.directory = path
         profile.duplicateStrategy = fileDuplicated
         profile.specifyRepository = self.chkRepository.state == .on
-        profile.specifyFamily = self.chkFamilies.state == .on
+        profile.specifyFamily = false
         profile.repositoryPath = repos
-        profile.family = family
+        profile.family = ""
         profile.patchImageDescription = self.chkPatchImageDescription.state == .on
         profile.patchDateTime = self.chkPatchDateTime.state == .on
         profile.patchGeolocation = self.chkPatchGeolocation.state == .on
@@ -534,7 +481,7 @@ class ExportConfigurationViewController: NSViewController {
             
             if status != .OK {
                 self.logger.log(status)
-                self.logger.log("Unable to update export profile id=\(self.editingId)")
+                self.logger.log(.trace, "Unable to update export profile id=\(self.editingId)")
                 return
             }else{
                 profile = form
@@ -542,9 +489,9 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         
-        self.logger.log("profile id \(profile.id)")
+        self.logger.log(.trace, "profile id \(profile.id)")
         if let vc = self.profileStackItems[profile.id] {
-            self.logger.log("going to update view \(profile.id)")
+            self.logger.log(.trace, "going to update view \(profile.id)")
             vc.updateView(profile: profile)
         }else{
             self.addProfileItem(profile: profile)
@@ -569,7 +516,7 @@ class ExportConfigurationViewController: NSViewController {
             }
         }, onDelete: {
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
-                self.logger.log("proceed delete")
+                self.logger.log(.trace, "proceed delete")
                 let state = ExportDao.default.deleteExportProfile(id: profile.id)
                 if state == .OK {
                     NSLayoutConstraint.deactivate(viewController.view.constraints)
@@ -803,28 +750,14 @@ class ExportConfigurationViewController: NSViewController {
         
 //        self.toggleGroup_EventCategory.selected = "include"
         
-        self.toggleGroup_Family = ToggleGroup([
-            "include" : self.chkIncludeFamily,
-            "exclude" : self.chkExcludeFamily
-        ], keysOrderred: ["include", "exclude"], defaultValue: "include")
-        
-//        self.toggleGroup_Family.selected = "include"
-        
         self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
         
-        self.eventCategoriesTableController = DictionaryTableViewController(self.tblEventCategories)
-        self.eventCategoriesTableController.onCheck = { id, state in
-            
-            let categories = self.eventCategoriesTableController.getCheckedItemAsSingleQuotedString(column: "name", separator: ",")
-            self.logger.log("event category checked: \(categories)")
-        }
-        
-        self.familyTableController = DictionaryTableViewController(self.tblFamily)
-        self.familyTableController.onCheck = { id, state in
-            
-            let families = self.familyTableController.getCheckedItemAsSingleQuotedString(column: "id", separator: ",")
-            self.logger.log("family checked: \(families)")
-        }
+//        self.eventCategoriesTableController = DictionaryTableViewController(self.tblEventCategories)
+//        self.eventCategoriesTableController.onCheck = { id, state in
+//            
+//            let categories = self.eventCategoriesTableController.getCheckedItemAsSingleQuotedString(column: "name", separator: ",")
+//            self.logger.log(.trace, "event category checked: \(categories)")
+//        }
     }
     
     // MARK: - TOGGLE GROUP
@@ -844,7 +777,7 @@ class ExportConfigurationViewController: NSViewController {
             toggleGroup.disable()
             tableController.table.isEnabled = false
             tableController.disableCheckboxes()
-            self.logger.log("toggled off")
+            self.logger.log(.trace, "toggled off")
         }
         if uncheckAll {
             tableController.uncheckAll()
@@ -864,27 +797,15 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     func toggleEventCategory(_ state:Bool, uncheckAll:Bool = false) {
-        self.toggleBox(state: state,
-                       uncheckAll: uncheckAll,
-                       checkBox: self.chkEventCategories,
-                       toggleGroup: self.toggleGroup_EventCategory,
-                       tableController: self.eventCategoriesTableController)
+//        self.toggleBox(state: state,
+//                       uncheckAll: uncheckAll,
+//                       checkBox: self.chkEventCategories,
+//                       toggleGroup: self.toggleGroup_EventCategory,
+//                       tableController: self.eventCategoriesTableController)
     }
     
     @IBAction func onCheckEventCategoryClicked(_ sender: NSButton) {
         self.toggleEventCategory(sender.state == .on)
-    }
-    
-    func toggleFamily(_ state:Bool, uncheckAll:Bool = false) {
-        self.toggleBox(state: state,
-                       uncheckAll: uncheckAll,
-                       checkBox: self.chkFamilies,
-                       toggleGroup: self.toggleGroup_Family,
-                       tableController: self.familyTableController)
-    }
-    
-    @IBAction func onCheckFamilyClicked(_ sender: NSButton) {
-        self.toggleFamily(sender.state == .on)
     }
     
     @IBAction func onIncludeRepositoryClicked(_ sender: NSButton) {

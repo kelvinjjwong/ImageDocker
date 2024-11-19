@@ -39,14 +39,14 @@ final class ExternalAPIController: NSViewController {
     @IBAction func onBaiduLinkClicked(_ sender: Any) {
         if let url = URL(string: "http://lbsyun.baidu.com"),
             NSWorkspace.shared.open(url) {
-            self.logger.log("triggered link \(url)")
+            self.logger.log(.trace, "triggered link \(url)")
         }
     }
     
     @IBAction func onGoogleLinkClicked(_ sender: Any) {
         if let url = URL(string: "https://developers.google.com/maps/documentation/maps-static/intro"),
             NSWorkspace.shared.open(url) {
-            self.logger.log("triggered link \(url)")
+            self.logger.log(.trace, "triggered link \(url)")
         }
     }
     

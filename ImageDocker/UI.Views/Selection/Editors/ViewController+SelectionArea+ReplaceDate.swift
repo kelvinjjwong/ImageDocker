@@ -58,6 +58,6 @@ extension SelectionViewController {
 
 extension ViewController : LunarCalendarViewDelegate {
     @objc func didSelectDate(_ selectedDate: Date) {
-        print(selectedDate)
+        self.logger.log(.trace, selectedDate)
     }
 }

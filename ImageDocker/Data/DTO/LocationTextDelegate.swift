@@ -41,14 +41,14 @@ class LocationTextDelegate : LocationConsumer {
                 if location.searchKeyword != "" {
                     GoogleLocation.queryForAddress(address: location.searchKeyword, locationConsumer: self, modifyLocation: location)
                 }else{
-                    self.logger.log("== no address detail, no keyword for google searching")
+                    self.logger.log(.trace, "== no address detail, no keyword for google searching")
                 }
             }
         }
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        self.logger.log("\(status) : \(message)")
+        self.logger.log(.trace, "\(status) : \(message)")
     }
     
     

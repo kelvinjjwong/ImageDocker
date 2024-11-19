@@ -139,7 +139,7 @@ class PeopleSelectionViewController: NSViewController {
             }
         }
         for g in checkedGroups {
-            print("checked \(Words.whose_family.fill(arguments: g.parent?.nickname ?? "", g.name))")
+            self.logger.log(.trace, "checked \(Words.whose_family.fill(arguments: g.parent?.nickname ?? "", g.name))")
         }
         
         if checkedGroups.isEmpty {
@@ -285,7 +285,7 @@ extension PeopleSelectionViewController: NSOutlineViewDataSource {
             return false
         }
         
-        print("dragged \(draggedString) to group:\(peopleGroupName)")
+        self.logger.log(.trace, "dragged \(draggedString) to group:\(peopleGroupName)")
         
         let json = JSON.init(parseJSON: draggedString)
         

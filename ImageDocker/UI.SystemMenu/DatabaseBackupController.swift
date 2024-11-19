@@ -399,7 +399,7 @@ final class DatabaseBackupController: NSViewController {
             let row = self.tblDatabaseArchives.selectedRow
             let timestamp = self.backupArchives[row].0
             let folder = self.backupArchives[row].3
-            self.logger.log("restore from \(folder)")
+            self.logger.log(.trace, "restore from \(folder)")
             
             var host = ""
             var port = 5432
@@ -627,11 +627,11 @@ final class DatabaseBackupController: NSViewController {
             for folder in selected {
                 let url = backupPath.appendingPathComponent(folder)
                 
-                self.logger.log("delete backup folder \(folder)")
+                self.logger.log(.trace, "delete backup folder \(folder)")
                 do{
                     try FileManager.default.removeItem(at: url)
                 }catch{
-                    self.logger.log("Unable to delete backup archive: \(url.path)")
+                    self.logger.log(.trace, "Unable to delete backup archive: \(url.path)")
                     self.logger.log(.error, error)
                 }
             }
@@ -642,7 +642,7 @@ final class DatabaseBackupController: NSViewController {
     
     @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
         guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-            self.logger.log("Unable to locate psql command in macOS, check db exist aborted.")
+            self.logger.log(.trace, "Unable to locate psql command in macOS, check db exist aborted.")
             return
         }
         var databaseProfile = DatabaseProfile()
@@ -662,7 +662,7 @@ final class DatabaseBackupController: NSViewController {
             databaseProfile.port = Setting.database.remotePostgres.port()
             databaseProfile.user = Setting.database.remotePostgres.username()
         }else{
-            self.logger.log("Selected to-database is not postgres. check db exist aborted.")
+            self.logger.log(.trace, "Selected to-database is not postgres. check db exist aborted.")
             return
         }
         let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -712,11 +712,11 @@ final class DatabaseBackupController: NSViewController {
     @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
         let databaseName = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard databaseName != "" else {
-            self.logger.log("Error: database name is empty")
+            self.logger.log(.trace, "Error: database name is empty")
             return
         }
         guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-            self.logger.log("Unable to locate pg_dump command in macOS, createdb aborted.")
+            self.logger.log(.trace, "Unable to locate pg_dump command in macOS, createdb aborted.")
             return
         }
         var host = ""
@@ -731,7 +731,7 @@ final class DatabaseBackupController: NSViewController {
             port = Setting.database.remotePostgres.port()
             user = Setting.database.remotePostgres.username()
         }else{
-            self.logger.log("Selected to-database is not postgres. createdb aborted.")
+            self.logger.log(.trace, "Selected to-database is not postgres. createdb aborted.")
             return
         }
         
@@ -743,13 +743,13 @@ final class DatabaseBackupController: NSViewController {
             let (status, _, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
             
             if status == true {
-                self.logger.log("created database \(databaseName) on \(user)@\(host):\(port)")
+                self.logger.log(.trace, "created database \(databaseName) on \(user)@\(host):\(port)")
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
                     self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_created_database.word()
                 }
             }else{
-                self.logger.log("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
+                self.logger.log(.trace, "Unable to create database \(databaseName) on \(user)@\(host):\(port)")
                 self.logger.log(pgError)
                 if let error = err {
                     self.logger.log(.error, error)

@@ -102,7 +102,7 @@ struct ExecutionEnvironment {
     }
     
     func pipList(_ pipPath:String) -> Set<String>{
-        self.logger.log("calling pip: \(pipPath)")
+        self.logger.log(.trace, "calling pip: \(pipPath)")
         var result:Set<String> = []
         let pipe = Pipe()
         
@@ -247,7 +247,7 @@ pip3 install face_recognition
     }
     
     func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
-        self.logger.log("Start to create sqlite db backup")
+        self.logger.log(.trace, "Start to create sqlite db backup")
         var backupFolder = ""
         let dbUrl = URL(fileURLWithPath: Setting.database.sqlite.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
@@ -260,7 +260,7 @@ pip3 install face_recognition
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
                 
-                self.logger.log("Backup data to: \(backupUrl.path)")
+                self.logger.log(.trace, "Backup data to: \(backupUrl.path)")
                 try fileManager.copyItem(at: dbFile, to: backupUrl.appendingPathComponent("ImageDocker.sqlite"))
                 if fileManager.fileExists(atPath: dbFileSHM.path){
                     try fileManager.copyItem(at: dbFileSHM, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-shm"))
@@ -273,16 +273,16 @@ pip3 install face_recognition
                 return (backupFolder, false, error)
             }
         }
-        self.logger.log("Finish create db backup")
+        self.logger.log(.trace, "Finish create db backup")
         return (backupFolder, true, nil)
     }
     
     func createPostgresDatabaseBackup(suffix:String) -> (String, Bool, Error?) {
         guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-            self.logger.log("Unable to locate pg_dump command in macOS, backup aborted.")
+            self.logger.log(.trace, "Unable to locate pg_dump command in macOS, backup aborted.")
             return ("", false, nil)
         }
-        self.logger.log("Start to create postgres db backup")
+        self.logger.log(.trace, "Start to create postgres db backup")
         
         let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
         var host = ""
@@ -302,7 +302,7 @@ pip3 install face_recognition
             database = Setting.database.remotePostgres.database()
             
         }else{
-            self.logger.log("Database is not Postgres. backup aborted.")
+            self.logger.log(.trace, "Database is not Postgres. backup aborted.")
             return ("", false, nil)
         }
         return PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath, suffix: suffix)
@@ -324,7 +324,7 @@ pip3 install face_recognition
         }else if (location == .fromSetting && Setting.database.databaseLocation() == "network") || location == .remoteDBServer {
             return self.createPostgresDatabaseBackup(suffix: suffix)
         }else{
-            self.logger.log("Database location error. backup aborted.")
+            self.logger.log(.trace, "Database location error. backup aborted.")
             return ("", false, nil)
         }
     }

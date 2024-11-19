@@ -115,7 +115,7 @@
 //    }
 //    
 //    @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
-////        self.logger.log("manage action \(menuItem.title)")
+////        self.logger.log(.trace, "manage action \(menuItem.title)")
 //        self.btnFaces.selectItem(at: 0)
 //        
 //        let storyboard = NSStoryboard(name: "PeopleFaceViewItems", bundle: nil)
@@ -138,10 +138,10 @@
 ////        if let window = self.peopleWindowController.window {
 ////            if self.peopleWindowController.isWindowLoaded {
 ////                window.makeKeyAndOrderFront(self)
-////                self.logger.log("order to front")
+////                self.logger.log(.trace, "order to front")
 ////            }else{
 ////                self.peopleWindowController.showWindow(self)
-////                self.logger.log("show window")
+////                self.logger.log(.trace, "show window")
 ////            }
 ////            let vc = window.contentViewController as! PeopleViewController
 ////            vc.initView()
@@ -204,10 +204,10 @@
 ////        if let window = self.peopleWindowController.window {
 ////            if self.peopleWindowController.isWindowLoaded {
 ////                window.makeKeyAndOrderFront(self)
-////                self.logger.log("order to front")
+////                self.logger.log(.trace, "order to front")
 ////            }else{
 ////                self.peopleWindowController.showWindow(self)
-////                self.logger.log("show window")
+////                self.logger.log(.trace, "show window")
 ////            }
 ////            let vc = window.contentViewController as! PeopleViewController
 ////            vc.initView()
@@ -222,7 +222,7 @@
 ////            let parts = title.components(separatedBy: " ")
 ////            let action = parts[0]
 ////            var area = parts[parts.count-1]
-//////            self.logger.log("\(action) \(area)")
+//////            self.logger.log(.trace, "\(action) \(area)")
 ////            if area == "collection" {
 ////                if self.imagesLoader.getItems().count > 0 {
 ////                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInCollection.word())")
@@ -260,7 +260,7 @@
 ////                        }
 ////                    }
 ////                }else{
-//////                    self.logger.log("no item in collection")
+//////                    self.logger.log(.trace, "no item in collection")
 ////                }
 ////            }else{
 ////                let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInArea.word("%s", area))")
@@ -324,11 +324,11 @@
 ////
 ////                                    if usedRam >= limitRam {
 ////                                        attempt += 1
-//////                                        self.logger.log("waiting for releasing memory for face detection, attempt: \(attempt)")
+//////                                        self.logger.log(.trace, "waiting for releasing memory for face detection, attempt: \(attempt)")
 ////                                        continousWorking = false
 ////                                        sleep(10)
 ////                                    }else{
-//////                                        self.logger.log("continue for face detection, last attempt: \(attempt)")
+//////                                        self.logger.log(.trace, "continue for face detection, last attempt: \(attempt)")
 ////                                        continousWorking = true
 ////                                    }
 ////                                }
@@ -361,7 +361,7 @@
 ////                }
 ////            }
 ////        }else{
-////            //self.logger.log("no selection")
+////            //self.logger.log(.trace, "no selection")
 ////        }
 ////    }
 //}

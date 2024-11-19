@@ -1624,10 +1624,10 @@ class EditRepositoryViewController: NSViewController {
                                           )
         }
         DispatchQueue.global().async {
-            self.logger.log("loading duplicates from database")
+            self.logger.log(.trace, "loading duplicates from database")
             
             let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryId: self.originalRepositoryId)
-            self.logger.log("loaded duplicates \(duplicates.count)")
+            self.logger.log(.trace, "loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
             self.accumulator?.setTarget(count)
@@ -2174,13 +2174,13 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onFindFacesClicked()
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
 //        guard !self.working else {
-//            self.logger.log("other task is running. abort this task.")
+//            self.logger.log(.trace, "other task is running. abort this task.")
 //            return
 //        }
 //        if let repository = self.originalContainer {
 //
 //            if repository.cropPath == "" {
-//                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+//                self.logger.log(.trace, "ERROR: Crop path is empty, please assign it first: \(repository.path)")
 //                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
 //                return
 //            }
@@ -2189,7 +2189,7 @@ class EditRepositoryViewController: NSViewController {
 //            var isDir:ObjCBool = false
 //            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
 //                if !isDir.boolValue {
-//                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+//                    self.logger.log(.trace, "ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
 //                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
 //                    return
 //                }
@@ -2215,10 +2215,10 @@ class EditRepositoryViewController: NSViewController {
 //                                                    }
 //                                                    self.logger.log(msg)
 //                                                    self.working = false
-//                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
+//                                                    self.logger.log(.trace, ">>> REMAIN \(self.continousWorkingRemain)")
 //                                                    if self.continousWorkingRemain <= 0 {
 //                                                        self.toggleButtons(true)
-//                                                        self.logger.log(">>> DONE")
+//                                                        self.logger.log(.trace, ">>> DONE")
 //                                                        msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
 //                                                        self.continousWorking = false
 //                                                    }
@@ -2240,12 +2240,12 @@ class EditRepositoryViewController: NSViewController {
 //
 //                while(self.continousWorkingRemain > 0){
 //                    if !self.working {
-//                        self.logger.log(">>> RE-TRIGGER")
+//                        self.logger.log(.trace, ">>> RE-TRIGGER")
 //                        self.continousWorkingAttempt += 1
-//                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
+//                        self.logger.log(.trace, ">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
 //                        self.scanFaces(from: images, in: repository)
 //                    }
-//                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
+//                    self.logger.log(.trace, ">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
 //                    sleep(10)
 //                }
 //            }
@@ -2259,8 +2259,8 @@ extension EditRepositoryViewController : DeviceListDelegate {
     fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
         
         if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
-            //self.logger.log("in device id = \(deviceId)")
-            //self.logger.log("queried device id = \(device.deviceId)")
+            //self.logger.log(.trace, "in device id = \(deviceId)")
+            //self.logger.log(.trace, "queried device id = \(device.deviceId)")
             self.lblDeviceId.stringValue = device.deviceId ?? ""
             var name = device.name ?? ""
             if name == "" {
@@ -2272,9 +2272,9 @@ extension EditRepositoryViewController : DeviceListDelegate {
             }
             self.lblDeviceName.stringValue = name
             
-            self.logger.log("update db? \(updateDB)")
+            self.logger.log(.trace, "update db? \(updateDB)")
             if updateDB {
-                self.logger.log("linking repo with device \(device.deviceId ?? "")")
+                self.logger.log(.trace, "linking repo with device \(device.deviceId ?? "")")
                 self.linkDeviceToRepository(deviceId: device.deviceId ?? "", deviceName: name)
             }
         }else{

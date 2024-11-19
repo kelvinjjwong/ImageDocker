@@ -264,7 +264,7 @@ extension PlaceListViewController: CoordinateConsumer {
     }
     
     func alert(status: Int, message: String) {
-        self.logger.log("\(status) - \(message)")
+        self.logger.log(.trace, "\(status) - \(message)")
     }
     
     
@@ -272,7 +272,7 @@ extension PlaceListViewController: CoordinateConsumer {
 
 extension PlaceListViewController: LocationConsumer {
     func consume(location: Location) {
-        //self.logger.log("CONSUME LOCATION: COUNTRY \(location.country)")
+        //self.logger.log(.trace, "CONSUME LOCATION: COUNTRY \(location.country)")
         self.location = location
         
         country.stringValue = location.country
@@ -300,7 +300,7 @@ extension PlaceListViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        self.logger.log("\(status) - \(message)")
+        self.logger.log(.trace, "\(status) - \(message)")
     }
     
     

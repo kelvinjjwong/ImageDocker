@@ -43,9 +43,9 @@ class DevicePathDetailViewController: NSViewController {
         let _ = DeviceDao.default.saveDevicePath(file: data)
         
         let containerPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(self.devicePath.toSubFolder).path
-//        self.logger.log("CONTAINER TO BE UPDATED: \(containerPath)")
+//        self.logger.log(.trace, "CONTAINER TO BE UPDATED: \(containerPath)")
         let _ = RepositoryDao.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
-//        self.logger.log("Updated expandable state to \(state ? "ON" : "OFF").")
+//        self.logger.log(.trace, "Updated expandable state to \(state ? "ON" : "OFF").")
         
         self.lblMessage.stringValue = "Updated expandable state to \(state ? "ON" : "OFF")."
     }
@@ -70,7 +70,7 @@ class DevicePathDetailViewController: NSViewController {
         data.excludeImported = (self.chkExcludeImported.state == .on)
         data.manyChildren = (self.chkManyChildren.state == .on)
         
-//        self.logger.log("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
+//        self.logger.log(.trace, "deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
         
         DispatchQueue.global().async {
             
@@ -89,7 +89,7 @@ class DevicePathDetailViewController: NSViewController {
 //                    self.lblMessage.stringValue = "Deleting related containers and images..."
 //                }
 //                //let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
-//                //self.logger.log("deleting container which local path=\(localPath)")
+//                //self.logger.log(.trace, "deleting container which local path=\(localPath)")
 //                //let state1 = ModelStore.default.deleteContainer(path: localPath)
 //                let state = ModelStore.default.saveDevicePath(file: data)
 //                if state != .OK {
@@ -108,7 +108,7 @@ class DevicePathDetailViewController: NSViewController {
 ////                        DispatchQueue.main.async {
 ////                            self.lblMessage.stringValue = "Unable to delete path in disk."
 ////                        }
-////                        self.logger.log("Unable to delete path in disk: \(localPath)")
+////                        self.logger.log(.trace, "Unable to delete path in disk: \(localPath)")
 ////                        self.logger.log(error)
 ////                    }
 //                }
@@ -117,7 +117,7 @@ class DevicePathDetailViewController: NSViewController {
             // apply changes to database when device path's local folder to be renamed
             
             if !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder {
-//                self.logger.log("changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
+//                self.logger.log(.trace, "changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
                 
                 let oldLocalPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(oldLocalFolder).path
                 let newLocalPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(data.toSubFolder).path
@@ -125,7 +125,7 @@ class DevicePathDetailViewController: NSViewController {
                 if !newLocalPath.isDirectoryExists() {
                     let (created, error) = newLocalPath.mkdirs(logger: self.logger)
                     if !created {
-                        self.logger.log("Unable to create directory for new local folder [\(data.toSubFolder)] at: \(newLocalPath)")
+                        self.logger.log(.trace, "Unable to create directory for new local folder [\(data.toSubFolder)] at: \(newLocalPath)")
                     }
                 }
                 if !newLocalPath.isDirectoryExists() {
@@ -133,17 +133,17 @@ class DevicePathDetailViewController: NSViewController {
                         self.lblMessage.stringValue = "Failed to change local folder: unable to access."
                     }
                 }else{
-//                    self.logger.log("TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
+//                    self.logger.log(.trace, "TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
                     
                     //UPDATE RELATED physical directory of IMAGE DEVICE FILES
                     let (created, error) = oldLocalPath.moveFile(to: newLocalPath, logger: self.logger)
                     if !created {
-                        self.logger.log("Unable to change local folder: failed to move/rename folder - \(error)")
+                        self.logger.log(.trace, "Unable to change local folder: failed to move/rename folder - \(error)")
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Failed to change local folder: unable to rename folder - \(error)"
                         }
                     }else{
-//                        self.logger.log("TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")
+//                        self.logger.log(.trace, "TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")
                         
                         // UPDATE RELATED importToPath of IMAGE DEVICE FILES
 //                        DispatchQueue.main.async {
@@ -164,7 +164,7 @@ class DevicePathDetailViewController: NSViewController {
 //                            self.lblMessage.stringValue = "Updated imported files."
 //                        }
                         
-//                        self.logger.log("TODO: UPDATE CONTAINERS and SUB-CONTAINERS")
+//                        self.logger.log(.trace, "TODO: UPDATE CONTAINERS and SUB-CONTAINERS")
                         // UPDATE container and sub-containers
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updating related containers..."
@@ -194,7 +194,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Updated related containers."
                         }
                         
-//                        self.logger.log("TODO: UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)")
+//                        self.logger.log(.trace, "TODO: UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)")
                         
                         // UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)
                         DispatchQueue.main.async {

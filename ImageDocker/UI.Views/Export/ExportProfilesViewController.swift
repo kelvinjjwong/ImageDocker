@@ -61,11 +61,11 @@ class ExportProfilesViewController: NSViewController {
             viewController.btnExport.isEnabled = false
             viewController.btnStop.isHidden = false
             DispatchQueue.global().async {
-                self.logger.log(">>>>>>>>>> STARTED EXPORT PROFILE \(profile.id)")
+                self.logger.log(.trace, ">>>>>>>>>> STARTED EXPORT PROFILE \(profile.id)")
                 let (state, message) = ExportManager.default.withMessageBox(viewController.lblMessage).export(profile: profile, rehearsal: false, limit: nil)
-                self.logger.log("=================== EXPORT END ================")
-                self.logger.log("state= \(state)")
-                self.logger.log("message= \(message)")
+                self.logger.log(.trace, "=================== EXPORT END ================")
+                self.logger.log(.trace, "state= \(state)")
+                self.logger.log(.trace, "message= \(message)")
                 DispatchQueue.main.async {
                     viewController.btnExport.isEnabled = true
                     viewController.btnStop.isHidden = true
@@ -74,7 +74,7 @@ class ExportProfilesViewController: NSViewController {
         }, onStop: {
             DispatchQueue.global().async {
                 ExportManager.default.withMessageBox(viewController.lblMessage).stopTask(profileId: profile.id)
-                self.logger.log(">>>>>>>>>> STOPPED EXPORT PROFILE \(profile.id)")
+                self.logger.log(.trace, ">>>>>>>>>> STOPPED EXPORT PROFILE \(profile.id)")
                 DispatchQueue.main.async {
                     viewController.btnExport.isEnabled = true
                     viewController.btnStop.isHidden = true

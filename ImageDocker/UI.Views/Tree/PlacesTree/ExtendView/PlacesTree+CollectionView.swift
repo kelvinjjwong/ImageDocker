@@ -31,7 +31,7 @@ extension ViewController {
     }
 
     func reloadPlaceCollection(moment:Moment, sender:NSButton) {
-        print("## reloadPlaceCollection")
+        self.logger.log(.trace, "## reloadPlaceCollection")
         self.collectionPaginationController?.reload()
 //        self.createCollectionPaginationPopover()
 //        self.collectionPaginationViewController
@@ -57,8 +57,8 @@ extension ViewController {
     // MARK: CLICK ACTION
     
     func loadCollectionByPlace(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
-//        self.logger.log("SELECTED PLACE COLLECTION:")
-//        self.logger.log("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
+//        self.logger.log(.trace, "SELECTED PLACE COLLECTION:")
+//        self.logger.log(.trace, "\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
             
         self.selectedMoment = moment
         

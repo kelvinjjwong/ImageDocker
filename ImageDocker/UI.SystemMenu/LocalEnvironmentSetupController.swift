@@ -142,8 +142,8 @@ final class LocalEnvironmentSetupController: NSViewController {
             let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
             pipe2.fileHandleForReading.closeFile()
             
-            print(string)
-            print(string2)
+            self.logger.log(.trace, string)
+            self.logger.log(.trace, string2)
             
             if string.contains(find: "Android Debug Bridge version") {
                 DispatchQueue.main.async {
@@ -191,7 +191,7 @@ final class LocalEnvironmentSetupController: NSViewController {
             
             self.downloadFileCompletionHandler(urlstring: url, destinationPath: destinationPath, deleteIfExist: true) {(destinationUrl, error) in
                 if let dest = destinationUrl {
-                    self.logger.log("Downloaded adb to: \(dest)")
+                    self.logger.log(.trace, "Downloaded adb to: \(dest)")
                     if dest.path != "" && dest.path.isFileExists() {
                         let filePath = dest.path
                         
@@ -218,9 +218,9 @@ final class LocalEnvironmentSetupController: NSViewController {
                         let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
                         pipe2.fileHandleForReading.closeFile()
                         
-                        print(string)
-                        print(string2)
-                        print("finished unzip adb")
+                        self.logger.log(.trace, string)
+                        self.logger.log(.trace, string2)
+                        self.logger.log(.trace, "finished unzip adb")
                         
                         DispatchQueue.main.async {
                             self.lblAdbMessage.stringValue = "Downloaded \(filename)"
@@ -332,7 +332,7 @@ final class LocalEnvironmentSetupController: NSViewController {
     @IBAction func onDownloadExifToolClicked(_ sender: NSButton) {
         let url = self.lblExifLatestVersion.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if url == "" || !url.hasPrefix("https://exiftool.org/") {
-            self.logger.log("EXIFTOOL latest version url is invalid: \(url)")
+            self.logger.log(.trace, "EXIFTOOL latest version url is invalid: \(url)")
             return
         }
         let filename = url.lastPartOfUrl()
@@ -351,7 +351,7 @@ final class LocalEnvironmentSetupController: NSViewController {
             
             self.downloadFileCompletionHandler(urlstring: url, destinationPath: destinationPath, deleteIfExist: true) {(destinationUrl, error) in
                 if let dest = destinationUrl {
-                    self.logger.log("Downloaded exiftool to: \(dest)")
+                    self.logger.log(.trace, "Downloaded exiftool to: \(dest)")
                     if dest.path != "" && dest.path.isFileExists() {
                         let _ = ExifTool.untarExiftoolPackage(filePath: dest.path)
                         DispatchQueue.main.async {
@@ -388,7 +388,7 @@ final class LocalEnvironmentSetupController: NSViewController {
     }
     
     func saveExifSection(_ defaults:UserDefaults) {
-        self.logger.log("Saving EXIFTOOL path: \(self.txtExifToolPath.stringValue)")
+        self.logger.log(.trace, "Saving EXIFTOOL path: \(self.txtExifToolPath.stringValue)")
         Setting.localEnvironment.saveExifToolPath(self.txtExifToolPath.stringValue)
     }
     
@@ -543,7 +543,7 @@ final class LocalEnvironmentSetupController: NSViewController {
 
 
         let task = URLSession.shared.downloadTask(with: request) { tempFileUrl, response, error in
-//            print(tempFileUrl, response, error)
+//            self.logger.log(.trace, tempFileUrl, response, error)
             if error != nil {
                 completion(nil, error)
                 return
@@ -552,7 +552,7 @@ final class LocalEnvironmentSetupController: NSViewController {
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
                     if let tempFileUrl = tempFileUrl {
-                        self.logger.log("download finished")
+                        self.logger.log(.trace, "download finished")
                         try! FileManager.default.moveItem(at: tempFileUrl, to: destinationUrl)
                         completion(destinationUrl, error)
                     } else {

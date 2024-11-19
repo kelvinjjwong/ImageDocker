@@ -115,14 +115,14 @@ class CollectionViewItem: NSCollectionViewItem {
             if let imageData = imageFile.imageData, let rotationDegree = imageData.rotation {
                 degree = rotationDegree
 //                if imageFile.isVideo {
-//                    print("video:\(imageFile.url) | rotate:\(rotationDegree)")
+//                    self.logger.log(.trace, "video:\(imageFile.url) | rotate:\(rotationDegree)")
 //                    degree = rotationDegree + -90
 //                }
             }
             if let thumbnail = imageFile.thumbnail {
                 if degree != 0 {
 //                    if imageFile.isPhoto {
-                        self.logger.log("[renderControls] thumbnail rotate to \(degree) degree for \(imageFile.url)")
+                        self.logger.log(.trace, "[renderControls] thumbnail rotate to \(degree) degree for \(imageFile.url)")
                         self.imageView?.image = thumbnail.rotate(degrees: CGFloat(degree))
 //                    }else{
 //                        self.imageView?.image = thumbnail
@@ -311,7 +311,7 @@ class CollectionViewItem: NSCollectionViewItem {
                     let tmpFolder = "/tmp/\(uuid)"
                     let tmpPath = "\(tmpFolder)/\(filename)"
                     do {
-                        self.logger.log("Restoring backup image from [\(backupUrl.path)] to [url.path]")
+                        self.logger.log(.trace, "Restoring backup image from [\(backupUrl.path)] to [url.path]")
                         try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
                         try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                         try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
@@ -320,7 +320,7 @@ class CollectionViewItem: NSCollectionViewItem {
                         self.logger.log(.error, "Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
                         self.logger.log(.error, error)
                         self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Failed to replace selected image with backup version.")
-                        self.logger.log("Restoring original editable version from \(tmpPath)")
+                        self.logger.log(.trace, "Restoring original editable version from \(tmpPath)")
                         do {
                             try FileManager.default.removeItem(atPath: url.path)
                             try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
@@ -351,7 +351,7 @@ class CollectionViewItem: NSCollectionViewItem {
 //            }
 //
 //        }else{
-//            self.logger.log("ERROR: Image object is null or file doesn't exist.")
+//            self.logger.log(.trace, "ERROR: Image object is null or file doesn't exist.")
 //            return
 //        }
 //    }
@@ -362,7 +362,7 @@ class CollectionViewItem: NSCollectionViewItem {
 //                let _ = FaceTask.default.recognizeFaces(path: url.path)
 //            }
 //        }else{
-//            self.logger.log("ERROR: Image object is null or file doesn't exist.")
+//            self.logger.log(.trace, "ERROR: Image object is null or file doesn't exist.")
 //            return
 //        }
 //    }

@@ -41,7 +41,7 @@ class FaceCollectionViewItemsLoader: NSObject {
             }
             //self.setupItems(self.items)
         }else{
-            self.logger.log("NO PEOPLE")
+            self.logger.log(.trace, "NO PEOPLE")
             //self.setupItems(nil)
         }
         self.collectDomainItemToSingleSection()

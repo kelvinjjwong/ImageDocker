@@ -26,10 +26,10 @@ extension ViewController {
             
             // current database info
             let (_dbLocation, _dbEngine, dbServer, dbName) = Setting.database.configuredDatabaseInfo()
-            print(_dbLocation)
-            print(_dbEngine)
-            print(dbServer)
-            print(dbName)
+            self.logger.log(.trace, _dbLocation)
+            self.logger.log(.trace, _dbEngine)
+            self.logger.log(.trace, dbServer)
+            self.logger.log(.trace, dbName)
             var dbEngine = ""
             if(_dbLocation == "local") {
                 if dbEngine == "SQLite" {
@@ -141,7 +141,7 @@ extension ViewController {
     internal func didStartWork() {
         self.view.subviews.removeLast()
         self.startingUp = false
-        self.logger.log("FINISHED STARTUP WORK")
+        self.logger.log(.trace, "FINISHED STARTUP WORK")
         
         self.centralSplitViewDelegate = CentralSplitViewDelegate(view: self)
         self.centralHorizontalSplitView.delegate = self.centralSplitViewDelegate

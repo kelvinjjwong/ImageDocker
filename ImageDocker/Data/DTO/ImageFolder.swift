@@ -61,7 +61,7 @@ class ImageFolder : NSObject {
             repoPath = "\(repoPath)/"
         }
         let subPath = url.path.replacingFirstOccurrence(of: repoPath, with: "")
-        //self.logger.log("LOAD FOLDER 2 \(name) \(path)")
+        //self.logger.log(.trace, "LOAD FOLDER 2 \(name) \(path)")
         if withContainer {
             self.containerFolder = RepositoryDao.default.getOrCreateContainer(name: folderName,
                                                                        path: path,
@@ -73,7 +73,7 @@ class ImageFolder : NSObject {
                                                                        subPath: subPath,
                                                                        manyChildren: manyChildren)
         }
-        //self.logger.log("Got or Created container: \(path)")
+        //self.logger.log(.trace, "Got or Created container: \(path)")
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages
         }

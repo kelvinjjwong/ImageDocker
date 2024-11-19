@@ -21,13 +21,13 @@ extension ImageFile {
     /// - Tag: ImageFile.transformDomainToMetaInfo()
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
-//            self.logger.log("meta -> repo -> \(photoFile.repositoryPath)")
+//            self.logger.log(.trace, "meta -> repo -> \(photoFile.repositoryPath)")
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "ImageId", value: photoFile.id))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "OriginMD5", value: photoFile.originalMD5))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "ExportMD5", value: photoFile.exportedMD5))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "id", value: "\(photoFile.repositoryId)"))
             if let repo = RepositoryDao.default.getRepository(id: photoFile.repositoryId) {
-//                self.logger.log("got repo \(repo.name)")
+//                self.logger.log(.trace, "got repo \(repo.name)")
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Owner", value: repo.owner))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Name", value: repo.name))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "SubPath", value: photoFile.subPath))
@@ -80,7 +80,7 @@ extension ImageFile {
             }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "GPS Date", value: photoFile.gpsDate))
             
-            //self.logger.log("SET COORD 2: \(photoFile.latitude ?? "") \(photoFile.longitude ?? "") - \(fileName)")
+            //self.logger.log(.trace, "SET COORD 2: \(photoFile.latitude ?? "") \(photoFile.longitude ?? "") - \(fileName)")
             
             
             
@@ -133,7 +133,7 @@ extension ImageFile {
                     metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "VideoModifyDate", value: exifDateFormat.string(from: photoFile.videoModifyDate!)))
                 }
                 if photoFile.trackCreateDate != nil {
-                    //self.logger.log("TRACK CREATE DATE \(photoFile.trackCreateDate)")
+                    //self.logger.log(.trace, "TRACK CREATE DATE \(photoFile.trackCreateDate)")
                     metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackCreateDate", value: exifDateFormat.string(from: photoFile.trackCreateDate!)))
                 }
                 if photoFile.trackModifyDate != nil {
@@ -187,7 +187,7 @@ extension ImageFile {
         if self.isVideo == true { return }
         
         guard let imgRef = CGImageSourceCreateWithURL(url as CFURL, nil) else {
-            self.logger.log("Failed CGImageSourceCreateWithURL \(url)")
+            self.logger.log(.trace, "Failed CGImageSourceCreateWithURL \(url)")
             return
         }
         
@@ -210,7 +210,7 @@ extension ImageFile {
         
         
         let _ = url.getImageOrientation()
-        //self.logger.log("======== photo orientation = \(orientation)")
+        //self.logger.log(.trace, "======== photo orientation = \(orientation)")
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             let cameraMake = tiffData[CameraMake] as? String ?? ""
@@ -313,7 +313,7 @@ extension ImageFile {
                 let lon = gpsData[GPSLongitude] as? Double,
                 let lonRef = gpsData[GPSLongitudeRef] as? String {
                 
-                //self.logger.log("TRACK COORD 1 \(lat) \(latRef) \(lon) \(lonRef)")
+                //self.logger.log(.trace, "TRACK COORD 1 \(lat) \(latRef) \(lon) \(lonRef)")
                 setCoordinate(latitude: latRef == "N" ? lat : -lat,
                               longitude: lonRef == "E" ? lon : -lon)
             }
@@ -328,7 +328,7 @@ extension ImageFile {
         }
         
         let photoFile = self.imageData!
-        //self.logger.log("loaded PhotoFile for \(filename)")
+        //self.logger.log(.trace, "loaded PhotoFile for \(filename)")
         
         let now = Date()
         let nowToSeconds = Int(now.timeIntervalSince1970)
@@ -382,8 +382,8 @@ extension ImageFile {
             let _ = ImageRecordDao.default.saveImage(image: photoFile)
         }
         
-        //self.logger.log("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
-        //self.logger.log("LOCATION LOADED")
+        //self.logger.log(.trace, "COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
+        //self.logger.log(.trace, "LOCATION LOADED")
         hasLoadedMetaInfoFromDatabase = true
     }
     
@@ -396,8 +396,8 @@ extension ImageFile {
         let nowToSeconds = Int(now.timeIntervalSince1970)
         
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
-        self.logger.log("exif url: \(url)")
-        //self.logger.log("exif json: \(jsonStr)")
+        self.logger.log(.trace, "exif url: \(url)")
+        //self.logger.log(.trace, "exif json: \(jsonStr)")
         let json:JSON = JSON(parseJSON: jsonStr)
         if json != JSON(NSNull()) {
             //metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
@@ -492,7 +492,7 @@ extension ImageFile {
             
             if json2[0]["Composite"]["GPSLatitude"] != JSON.null && json2[0]["Composite"]["GPSLongitude"] != JSON.null && latitude != "0" && longitude != "0" && latitude != "null" && longitude != "null" {
                 
-                //self.logger.log("SET COORD 3: \(latitude) \(longitude) - \(fileName)")
+                //self.logger.log(.trace, "SET COORD 3: \(latitude) \(longitude) - \(fileName)")
                 
                 if let lat:Double = json2[0]["Composite"]["GPSLatitude"].double,
                     let lon:Double = json2[0]["Composite"]["GPSLongitude"].double {

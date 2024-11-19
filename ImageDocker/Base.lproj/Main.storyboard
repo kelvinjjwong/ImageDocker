@@ -3905,17 +3905,17 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 <tabViewItems>
                                     <tabViewItem label="View" identifier="" id="CVv-o3-SrW">
                                         <view key="view" id="75a-vD-tIK">
-                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <rect key="frame" x="10" y="7" width="571" height="407"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPr-6A-ckN">
-                                                    <rect key="frame" x="0.0" y="0.0" width="571" height="335"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="571" height="342"/>
                                                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="ndF-DA-Aem">
-                                                        <rect key="frame" x="0.0" y="0.0" width="556" height="335"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="556" height="342"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L90-gL-Tg0" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="335" width="556" height="0.0"/>
+                                                                <rect key="frame" x="0.0" y="342" width="556" height="0.0"/>
                                                             </stackView>
                                                         </subviews>
                                                         <constraints>
@@ -3929,12 +3929,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="sCh-pi-M5h">
-                                                        <rect key="frame" x="556" y="0.0" width="15" height="335"/>
+                                                        <rect key="frame" x="556" y="0.0" width="15" height="342"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
                                                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aMc-AT-PSN">
-                                                    <rect key="frame" x="0.0" y="335" width="571" height="65"/>
+                                                    <rect key="frame" x="0.0" y="342" width="571" height="65"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="BTI-28-AO4">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4048,7 +4048,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <rect key="frame" x="0.0" y="342" width="571" height="65"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="n6P-ul-WoI">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="j1A-Hb-l4j">
                                                                 <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
@@ -4271,17 +4271,17 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 <tabViewItems>
                                     <tabViewItem label="View" identifier="" id="POD-eu-nmk">
                                         <view key="view" id="3gk-pp-31C">
-                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <rect key="frame" x="10" y="7" width="571" height="418"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PPZ-1c-7BP">
-                                                    <rect key="frame" x="0.0" y="0.0" width="571" height="335"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="571" height="353"/>
                                                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="vEd-Mw-dM1">
-                                                        <rect key="frame" x="0.0" y="0.0" width="556" height="335"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="556" height="353"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ccj-7y-AhU" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="335" width="556" height="0.0"/>
+                                                                <rect key="frame" x="0.0" y="353" width="556" height="0.0"/>
                                                             </stackView>
                                                         </subviews>
                                                         <constraints>
@@ -4295,12 +4295,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="tTL-bw-JR6">
-                                                        <rect key="frame" x="556" y="0.0" width="15" height="335"/>
+                                                        <rect key="frame" x="556" y="0.0" width="15" height="353"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
                                                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Kz-hg-9XC">
-                                                    <rect key="frame" x="0.0" y="335" width="571" height="65"/>
+                                                    <rect key="frame" x="0.0" y="353" width="571" height="65"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="LZZ-Qt-dHR">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4755,7 +4755,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <rect key="frame" x="0.0" y="3" width="114" height="88"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="Er0-Mf-WxK">
                                                                     <rect key="frame" x="0.0" y="0.0" width="114" height="88"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" viewBased="YES" id="zmZ-bf-Ywu">
                                                                             <rect key="frame" x="0.0" y="0.0" width="114" height="88"/>
@@ -4888,7 +4888,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <rect key="frame" x="0.0" y="5" width="571" height="275"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="L8B-ZK-Cav">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="275"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="3uU-7Y-Zfh" viewBased="YES" id="dhp-y6-mNu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="571" height="247"/>
@@ -5244,7 +5244,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <rect key="frame" x="0.0" y="45" width="571" height="343"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="cYx-Lv-jIg">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="343"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="xdD-8Z-tRS" id="FeG-Hj-2Zo">
                                                                 <rect key="frame" x="0.0" y="0.0" width="571" height="343"/>
@@ -5387,7 +5387,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <rect key="frame" x="0.0" y="388" width="571" height="65"/>
                                                     <clipView key="contentView" id="Gid-Uf-Mtd">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="l0K-rg-AO7">
                                                                 <rect key="frame" x="0.0" y="0.0" width="571" height="65"/>
@@ -5508,7 +5508,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <rect key="frame" x="0.0" y="5" width="571" height="448"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="UXb-G0-pQL">
                                                         <rect key="frame" x="0.0" y="0.0" width="571" height="448"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="AaM-5p-I4l" id="to4-m3-w7H">
                                                                 <rect key="frame" x="0.0" y="0.0" width="571" height="448"/>

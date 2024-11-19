@@ -159,7 +159,7 @@ extension FaceCollectionViewController : NSCollectionViewDelegate {
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         self.selectedIndexPaths = indexPaths
-        //self.logger.log("selected: \(indexPaths.first?.item)")
+        //self.logger.log(.trace, "selected: \(indexPaths.first?.item)")
         highlightItems(selected: true, atIndexPaths: indexPaths)
     }
     

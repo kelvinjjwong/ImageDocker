@@ -52,7 +52,7 @@ extension ViewController: NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("value"):
                 value = info.value ?? ""
             case NSUserInterfaceItemIdentifier("copy"):
-                //self.logger.log("action cell")
+                //self.logger.log(.trace, "action cell")
                 
                 isAction = true
                 

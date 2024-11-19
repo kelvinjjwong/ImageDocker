@@ -34,7 +34,7 @@ class ImagePreviewController : NSViewController {
     }
     
     @IBAction func onWriteNotesClicked(_ sender: NSButton) {
-        self.logger.log("preview menu - to do function")
+        self.logger.log(.trace, "preview menu - to do function")
     }
     
     @IBAction func onZoomOutClicked(_ sender: NSButton) {
@@ -66,7 +66,7 @@ class ImagePreviewController : NSViewController {
                     
                     if let collectionViewItem = imageFile.collectionViewItem {
                         
-                        self.logger.log("re-render collection view item after rotate \(rotateDegree) degree - imageId:\(imageFile.imageData?.id ?? ""), repositoryId:\(imageFile.imageData?.repositoryId ?? -999999)")
+                        self.logger.log(.trace, "re-render collection view item after rotate \(rotateDegree) degree - imageId:\(imageFile.imageData?.id ?? ""), repositoryId:\(imageFile.imageData?.repositoryId ?? -999999)")
                         
                         collectionViewItem.imageFile?.imageData?.rotation = degree
                         collectionViewItem.reRenderItem()
@@ -75,12 +75,12 @@ class ImagePreviewController : NSViewController {
             }
             
         }else{
-            print("rotate clockwise:")
-            print(self.getImageFromPreview == nil)
-            print(self.getImageFromPreview?() == nil)
-            print(self.imageFile == nil)
-            print(self.imageFile?.imageData == nil)
-            print(self.imageFile?.imageData?.id == nil)
+            self.logger.log(.trace, "rotate clockwise:")
+            self.logger.log(.trace, self.getImageFromPreview == nil)
+            self.logger.log(.trace, self.getImageFromPreview?() == nil)
+            self.logger.log(.trace, self.imageFile == nil)
+            self.logger.log(.trace, self.imageFile?.imageData == nil)
+            self.logger.log(.trace, self.imageFile?.imageData?.id == nil)
         }
     }
     

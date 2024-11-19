@@ -184,7 +184,7 @@ public final class PostgresConnection : ImageDBInterface {
         pgdump.standardError = pipe
         
         let startTime = Date()
-        self.logger.log("doing pgdump clone")
+        self.logger.log(.trace, "doing pgdump clone")
         pgdump.launch()
         pgdump.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -218,7 +218,7 @@ public final class PostgresConnection : ImageDBInterface {
         do{
             try FileManager.default.createDirectory(at: backupfolder, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            self.logger.log("Unable to create backup folder \(backupfolder.path)")
+            self.logger.log(.trace, "Unable to create backup folder \(backupfolder.path)")
             self.logger.log(.error, error)
             return (folder, false, error)
         }
@@ -229,7 +229,7 @@ public final class PostgresConnection : ImageDBInterface {
         let pgdump = Process("/bin/bash", ["-c", cmd])
         
         let startTime = Date()
-        self.logger.log("doing pgdump backup")
+        self.logger.log(.trace, "doing pgdump backup")
         pgdump.launch()
         pgdump.waitUntilExit()
         self.logger.timecost("end of pgdump backup", fromDate: startTime)
@@ -246,7 +246,7 @@ public final class PostgresConnection : ImageDBInterface {
         let pgdump = Process("/bin/bash", ["-c", cmd])
         
         let startTime = Date()
-        self.logger.log("doing psql restore")
+        self.logger.log(.trace, "doing psql restore")
         pgdump.launch()
         pgdump.waitUntilExit()
         self.logger.timecost("end of psql restore", fromDate: startTime)

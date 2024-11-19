@@ -101,7 +101,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             gov = gov.replacingOccurrences(of: Words.section_SAR.word(), with: "")
             place = place.replacingOccurrences(of: Words.section_SAR.word(), with: "")
             
-            //self.logger.log("Got \(place)-\(year)-\(month)-\(day)")
+            //self.logger.log(.trace, "Got \(place)-\(year)-\(month)-\(day)")
             var govEntry:Moment
             var placeEntry:Moment
             var yearEntry:Moment
@@ -280,9 +280,9 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         from "Image") t
         WHERE 1=1 \(arguments) \(additionalConditions) GROUP BY \(fields) ORDER BY \(fields) DESC
         """
-//        self.logger.log(">> Postgres SQL of loading moments treeview")
+//        self.logger.log(.trace, ">> Postgres SQL of loading moments treeview")
 //        self.logger.log(sql)
-//        self.logger.log("\n")
+//        self.logger.log(.trace, "\n")
         var result:[Moment] = []
         final class TempRecord : DatabaseRecord {
             var photoCount: Int = 0
@@ -297,9 +297,9 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }catch{
             self.logger.log(.error, error)
         }
-//        self.logger.log(">> got \(records.count) from SQL")
+//        self.logger.log(.trace, ">> got \(records.count) from SQL")
         for row in records {
-//            self.logger.log("moment node: y:\(row.photoTakenYear ?? 0) m:\(row.photoTakenMonth ?? 0) d:\(row.photoTakenDay ?? 0)")
+//            self.logger.log(.trace, "moment node: y:\(row.photoTakenYear ?? 0) m:\(row.photoTakenMonth ?? 0) d:\(row.photoTakenDay ?? 0)")
             let collection = Moment(.MOMENTS, imageCount: row.photoCount, year: row.photoTakenYear ?? 0, month: row.photoTakenMonth ?? 0, day: row.photoTakenDay ?? 0)
             result.append(collection)
         }
@@ -341,7 +341,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             let day = data.photoTakenDay
             let photoCount = data.photoCount
             
-            //self.logger.log("Got \(place)-\(year)-\(month)-\(day)")
+            //self.logger.log(.trace, "Got \(place)-\(year)-\(month)-\(day)")
             var yearEntry:Moment
             var monthEntry:Moment
             
@@ -530,7 +530,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         GROUP BY \(fields) ORDER BY \(orderFields)
         """
 //        self.logger.log(sql)
-//        self.logger.log("SQL values: \(argumentValues)")
+//        self.logger.log(.trace, "SQL values: \(argumentValues)")
         var result:[Moment] = []
         
         final class TempRecord : DatabaseRecord {
@@ -731,7 +731,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         group by event, \(fields) order by event, \(fields) DESC
         """
 //        self.logger.log(sql)
-//        self.logger.log("SQL argument: \(ev)")
+//        self.logger.log(.trace, "SQL argument: \(ev)")
         
         final class TempRecord : DatabaseRecord {
             var cnt:Int = 0
@@ -770,7 +770,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             condition = " where \"event\"=? "
             args.append(ev)
         }
-        //self.logger.log("debug 1")
+        //self.logger.log(.trace, "debug 1")
         var records:[TempRecord] = []
         do {
             records = try TempRecord.fetchAll(db, sql: """
@@ -832,7 +832,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     
     func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
-        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        self.logger.log(.trace, "pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
         
 //        self.logger.log(stmt)
@@ -856,14 +856,14 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }catch{
             self.logger.log(.error, error)
         }
-        self.logger.log("loaded \(result.count) records")
+        self.logger.log(.trace, "loaded \(result.count) records")
         return result
         
     }
     
     func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
-        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        self.logger.log(.trace, "pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         
         var result:[Image] = []
@@ -884,13 +884,13 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }catch{
             self.logger.log(.error, error)
         }
-        self.logger.log("loaded \(result.count) records")
+        self.logger.log(.trace, "loaded \(result.count) records")
         return result
     }
     
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
         let db = PostgresConnection.database()
-//        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+//        self.logger.log(.trace, "pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: true)
         
         var result:[Image] = []
@@ -911,7 +911,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }catch{
             self.logger.log(.error, error)
         }
-//        self.logger.log("loaded \(result.count) records")
+//        self.logger.log(.trace, "loaded \(result.count) records")
         return result
     }
     
@@ -985,7 +985,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     }
     
     func getMaxPhotoTakenYear() -> Int {
-        self.logger.log("getMaxPhotoTakenYear()")
+        self.logger.log(.trace, "getMaxPhotoTakenYear()")
         let db = PostgresConnection.database()
         let sql = "select distinct max(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
         final class TempRecord : DatabaseRecord {
@@ -1005,7 +1005,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     }
     
     func getMinPhotoTakenYear() -> Int {
-        self.logger.log("getMinPhotoTakenYear()")
+        self.logger.log(.trace, "getMinPhotoTakenYear()")
         let db = PostgresConnection.database()
         let sql = "select distinct min(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
         final class TempRecord : DatabaseRecord {
@@ -1301,7 +1301,7 @@ order by "date"
 //            key.append("\(parentPath.withLastStash())%")
 //        }
         
-//        self.logger.log("\(condition) \(otherPredicate)")
+//        self.logger.log(.trace, "\(condition) \(otherPredicate)")
         
         do {
             if pageSize > 0 && pageNumber > 0 {

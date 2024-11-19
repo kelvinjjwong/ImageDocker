@@ -448,11 +448,11 @@ class MemoryReleasable {
                     
                     if usedRam >= limitRam {
                         attempt += 1
-                        //self.logger.log("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
+                        //self.logger.log(.trace, "waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
                         continousWorking = false
                         sleep(10)
                     }else{
-//                            self.logger.log("continue for Setting up containers' parent, last attempt: \(attempt)")
+//                            self.logger.log(.trace, "continue for Setting up containers' parent, last attempt: \(attempt)")
                         continousWorking = true
                     }
                 }

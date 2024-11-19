@@ -749,7 +749,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubContainers(parent path: String) -> Int {
         let db = PostgresConnection.database()
-        self.logger.log("countSubContainers(parent:\(path))")
+        self.logger.log(.trace, "countSubContainers(parent:\(path))")
         do {
             return try ImageContainer.count(db, parameters: ["parentFolder" : path])
         }catch{
@@ -760,7 +760,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubContainers(containerId:Int) -> Int {
         let db = PostgresConnection.database()
-        self.logger.log("countSubContainers(containerId:\(containerId))")
+        self.logger.log(.trace, "countSubContainers(containerId:\(containerId))")
         do {
             return try ImageContainer.count(db, parameters: ["parentId": containerId])
         }catch{
@@ -791,7 +791,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubContainers(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
-        self.logger.log("countSubContainers(repositoryId:\(repositoryId))")
+        self.logger.log(.trace, "countSubContainers(repositoryId:\(repositoryId))")
         do {
             if let container = try ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId": 0]) {
                 return try ImageContainer.count(db, parameters: ["parentId": container.id])
@@ -811,7 +811,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubImages(containerId:Int) -> Int {
         let db = PostgresConnection.database()
-        self.logger.log("countSubImages(containerId:\(containerId))")
+        self.logger.log(.trace, "countSubImages(containerId:\(containerId))")
         do {
             return try Image.count(db, parameters: ["containerId": containerId])
         }catch{
@@ -822,7 +822,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubHiddenImages(containerId:Int) -> Int {
         let db = PostgresConnection.database()
-        self.logger.log("countSubHiddenImages(containerId:\(containerId))")
+        self.logger.log(.trace, "countSubHiddenImages(containerId:\(containerId))")
         do {
             return try Image.count(db, parameters: ["containerId": containerId, "hidden": true])
         }catch{
@@ -1093,7 +1093,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func updateImageContainerSubContainers(path:String) -> Int {
         let subContainers = self.countSubContainers(parent: path)
-        self.logger.log("[DB][PostgresClientKit+ImageContainer] updating subContainers amount to \(subContainers) - \(path)")
+        self.logger.log(.trace, "[DB][PostgresClientKit+ImageContainer] updating subContainers amount to \(subContainers) - \(path)")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """

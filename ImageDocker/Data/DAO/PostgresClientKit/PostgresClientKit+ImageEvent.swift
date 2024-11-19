@@ -234,16 +234,16 @@ class EventDaoPostgresCK : EventDaoInterface {
             let event = data.event
             //self.logger.log(event)
             let year = data.photoTakenYear
-            //self.logger.log("year")
+            //self.logger.log(.trace, "year")
             let month = data.photoTakenMonth
-            //self.logger.log("month")
+            //self.logger.log(.trace, "month")
             let day = data.photoTakenDay
-            //self.logger.log("day")
+            //self.logger.log(.trace, "day")
             let photoCount = data.photoCount
-            //self.logger.log("count")
+            //self.logger.log(.trace, "count")
             let place = data.place
             
-            //self.logger.log("Got \(event)-\(year)-\(month)-\(day)-\(place)")
+            //self.logger.log(.trace, "Got \(event)-\(year)-\(month)-\(day)-\(place)")
             var eventEntry:Event
             var monthEntry:Event
             
@@ -462,8 +462,8 @@ select DISTINCT "event" from "Image" where "id" in (\(imageIds.joinedSingleQuote
         }catch{
             self.logger.log(.error, error)
         }
-        print("getEvents(imageIds: \(imageIds)")
-        print(result)
+        self.logger.log(.trace, "getEvents(imageIds: \(imageIds)")
+        self.logger.log(.trace, result)
         return result
     }
     

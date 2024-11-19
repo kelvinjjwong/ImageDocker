@@ -36,7 +36,7 @@ extension ImageSQLHelper {
     
     // sql by container
     static func generatePostgresSQLStatement(filter:CollectionFilter) -> (String, String) {
-        self.logger.log("[generatePostgresSQLStatement] filter: \(filter.represent())")
+        self.logger.log(.trace, "[generatePostgresSQLStatement] filter: \(filter.represent())")
         
         var hiddenWhere = ""
         if filter.includeHidden == .ShowOnly {
@@ -102,9 +102,9 @@ extension ImageSQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        self.logger.log("[Postgres Image] Generated SQL statement for all: \(stmt)")
-        self.logger.log("[Postgres Image] Generated SQL statement for hidden: \(stmtHidden)")
-        self.logger.log("[Postgres Image] SQL args: \(sqlArgs)")
+        self.logger.log(.trace, "[Postgres Image] Generated SQL statement for all: \(stmt)")
+        self.logger.log(.trace, "[Postgres Image] Generated SQL statement for hidden: \(stmtHidden)")
+        self.logger.log(.trace, "[Postgres Image] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }
@@ -126,9 +126,9 @@ extension ImageSQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for all: \(stmt)")
-        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for hidden: \(stmtHidden)")
-        self.logger.log("[Postgres Image -> Searching] SQL args: \(sqlArgs)")
+        self.logger.log(.trace, "[Postgres Image -> Searching] Generated SQL statement for all: \(stmt)")
+        self.logger.log(.trace, "[Postgres Image -> Searching] Generated SQL statement for hidden: \(stmtHidden)")
+        self.logger.log(.trace, "[Postgres Image -> Searching] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }

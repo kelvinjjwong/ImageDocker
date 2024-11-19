@@ -91,7 +91,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func load(containerId: Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[load(containerId)] containerId:\(containerId)")
+        self.logger.log(.trace, "[load(containerId)] containerId:\(containerId)")
         loading = true
         
         lastRequest.loadSource = .repository
@@ -117,7 +117,7 @@ class CollectionViewItemsLoader : NSObject {
               country:String = "", province:String = "", city:String = "", place:String?,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
+        self.logger.log(.trace, "[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
         loading = true
         
         lastRequest.loadSource = .moment
@@ -142,7 +142,7 @@ class CollectionViewItemsLoader : NSObject {
                                                           country: country, province: province, city: city, place: place,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
-        //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
+        //self.logger.log(.trace, "GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
         //}
@@ -157,7 +157,7 @@ class CollectionViewItemsLoader : NSObject {
               country:String = "", province:String = "", city:String = "", place:String,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
+        self.logger.log(.trace, "[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
         loading = true
         
         lastRequest.loadSource = .event
@@ -182,7 +182,7 @@ class CollectionViewItemsLoader : NSObject {
                                                           country: country, province: province, city: city, place:place,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
-        //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
+        //self.logger.log(.trace, "GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
         //}
@@ -203,7 +203,7 @@ class CollectionViewItemsLoader : NSObject {
     func search(conditions:SearchCondition,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[search(conditions)]")
+        self.logger.log(.trace, "[search(conditions)]")
         loading = true
         
         lastRequest.lastLoadSource = lastRequest.loadSource
@@ -243,7 +243,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func reload() {
-        self.logger.log("[reload] LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
+        self.logger.log(.trace, "[reload] LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
         if lastRequest.loadSource == nil {
             self.reloadImages()
         }else{
@@ -311,11 +311,11 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func removeItem(_ imageFile:ImageFile){
-        print("CollectionViewItemsLoader.removeItem \(imageFile.imageData?.id ?? "?")")
+        self.logger.log(.trace, "CollectionViewItemsLoader.removeItem \(imageFile.imageData?.id ?? "?")")
         if let i = items.firstIndex(where: { ($0.imageData?.id ?? $0.url.path()) == (imageFile.imageData?.id ?? imageFile.url.path()) }) {
             items.remove(at: i)
         }else{
-            print("CollectionViewItemsLoader.removeItem not found item")
+            self.logger.log(.error, "CollectionViewItemsLoader.removeItem not found item")
         }
     }
     
@@ -402,7 +402,7 @@ class CollectionViewItemsLoader : NSObject {
 //                self.logger.log(dup)
 //            }
 //        }
-        //self.logger.log("Loading duplicate photos from db: DONE")
+        //self.logger.log(.trace, "Loading duplicate photos from db: DONE")
         
         let repositoryColorMapping = FaceDao.default.getRepositoryOwnerColors()
         

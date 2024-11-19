@@ -7,8 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class PeopleManageViewController: NSViewController {
+    
+    let logger = LoggerFactory.get(category: "People", subCategory: "Manager")
     
     
     fileprivate var selectedPeopleId = ""
@@ -212,7 +215,7 @@ class PeopleManageViewController: NSViewController {
         let item = sender.item(atRow: sender.clickedRow)
         
         if let item = item as? PeopleGroup {
-            print("double clicked people group \(item.name)")
+            self.logger.log(.trace, "double clicked people group \(item.name)")
             let view = sender.view(atColumn: 0, row: sender.clickedRow, makeIfNecessary: false)
             if let cellView = view as? PeopleManageCheckableTableCellView {
                 cellView.textField?.isEditable = true
@@ -257,6 +260,8 @@ class PeopleManageViewController: NSViewController {
 
 class PeopleManageCheckableTableCellView: NSTableCellView {
     
+    let logger = LoggerFactory.get(category: "People", subCategory: "CheckableItem")
+    
     @IBOutlet weak var checkbox: NSButton!
     @IBOutlet weak var removeButton: NSButton!
     @IBOutlet weak var editButton: NSButton!
@@ -271,7 +276,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
         if let item = nodeData as? CoreMember {
-            print("checkbox: core member: \(item.nickname) , state: \(sender.state == .on)")
+            self.logger.log(.trace, "checkbox: core member: \(item.nickname) , state: \(sender.state == .on)")
             let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
@@ -280,7 +285,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
             }
         }
         if let item = nodeData as? PeopleGroup {
-            print("checkbox: people group: \(item.name) , state: \(sender.state == .on)")
+            self.logger.log(.trace, "checkbox: people group: \(item.name) , state: \(sender.state == .on)")
             let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
@@ -289,7 +294,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
             }
         }
         if let item = nodeData as? PeopleGroupMember {
-            print("checkbox: people: \(item.id) , state: \(sender.state == .on)")
+            self.logger.log(.trace, "checkbox: people: \(item.id) , state: \(sender.state == .on)")
             let ov = item.isChecked
             self.isChecked = (sender.state == .on)
             item.isChecked = (sender.state == .on)
@@ -301,7 +306,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     
     @IBAction func onRemoveClicked(_ sender: NSButton) { // on update or remove, shared button
         if let item = nodeData as? CoreMember {
-            print("add empty people group for: \(item.nickname)")
+            self.logger.log(.trace, "add empty people group for: \(item.nickname)")
             let idx = item.groups.count + 1
             let groupId = "\(item.id)_group_\(idx)"
             let groupName = "\(Words.new_people_group.word()) \(idx)"
@@ -327,7 +332,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
             
         }
         if let item = nodeData as? PeopleGroup {
-            print("remove people group: \(item.name) , state: \(sender.state == .on)")
+            self.logger.log(.trace, "remove people group: \(item.name) , state: \(sender.state == .on)")
             
             // delete people group
             
@@ -348,7 +353,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
             }
         }
         if let item = nodeData as? PeopleGroupMember {
-            print("remove people: \(item.id) , state: \(sender.state == .on)")
+            self.logger.log(.trace, "remove people: \(item.id) , state: \(sender.state == .on)")
             
             if let peopleGroup = item.parent {
                 peopleGroup.members.removeAll { member in
@@ -510,7 +515,7 @@ extension PeopleManageViewController: NSOutlineViewDataSource {
             return false
         }
         
-        print("dragged \(draggedString) to group:\(peopleGroupName)")
+        self.logger.log(.trace, "dragged \(draggedString) to group:\(peopleGroupName)")
         
         let json = JSON.init(parseJSON: draggedString)
         

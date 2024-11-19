@@ -430,7 +430,7 @@ final class PreferencesController: NSViewController {
         self.lblPaginationPromptRight.stringValue = Words.preference_tab_performance_box_pagination_prompt_right.word()
         self.setupMemorySlider()
         let paginationAmount = Setting.performance.amountForPagination()
-//        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
+//        self.logger.log(.trace, "GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         self.lstAmountForPagination.item(at: 0)?.title = Words.preference_tab_performance_pagination_unlimited.word()
         if paginationAmount == 0 {
             self.lstAmountForPagination.selectItem(withTitle: Words.preference_tab_performance_pagination_unlimited.word())

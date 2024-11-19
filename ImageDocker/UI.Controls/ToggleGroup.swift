@@ -79,7 +79,7 @@ public final class ToggleGroup {
                 break
             }
         }
-        self.logger.log("disable \(key) at \(i)")
+        self.logger.log(.trace, "disable \(key) at \(i)")
         var needCheckNext = false
         for (k, button) in toggles {
             if k == key {
@@ -99,7 +99,7 @@ public final class ToggleGroup {
             }
             
             let enableKey = keys[i]
-            self.logger.log("will enable \(enableKey) at \(i)")
+            self.logger.log(.trace, "will enable \(enableKey) at \(i)")
             for (k, button) in toggles {
                 if enableKey == k {
                     button.state = .on

@@ -44,7 +44,7 @@ class RepositoryDao {
                                  storagePath:String,
                                  facePath:String,
                                  cropPath:String) -> ImageFolder {
-        self.logger.log("Creating repository with name:\(name) , path:\(path)")
+        self.logger.log(.trace, "Creating repository with name:\(name) , path:\(path)")
         
         let (homeVolume, _homePath) = homePath.getVolumeFromThisPath()
         let (repositoryVolume, _repositoryPath) = path.getVolumeFromThisPath()
@@ -61,7 +61,7 @@ class RepositoryDao {
                                    cropVolume: cropVolume, cropPath: _cropPath)
         
         if let repositoryId = imageRepository?.id {
-            self.logger.log("Created ImageRepository with id: \(repositoryId)")
+            self.logger.log(.trace, "Created ImageRepository with id: \(repositoryId)")
         }
         
         let imageFolder = ImageFolder(URL(fileURLWithPath: path),

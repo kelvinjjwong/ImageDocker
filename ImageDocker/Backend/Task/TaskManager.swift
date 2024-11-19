@@ -177,15 +177,15 @@ class Tasklet {
     }
     
     func startFixedDelayExecution(intervalInSecond:Int) {
-        self.logger.log("fixed delay execution - \(self.name) - \(self.state)")
+        self.logger.log(.trace, "fixed delay execution - \(self.name) - \(self.state)")
         if let exec = self.taskCode {
             DispatchQueue.global().async {
                 while(true) {
                     if TaskletManager.default.isTaskStopped(id: self.id) {
-//                        self.logger.log("stopped fixed delay job !!!!!!!!")
+//                        self.logger.log(.trace, "stopped fixed delay job !!!!!!!!")
                         return
                     }
-                    //self.logger.log("fixed delay execution - \(self.name) - \(self.state)")
+                    //self.logger.log(.trace, "fixed delay execution - \(self.name) - \(self.state)")
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         self.state = "IN_PROGRESS"
@@ -194,13 +194,13 @@ class Tasklet {
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         
-//                        self.logger.log("waiting \(intervalInSecond) sec for next fixedDelay run")
+//                        self.logger.log(.trace, "waiting \(intervalInSecond) sec for next fixedDelay run")
                         
                         if !TaskletManager.default.isSingleMode() {
                             var n = 0
                             while(n < intervalInSecond) {
                                 if TaskletManager.default.isTaskStopped(id: self.id) {
-    //                                self.logger.log("stopped fixed delay job !!!!!!!!")
+    //                                self.logger.log(.trace, "stopped fixed delay job !!!!!!!!")
                                     return
                                 }
                                 
@@ -278,7 +278,7 @@ class TaskletManager {
     func startQueueTimer() {
         self.queueTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             if self.isSingleMode() {
-                //self.logger.log("===== single thread mode ======")
+                //self.logger.log(.trace, "===== single thread mode ======")
                 self.printQueuedTasks()
                 if !self.queue.isEmpty {
                     if let task = self.getPeakTaskFromQueue() {
@@ -340,7 +340,7 @@ class TaskletManager {
                 }
                 // end if single thread mode
             }else{
-                //self.logger.log("===== multi thread mode ======")
+                //self.logger.log(.trace, "===== multi thread mode ======")
                 // when suddenly changed from single thread mode to multi thread mode
                 // clean the queue and execute all queued tasks
                 let queuedTasks = self.queue.dequeueAll()
@@ -359,16 +359,16 @@ class TaskletManager {
     }
     
     func printQueuedTasks() {
-        self.logger.log("==========================")
-        self.logger.log("Queued tasks: \(self.queue.list.count)")
+        self.logger.log(.trace, "==========================")
+        self.logger.log(.trace, "Queued tasks: \(self.queue.list.count)")
         for task in self.queue.list {
             if task.isFixedDelayJob {
-                self.logger.log("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(String(describing: self.tasksStartStopState[task.id]))")
+                self.logger.log(.trace, "\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(String(describing: self.tasksStartStopState[task.id]))")
             }else{
-                self.logger.log("\(task.name) - \(task.state)")
+                self.logger.log(.trace, "\(task.name) - \(task.state)")
             }
         }
-        self.logger.log("==========================")
+        self.logger.log(.trace, "==========================")
     }
     
     func getPeakTaskFromQueue() -> Tasklet? {
@@ -452,8 +452,8 @@ class TaskletManager {
     @objc func onTaskChanged(notification: NSNotification) {
         for task in tasks {
             if task.taskid == notification.name.rawValue {
-                //self.logger.log("=== onTaskChanged - \(task.taskid) - \(task.state)")
-                //self.logger.log("viewManager is nil ? \(viewManager == nil)")
+                //self.logger.log(.trace, "=== onTaskChanged - \(task.taskid) - \(task.state)")
+                //self.logger.log(.trace, "viewManager is nil ? \(viewManager == nil)")
                 if let view = viewManager {
                     DispatchQueue.main.async {
                         view.updateTask(task: task)
@@ -600,7 +600,7 @@ class TaskletManager {
             }
 
             task.notifyChange()
-            self.logger.log("forceComplete notifyChange \(task.name)")
+            self.logger.log(.trace, "forceComplete notifyChange \(task.name)")
             
             self.updateTasksCountInMainWindow()
         }
@@ -611,7 +611,7 @@ class TaskletManager {
         
         if task.state != "STOPPED" && task.state != "COMPLETED" {
             task.state = "IN_PROGRESS"
-//            self.logger.log("\(task.name) in progress")
+//            self.logger.log(.trace, "\(task.name) in progress")
         }
         if increase && task.state == "IN_PROGRESS" {
             task.progress += 1
@@ -626,7 +626,7 @@ class TaskletManager {
                     }
                 }
                 self.updateTasksCountInMainWindow()
-//                self.logger.log("\(task.name) completed")
+//                self.logger.log(.trace, "\(task.name) completed")
             }
         }
         task.notifyChange()
@@ -663,7 +663,7 @@ class TaskletManager {
     
     func startFixedDelayExecution(type:String, name:String) {
         if let task = self.getTask(type: type, name: name) {
-            //self.logger.log("===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
+            //self.logger.log(.trace, "===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
             if self.isSingleMode() {
                 if self.isInQueue(task: task) {
                     task.state = "READY"
@@ -679,12 +679,12 @@ class TaskletManager {
     
     func startFixedDelayExecution(id:String) {
         if let task = self.getTask(id: id) {
-            //self.logger.log("===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
+            //self.logger.log(.trace, "===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
             if self.isSingleMode() {
                 if self.isInQueue(task: task) {
                     task.state = "READY"
                 }else{
-                    self.logger.log("push to queue - \(task.name)")
+                    self.logger.log(.trace, "push to queue - \(task.name)")
                     task.state = "READY"
                     self.pushTaskToQueue(task: task)
                 }
@@ -807,12 +807,12 @@ class TaskletManager {
     }
     
     func printAll() {
-        self.logger.log("===================================")
-        self.logger.log("Listing all tasks ...")
+        self.logger.log(.trace, "===================================")
+        self.logger.log(.trace, "Listing all tasks ...")
         for task in tasks {
             self.logger.log(task.toString())
         }
-        self.logger.log("===================================")
+        self.logger.log(.trace, "===================================")
     }
     
 }

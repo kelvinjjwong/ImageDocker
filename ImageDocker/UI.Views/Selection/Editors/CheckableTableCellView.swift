@@ -6,8 +6,11 @@
 //  Copyright © 2024 nonamecat. All rights reserved.
 //
 import Cocoa
+import LoggerFactory
 
 public class CheckableTableCellView: NSTableCellView {
+    
+    let logger = LoggerFactory.get(category: "Table", subCategory: "CheckItem")
     
     @IBOutlet weak var checkbox: NSButton!
     @IBOutlet weak var removeButton: NSButton!
@@ -27,7 +30,7 @@ public class CheckableTableCellView: NSTableCellView {
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
         if let item = nodeData {
-            print("checkbox: people: \(item.getId()) , \(String(describing: type(of: item))), state: \(sender.state == .on)")
+            self.logger.log(.trace, "checkbox: people: \(item.getId()) , \(String(describing: type(of: item))), state: \(sender.state == .on)")
             let ov = item.checked()
             self.isChecked = (sender.state == .on)
             item.setCheckState(state: (sender.state == .on))
@@ -51,7 +54,7 @@ public class CheckableTableCellView: NSTableCellView {
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {
-        print("clicked edit button")
+        self.logger.log(.trace, "clicked edit button")
         
         if let item = nodeData {
             
@@ -90,11 +93,11 @@ public class CheckableTableCellView: NSTableCellView {
                     self.editButton.image = Icons.saveEdit
                 }
             }else{
-                print("CheckableTableCellView onEdit outside, closure is nil ? \(self.onEditNode == nil)")
+                self.logger.log(.trace, "CheckableTableCellView onEdit outside, closure is nil ? \(self.onEditNode == nil)")
                 let _ = self.onEditNode?(item)
             }
         }else{
-            print("CheckableTableCellView onEdit: nodeData is nil")
+            self.logger.log(.trace, "CheckableTableCellView onEdit: nodeData is nil")
         }
     }
     

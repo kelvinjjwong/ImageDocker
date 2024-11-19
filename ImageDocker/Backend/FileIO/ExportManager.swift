@@ -59,7 +59,7 @@ class ExportManager {
     fileprivate func nonStop(profileId:String) -> Bool {
         
         if Setting.database.isSQLite() && self.suppressed {
-            self.logger.log("ExportManager is suppressed.")
+            self.logger.log(.trace, "ExportManager is suppressed.")
             TaskManager.exporting = false
             self.stopAllTasks()
             return false
@@ -88,7 +88,7 @@ class ExportManager {
         let generatedImageDescription = Naming.Export.getNewDescription(image: image)
         ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: targetFullFilePath))
 
-        self.logger.log("Change ImageDescription for image.id: \(image.id) : DONE")
+        self.logger.log(.trace, "Change ImageDescription for image.id: \(image.id) : DONE")
     }
     
     private func patchImageDateTime(image:Image, profile:ExportProfile, targetFilePath:String) {
@@ -141,14 +141,14 @@ class ExportManager {
         let triggerTime = Date()
         
         
-        //self.logger.log("exporting")
+        //self.logger.log(.trace, "exporting")
         TaskManager.exporting = true
-        self.logger.log("  ")
-        self.logger.log("!! ExportManager start working at \(Date())")
+        self.logger.log(.trace, "  ")
+        self.logger.log(.trace, "!! ExportManager start working at \(Date())")
         
         self.startTask(profileId: profile.id)
         
-        self.logger.log("EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
+        self.logger.log(.trace, "EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
         let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
         
@@ -235,7 +235,7 @@ class ExportManager {
         
         // invalid source file
         if imagePath == "" || !FileManager.default.fileExists(atPath: imagePath) {
-            self.logger.log("[\(imagePath)] Source image not found in file system")
+            self.logger.log(.trace, "[\(imagePath)] Source image not found in file system")
             return false
         }
         
@@ -247,10 +247,10 @@ class ExportManager {
         let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
-        self.logger.log("[\(imagePath)] Will copy file to [\(fullTargetFilePath)]")
+        self.logger.log(.trace, "[\(imagePath)] Will copy file to [\(fullTargetFilePath)]")
         
         if rehearsal {
-            self.logger.log("[\(imagePath)] Rehearsal not really copy file.")
+            self.logger.log(.trace, "[\(imagePath)] Rehearsal not really copy file.")
             return true
         }
         
@@ -275,7 +275,7 @@ class ExportManager {
                 }
             }
             if FileManager.default.fileExists(atPath: "\(fullTargetFilePath.path)") {
-                self.logger.log("[\(imagePath)] Destination file exists, try delete: \(fullTargetFilePath.path)")
+                self.logger.log(.trace, "[\(imagePath)] Destination file exists, try delete: \(fullTargetFilePath.path)")
                 do {
                     try FileManager.default.removeItem(atPath: "\(fullTargetFilePath.path)")
                 }catch{
@@ -284,10 +284,10 @@ class ExportManager {
                 }
             }
             do {
-                self.logger.log("[\(imagePath)] Copying file to [\(fullTargetFilePath.path)]")
+                self.logger.log(.trace, "[\(imagePath)] Copying file to [\(fullTargetFilePath.path)]")
                 try FileManager.default.copyItem(atPath: imagePath, toPath: "\(fullTargetFilePath.path)")
                 copied = true
-                self.logger.log("[\(imagePath)] Copied file to [\(fullTargetFilePath.path)]")
+                self.logger.log(.trace, "[\(imagePath)] Copied file to [\(fullTargetFilePath.path)]")
             }catch {
                 self.logger.log(.error, "[\(imagePath)] Unable to copy file to: [\(fullTargetFilePath.path)] ")
                 self.logger.log(.error, error)
@@ -313,7 +313,7 @@ class ExportManager {
             // generate MD5
             let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
             
-            self.logger.log("[\(imagePath)] Copy file to [\(fullTargetFilePath.path)] DONE.")
+            self.logger.log(.trace, "[\(imagePath)] Copy file to [\(fullTargetFilePath.path)] DONE.")
             
             let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? imagePath, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
             // TODO handle db interrupt error
@@ -328,7 +328,7 @@ class ExportManager {
     
     // MARK: - HOUSE KEEP
     func housekeepFilesNotInExportLog(profile:ExportProfile) {
-        self.logger.log("EXPORT: HOUSE KEEP")
+        self.logger.log(.trace, "EXPORT: HOUSE KEEP")
         
         self.printMessage("Checking invalid exported files ...")
         
@@ -359,7 +359,7 @@ class ExportManager {
                 if url.isWritable! {
                     if !url.isDirectory! {
                         if !fileRecords.contains(file.path) {
-                            self.logger.log("found file not in record: \(file.path) , mark to delete")
+                            self.logger.log(.trace, "found file not in record: \(file.path) , mark to delete")
                             uselessFiles.insert(file.path)
                         }
                     }else {
@@ -372,7 +372,7 @@ class ExportManager {
             }
         }
         
-        self.logger.log("Useless exported file count: \(uselessFiles.count)")
+        self.logger.log(.trace, "Useless exported file count: \(uselessFiles.count)")
         
         self.printMessage("Found invalid exported files: \(uselessFiles.count)")
         
@@ -388,7 +388,7 @@ class ExportManager {
                 i += 1
                 self.printMessage("Deleting invalid exported file ... ( \(i) / \(total) )")
                 
-                self.logger.log("deleting invalid exported file \(uselessFile)")
+                self.logger.log(.trace, "deleting invalid exported file \(uselessFile)")
                 
                 do {
                     try FileManager.default.removeItem(atPath: uselessFile)
@@ -416,7 +416,7 @@ class ExportManager {
         
         self.printMessage("")
         
-        self.logger.log("EXPORT: HOUSE KEEP: DONE")
+        self.logger.log(.trace, "EXPORT: HOUSE KEEP: DONE")
     }
     
     

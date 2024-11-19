@@ -104,12 +104,12 @@ class NotificationMessageManager {
     }
     
     func printQueuedMessages() {
-        self.logger.log("==========================")
-        self.logger.log("Queued messages: \(self.queue.list.count)")
+        self.logger.log(.trace, "==========================")
+        self.logger.log(.trace, "Queued messages: \(self.queue.list.count)")
         for notificationMessage in self.queue.list {
-            self.logger.log("\(notificationMessage.name) - \(notificationMessage.message)")
+            self.logger.log(.trace, "\(notificationMessage.name) - \(notificationMessage.message)")
         }
-        self.logger.log("==========================")
+        self.logger.log(.trace, "==========================")
     }
     
     private func pushMessageToQueue(message:NotificationMessage, toEnd:Bool = false) {
@@ -184,9 +184,9 @@ class NotificationMessageManager {
         for notificationMessage in notificationMessages {
             if notificationMessage.msgid == notification.name.rawValue {
                 
-//                self.logger.log("onNotificationMessageChanged: \(notificationMessage.id)")
-                //self.logger.log("=== onTaskChanged - \(task.taskid) - \(task.state)")
-                //self.logger.log("viewManager is nil ? \(viewManager == nil)")
+//                self.logger.log(.trace, "onNotificationMessageChanged: \(notificationMessage.id)")
+                //self.logger.log(.trace, "=== onTaskChanged - \(task.taskid) - \(task.state)")
+                //self.logger.log(.trace, "viewManager is nil ? \(viewManager == nil)")
                 if let stackViewManager = viewManager {
                     if let viewController = stackViewManager.messagesView[notificationMessage.id] {
                         DispatchQueue.main.async {
@@ -258,12 +258,12 @@ class NotificationMessageManager {
     }
     
     func printAll() {
-        self.logger.log("===================================")
-        self.logger.log("Listing all messages ...")
+        self.logger.log(.trace, "===================================")
+        self.logger.log(.trace, "Listing all messages ...")
         for notificationMessage in self.notificationMessages {
             self.logger.log(notificationMessage.toString())
         }
-        self.logger.log("===================================")
+        self.logger.log(.trace, "===================================")
     }
     
 }

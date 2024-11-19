@@ -94,13 +94,13 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         treeView.collectionSelected = onNodeSelected
 //        { collection in
-//            self.logger.log("selected \(collection.path)")
+//            self.logger.log(.trace, "selected \(collection.path)")
 //        }
         treeView.collectionAction = moreActionOnNode
         
         self.trees.append(treeView)
         self.nameToTrees[title] = treeView
-        self.logger.log("[\(title)] is just mapped in nameToTrees[]")
+        self.logger.log(.trace, "[\(title)] is just mapped in nameToTrees[]")
         
         // MARK: stack body
         
@@ -130,7 +130,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         stackItem.header.afterExpand = {
             let (opened, closed) = self.countTreeStates()
-            //self.logger.log("opened: \(opened), closed: \(closed)")
+            //self.logger.log(.trace, "opened: \(opened), closed: \(closed)")
         }
         
         // Add the header view.
@@ -190,7 +190,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     }
     
     func reloadTree(_ title:String) {
-        self.logger.log("reloadTree: \(title)")
+        self.logger.log(.trace, "reloadTree: \(title)")
         if let tree = self.nameToTrees[title] {
             tree.show()
         }else{

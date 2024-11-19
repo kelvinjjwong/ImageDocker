@@ -19,7 +19,7 @@ extension ImageFolderTreeScanner {
         let exists = RepositoryDao.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
-                //self.logger.log("Updating image count of container: \(exist.path)")
+                //self.logger.log(.trace, "Updating image count of container: \(exist.path)")
                 let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path),
                                               name: exist.name,
                                               repositoryPath: exist.repositoryPath,
@@ -45,10 +45,10 @@ extension ImageFolderTreeScanner {
                         let updateState = RepositoryDao.default.saveImageContainer(container: container)
                         if indicator != nil {
                             if updateState == .OK {
-                                self.logger.log("Updated image count [\(container.name) \(countChange) (\(container.parentFolder))]")
+                                self.logger.log(.trace, "Updated image count [\(container.name) \(countChange) (\(container.parentFolder))]")
                                 indicator?.display(message: "Updated [\(container.name) \(countChange) (\(container.parentFolder))]")
                             }else{
-                                self.logger.log("[\(updateState)] Failed to update image count [\(container.name) \(countChange) (\(container.parentFolder))]")
+                                self.logger.log(.trace, "[\(updateState)] Failed to update image count [\(container.name) \(countChange) (\(container.parentFolder))]")
                                 indicator?.display(message: "Failed to update [\(container.name) \(countChange) (\(container.parentFolder))]")
                             }
                         }

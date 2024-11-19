@@ -31,7 +31,7 @@ extension ViewController {
         smallScreen = size.isSmallScreen
         
         if size.isSmallScreen {
-            self.logger.log("[SCREEN-RESOLUTION-DETECT] SMALL SCREEN \(windowBounds)")
+            self.logger.log(.trace, "[SCREEN-RESOLUTION-DETECT] SMALL SCREEN \(windowBounds)")
             
             var windowFrame = self.view.window?.frame
             windowFrame?.size = windowSize
@@ -53,7 +53,7 @@ extension ViewController {
                 self.playerContainer.display()
             }
         }else {
-            self.logger.log("[SCREEN-RESOLUTION-DETECT] BIG SCREEN \(windowBounds)")
+            self.logger.log(.trace, "[SCREEN-RESOLUTION-DETECT] BIG SCREEN \(windowBounds)")
             
             splashController.view.frame = self.view.bounds
             

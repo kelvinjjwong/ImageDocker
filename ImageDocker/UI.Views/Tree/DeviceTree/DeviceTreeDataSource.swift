@@ -39,7 +39,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 if let id = registeredDevice.deviceId {
                     
                     do {
-                        self.logger.log("[DEVICE][Android] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
+                        self.logger.log(.trace, "[DEVICE][Android] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
                         self.registered_android_id_names[id] = ""
                         self.registered_android_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
@@ -61,7 +61,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 if let id = registeredDevice.deviceId {
                     
                     do {
-                        self.logger.log("[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
+                        self.logger.log(.trace, "[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
                         self.registered_iphone_id_names[id] = ""
                         self.registered_iphone_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
@@ -80,7 +80,7 @@ class DeviceTreeDataSource : TreeDataSource {
     }
     
     func startConnectivityTest() {
-//        self.logger.log("start connectivity test timer")
+//        self.logger.log(.trace, "start connectivity test timer")
         
         self.volumesConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             DispatchQueue.global().async {
@@ -92,7 +92,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 
                 
                 for registeredVolume in registeredVolumes {
-                    print(registeredVolume.getPathOfSoftlink())
+                    self.logger.log(.trace, "check registered volume: \(registeredVolume.getPathOfSoftlink())")
                     
                     let connectivityStatus = mountedVolumes.contains(registeredVolume)
                     
@@ -142,7 +142,7 @@ class DeviceTreeDataSource : TreeDataSource {
                     self.loadRegisteredDevices()
 
                     let connectedDeviceIds:[String] = DeviceBridge.Android().devices()
-//                    self.logger.log("connected android phones: \(connectedDeviceIds)")
+//                    self.logger.log(.trace, "connected android phones: \(connectedDeviceIds)")
                     for deviceId in self.registered_android_id_names.keys {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
@@ -201,11 +201,11 @@ class DeviceTreeDataSource : TreeDataSource {
                     self.loadRegisteredDevices()
                     
                     let connectedDeviceIds:[String] = DeviceBridge.IPHONE().devices()
-//                    self.logger.log("connected android phones: \(connectedDeviceIds)")
+//                    self.logger.log(.trace, "connected android phones: \(connectedDeviceIds)")
                     for deviceId in self.registered_iphone_id_names.keys {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
-//                        print(connectivityStatus)
+//                        self.logger.log(.trace, connectivityStatus)
 
                         // initial
                         if self.deviceConnectivityStatus[deviceId] == nil {
@@ -319,7 +319,7 @@ class DeviceTreeDataSource : TreeDataSource {
     }
     
     private func convertToTreeNode(device: PhoneDevice, connected: Bool) -> TreeCollection {
-        self.logger.log("convert to tree node: \(device) , connected=\(connected)")
+        self.logger.log(.trace, "convert to tree node: \(device) , connected=\(connected)")
         return TreeCollection(device.represent(), id: device.deviceId, object: device, state: connected ? 1 : 0)
     }
     
@@ -346,7 +346,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         // devices those connected
         let devices:[String] = DeviceBridge.Android().devices()
-        self.logger.log("connected android device count: \(devices.count)")
+        self.logger.log(.trace, "connected android device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .Android)
         if devices.count > 0 {
             for deviceId in devices {

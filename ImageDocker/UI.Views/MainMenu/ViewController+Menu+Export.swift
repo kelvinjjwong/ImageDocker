@@ -19,7 +19,7 @@ extension ViewController {
     }
     
     @objc func exportMenuConfigAction(_ menuItem:NSMenuItem) {
-//        self.logger.log("clicked export menu configuration")
+//        self.logger.log(.trace, "clicked export menu configuration")
         self.btnExport.selectItem(at: 0)
         
         let viewController = ExportConfigurationViewController()
@@ -27,8 +27,8 @@ extension ViewController {
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
         let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-        let windowWidth = 1920
-        let windowHeight = 970
+        let windowWidth = 1250
+        let windowHeight = 820
         let originX = (screenWidth - windowWidth) / 2
         let originY = (screenHeight - windowHeight) / 2
         
@@ -42,7 +42,7 @@ extension ViewController {
     }
     
     @objc func exportMenuExportProfilesAction(_ menuItem:NSMenuItem) {
-//        self.logger.log("clicked export menu export action")
+//        self.logger.log(.trace, "clicked export menu export action")
         self.btnExport.selectItem(at: 0)
         
         let viewController = ExportProfilesViewController()

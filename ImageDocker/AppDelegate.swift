@@ -73,7 +73,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSUserNotificationCenter.default.delegate = self
         LoggerFactory.append(logWriter: ConsoleLogger())
         LoggerFactory.append(logWriter: FileLogger(pathOfFolder: self.logFilePath()))
-        LoggerFactory.enable([.info, .error, .warning, .debug, .trace])
+        LoggerFactory.enable([.info, .error, .warning, .debug])
+        LoggerFactory.enable(category: "DB", types: [.info, .error, .warning, .trace])
         self.setupMainMenu()
     }
 

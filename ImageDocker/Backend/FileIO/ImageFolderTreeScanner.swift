@@ -61,18 +61,18 @@ class ImageFolderTreeScanner {
         var repoExistInFileSys = repo.path.isDirectoryExists()
         
         if !repoExistInFileSys {
-            self.logger.log("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
+            self.logger.log(.trace, "[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
             let deleteState = RepositoryDao.default.deleteContainer(path: repo.path, deleteImage: true)
             if deleteState == .OK {
-                self.logger.log("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
+                self.logger.log(.trace, "[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
             }else{
-                self.logger.log("[Repository Scan] [\(deleteState)] Unable to delete non-exist repository and related images in DB: [\(repo.path)]")
+                self.logger.log(.trace, "[Repository Scan] [\(deleteState)] Unable to delete non-exist repository and related images in DB: [\(repo.path)]")
             }
             return (false, filesysUrls, fileUrlToRepo)// continue
         }
         
         if repo.path.withLastStash() != repo.repositoryPath.withLastStash() {
-            self.logger.log("[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
+            self.logger.log(.trace, "[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
             return (false, filesysUrls, fileUrlToRepo)// continue
         }
         
@@ -87,7 +87,7 @@ class ImageFolderTreeScanner {
                         let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
 //                            pathToDeviceSubFolder[path] = devicePath.toSubFolder
                         
-                        self.logger.log("[Repository Scan] get or create container for device [id=\(repo.deviceId)] path [\(path)]")
+                        self.logger.log(.trace, "[Repository Scan] get or create container for device [id=\(repo.deviceId)] path [\(path)]")
                         let folder = ImageFolder(URL(fileURLWithPath: path),
                                                       name: devicePath.toSubFolder,
                                                       repositoryPath: repositoryPath,
@@ -101,10 +101,10 @@ class ImageFolderTreeScanner {
                         
                         if let container = RepositoryDao.default.getContainer(path: path) {
                             if container.path == repo.path {
-                                print("[REPOSITORY] Setting a ROOT repository: \(path)")
+                                self.logger.log(.trace, "[REPOSITORY] Setting a ROOT repository: \(path)")
                                 let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: "")
                             }else{
-                                print("[REPOSITORY] Binding a SUB container to repository: \(path) ==> \(repo.path)")
+                                self.logger.log(.trace, "[REPOSITORY] Binding a SUB container to repository: \(path) ==> \(repo.path)")
                                 let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
                             }
                         }
@@ -117,12 +117,12 @@ class ImageFolderTreeScanner {
             } // end of if devicePaths.count > 0
         } // end of if repo.deviceid != ""
         
-        self.logger.log("CHECKING REPO \(repo.path)")
+        self.logger.log(.trace, "CHECKING REPO \(repo.path)")
         
-        self.logger.log("CHECK REPO: ENUMERATING FILESYS")
+        self.logger.log(.trace, "CHECK REPO: ENUMERATING FILESYS")
         
         autoreleasepool { () -> Void in
-            self.logger.log(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
+            self.logger.log(.trace, ">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
             if indicator != nil {
                 indicator?.display(message: Words.walking_thru_directory.fill(arguments: "\(i)", "\(totalCount)", repo.name))
             }
@@ -139,12 +139,12 @@ class ImageFolderTreeScanner {
             for folderUrl in directoryPaths.foldersysUrls {
                 foldersysUrls.insert(folderUrl)
             }
-            self.logger.log(">>> WALKING THRU DIRECTORY done \(i)/\(totalCount)  <<<")
+            self.logger.log(.trace, ">>> WALKING THRU DIRECTORY done \(i)/\(totalCount)  <<<")
         }
         
-        self.logger.log("CHECK REPO: ENUMERATING FILESYS: DONE")
+        self.logger.log(.trace, "CHECK REPO: ENUMERATING FILESYS: DONE")
         
-        self.logger.log("CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
+        self.logger.log(.trace, "CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
         
         autoreleasepool { () -> Void in
             
@@ -173,18 +173,18 @@ class ImageFolderTreeScanner {
                     var exclude = false
                     if excludedContainerPaths.contains(path) {
                         exclude = true
-                        self.logger.log("Exclude container: \(path)")
+                        self.logger.log(.trace, "Exclude container: \(path)")
                     }else{
                         for excludedPath in excludedContainerPaths {
                             if path.hasPrefix(excludedPath.withLastStash()) {
                                 exclude = true
-                                self.logger.log("Exclude container: \(path)")
+                                self.logger.log(.trace, "Exclude container: \(path)")
                                 break
                             }
                         }
                     }
                     
-                    self.logger.log("Adding container folder \(k)/\(kall): \(path)")
+                    self.logger.log(.trace, "Adding container folder \(k)/\(kall): \(path)")
                     if indicator != nil {
                         indicator?.display(message: Words.adding_container_folder.fill(arguments: k, kall))
                     }
@@ -232,19 +232,19 @@ class ImageFolderTreeScanner {
                     var exclude = false
                     if excludedContainerPaths.contains(path) {
                         exclude = true
-                        self.logger.log("Exclude container: \(path)")
+                        self.logger.log(.trace, "Exclude container: \(path)")
                     }else{
                         for excludedPath in excludedContainerPaths {
                             if path.hasPrefix(excludedPath.withLastStash()) {
                                 exclude = true
-                                self.logger.log("Exclude container: \(path)")
+                                self.logger.log(.trace, "Exclude container: \(path)")
                                 break
                             }
                         }
                     }
                     
                     
-                    self.logger.log("Getting parent folder \(j)/\(kall): \(path)")
+                    self.logger.log(.trace, "Getting parent folder \(j)/\(kall): \(path)")
                     if indicator != nil {
                         indicator?.display(message: Words.getting_parent_folder.fill(arguments: j, kall))
                     }
@@ -253,7 +253,7 @@ class ImageFolderTreeScanner {
                     
                     if !exclude {
                         if let parentFolder = path.getNearestParent(from: containers) { //FIXME: deprecate
-                            self.logger.log("### FIND PARENT >>> \(path) >>> parent folder: \(parentFolder)")
+                            self.logger.log(.trace, "### FIND PARENT >>> \(path) >>> parent folder: \(parentFolder)")
                             
                             let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                             
@@ -279,13 +279,13 @@ class ImageFolderTreeScanner {
                         let deleteState = RepositoryDao.default.deleteContainer(path: path, deleteImage: true)
                         
                         if deleteState == .OK {
-                            self.logger.log("Deleted container and related images from DB: \(path)")
+                            self.logger.log(.trace, "Deleted container and related images from DB: \(path)")
                             if indicator != nil { indicator?.display(message: Words.removed_non_exist_container.fill(arguments: k, folderUrlsToRemoved.count)) }
                             
                             TaskletManager.default.updateProgress(id: taskId, message: Words.removed_non_exist_container.fill(arguments: k, folderUrlsToRemoved.count), increase: false)
 
                         }else{
-                            self.logger.log("[\(deleteState)] Failed to delete container and related images from DB: \(path)")
+                            self.logger.log(.trace, "[\(deleteState)] Failed to delete container and related images from DB: \(path)")
                             if indicator != nil { indicator?.display(message: Words.failed_to_remove_non_exist_container.fill(arguments: "\(deleteState)", "\(k)", "\(folderUrlsToRemoved.count)")) }
                             
                             TaskletManager.default.updateProgress(id: taskId, message: Words.failed_to_remove_non_exist_container.fill(arguments: "\(deleteState)", "\(k)", "\(folderUrlsToRemoved.count)"), increase: false)
@@ -309,15 +309,15 @@ class ImageFolderTreeScanner {
     ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
     /// - Tag: applyImportGap(dbUrls,filesysUrls,fileUrlToRepo)
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
-        self.logger.log("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
-        self.logger.log("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
+        self.logger.log(.trace, "EXISTING DB PHOTO COUNT = \(dbUrls.count)")
+        self.logger.log(.trace, "EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
 //        var dbUrls:Set<String> = Set<String>()
 //        for exist in exists {
 //            let path = exist.path
 //            dbUrls.insert(path)
 //
 //        }
-        self.logger.log("EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
+        self.logger.log(.trace, "EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
         
         if dbUrls.count == filesysUrls.count {
             if indicator != nil { indicator?.display(message: Words.filesys_scan_no_gap_between_db_and_filesys.word()) }
@@ -340,7 +340,7 @@ class ImageFolderTreeScanner {
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
         let urlsToRemoved:Set<String> = dbUrls.subtracting(filesysUrls)
         
-        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
+        self.logger.log(.trace, "CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
         
         let total = urlsToAdd.count + urlsToRemoved.count
         
@@ -363,10 +363,10 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.setTotal(id: taskId, total: total)
         
-        self.logger.log("CHECK REPO: EXECUTE ADD OR REMOVE")
+        self.logger.log(.trace, "CHECK REPO: EXECUTE ADD OR REMOVE")
         
         if urlsToAdd.count > 0 {
-            self.logger.log("URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
+            self.logger.log(.trace, "URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
 //            indicator?.dataChanged()
             
             var index = 0
@@ -389,12 +389,12 @@ class ImageFolderTreeScanner {
                 
                 var exclude = false
                 if excludedContainerPaths.contains(url) {
-                    self.logger.log("Exclude image (excluded device path): \(url)")
+                    self.logger.log(.trace, "Exclude image (excluded device path): \(url)")
                     exclude = true
                 }else{
                     for excludedPath in excludedContainerPaths {
                         if url.hasPrefix(excludedPath.withLastStash()) {
-                            self.logger.log("Exclude image (excluded device path): \(url)")
+                            self.logger.log(.trace, "Exclude image (excluded device path): \(url)")
                             exclude = true
                             break
                         }
@@ -405,14 +405,14 @@ class ImageFolderTreeScanner {
                     let createState = ImageRecordDao.default.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
                     if createState == .OK {
                         DispatchQueue.main.async {
-                            self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
+                            self.logger.log(.trace, "Imported images ... (\(index)/\(urlsToAdd.count))")
                             if indicator != nil { let _ = indicator?.add(Words.imported_images.fill(arguments: index, urlsToAdd.count)) }
                         }
                         
                         TaskletManager.default.updateProgress(id: taskId, message: Words.imported_images.fill(arguments: index, urlsToAdd.count), increase: true)
                     }else{
                         DispatchQueue.main.async {
-                            self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+                            self.logger.log(.trace, "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
                             if indicator != nil { let _ = indicator?.add(Words.failed_to_import_images.fill(arguments: "\(createState)", "\(index)", "\(urlsToAdd.count)")) }
                         }
                         
@@ -456,10 +456,10 @@ class ImageFolderTreeScanner {
 //                        if usedRam >= limitRam {
 //                            continousWorking = false
 //                            attempt += 1
-//                            self.logger.log(">>> waiting for releasing memory for URLS TO ADD FROM FILESYS, attempt:\(attempt)")
+//                            self.logger.log(.trace, ">>> waiting for releasing memory for URLS TO ADD FROM FILESYS, attempt:\(attempt)")
 //                            sleep(10)
 //                        }else{
-//                            self.logger.log(">>> continue for URLS TO ADD FROM FILESYS, last attempt:\(attempt)")
+//                            self.logger.log(.trace, ">>> continue for URLS TO ADD FROM FILESYS, last attempt:\(attempt)")
 //                            continousWorking = true
 //                        }
 //                    }
@@ -470,12 +470,12 @@ class ImageFolderTreeScanner {
 //
 //                        var exclude = false
 //                        if excludedContainerPaths.contains(url) {
-//                            self.logger.log("Exclude image (excluded device path): \(url)")
+//                            self.logger.log(.trace, "Exclude image (excluded device path): \(url)")
 //                            exclude = true
 //                        }else{
 //                            for excludedPath in excludedContainerPaths {
 //                                if url.hasPrefix(excludedPath.withStash()) {
-//                                    self.logger.log("Exclude image (excluded device path): \(url)")
+//                                    self.logger.log(.trace, "Exclude image (excluded device path): \(url)")
 //                                    exclude = true
 //                                    break
 //                                }
@@ -486,14 +486,14 @@ class ImageFolderTreeScanner {
 //                            let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
 //                            if createState == .OK {
 //                                DispatchQueue.main.async {
-//                                    self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
+//                                    self.logger.log(.trace, "Imported images ... (\(index)/\(urlsToAdd.count))")
 //                                    if indicator != nil { let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))") }
 //                                }
 //
 //                                TaskletManager.default.updateProgress(id: taskId, message: "Imported images ... (\(index)/\(urlsToAdd.count))", increase: true)
 //                            }else{
 //                                DispatchQueue.main.async {
-//                                    self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+//                                    self.logger.log(.trace, "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
 //                                    if indicator != nil { let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))") }
 //                                }
 //
@@ -509,12 +509,12 @@ class ImageFolderTreeScanner {
 //            if indicator != nil {
 //                indicator?.dataChanged()
 //            }
-            self.logger.log("URLS TO ADD FROM FILESYS: SAVE DONE")
+            self.logger.log(.trace, "URLS TO ADD FROM FILESYS: SAVE DONE")
         } // end of urlsToAdd.count > 0
         
         var k = 0
         if urlsToRemoved.count > 0 {
-            self.logger.log("PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
+            self.logger.log(.trace, "PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
             k += 1
 //            indicator?.dataChanged()
             for url in urlsToRemoved {
@@ -529,16 +529,16 @@ class ImageFolderTreeScanner {
                 if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
                 
                 
-                self.logger.log("Deleting image from DB (delFlag): \(url)")
+                self.logger.log(.trace, "Deleting image from DB (delFlag): \(url)")
                 let deleteState = ImageRecordDao.default.deletePhoto(atPath: url)
                 
                 if deleteState == .OK {
-                    self.logger.log("Deleted images ... (\(k)/\(urlsToRemoved.count))")
+                    self.logger.log(.trace, "Deleted images ... (\(k)/\(urlsToRemoved.count))")
                     if indicator != nil { let _ = indicator?.add(Words.deleted_images.fill(arguments: k, urlsToRemoved.count)) }
                     
                     TaskletManager.default.updateProgress(id: taskId, message: Words.deleted_images.fill(arguments: k, urlsToRemoved.count), increase: true)
                 }else{
-                    self.logger.log("[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))")
+                    self.logger.log(.trace, "[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))")
                     if indicator != nil { let _ = indicator?.add(Words.failed_to_delete_images.fill(arguments: "\(deleteState)", "\(k)", "\(urlsToRemoved.count)")) }
                     
                     TaskletManager.default.updateProgress(id: taskId, message: Words.failed_to_delete_images.fill(arguments: "\(deleteState)", "\(k)", "\(urlsToRemoved.count)"), increase: true)
@@ -551,10 +551,10 @@ class ImageFolderTreeScanner {
             //DispatchQueue.main.async {
                 //ModelStore.save()
             //}
-            self.logger.log("PHOTOS TO REMOVED FROM DB: SAVE DONE")
+            self.logger.log(.trace, "PHOTOS TO REMOVED FROM DB: SAVE DONE")
         } // end of urlsToRemoved.count > 0
         
-        self.logger.log("CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
+        self.logger.log(.trace, "CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
         
         return true
     }
@@ -597,7 +597,7 @@ class ImageFolderTreeScanner {
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
         
-//        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+//        self.logger.log(.trace, "CHECK REPO: CHECK TO BE ADDED AND REMOVED")
 //        if indicator != nil { indicator?.display(message: Words.checking_gap_between_db_and_filesys.word()) }
 //
 //        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_loading_all_images_from_db.word(), increase: false)
@@ -612,7 +612,7 @@ class ImageFolderTreeScanner {
 //            return false
 //        }
         
-        self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
+        self.logger.log(.trace, "TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
             indicator?.display(message: Words.filesys_scan_repository_scan_done.word())
             indicator?.dataChanged()

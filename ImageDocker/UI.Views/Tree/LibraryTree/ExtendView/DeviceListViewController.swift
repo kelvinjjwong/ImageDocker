@@ -45,7 +45,7 @@ class DeviceListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && devices.count > 0 && lastSelectedRow! < devices.count {
                 if let selectedDeviceId = devices[lastSelectedRow!].deviceId {
-                    //self.logger.log("selected device id \(selectedDeviceId)")
+                    //self.logger.log(.trace, "selected device id \(selectedDeviceId)")
                     if self.selectionDelegate != nil {
                         self.selectionDelegate?.selectDevice(deviceId: selectedDeviceId)
                     }

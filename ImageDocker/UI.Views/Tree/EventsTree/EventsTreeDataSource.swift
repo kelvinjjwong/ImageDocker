@@ -28,7 +28,7 @@ class EventsTreeDataSource : TreeDataSource {
             moment.eventCategory = lv1
             moment.event = lv2
             
-            //self.logger.log("Got event \(lv1) -> \(lv2)")
+            //self.logger.log(.trace, "Got event \(lv1) -> \(lv2)")
             
             var lv1Entry:TreeCollection
             var lv2Entry:TreeCollection
@@ -46,7 +46,7 @@ class EventsTreeDataSource : TreeDataSource {
                 lv2Entry.expandable = true
                 lv1Entry.addChild(collection: lv2Entry)
             }else{
-                //self.logger.log("ERROR: duplicated event entry \(lv1) -> \(lv2)")
+                //self.logger.log(.trace, "ERROR: duplicated event entry \(lv1) -> \(lv2)")
             }
         }
         
@@ -94,11 +94,11 @@ class EventsTreeDataSource : TreeDataSource {
                     }
                     return (nodes, nil, nil)
                 }else{
-//                    self.logger.log("parent event is empty")
+//                    self.logger.log(.trace, "parent event is empty")
                 }
                 
             }else{
-//                self.logger.log("EventsTreeDS: no related object")
+//                self.logger.log(.trace, "EventsTreeDS: no related object")
             }
         }
         return ([], nil, nil)

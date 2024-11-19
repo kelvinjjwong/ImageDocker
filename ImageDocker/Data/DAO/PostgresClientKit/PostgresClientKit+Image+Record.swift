@@ -252,7 +252,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     // MARK: UPDATE PATH
     
     func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState {
-        self.logger.log("[updateImagePaths(oldPath,newPath,repositoryPath,subPath,containerPath,id)]")
+        self.logger.log(.trace, "[updateImagePaths(oldPath,newPath,repositoryPath,subPath,containerPath,id)]")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
@@ -267,7 +267,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     }
     
     func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState {
-        self.logger.log("[updateImagePaths(id,newPath,repositoryPath,subPath,containerPath)]")
+        self.logger.log(.trace, "[updateImagePaths(id,newPath,repositoryPath,subPath,containerPath)]")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
@@ -285,7 +285,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     // MARK: UPDATE DATE
     
     func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState{
-        self.logger.log("[updateImageDateTimeFromFilename] update image to \(dateTimeFromFilename) - path:\(path)")
+        self.logger.log(.trace, "[updateImageDateTimeFromFilename] update image to \(dateTimeFromFilename) - path:\(path)")
         let db = PostgresConnection.database()
         
         do {
@@ -301,7 +301,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     }
     
     func updateImageDateTimeFromFilename(id:String, dateTimeFromFilename:String) -> ExecuteState{
-        self.logger.log("[updateImageDateTimeFromFilename] update image to \(dateTimeFromFilename) - id:\(id)")
+        self.logger.log(.trace, "[updateImageDateTimeFromFilename] update image to \(dateTimeFromFilename) - id:\(id)")
         let db = PostgresConnection.database()
         
         do {
@@ -362,8 +362,8 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         }
 //        arguments.append(path)
         let valueSets = values.joined(separator: ",")
-        print("[UPDATE-DATE-SQL] UPDATE \"Image\" set \(valueSets) WHERE \"path\"=\"\(path)\"")
-        print("[UPDATE-DATE-SQL] ARGS: \(arguments)")
+        self.logger.log(.trace, "[UPDATE-DATE-SQL] UPDATE \"Image\" set \(valueSets) WHERE \"path\"=\"\(path)\"")
+        self.logger.log(.trace, "[UPDATE-DATE-SQL] ARGS: \(arguments)")
         do {
             try db.execute(sql: """
             UPDATE "Image" set \(valueSets) WHERE "path"='\(path)'
@@ -536,7 +536,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     // MARK: UPDATE ROTATION
     
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState{
-        self.logger.log("update image rotation to \(rotation) - \(path)")
+        self.logger.log(.trace, "update image rotation to \(rotation) - \(path)")
         let db = PostgresConnection.database()
         
         do {

@@ -43,17 +43,17 @@
 //    }
 //    
 //    func training(dataSetPath:String = FaceRecognition.trainingSamplePath, modelPath:String = FaceRecognition.defaultModelPath, onOutput:@escaping (String) -> Void) {
-//        self.logger.log("training")
+//        self.logger.log(.trace, "training")
 //        self.logger.log(dataSetPath)
 //        self.logger.log(modelPath)
 //        
 //        let python = PreferencesController.pythonPath()
 //        if python == "" {
-//            self.logger.log("Path for python has not been located.")
+//            self.logger.log(.trace, "Path for python has not been located.")
 //            return
 //        }
 //        if !FileManager.default.fileExists(atPath: python) {
-//            self.logger.log("Python not found in \(python)")
+//            self.logger.log(.trace, "Python not found in \(python)")
 //            return
 //        }
 //        
@@ -77,12 +77,12 @@
 //                                                            let data = outHandle.availableData
 //                                                            if data.count > 0 {
 //                                                                if let str = String(data: data, encoding: String.Encoding.utf8) {
-//                                                                    self.logger.log("got output: \(str)")
+//                                                                    self.logger.log(.trace, "got output: \(str)")
 //                                                                    onOutput(str)
 //                                                                }
 //                                                                //outHandle.waitForDataInBackgroundAndNotify()
 //                                                            } else {
-//                                                                self.logger.log("EOF on stdout from process")
+//                                                                self.logger.log(.trace, "EOF on stdout from process")
 //                                                                outHandle.closeFile()
 //                                                                NotificationCenter.default.removeObserver(obs1!)
 //                                                            }
@@ -91,7 +91,7 @@
 //            var obs2 : NSObjectProtocol!
 //            obs2 = NotificationCenter.default.addObserver(forName: Process.didTerminateNotification,
 //                                                          object: cmd, queue: nil) { notification in
-//                                                            self.logger.log("terminated")
+//                                                            self.logger.log(.trace, "terminated")
 //                                                            outHandle.closeFile()
 //                                                            NotificationCenter.default.removeObserver(obs2!)
 //            }
@@ -112,17 +112,17 @@
 //            modelpath = FaceRecognition.defaultModelPath
 //        }
 //        if !FileManager.default.fileExists(atPath: modelpath) {
-//            self.logger.log("No available encoded model for recognition")
+//            self.logger.log(.trace, "No available encoded model for recognition")
 //            return []
 //        }
 //        
 //        let python = PreferencesController.pythonPath()
 //        if python == "" {
-//            self.logger.log("Path for python has not been located.")
+//            self.logger.log(.trace, "Path for python has not been located.")
 //            return []
 //        }
 //        if !FileManager.default.fileExists(atPath: python) {
-//            self.logger.log("Python not found in \(python)")
+//            self.logger.log(.trace, "Python not found in \(python)")
 //            return []
 //        }
 //        
@@ -154,7 +154,7 @@
 //                    if parts.count == 7 && parts[6] != "" {
 //                        let name = parts[6]
 //                        result.append(name)
-//                        self.logger.log("Found face [\(name)] from image \(imagePath)")
+//                        self.logger.log(.trace, "Found face [\(name)] from image \(imagePath)")
 //                    }
 //                }
 //            }

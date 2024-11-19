@@ -73,7 +73,7 @@ class NotificationsViewController : NSViewController {
         let relativeDate = formatter.localizedString(for: time, relativeTo: Date.now)
 
         // print it out
-//        print("Relative date is: \(relativeDate)")
+//        self.logger.log(.trace, "Relative date is: \(relativeDate)")
         return relativeDate
     }
     

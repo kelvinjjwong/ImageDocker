@@ -24,7 +24,7 @@ extension ImageFolderTreeScanner {
                                                                includingPropertiesForKeys: resourceValueKeys,
                                                                options: options,
                                                                errorHandler: { url, error in
-                                                                self.logger.log("`directoryEnumerator` error: \(error).")
+                                                                self.logger.log(.trace, "`directoryEnumerator` error: \(error).")
                                                                 return true
         }
             ) else { return result}
@@ -44,7 +44,7 @@ extension ImageFolderTreeScanner {
                 // to support soft link
                 let path = url.path.replacingFirstOccurrence(of: realPhysicalPath, with: repositoryPath)
                 let transformedURL = URL(fileURLWithPath: path)
-                self.logger.log("[FileSys Scan] Getting entry: \(path)")
+                self.logger.log(.trace, "[FileSys Scan] Getting entry: \(path)")
                 
                 if indicator != nil {
                     indicator?.display(message: Words.filesys_scan_repository.fill(arguments: repositoryPath))
@@ -58,7 +58,7 @@ extension ImageFolderTreeScanner {
                 result.foldersysUrls.insert(folderUrl.path)
             }
             catch {
-                self.logger.log("Unexpected error occured: \(error).")
+                self.logger.log(.trace, "Unexpected error occured: \(error).")
             }
         }
         if indicator != nil {

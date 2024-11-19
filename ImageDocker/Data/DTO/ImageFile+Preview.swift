@@ -33,7 +33,7 @@ extension ImageFile {
             }
         }
         catch {
-            self.logger.log("Unexpected error occured: \(error).")
+            self.logger.log(.trace, "Unexpected error occured: \(error).")
         }
         return nil
     }
@@ -51,7 +51,7 @@ extension ImageFile {
         }
         catch let error as NSError
         {
-            self.logger.log("Image generation failed with error \(error)")
+            self.logger.log(.trace, "Image generation failed with error \(error)")
             return nil
         }
     }
@@ -62,7 +62,7 @@ extension ImageFile {
             guard CGImageSourceGetType(imageSource) != nil else { return nil }
             
             let _ = url.getImageOrientation()
-            //self.logger.log("======== photo orientation = \(orientation)")
+            //self.logger.log(.trace, "======== photo orientation = \(orientation)")
             
             let thumbnailOptions = [
                 String(createThumbnailWithTransform): true,

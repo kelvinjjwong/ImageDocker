@@ -108,7 +108,7 @@ public final class ImageRecordDao {
     /// - version: 2019.4.5
     /// - Tag: createImageIfAbsent(url)
     func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) -> ExecuteState {
-        //self.logger.log("CREATING PHOTO \(url.path)")
+        //self.logger.log(.trace, "CREATING PHOTO \(url.path)")
         if let repo = fileUrlToRepo[url]{
             self.logger.log(.info, "[createImageIfAbsent] Creating image \(url), repo: \(repo.repositoryPath)")
             let image = ImageFile(url: URL(fileURLWithPath: url),

@@ -18,7 +18,7 @@ extension ImageFolderTreeScanner {
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.location_scan_loading_images.word(), increase: false)
         let images = ImageSearchDao.default.getPhotoFilesWithoutLocation(repositoryPath: repository.repositoryPath)
-        self.logger.log("PHOTOS WITHOUT LOCATION: \(images.count) - \(repository.name)")
+        self.logger.log(.trace, "PHOTOS WITHOUT LOCATION: \(images.count) - \(repository.name)")
         self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     

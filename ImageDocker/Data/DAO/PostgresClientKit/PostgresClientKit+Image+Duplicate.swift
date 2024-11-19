@@ -19,7 +19,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     func reloadDuplicatePhotos() {
         let db = PostgresConnection.database()
         
-        self.logger.log("Loading duplicate photos from db")
+        self.logger.log(.trace, "Loading duplicate photos from db")
         let startTime_loadDup = Date()
         
         let duplicates:Duplicates = Duplicates()
@@ -71,7 +71,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             duplicates.yearMonths.insert(year * 1000 + month)
             duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
             
-            //self.logger.log("duplicated date: \(date)")
+            //self.logger.log(.trace, "duplicated date: \(date)")
             dupDates.insert(date)
         }
         
@@ -116,7 +116,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 let minute = Calendar.current.component(.minute, from: date)
                 let second = Calendar.current.component(.second, from: date)
                 let key = "\(photo.place ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
-                //self.logger.log("duplicated record: \(key)")
+                //self.logger.log(.trace, "duplicated record: \(key)")
                 let path = photo.path
                 if let first = firstPhotoInPlaceAndDate[key] {
                     // duplicates
@@ -169,7 +169,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             """, orderBy: "\"duplicatesKey\" asc, path asc", values: [keyword, otherKeyword])
             for image in records {
                 if let key = image.duplicatesKey, key != "" {
-                    //self.logger.log("found \(key) - \(image.path)")
+                    //self.logger.log(.trace, "found \(key) - \(image.path)")
                     if let _ = result[key] {
                         result[key]?.append(image)
                     }else{
@@ -192,7 +192,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 """, orderBy: "\"duplicatesKey\" asc, path asc", values: [repositoryId])
             for image in records {
                 if let key = image.duplicatesKey, key != "" {
-                    //self.logger.log("found \(key) - \(image.path)")
+                    //self.logger.log(.trace, "found \(key) - \(image.path)")
                     if let _ = result[key] {
                         result[key]?.append(image)
                     }else{

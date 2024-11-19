@@ -93,10 +93,10 @@ extension SelectionViewController {
             if let paths = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
                 for path in paths {
                     if path == imageFile.url.path {
-                        self.logger.log("to be changed: show - \(path)")
+                        self.logger.log(.trace, "to be changed: show - \(path)")
                         ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: false)
                     }else{
-                        self.logger.log("to be changed: hide - \(path)")
+                        self.logger.log(.trace, "to be changed: hide - \(path)")
                         ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: true)
                     }
                 }

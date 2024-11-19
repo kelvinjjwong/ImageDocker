@@ -51,7 +51,7 @@ class ContainerViewController: NSViewController {
             self.stat()
         }else{
             self.lblMessage.stringValue = "ERROR: Invalid container path: \(path)"
-            self.logger.log("invalid container path: \(path)")
+            self.logger.log(.trace, "invalid container path: \(path)")
         }
     }
     

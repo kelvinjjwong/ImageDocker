@@ -56,14 +56,14 @@ class FaceDetection {
     
     func findFace(from imageFile:URL, into cropsStorage:URL, nameBy:NamingRule = .number, onCompleted: (([FaceClip]) -> Void)? = nil) {
         guard let cgImage = CGImage.getCGImage(from: imageFile) else {
-            self.logger.log("ERROR: Cannot convert to CGImage: \(imageFile.path)")
+            self.logger.log(.trace, "ERROR: Cannot convert to CGImage: \(imageFile.path)")
             return
         }
         // Start face detection via Vision
         autoreleasepool { () -> Void in
             let facesRequest = VNDetectFaceRectanglesRequest { request, error in
                 guard error == nil else {
-                    self.logger.log("ERROR: \(error!.localizedDescription)")
+                    self.logger.log(.trace, "ERROR: \(error!.localizedDescription)")
                     return
                 }
                 self.handleFaces(request, cgImage: cgImage, cropsPath: cropsStorage, nameBy: nameBy, onCompleted: onCompleted)
@@ -79,21 +79,21 @@ class FaceDetection {
         }
         
         
-        self.logger.log("Trying to create directory: \(cropsPath.path)")
+        self.logger.log(.trace, "Trying to create directory: \(cropsPath.path)")
         var isDir:ObjCBool = false
         do {
             try FileManager.default.createDirectory(atPath: cropsPath.path, withIntermediateDirectories: true, attributes: nil)
         }catch{
             self.logger.log(.error, error)
-            self.logger.log("ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
+            self.logger.log(.trace, "ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
             return
         }
         if !FileManager.default.fileExists(atPath: cropsPath.path, isDirectory: &isDir) {
-            self.logger.log("ERROR: Cannot create directory: \(cropsPath.path)")
+            self.logger.log(.trace, "ERROR: Cannot create directory: \(cropsPath.path)")
             return
         }
         if !isDir.boolValue {
-            self.logger.log("ERROR: Cannot create directory: \(cropsPath.path), it's occupied by a file.")
+            self.logger.log(.trace, "ERROR: Cannot create directory: \(cropsPath.path), it's occupied by a file.")
             return
         }
         
@@ -103,16 +103,16 @@ class FaceDetection {
         observations.forEach { observation in
             let (cgImage, x, y, width, height, frameX, frameY, frameWidth, frameHeight) = cgImage.cropImageToFace(observation, borderPercentage: self.BorderPercentage)
             guard let image = cgImage else {
-                self.logger.log("Image file cannot be cropped.")
+                self.logger.log(.trace, "Image file cannot be cropped.")
                 return
             }
             i += 1
-            self.logger.log("got \(i)")
+            self.logger.log(.trace, "got \(i)")
             // Create image file from detected faces
             autoreleasepool(invoking: { () -> Void in
                 let data = NSBitmapImageRep.init(cgImage: image).representation(using: .jpeg, properties: [:])
                 if data == nil {
-                    self.logger.log("data object is nil")
+                    self.logger.log(.trace, "data object is nil")
                     
                 }else{
                     
@@ -126,7 +126,7 @@ class FaceDetection {
                         filenameTemporary = "\(observation.uuid)-temp.jpg"
                     }
                     let faceURL = cropsPath.appendingPathComponent(filename)
-                    self.logger.log("Creating crop file: \(filename)")
+                    self.logger.log(.trace, "Creating crop file: \(filename)")
                     if Int(frameWidth) > CropSize || Int(frameHeight) > CropSize {
                         let tempURL = cropsPath.appendingPathComponent(filenameTemporary)
                         

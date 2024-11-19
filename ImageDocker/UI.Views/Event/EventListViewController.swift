@@ -37,7 +37,7 @@ class EventListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && events.count > 0 && lastSelectedRow! < events.count {
                 let event = events[lastSelectedRow!]
-                self.logger.log("selected event: owner: \(event.ownerId) \(event.ownerNickname)")
+                self.logger.log(.trace, "selected event: owner: \(event.ownerId) \(event.ownerNickname)")
                 self.eventName.stringValue = event.name
                 self.cmbOwner.stringValue = event.owner
                 self.lblOwnerNickname.stringValue = event.ownerNickname

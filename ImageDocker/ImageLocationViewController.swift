@@ -49,7 +49,7 @@ class ImageLocationViewController : NSViewController {
             }
         }
 //        else{
-//            self.logger.log("img has no coord")
+//            self.logger.log(.trace, "img has no coord")
 //        }
     }
     
@@ -81,7 +81,7 @@ class ImageLocationViewController : NSViewController {
         default:
             zoomSize = 17
         }
-        print("zoom size: \(zoomSize)")
+        self.logger.log(.trace, "zoom size: \(zoomSize)")
         self.loadBaiduMap()
         previousTick = tick
     }

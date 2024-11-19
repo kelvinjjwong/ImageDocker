@@ -77,7 +77,7 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
     }
     
     public func reloadNodes() {
-        print("tree view reload nodes")
+        self.logger.log(.trace, "tree view reload nodes")
         let checkedIds = self.getCheckedItems().map { $0.getId() }
         self.removeAllCheckableNodes()
         
@@ -101,7 +101,7 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
             }
         }
 //        for g in checkedGroups {
-//            self.logger.log("checked \(Words.whose_family_group.fill(arguments: g.parent?.nickname ?? "", g.name))")
+//            self.logger.log(.trace, "checked \(Words.whose_family_group.fill(arguments: g.parent?.nickname ?? "", g.name))")
 //        }
         return checkedGroups
     }
@@ -134,13 +134,13 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
     func setCheckedItems(ids:[String]) {
         self.setCheckedItems(nodes: self.getCheckableTreeNodes(ids: ids))
         
-//        print("before set checked items, stored ids: \(self.checkableItems.keys)")
+//        self.logger.log(.trace, "before set checked items, stored ids: \(self.checkableItems.keys)")
 //        for id in self.checkableItems.keys {
-//            print("id:\(id) text:\(self.checkableItems[id]?.0.getText())")
+//            self.logger.log(.trace, "id:\(id) text:\(self.checkableItems[id]?.0.getText())")
 //        }
-//        print("before set checked items, need check ids: \(ids)")
+//        self.logger.log(.trace, "before set checked items, need check ids: \(ids)")
         for id in ids {
-//            print("want to setCheckedItems id:\(id) to true")
+//            self.logger.log(.trace, "want to setCheckedItems id:\(id) to true")
             if let (node, cell) = self.checkableItems[id] {
                 node.setCheckState(state: true)
             }
@@ -149,7 +149,7 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         // verify
 //        for cm in self.coreMembers {
 //            for group in cm.getChildren() {
-//                print("setCheckedItems id:\(group.getId()) \(group.getText()) after set checked: \(group.checked())")
+//                self.logger.log(.trace, "setCheckedItems id:\(group.getId()) \(group.getText()) after set checked: \(group.checked())")
 //            }
 //        }
 //        self.treeView.reloadData()
@@ -158,7 +158,7 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
     }
     
     public func addCheckableNode(node:TreeNodeData, item: CheckableTableCellView?) {
-//        print("addCheckableNode id:\(node.getId()) \(node.getText()) item not nil:\(item != nil)")
+//        self.logger.log(.trace, "addCheckableNode id:\(node.getId()) \(node.getText()) item not nil:\(item != nil)")
         if let (n, c) = self.checkableItems[node.getId()] {
             // existing stored
             if c == nil { // overwrite
@@ -264,7 +264,7 @@ extension CheckableTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.imageView!.image = item.nodeIcon()
             cell.checkbox.isEnabled = item.isCheckable() && self.checkable
             cell.checkbox.isHidden = !(item.isCheckable() && self.checkable)
-//            print("refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
+//            self.logger.log(.trace, "refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
             
             if let (node, _) = self.checkableItems[item.getId()] {
                 cell.checkbox.state = node.checked() ? .on : .off

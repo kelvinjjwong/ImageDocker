@@ -19,11 +19,11 @@ extension ImageFolderTreeScanner {
 //            return
 //        }
         
-        self.logger.log("checking stop flag for task id \(taskId)")
+        self.logger.log(.trace, "checking stop flag for task id \(taskId)")
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
         
-        self.logger.log("continue load exif")
+        self.logger.log(.trace, "continue load exif")
         
         // progress indicate 3 - (RepositoryDetailViewController - Accumulator(target: 2)
 //        if indicator != nil {
@@ -36,19 +36,19 @@ extension ImageFolderTreeScanner {
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths(withStash: true)
         
-        self.logger.log("loaded excluded container paths")
+        self.logger.log(.trace, "loaded excluded container paths")
         
         let photoCount = images.count
         
         if photoCount > 0 {
-            self.logger.log("Total \(images.count) images need to UPDATING EXIF")
+            self.logger.log(.trace, "Total \(images.count) images need to UPDATING EXIF")
             if indicator != nil {
                 indicator?.setTarget(photoCount)
             }
 
             TaskletManager.default.setTotal(id: taskId, total: photoCount)
             
-            self.logger.log("set total \(photoCount)")
+            self.logger.log(.trace, "set total \(photoCount)")
             
             var i = 0
             
@@ -68,7 +68,7 @@ extension ImageFolderTreeScanner {
                 var exclude = false
                 for excludedPath in excludedContainerPaths {
                     if photo.path.hasPrefix(excludedPath) {
-                        self.logger.log("Exclude image (exclude device path): \(photo.path)")
+                        self.logger.log(.trace, "Exclude image (exclude device path): \(photo.path)")
                         exclude = true
                         break
                     }
@@ -84,10 +84,10 @@ extension ImageFolderTreeScanner {
                 }
                 
                 TaskletManager.default.updateProgress(id: taskId, message: Words.progress_meta_scan_images.fill(arguments: "\(i)", "\(photoCount)", photo.subPath), increase: true)
-                self.logger.log("finished exif \(photo.subPath)")
+                self.logger.log(.trace, "finished exif \(photo.subPath)")
             } // end of images-loop
             //ModelStore.save()
-            self.logger.log("UPDATING EXIF: SAVE DONE")
+            self.logger.log(.trace, "UPDATING EXIF: SAVE DONE")
         }else {
             if indicator != nil {
                 indicator?.forceComplete()
@@ -112,7 +112,7 @@ extension ImageFolderTreeScanner {
         // progress indicate 2 - (RepositoryDetailViewController - Accumulator(target: 2)
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
         let images = ImageSearchDao.default.getImagesWithoutExif(repositoryId: repository.id)
-        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count) - repository id:\(repository.id)")
+        self.logger.log(.trace, "PHOTOS WITHOUT EXIF: \(images.count) - repository id:\(repository.id)")
         self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
@@ -124,7 +124,7 @@ extension ImageFolderTreeScanner {
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
         let images = ImageSearchDao.default.getPhotoFilesWithoutExif()
-        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count)")
+        self.logger.log(.trace, "PHOTOS WITHOUT EXIF: \(images.count)")
         self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     

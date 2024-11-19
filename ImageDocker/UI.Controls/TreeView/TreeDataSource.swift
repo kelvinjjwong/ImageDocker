@@ -77,7 +77,7 @@ class TreeCollection {
         self.children.append(child)
         self.mapping[name] = child
         self.childrenCount = self.children.count
-        self.logger.log("added \(child.path)")
+        self.logger.log(.trace, "added \(child.path)")
     }
     
     func addChild(collection:TreeCollection) {
@@ -106,7 +106,7 @@ class TreeCollection {
         var result:[TreeCollection] = []
         for child in children {
             result.append(child)
-            self.logger.log("flatted: \(child.path)")
+            self.logger.log(.trace, "flatted: \(child.path)")
             result.append(contentsOf: child.getUnlimitedDepthChildren())
         }
         return result
@@ -187,7 +187,7 @@ class StaticTreeDataSource : TreeDataSource {
         
         if let c = collection {
             let path = c.path
-            self.logger.log("loading children of \(path)")
+            self.logger.log(.trace, "loading children of \(path)")
             if let node = self.findNode(path: path) {
                 sourceDataset = node.children
             }
@@ -204,14 +204,14 @@ class StaticTreeDataSource : TreeDataSource {
             child.expandable = data.expandable
             resultDataset.append(child)
         }
-        self.logger.log("loaded \(resultDataset.count) children")
+        self.logger.log(.trace, "loaded \(resultDataset.count) children")
         return (resultDataset, nil, nil)
     }
     
     internal func findNode(path: String) -> TreeCollection? {
         for data in flattable_all {
             if data.path == path {
-                self.logger.log("got it from source datas")
+                self.logger.log(.trace, "got it from source datas")
                 return data
             }
         }
@@ -246,7 +246,7 @@ class StaticTreeDataSource : TreeDataSource {
     }
     
     func findNode(keyword: String) -> TreeCollection? {
-        self.logger.log("find node containing \(keyword)")
+        self.logger.log(.trace, "find node containing \(keyword)")
         return nil
     }
     

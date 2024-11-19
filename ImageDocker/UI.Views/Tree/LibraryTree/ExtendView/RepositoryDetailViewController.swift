@@ -453,15 +453,15 @@ class RepositoryDetailViewController: NSViewController {
                                         lblMessage: self.lblMessage,
                                         presetAddingMessage: Words.searchingImagesForEXIF.word(), // progress indicate 1 (RepositoryDetailViewController - Accumulator(target: 2)
                                         onCompleted: { data in
-                                            self.logger.log("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
+                                            self.logger.log(.trace, "====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
                                             self.toggleButtons(true)
             },
                                         onDataChanged: {
-                                            self.logger.log("====== DATE CHANGED when SCAN single REPO for EXIF \(repository.name)")
+                                            self.logger.log(.trace, "====== DATE CHANGED when SCAN single REPO for EXIF \(repository.name)")
             })
             
             ImageFolderTreeScanner.default.scanPhotosToLoadExif_asTask(repository: repository, indicator: indicator, onCompleted: {
-                self.logger.log(">>>> onCompleted")
+                self.logger.log(.trace, ">>>> onCompleted")
                 self.toggleButtons(true)
             })
         }
@@ -476,15 +476,15 @@ class RepositoryDetailViewController: NSViewController {
                                         lblMessage: self.lblMessage,
                                         presetAddingMessage: Words.searchingImagesForLocation.word(),
                                         onCompleted: { data in
-                                            self.logger.log("====== COMPLETED SCAN single REPO for location \(repository.name)")
+                                            self.logger.log(.trace, "====== COMPLETED SCAN single REPO for location \(repository.name)")
                                             self.toggleButtons(true)
             },
                                         onDataChanged: {
-                                            self.logger.log("====== DATE CHANGED when SCAN single REPO for location \(repository.name)")
+                                            self.logger.log(.trace, "====== DATE CHANGED when SCAN single REPO for location \(repository.name)")
             })
             
             ImageFolderTreeScanner.default.scanPhotosToLoadLocation_asTask(repository: repository, indicator: indicator, onCompleted: {
-                self.logger.log(">>>> onCompleted")
+                self.logger.log(.trace, ">>>> onCompleted")
                 self.toggleButtons(true)
             })
         }
@@ -510,7 +510,7 @@ class RepositoryDetailViewController: NSViewController {
     
     // currently using
     private func scanImageRepository() {
-        self.logger.log("scanImageRepository")
+        self.logger.log(.trace, "scanImageRepository")
         if(self.working) {
             self.logger.log(.error, "Another long task is working.")
             NotificationMessageManager.default.createNotificationMessage(type: "Import for editing", name: self._repositoryName, message: "Another long task is working.")
@@ -541,7 +541,7 @@ class RepositoryDetailViewController: NSViewController {
                     // MARK: ImageRepository linked with an ImageContainer
                     
                     if let repositoryLinkedContainer = RepositoryDao.default.findContainer(repositoryId: imageRepository.id, subPath: "") {
-                        self.logger.log("ImageRepository linked with an ImageContainer, repositoryId:\(imageRepository.id), containerId:\(repositoryLinkedContainer.id)")
+                        self.logger.log(.trace, "ImageRepository linked with an ImageContainer, repositoryId:\(imageRepository.id), containerId:\(repositoryLinkedContainer.id)")
                     }else{
                         self.logger.log(.error, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(imageRepository.id)")
                         if let createdLinkedContainer = RepositoryDao.default.createEmptyImageContainerLinkToRepository(repositoryId: imageRepository.id) {
@@ -622,13 +622,13 @@ class RepositoryDetailViewController: NSViewController {
                                     let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
                                     if let isDirectory = resourceValues[URLResourceKey.isDirectoryKey] as? NSNumber {
                                         if isDirectory.boolValue {
-                                            self.logger.log("Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a folder")
+                                            self.logger.log(.trace, "Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a folder")
                                             
                                             // find parent container of current container
                                             let folderName = subPath.lastPartOfUrl()
                                             
                                             let parentSubPath = subPath.parentPath()
-                                            self.logger.log("Folder subPath [\(subPath)]'s parentSubPath is [\(parentSubPath)] in repository id \(self._repositoryId)")
+                                            self.logger.log(.trace, "Folder subPath [\(subPath)]'s parentSubPath is [\(parentSubPath)] in repository id \(self._repositoryId)")
                                             
                                             // MARK: define parentId
                                             
@@ -653,7 +653,7 @@ class RepositoryDetailViewController: NSViewController {
                                                 if existingContainerInDB.repositoryId == 0 {
                                                     let executeState_updateRepoId = RepositoryDao.default.updateImageContainerWithRepositoryId(containerId: existingContainerInDB.id, repositoryId: imageRepository.id)
                                                     if executeState_updateRepoId == .OK {
-                                                        self.logger.log("Updated ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
+                                                        self.logger.log(.trace, "Updated ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
                                                     }else{
                                                         self.logger.log(.error, "Unable to update ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
                                                     }
@@ -664,7 +664,7 @@ class RepositoryDetailViewController: NSViewController {
                                                 if existingContainerInDB.parentId != parentId {
                                                     let executeState_updateParentId = RepositoryDao.default.updateImageContainerWithParentId(containerId: existingContainerInDB.id, parentId: parentId)
                                                     if executeState_updateParentId == .OK {
-                                                        self.logger.log("Updated ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
+                                                        self.logger.log(.trace, "Updated ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
                                                     }else{
                                                         self.logger.log(.error, "Unable to update ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
                                                     }
@@ -693,7 +693,7 @@ class RepositoryDetailViewController: NSViewController {
                                                 }
                                             }
                                         }else{
-                                            self.logger.log("Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a file")
+                                            self.logger.log(.trace, "Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a file")
                                             if let currentContainer = currentContainer {
                                                 
                                                 var currentImage:Image? = nil
@@ -764,12 +764,12 @@ class RepositoryDetailViewController: NSViewController {
                                                 if let imageDeviceFile = DeviceDao.default.getDeviceFile(repositoryId: self._repositoryId, localFilePath: subPath.removeFirstStash()) {
                                                     if imageDeviceFile.importedImageId == "" && importedImageId != "" {
                                                         
-                                                        self.logger.log("Update ImageDeviceFile importedImageId:\(importedImageId), repositoryId:\(self._repositoryId), subPath:\(subPath.removeFirstStash())")
+                                                        self.logger.log(.trace, "Update ImageDeviceFile importedImageId:\(importedImageId), repositoryId:\(self._repositoryId), subPath:\(subPath.removeFirstStash())")
                                                         let _ = DeviceDao.default.updateDeviceFileWithImageId(importedImageId: importedImageId,
                                                                                                               repositoryId: self._repositoryId,
                                                                                                               subPath: subPath.removeFirstStash())
                                                         
-                                                        self.logger.log("Update Image originalMD5:\(imageDeviceFile.fileMD5), deviceId:\(imageDeviceFile.deviceId), deviceFileId:\(imageDeviceFile.fileId), repositoryId:\(self._repositoryId), subPath:\(subPath.removeFirstStash())")
+                                                        self.logger.log(.trace, "Update Image originalMD5:\(imageDeviceFile.fileMD5), deviceId:\(imageDeviceFile.deviceId), deviceFileId:\(imageDeviceFile.fileId), repositoryId:\(self._repositoryId), subPath:\(subPath.removeFirstStash())")
                                                         if imageDeviceFile.fileMD5 ?? "" != "" && imageDeviceFile.deviceId ?? "" != "" && imageDeviceFile.fileId ?? "" != "" {
                                                             if let importedImage = currentImage {
                                                                 if importedImage.originalMD5 ?? "" == "" || importedImage.deviceId == "" || importedImage.deviceFileId == "" {

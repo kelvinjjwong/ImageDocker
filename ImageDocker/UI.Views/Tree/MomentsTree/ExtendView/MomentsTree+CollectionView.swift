@@ -20,7 +20,7 @@ extension ViewController {
     
     // 1
     func loadCollectionByMoment(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
-        self.logger.log("loadCollectionByMoment(moment, pageSize, pageNumber)")
+        self.logger.log(.trace, "loadCollectionByMoment(moment, pageSize, pageNumber)")
         self.selectedMoment = moment
         
         self.collectionPaginationController?.initPageSize(pageSize: pageSize)
@@ -38,9 +38,9 @@ extension ViewController {
     
     // 2
     func loadCollectionByMoment(year:Int, month:Int, day:Int, pageSize:Int = 0, pageNumber:Int = 0){
-        self.logger.log("loadCollectionByMoment(year, month, day, pageSize, pageNumber)")
+        self.logger.log(.trace, "loadCollectionByMoment(year, month, day, pageSize, pageNumber)")
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
-//        self.logger.log("select \(year) \(month) \(day)")
+//        self.logger.log(.trace, "select \(year) \(month) \(day)")
         
         loadCollection {
             self.imagesLoader.load(

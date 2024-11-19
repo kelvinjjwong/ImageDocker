@@ -217,7 +217,7 @@ class TheaterViewController: NSViewController {
     }
     
     func viewInit(year:Int, month:Int, day:Int, event:String? = nil){
-        self.logger.log("init theater with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
+        self.logger.log(.trace, "init theater with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
         
         self.indexOfYear = 0
         self.btnLastYear.title = "0000"
@@ -443,7 +443,7 @@ extension TheaterViewController {
     }
     
     private func reloadCollectionView(year:Int, month:Int, day:Int){
-        self.logger.log("reload collection view with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
+        self.logger.log(.trace, "reload collection view with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
         self.collectionViewController.imagesLoader.clean()
         let images = ImageSearchDao.default.getImagesByDate(year: year, month:month, day:day, event: self.event)
         self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
@@ -485,9 +485,9 @@ extension TheaterViewController {
     }
     
     private func selectItem(at index:Int, forceFocus:Bool = false){
-        self.logger.log("select index: \(index)")
+        self.logger.log(.trace, "select index: \(index)")
         if index >= 0 && index < self.collectionViewController.imagesLoader.getItems().count {
-            self.logger.log("select image \(index)")
+            self.logger.log(.trace, "select image \(index)")
             let indexPath:IndexPath = IndexPath(item: index, section: 0)
             let indexSet:Set<IndexPath> = [indexPath]
             
@@ -503,7 +503,7 @@ extension TheaterViewController {
     }
     
     private func selectItem(offset:Int){
-        self.logger.log("select offset: \(offset)")
+        self.logger.log(.trace, "select offset: \(offset)")
         self.selectItem(at: self.selectedIndex + offset, forceFocus: true)
     }
 }
@@ -526,7 +526,7 @@ extension TheaterViewController {
             NSApplication.shared.keyWindow === locWindow else { return false }
         switch Int( event.keyCode) {
         case kVK_Escape:
-            self.logger.log("pressed escape")
+            self.logger.log(.trace, "pressed escape")
             return true
         case kVK_DownArrow:
             self.selectItem(offset: 1)

@@ -14,6 +14,7 @@ import LoggerFactory
 class ExifTool {
     
     let logger = LoggerFactory.get(category: "ExifTool")
+    static let _logger = LoggerFactory.get(category: "ExifTool")
     
     /// singleton instance of this class
     static let helper = ExifTool()
@@ -26,7 +27,7 @@ class ExifTool {
         let exiftoolUrl = Setting.localEnvironment.exiftoolPath()
         if exiftoolUrl != "" && exiftoolUrl.isFileExists() {
             mainUrl = URL(fileURLWithPath: exiftoolUrl)
-            self.logger.log("[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
+            self.logger.log(.trace, "[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
         } else {
             mainUrl = URL(fileURLWithPath: "")
             self.logger.log(.error, "[EXIFTOOL-INIT] ExifTool command path has not setup or does not exist.")
@@ -38,7 +39,7 @@ class ExifTool {
             let exiftoolUrl = Setting.localEnvironment.exiftoolPath()
             if exiftoolUrl != "" && exiftoolUrl.isFileExists() {
                 self.mainUrl = URL(fileURLWithPath: exiftoolUrl)
-                self.logger.log("[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
+                self.logger.log(.trace, "[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
             }
         }
     }
@@ -64,8 +65,8 @@ class ExifTool {
         let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
         pipe2.fileHandleForReading.closeFile()
         
-        print(string)
-        print(string2)
+        _logger.log(.trace, string)
+        _logger.log(.trace, string2)
         return string
     }
     
@@ -90,8 +91,8 @@ class ExifTool {
         let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
         pipe2.fileHandleForReading.closeFile()
         
-        print(string)
-        print(string2)
+        _logger.log(.trace, string)
+        _logger.log(.trace, string2)
         return string
     }
     
@@ -120,8 +121,8 @@ class ExifTool {
         let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
         pipe2.fileHandleForReading.closeFile()
         
-        print(string)
-        print(string2)
+        _logger.log(.trace, string)
+        _logger.log(.trace, string2)
         return filename
     }
     
@@ -234,7 +235,7 @@ class ExifTool {
     }
     
     func patchDateForVideo(date:Date, url:URL, tags:Set<String>) {
-        self.logger.log("Changing date time for: \(url.path)")
+        self.logger.log(.trace, "Changing date time for: \(url.path)")
         self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
@@ -314,7 +315,7 @@ class ExifTool {
     }
     
     func patchDateForPhoto(date:Date, url:URL, tags:Set<String>) {
-        self.logger.log("Changing date time for: \(url.path)")
+        self.logger.log(.trace, "Changing date time for: \(url.path)")
         self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
@@ -385,7 +386,7 @@ class ExifTool {
     }
     
     func patchGPSCoordinateForImage(latitude:Double, longitude:Double, url:URL){
-        self.logger.log("Changing GPS coordinate for: \(url.path)")
+        self.logger.log(.trace, "Changing GPS coordinate for: \(url.path)")
         self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
@@ -416,7 +417,7 @@ class ExifTool {
     }
     
     func patchImageDescription(description:String, url:URL) {
-        self.logger.log("Changing ImageDescription for: \(url.path)")
+        self.logger.log(.trace, "Changing ImageDescription for: \(url.path)")
         self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
@@ -450,7 +451,7 @@ class ExifTool {
     }
     
     func assignKeyValueForImage(key:String, value:String, url:URL){
-        self.logger.log("Assigning \(key) -> \(value) for: \(url.path)")
+        self.logger.log(.trace, "Assigning \(key) -> \(value) for: \(url.path)")
         self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")

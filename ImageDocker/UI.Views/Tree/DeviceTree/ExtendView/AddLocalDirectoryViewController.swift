@@ -186,10 +186,10 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     }
     
     func gotoParent() {
-//        self.logger.log("current: \(currentPath.path)")
+//        self.logger.log(.trace, "current: \(currentPath.path)")
         let parent = currentPath.deletingLastPathComponent()
         self.currentPath = parent
-//        self.logger.log("parent: \(currentPath.path)")
+//        self.logger.log(.trace, "parent: \(currentPath.path)")
         goto(url: parent)
     }
     

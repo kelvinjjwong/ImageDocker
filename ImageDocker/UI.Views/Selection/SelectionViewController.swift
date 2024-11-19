@@ -65,7 +65,7 @@ class SelectionViewController : NSViewController {
         batchEditIndicator.isHidden = true
 //        comboPlaceList.isEditable = false
         self.btnShare.sendAction(on: .leftMouseDown)
-//        self.logger.log("Loading view - setup event list")
+//        self.logger.log(.trace, "Loading view - setup event list")
         self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -91,7 +91,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.openDatePicker(self.btnDatePicker, with: referenceDate)
     }
     
@@ -108,7 +108,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.openDatePicker(sender)
     }
     
@@ -121,7 +121,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.selectCombineMenuInSelectionArea(i, selectedImageIds: selectedImageIds)
     }
     
@@ -133,7 +133,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.share(sender)
     }
     
@@ -145,7 +145,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.openExportToDeviceDialog(sender)
     }
     
@@ -157,7 +157,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.visibleSelectedImages()
     }
     
@@ -169,7 +169,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.hideSelectedImages()
     }
     
@@ -181,7 +181,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.checkAllInSelectionArea()
     }
     
@@ -193,7 +193,7 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.cleanSomeFromSelectionArea()
     }
     
@@ -208,7 +208,7 @@ class SelectionViewController : NSViewController {
         for editor in editors {
             editor.removeAllImageFlowListItems()
         }
-        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.logger.log(.trace, "selected image ids: \(selectedImageIds)")
         self.cleanUpSelectionArea()
     }
     

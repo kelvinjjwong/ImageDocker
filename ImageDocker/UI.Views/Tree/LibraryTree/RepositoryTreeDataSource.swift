@@ -77,7 +77,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("load repositories from database - START")
+        self.logger.log(.trace, "load repositories from database - START")
         let startTime = Date()
         
         var coreMembers:[String:String] = [:]
@@ -90,11 +90,11 @@ class RepositoryTreeDataSource : TreeDataSource {
         let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "owner, name", condition: condition)
         self.logger.timecost("load repositories from database - DONE", fromDate: startTime)
         if containers.count == 0 {
-//            self.logger.log(">>> no repository is loaded for tree")
+//            self.logger.log(.trace, ">>> no repository is loaded for tree")
         }
         let startTime2 = Date()
         for container in containers {
-//            self.logger.log(">>> loaded repo for tree: \(container.name)")
+//            self.logger.log(.trace, ">>> loaded repo for tree: \(container.name)")
             self.logger.log(.trace, "converting repository to tree node - id:\(container.id) , owner:\(container.owner)")
             
             let ownerNode = self.findNode(id: container.owner, in: nodes) ?? self.convertToTreeNode(ownerId: container.owner, ownerName: coreMembers[container.owner] ?? container.owner)
@@ -114,7 +114,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadSubContainers(repositoryId: Int, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("load sub containers from database - START - repositoryId: \(repositoryId)")
+        self.logger.log(.trace, "load sub containers from database - START - repositoryId: \(repositoryId)")
         let startTime = Date()
         let containers = RepositoryDao.default.getSubContainersSingleLevel(repositoryId: repositoryId, condition: condition)
         self.logger.timecost("load sub containers from database - DONE - repositoryId: \(repositoryId)", fromDate: startTime)
@@ -132,7 +132,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadSubContainers(containerId: Int, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("load sub containers from database - START - containerId: \(containerId)")
+        self.logger.log(.trace, "load sub containers from database - START - containerId: \(containerId)")
         let startTime = Date()
         let containers = RepositoryDao.default.getSubContainersSingleLevel(containerId: containerId, condition: condition)
         self.logger.timecost("load sub containers from database - DONE - containerId: \(containerId)", fromDate: startTime)
@@ -150,7 +150,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     /// - Tag: RepositoryTreeDataSource.loadSubContainers(parentPath)
     func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("load sub containers from database - START - parentFolder: \(parentPath.removeLastStash())")
+        self.logger.log(.trace, "load sub containers from database - START - parentFolder: \(parentPath.removeLastStash())")
         let startTime = Date()
         let containers = RepositoryDao.default.getSubContainers(parent: parentPath.removeLastStash(), condition: condition)
         self.logger.timecost("load sub containers from database - DONE - parentFolder: \(parentPath.removeLastStash())", fromDate: startTime)

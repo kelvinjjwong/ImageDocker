@@ -18,11 +18,11 @@ extension ImageFolderTreeScanner {
         
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
-        self.logger.log("Loading containers from db ")
+        self.logger.log(.trace, "Loading containers from db ")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
         let containers = RepositoryDao.default.getAllContainers()
         
-        self.logger.log("Setting up containers' parent ")
+        self.logger.log(.trace, "Setting up containers' parent ")
         
 //        let limitRam = PreferencesController.peakMemory() * 1024
 //        var continousWorking = true
@@ -53,7 +53,7 @@ extension ImageFolderTreeScanner {
                         }
                     }
                     if !containerExistInFileSys {
-                        self.logger.log("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
+                        self.logger.log(.trace, "Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
 
                     }else{
                     
@@ -72,7 +72,7 @@ extension ImageFolderTreeScanner {
                         if container.hideByParent || exclude {
                             // do nothing
                         }else{
-//                                self.logger.log("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
+//                                self.logger.log(.trace, "[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
                             let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
                                                                       name:container.name,
                                                                       repositoryPath: container.repositoryPath,
@@ -87,12 +87,12 @@ extension ImageFolderTreeScanner {
                                 if container.hasParentContainer() {
                                     if let parentFolder = urlFolders[container.parentFolder] {
                                         imageFolder.setParent(parentFolder)
-//                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
+//                                            self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
                                     }
                                 }else{
                                     if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                         imageFolder.setParent(parent)
-//                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                            self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                         foldersNeedSave.insert(imageFolder)
                                     }
                                 }
@@ -100,7 +100,7 @@ extension ImageFolderTreeScanner {
                             }else{
                                 if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                     imageFolder.setParent(parent)
-//                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                        self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                     foldersNeedSave.insert(imageFolder)
                                 }
                             }
@@ -108,7 +108,7 @@ extension ImageFolderTreeScanner {
                                 let subPath = container.path.replacingFirstOccurrence(of: parent.url.path.withLastStash(), with: "")
                                 imageFolder.name = subPath
                                 
-//                                    self.logger.log("SUB PATH -> \(subPath)")
+//                                    self.logger.log(.trace, "SUB PATH -> \(subPath)")
                                 
                                 if subPath.contains("/") {
                                     let parts = subPath.components(separatedBy: "/")
@@ -117,12 +117,12 @@ extension ImageFolderTreeScanner {
                                         if part == "" {continue}
                                         if midPaths.count == 0 {
                                             let midPath = parent.url.appendingPathComponent(part).path
-//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+//                                                self.logger.log(.trace, "MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
                                             midPaths.append(midPath)
                                         }else{
                                             let parentMidPath = midPaths[midPaths.count-1]
                                             let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
-//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+//                                                self.logger.log(.trace, "MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
                                             midPaths.append(midPath)
                                         }
                                     }
@@ -141,7 +141,7 @@ extension ImageFolderTreeScanner {
                                             // create dummy ImageFolder in the middle
                                             midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
                                             midFolder!.setParent(parents[parents.count - 1])
-//                                                self.logger.log("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
+//                                                self.logger.log(.trace, "SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
                                             
                                             // to be added to the whole set
                                             midFolders.append(midFolder!)
@@ -152,7 +152,7 @@ extension ImageFolderTreeScanner {
                                         parents.append(midFolder!) // for next calculation
                                     }
                                     imageFolder.setParent(parents[parents.count - 1])
-//                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                        self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                     imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
                                     
                                     imageFolders.append(contentsOf: midFolders)
@@ -183,11 +183,11 @@ extension ImageFolderTreeScanner {
 //
 //                        if usedRam >= limitRam {
 //                            attempt += 1
-//                            self.logger.log("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
+//                            self.logger.log(.trace, "waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
 //                            continousWorking = false
 //                            sleep(10)
 //                        }else{
-////                            self.logger.log("continue for Setting up containers' parent, last attempt: \(attempt)")
+////                            self.logger.log(.trace, "continue for Setting up containers' parent, last attempt: \(attempt)")
 //                            continousWorking = true
 //                        }
 //                    }
@@ -205,7 +205,7 @@ extension ImageFolderTreeScanner {
 //                            }
 //                        }
 //                        if !containerExistInFileSys {
-//                            self.logger.log("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
+//                            self.logger.log(.trace, "Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
 //
 //                        }else{
 //
@@ -224,7 +224,7 @@ extension ImageFolderTreeScanner {
 //                            if container.hideByParent || exclude {
 //                                // do nothing
 //                            }else{
-////                                self.logger.log("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
+////                                self.logger.log(.trace, "[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
 //                                let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
 //                                                                          name:container.name,
 //                                                                          repositoryPath: container.repositoryPath,
@@ -239,12 +239,12 @@ extension ImageFolderTreeScanner {
 //                                    if container.parentFolder != "" {
 //                                        if let parentFolder = urlFolders[container.parentFolder] {
 //                                            imageFolder.setParent(parentFolder)
-////                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
+////                                            self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
 //                                        }
 //                                    }else{
 //                                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
 //                                            imageFolder.setParent(parent)
-////                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+////                                            self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
 //                                            foldersNeedSave.insert(imageFolder)
 //                                        }
 //                                    }
@@ -252,7 +252,7 @@ extension ImageFolderTreeScanner {
 //                                }else{
 //                                    if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
 //                                        imageFolder.setParent(parent)
-////                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+////                                        self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
 //                                        foldersNeedSave.insert(imageFolder)
 //                                    }
 //                                }
@@ -260,7 +260,7 @@ extension ImageFolderTreeScanner {
 //                                    let subPath = container.path.replacingFirstOccurrence(of: "\(parent.url.path.withStash())", with: "")
 //                                    imageFolder.name = subPath
 //
-////                                    self.logger.log("SUB PATH -> \(subPath)")
+////                                    self.logger.log(.trace, "SUB PATH -> \(subPath)")
 //
 //                                    if subPath.contains("/") {
 //                                        let parts = subPath.components(separatedBy: "/")
@@ -269,12 +269,12 @@ extension ImageFolderTreeScanner {
 //                                            if part == "" {continue}
 //                                            if midPaths.count == 0 {
 //                                                let midPath = parent.url.appendingPathComponent(part).path
-////                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+////                                                self.logger.log(.trace, "MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
 //                                                midPaths.append(midPath)
 //                                            }else{
 //                                                let parentMidPath = midPaths[midPaths.count-1]
 //                                                let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
-////                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+////                                                self.logger.log(.trace, "MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
 //                                                midPaths.append(midPath)
 //                                            }
 //                                        }
@@ -293,7 +293,7 @@ extension ImageFolderTreeScanner {
 //                                                // create dummy ImageFolder in the middle
 //                                                midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
 //                                                midFolder!.setParent(parents[parents.count - 1])
-////                                                self.logger.log("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
+////                                                self.logger.log(.trace, "SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
 //
 //                                                // to be added to the whole set
 //                                                midFolders.append(midFolder!)
@@ -304,7 +304,7 @@ extension ImageFolderTreeScanner {
 //                                            parents.append(midFolder!) // for next calculation
 //                                        }
 //                                        imageFolder.setParent(parents[parents.count - 1])
-////                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+////                                        self.logger.log(.trace, "SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
 //                                        imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
 //
 //                                        imageFolders.append(contentsOf: midFolders)
@@ -322,10 +322,10 @@ extension ImageFolderTreeScanner {
 //            } // end of while loop
         }// end of if-containers-is-empty
         urlFolders.removeAll()
-        self.logger.log("Setting up containers' parent: DONE ")
+        self.logger.log(.trace, "Setting up containers' parent: DONE ")
         
         if foldersNeedSave.count > 0 {
-            self.logger.log("Saving containers' parent")
+            self.logger.log(.trace, "Saving containers' parent")
             var k = 0
             let kall = foldersNeedSave.count
             for imageFolder in foldersNeedSave {
@@ -339,27 +339,27 @@ extension ImageFolderTreeScanner {
                         }
                     }
                     if !containerExistInFileSys {
-                        self.logger.log("Container does not exist in FileSys, ignore saving in DB: \(k)/\(kall): \(imageContainer.path)")
+                        self.logger.log(.trace, "Container does not exist in FileSys, ignore saving in DB: \(k)/\(kall): \(imageContainer.path)")
                         continue;
                     }
                     
                     let saveState = RepositoryDao.default.saveImageContainer(container: imageContainer)
                     if saveState == .OK {
-                        self.logger.log("Saved container into DB \(k)/\(kall): \(imageContainer.path)")
+                        self.logger.log(.trace, "Saved container into DB \(k)/\(kall): \(imageContainer.path)")
                     }else{
-                        self.logger.log("[\(saveState)] Unable to save container into DB \(k)/\(kall): \(imageContainer.path)")
+                        self.logger.log(.trace, "[\(saveState)] Unable to save container into DB \(k)/\(kall): \(imageContainer.path)")
                     }
                 }
             }
-            self.logger.log("Saving containers' parent: DONE ")
+            self.logger.log(.trace, "Saving containers' parent: DONE ")
         }
         foldersNeedSave.removeAll()
         
-//        self.logger.log("======================")
+//        self.logger.log(.trace, "======================")
 //        for imgf in imageFolders {
-//            self.logger.log("\(imgf.url.path) -> PARENT -> \(imgf.parent?.url.path ?? "")")
+//            self.logger.log(.trace, "\(imgf.url.path) -> PARENT -> \(imgf.parent?.url.path ?? "")")
 //        }
-//        self.logger.log("======================")
+//        self.logger.log(.trace, "======================")
         
         return imageFolders
     }

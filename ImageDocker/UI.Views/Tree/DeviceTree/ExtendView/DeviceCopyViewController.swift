@@ -166,7 +166,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     @objc func onSourcePathTableClicked() {
-//        self.logger.log("row \(tblSourcePath.clickedRow), col \(tblSourcePath.clickedColumn) clicked")
+//        self.logger.log(.trace, "row \(tblSourcePath.clickedRow), col \(tblSourcePath.clickedColumn) clicked")
         if sourcePathTableDelegate.paths.count > 0 && tblSourcePath.clickedRow < paths.count && tblSourcePath.clickedRow >= 0 && tblSourcePath.clickedColumn >= 0 {
             let devicePath = paths[tblSourcePath.clickedRow]
             if let data = devicePath.data {
@@ -178,7 +178,7 @@ class DeviceCopyViewController: NSViewController {
                 self.devicePathPopover?.show(relativeTo: cellRect, of: self.view, preferredEdge: .minX)
                 
             }else{
-//                self.logger.log("CLICKED, NO DATA")
+//                self.logger.log(.trace, "CLICKED, NO DATA")
             }
         }
     }
@@ -188,8 +188,8 @@ class DeviceCopyViewController: NSViewController {
     func viewInit(device:PhoneDevice, repository: ImageRepository){
         self.repository = repository
         if device.deviceId != self.device.deviceId {
-//            self.logger.log("DEVICE INIT")
-//            self.logger.log("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
+//            self.logger.log(.trace, "DEVICE INIT")
+//            self.logger.log(.trace, "DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
             self.device = device
             
             self.btnUpdateRepository.isEnabled = true
@@ -299,15 +299,15 @@ class DeviceCopyViewController: NSViewController {
     // MARK: - GET FILE LIST
     
     func getFileFullList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
-        print("getFileFullList from \(path.sourcePath)")
-//        self.logger.log("GET FULL LIST FROM \(path)")
+        self.logger.log(.trace, "getFileFullList from \(path.sourcePath)")
+//        self.logger.log(.trace, "GET FULL LIST FROM \(path)")
         if self.deviceFiles_fulllist[path.sourcePath] == nil {
-//            self.logger.log("nil, return empty")
+//            self.logger.log(.trace, "nil, return empty")
             self.deviceFiles_fulllist[path.sourcePath] = []
             return []
         }else{
             if self.deviceFiles_fulllist[path.sourcePath]!.count == 0 {
-//                self.logger.log("not nil but zero count, load from path")
+//                self.logger.log(.trace, "not nil but zero count, load from path")
                 let excludePaths:[String] = self.getExcludedPaths()
                 self.loadFromPath(path: path, reloadFileList:reloadFileList, excludePaths: excludePaths)
             }
@@ -317,7 +317,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func getFileFilteredList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
-        print("getFileFilteredList from \(path.sourcePath)")
+        self.logger.log(.trace, "getFileFilteredList from \(path.sourcePath)")
         if self.deviceFiles_fulllist[path.sourcePath] == nil {
             return []
         }
@@ -331,7 +331,7 @@ class DeviceCopyViewController: NSViewController {
     // MARK: - LOAD FROM PATH
     
     fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough) {
-//        self.logger.log("LOAD FROM LOCAL \(path) - \(pretendPath)")
+//        self.logger.log(.trace, "LOAD FROM LOCAL \(path) - \(pretendPath)")
         
         DispatchQueue.main.async {
             self.deviceFiles_filtered[path] = []
@@ -353,7 +353,7 @@ class DeviceCopyViewController: NSViewController {
                 f.path = url.path
                 let importedFile:ImageDeviceFile? = DeviceDao.default.getImportedFile(deviceId: self.device.deviceId, file: f)
                 if let deviceFile = importedFile {
-//                    self.logger.log("IMPORTED \(f.filename)")
+//                    self.logger.log(.trace, "IMPORTED \(f.filename)")
                     f.storedMD5 = deviceFile.fileMD5 ?? ""
                     f.storedSize = deviceFile.fileSize ?? ""
                     f.storedDateTime = deviceFile.fileDateTime ?? ""
@@ -363,7 +363,7 @@ class DeviceCopyViewController: NSViewController {
                     
                     f.deviceFile = deviceFile
                 }else{
-//                    self.logger.log("NOT IMPORTED \(f.filename)")
+//                    self.logger.log(.trace, "NOT IMPORTED \(f.filename)")
                     let key = "\(self.device.deviceId):\(f.path)"
                     let datetime = LocalDirectory.bridge.datetime(of: f.filename, in: filepath.path)
                     let deviceFile = ImageDeviceFile.new(fileId: key,
@@ -411,13 +411,13 @@ class DeviceCopyViewController: NSViewController {
             if DeviceBridge.Android().exists(device: self.device.deviceId, path: path) {
                 files = DeviceBridge.Android().files(device: self.device.deviceId, in: path)
             }else{
-//                self.logger.log("NOT EXISTS PATH ON DEVICE \(path)")
+//                self.logger.log(.trace, "NOT EXISTS PATH ON DEVICE \(path)")
             }
         }else{
             files = IPHONE.bridge.files(mountPoint: Setting.localEnvironment.iosDeviceMountPoint(), in: path)
         }
         guard files.count > 0 else {
-//            self.logger.log("NO FILE FOUND in \(path)")
+//            self.logger.log(.trace, "NO FILE FOUND in \(path)")
 //            DispatchQueue.main.async {
 //                self.lblProgressMessage.stringValue = "No file found in \(path)"
 //            }
@@ -459,12 +459,12 @@ class DeviceCopyViewController: NSViewController {
             
             if checksumMode == .Rough {
                 if (f.stored && !f.matchedWithoutMD5){
-//                    self.logger.log("Getting MD5 of \(f.path)")
+//                    self.logger.log(.trace, "Getting MD5 of \(f.path)")
                     f.fileMD5 = DeviceBridge.Android().md5(device: self.device.deviceId, fileWithPath: f.path)
                 }
             }else if checksumMode == .Deep {
                 if (f.stored && !f.matched){
-//                    self.logger.log("Getting MD5 of \(f.path)")
+//                    self.logger.log(.trace, "Getting MD5 of \(f.path)")
                     f.fileMD5 = DeviceBridge.Android().md5(device: self.device.deviceId, fileWithPath: f.path)
                 }
             }
@@ -499,7 +499,7 @@ class DeviceCopyViewController: NSViewController {
                 self.btnCopy.isEnabled = true
             }
             if reloadFileList {
-//                self.logger.log("RELOAD")
+//                self.logger.log(.trace, "RELOAD")
                 self.tblFiles.reloadData()
             }
         }
@@ -549,10 +549,10 @@ class DeviceCopyViewController: NSViewController {
 //            self.logger.log(self.btnMount.title)
             let mountpoint = Setting.localEnvironment.iosDeviceMountPoint()
             if self.btnMount.title == Words.device_mount.word() {
-//                self.logger.log("INVOKE MOUNT")
+//                self.logger.log(.trace, "INVOKE MOUNT")
                 IPHONE.bridge.unmount(path: mountpoint)
                 if IPHONE.bridge.mount(path: mountpoint) {
-//                    self.logger.log("JUST MOUNTED")
+//                    self.logger.log(.trace, "JUST MOUNTED")
                     self.btnMount.title = Words.device_unmount.word()
                     
                     self.paths = [
@@ -563,10 +563,10 @@ class DeviceCopyViewController: NSViewController {
                     self.tblSourcePath.reloadData()
                     
                 }else{
-//                    self.logger.log("UNABLE TO MOUNT IPHONE")
+//                    self.logger.log(.trace, "UNABLE TO MOUNT IPHONE")
                 }
             }else {
-//                self.logger.log("INVOKE UNMOUNT")
+//                self.logger.log(.trace, "INVOKE UNMOUNT")
                 // Unmount
                 IPHONE.bridge.unmount(path: mountpoint)
                 self.btnMount.title = Words.device_mount.word()
@@ -577,7 +577,7 @@ class DeviceCopyViewController: NSViewController {
                 self.tblSourcePath.reloadData()
             }
         }else{
-//            self.logger.log("NOT IPHONE")
+//            self.logger.log(.trace, "NOT IPHONE")
             self.btnMount.isHidden = true
             self.btnMount.isEnabled = false
         }
@@ -676,17 +676,17 @@ class DeviceCopyViewController: NSViewController {
 //                                do {
 //                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
 //                                }catch{
-//                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
+//                                    self.logger.log(.trace, "Error occured when trying to create folder \(newFolderPath.path)", error)
 //                                }
 //                                do {
 //                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
 //                                }catch{
-//                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
+//                                    self.logger.log(.trace, "Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
 //                                }
 //                            }
 //                            var file = deviceFile
 //                            file.importToPath = newFolderPath.path
-////                            self.logger.log("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
+////                            self.logger.log(.trace, "Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
 //                            let _ = DeviceDao.default.saveDeviceFile(file: file)
 //                        }
 //                        
@@ -726,12 +726,12 @@ class DeviceCopyViewController: NSViewController {
 //                                do {
 //                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
 //                                }catch{
-//                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
+//                                    self.logger.log(.trace, "Error occured when trying to create folder \(newFolderPath.path)", error)
 //                                }
 //                                do {
 //                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
 //                                }catch{
-//                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
+//                                    self.logger.log(.trace, "Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
 //                                }
 //                            }
 //                        }
@@ -760,7 +760,7 @@ class DeviceCopyViewController: NSViewController {
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
         if Alert.dialogOKCancel(question: "DELETE DEVICE FILE RECORDS", text: "Do you confirm to delete all device file imported recoreds?") {
-            self.logger.log("proceed delete")
+            self.logger.log(.trace, "proceed delete")
             self.lblMessage.stringValue = "Deleting records ..."
             let _ = DeviceDao.default.deleteDeviceFiles(deviceId: self.device.deviceId)
             self.lblMessage.stringValue = "Deleted records."
@@ -938,10 +938,10 @@ class DeviceCopyViewController: NSViewController {
             if path.exclude {
                 continue
             }
-//            self.logger.log("TO BE COPIED: \(path.sourcePath) - \(self.deviceFiles_filtered[path.sourcePath]!.count)")
+//            self.logger.log(.trace, "TO BE COPIED: \(path.sourcePath) - \(self.deviceFiles_filtered[path.sourcePath]!.count)")
             total += self.deviceFiles_filtered[path.sourcePath]!.count
         }
-//        self.logger.log("TO BE COPIED: \(total)")
+//        self.logger.log(.trace, "TO BE COPIED: \(total)")
         guard total > 0 else {return}
         self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         
@@ -1027,16 +1027,16 @@ class DeviceCopyViewController: NSViewController {
                         if self.device.type == .Android {
                             let (result, error) = DeviceBridge.Android().pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
                             if result && error == nil {
-//                                self.logger.log("Copied \(file.path)")
+//                                self.logger.log(.trace, "Copied \(file.path)")
                                 deviceFile.localFilePath = localFilePath
 //                                    deviceFile.importToPath = destinationPathForFile
                                 deviceFile.importAsFilename = file.filename
                                 deviceFile.importDate = date
                                 deviceFile.repositoryId = self.repository!.id
                                 let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
-//                                    self.logger.log("Updated \(file.path)")
+//                                    self.logger.log(.trace, "Updated \(file.path)")
                             }else{
-//                                self.logger.log("Failed to copy \(file.path)")
+//                                self.logger.log(.trace, "Failed to copy \(file.path)")
                                 if let err = error {
                                     if err.localizedDescription.range(of: "device '\(self.device.deviceId)' not found") != nil {
                                         self.forceStop = true
@@ -1048,20 +1048,20 @@ class DeviceCopyViewController: NSViewController {
                             }
                         }else if self.device.type == .iPhone {
                             if IPHONE.bridge.pull(mountPoint: Setting.localEnvironment.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
-//                                self.logger.log("Copied \(file.path)")
+//                                self.logger.log(.trace, "Copied \(file.path)")
                                 deviceFile.localFilePath = localFilePath
 //                                    deviceFile.importToPath = destinationPathForFile
                                 deviceFile.importAsFilename = file.filename
                                 deviceFile.importDate = date
                                 deviceFile.repositoryId = self.repository!.id
                                 let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
-//                                    self.logger.log("Updated \(file.path)")
+//                                    self.logger.log(.trace, "Updated \(file.path)")
                             }else{
-//                                self.logger.log("Failed to copy \(file.path)")
+//                                self.logger.log(.trace, "Failed to copy \(file.path)")
                             }
                         }
                     } else if path.type == .localDirectory {
-//                        self.logger.log("COPYING LOCAL \(file.onDevicePath)")
+//                        self.logger.log(.trace, "COPYING LOCAL \(file.onDevicePath)")
                         
                         var needSaveFile:Bool = false
                         let destinationFile = URL(fileURLWithPath: destinationPathForFile).appendingPathComponent(file.filename).path
@@ -1083,7 +1083,7 @@ class DeviceCopyViewController: NSViewController {
                             deviceFile.importDate = date
                             deviceFile.repositoryId = self.repository!.id
                             let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
-//                            self.logger.log("Updated \(file.path)")
+//                            self.logger.log(.trace, "Updated \(file.path)")
                         }
                     }
                     
@@ -1126,7 +1126,7 @@ class DeviceCopyViewController: NSViewController {
     // copy files from raw folder to repository folder if it wasn't copied
     // generate md5 and update field 'md5' if it's null or empty in db
     fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile,repository:ImageRepository, fileHandler:ComputerFileManager){
-        self.logger.log("updateDeviceFileIntoRepository() -> \(deviceFile.localFilePath)")
+        self.logger.log(.trace, "updateDeviceFileIntoRepository() -> \(deviceFile.localFilePath)")
         
         let storageUrlWithSlash = "\(repository.storageVolume)\(repository.storagePath)".withLastStash()
         let repositoryPath = "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash()
@@ -1170,14 +1170,14 @@ class DeviceCopyViewController: NSViewController {
             
             let repositoryFolderUrl = repositoryFileUrl.deletingLastPathComponent()
             do {
-                self.logger.log("Create editable directoy [\(repositoryFolderUrl)]")
+                self.logger.log(.trace, "Create editable directoy [\(repositoryFolderUrl)]")
                 try FileManager.default.createDirectory(at: repositoryFolderUrl, withIntermediateDirectories: true, attributes: nil)
             }catch{
                 logger.log("Error occured when trying to create folder \(repositoryFolderUrl.path)", error)
             }
             // copy files from raw folder to repository folder if it wasn't copied
             if !repositoryFileUrl.path.isFileExists() {
-                self.logger.log("Copying file from [\(importedFileUrl.path)] to [\(repositoryFileUrl.path)]")
+                self.logger.log(.trace, "Copying file from [\(importedFileUrl.path)] to [\(repositoryFileUrl.path)]")
                 let (copied, error) = importedFileUrl.path.copyFile(to: repositoryFileUrl.path, logger: self.logger)
                 if !copied {
                     logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path) - \(error)")
@@ -1187,7 +1187,7 @@ class DeviceCopyViewController: NSViewController {
             // generate md5 and update field 'md5' if it's null or empty in db
             if file.fileMD5 == nil || file.fileMD5 == "" {
                 let md5 = fileHandler.md5(pathOfFile: importedFileUrl.path)
-                self.logger.log("Generated MD5 for [\(importedFileUrl.path)] as [\(md5)]")
+                self.logger.log(.trace, "Generated MD5 for [\(importedFileUrl.path)] as [\(md5)]")
                 if md5 != "" {
                     file.fileMD5 = md5
                     needSave = true
@@ -1213,7 +1213,7 @@ class DeviceCopyViewController: NSViewController {
         self.disableButtons()
         
         let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
-//        self.logger.log("device file count: \(deviceFiles.count)")
+//        self.logger.log(.trace, "device file count: \(deviceFiles.count)")
         if deviceFiles.count > 0 {
             self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
             
@@ -1234,7 +1234,7 @@ class DeviceCopyViewController: NSViewController {
                         let _ = self.accumulator?.add("")
                     }
                 }
-                self.logger.log("Completed copy into editable folder")
+                self.logger.log(.trace, "Completed copy into editable folder")
                 DispatchQueue.main.async {
                     self.lblMessage.stringValue = "Completed copy into editable folder"
                 }
@@ -1243,7 +1243,7 @@ class DeviceCopyViewController: NSViewController {
                 self.enableButtons()
             }
         }else{
-            self.logger.log("No file record could be copied into editable folder.")
+            self.logger.log(.trace, "No file record could be copied into editable folder.")
             self.lblMessage.stringValue = "No file record could be copied into editable folder."
             self.forceStop = false
             self.working = false
@@ -1336,7 +1336,7 @@ class DeviceCopyViewController: NSViewController {
                                                                                    deviceType: self.device.type,
                                                                                    destinationType: .onDevice,
                                                                                    onApply: { (directory, toSubFolder, isExclude, hasManyChildren) in
-//                self.logger.log("\(directory) \(toSubFolder) \(isExclude)")
+//                self.logger.log(.trace, "\(directory) \(toSubFolder) \(isExclude)")
                 var dest = DeviceCopyDestination.new((directory, toSubFolder))
                 // on device directory need to be saved into db
                 if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .onDevice }) {
@@ -1386,7 +1386,7 @@ class DeviceCopyViewController: NSViewController {
                                                                                    deviceType: self.device.type,
                                                                                    destinationType: .localDirectory,
                                                                                    onApply: { (directory, toSubFolder, isExclude, hasManyChildren) in
-//                self.logger.log("\(directory) \(toSubFolder) \(isExclude)")
+//                self.logger.log(.trace, "\(directory) \(toSubFolder) \(isExclude)")
                 let dest = DeviceCopyDestination.local((directory, toSubFolder))
                 // local directory no need to be saved into db
                 if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .localDirectory }) {
@@ -1427,7 +1427,7 @@ extension DeviceCopyViewController : DeviceSourcePathSelectionDelegate {
     
     func selectDeviceSourcePath(path: DeviceCopyDestination) {
         selectedPath = path
-//        self.logger.log("SELECTED \(path.sourcePath) - \(path.toSubFolder) - \(path.type)")
+//        self.logger.log(.trace, "SELECTED \(path.sourcePath) - \(path.toSubFolder) - \(path.type)")
         self.refreshFileList()
         
     }
@@ -1518,7 +1518,7 @@ extension DeviceSourcePathTableDelegate : NSTableViewDelegate {
             
             
             if clickAction != nil {
-//                self.logger.log("TRIGGER CLICK ACTION")
+//                self.logger.log(.trace, "TRIGGER CLICK ACTION")
                 let devicePath = paths[lastSelectedRow!]
                 clickAction!(devicePath, lastSelectedRow!)
             }

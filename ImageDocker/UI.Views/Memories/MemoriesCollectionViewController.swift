@@ -42,7 +42,7 @@ extension MemoriesCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "MemoryCollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? MemoryCollectionViewItem else {return item}
-        //self.logger.log("created item")
+        //self.logger.log(.trace, "created item")
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
             collectionViewItem.imageFile = imageFile

@@ -25,7 +25,7 @@ extension ViewController {
     }
     
     func reloadEventCollection(moment:Moment, sender:NSButton) {
-        print("## reloadEventCollection")
+        self.logger.log(.trace, "## reloadEventCollection")
         self.collectionPaginationController?.reload()
 //        self.createCollectionPaginationPopover()
 //        self.collectionPaginationViewController
@@ -59,11 +59,11 @@ extension ViewController {
         self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)
         self.collectionPaginationController?.initCounter(onCountTotal: {
             let count = self.countImagesOfEvent(moment: moment)
-            print("event images count: \(count)")
+            self.logger.log(.trace, "event images count: \(count)")
             return count
         }, onCountHidden: {
             let count = self.countHiddenImagesOfEvent(moment: moment)
-            print("event hidden images count: \(count)")
+            self.logger.log(.trace, "event hidden images count: \(count)")
             return count
         })
 //        if self.chbShowHidden.state == .off {

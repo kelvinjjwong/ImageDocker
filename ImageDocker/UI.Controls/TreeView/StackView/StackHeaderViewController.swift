@@ -76,7 +76,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     }
     
     @objc func processSearch() {
-        self.logger.log("===== TREE search: \(self.searchField.tokenStringValue)")
+        self.logger.log(.trace, "===== TREE search: \(self.searchField.tokenStringValue)")
         if self.filterAction != nil {
             self.filterAction!()
         }

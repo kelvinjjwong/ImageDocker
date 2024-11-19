@@ -134,7 +134,7 @@ class PeopleFace {
             }
         }
         catch {
-            self.logger.log("Unexpected error occured: \(error).")
+            self.logger.log(.trace, "Unexpected error occured: \(error).")
         }
         return nil
     }

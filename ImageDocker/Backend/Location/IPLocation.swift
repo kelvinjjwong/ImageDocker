@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 public class IPLocation {
+    
+    static let logger = LoggerFactory.get(category: "IP", subCategory: "Location")
     
     public static func get() -> String{
         let pipe = Pipe()
@@ -31,8 +34,8 @@ public class IPLocation {
         let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
         pipe2.fileHandleForReading.closeFile()
         
-        print(string)
-        print(string2)
+        logger.log(.trace, string)
+        logger.log(.trace, string2)
         return string
     }
 }

@@ -27,7 +27,7 @@ class ImageFile {
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
             if let repo = RepositoryDao.default.getRepository(id: img.repositoryId) {
-                self.logger.log("[getBackupUrl] backup url: \(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
+                self.logger.log(.trace, "[getBackupUrl] backup url: \(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
                 return URL(fileURLWithPath: "\(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
             }
         }
@@ -199,30 +199,30 @@ class ImageFile {
             self.rawPath = repository.storagePath
             
             let imagePath = "\(repository.repositoryVolume.removeLastStash())\(repository.repositoryPath.withLastStash())\(image.subPath)"
-            self.logger.log("image full path: \(imagePath)")
+            self.logger.log(.trace, "image full path: \(imagePath)")
             
             self.url = URL(fileURLWithPath: imagePath)
             
-            self.logger.log("Loaded ImageFile url: \(self.url)")
+            self.logger.log(.trace, "Loaded ImageFile url: \(self.url)")
         }else{
             self.logger.log(.error, "Unable to load ImageRepository for Image.id:\(image.id) with repositoryId:\(image.repositoryId), subPath:\(image.subPath)")
             self.url = URL(fileURLWithPath: image.path)
-            self.logger.log("URL using image.path: \(image.path)")
+            self.logger.log(.trace, "URL using image.path: \(image.path)")
         }
         
-        self.logger.log("repositoryId:\(self.repositoryId), repositoryVolume:\(self.repositoryVolume), rawVolume:\(self.rawVolume)")
+        self.logger.log(.trace, "repositoryId:\(self.repositoryId), repositoryVolume:\(self.repositoryVolume), rawVolume:\(self.rawVolume)")
         
         self.indicator = indicator
         
 //        if let repositoryVolume = repositoryVolume {
 //            let (_, path) = image.path.getVolumeFromThisPath()
-//            self.logger.log("Divided path: \(path)")
+//            self.logger.log(.trace, "Divided path: \(path)")
 //            let fullPath = "\(repositoryVolume)\(path)"
 //            self.url = URL(fileURLWithPath: fullPath)
-//            self.logger.log("fullPath: \(fullPath)")
+//            self.logger.log(.trace, "fullPath: \(fullPath)")
 //        }else{
 //            self.url = URL(fileURLWithPath: image.path)
-//            self.logger.log("using image.path: \(image.path)")
+//            self.logger.log(.trace, "using image.path: \(image.path)")
 //        }
         
         
@@ -355,7 +355,7 @@ class ImageFile {
                 self.logger.log(.trace, "[ImageFile.init from database] needSave set to true due to isNeedLoadLocation is true and called loadLocation()")
                 needSave = true
                 autoreleasepool { () -> Void in
-                    //self.logger.log("LOADING LOCATION")
+                    //self.logger.log(.trace, "LOADING LOCATION")
                     let startTime_loadLocation = Date()
                     loadLocation(locationConsumer: self)
                     self.logger.timecost("[ImageFile.init from database][loadLocation] time cost", fromDate: startTime_loadLocation)
@@ -411,13 +411,13 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
         if let repo = repository {
-            self.logger.log("repo has value, getOrCreatePhoto")
+            self.logger.log(.trace, "repo has value, getOrCreatePhoto")
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
                                                              repositoryPath: repo.repositoryPath.withLastStash())
         }else{
-            self.logger.log("repo is null, getOrCreatePhoto")
+            self.logger.log(.trace, "repo is null, getOrCreatePhoto")
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,
@@ -425,7 +425,7 @@ class ImageFile {
         }
         
         if !quickCreate {
-            self.logger.log("LOAD META FROM DB BY IMAGE URL")
+            self.logger.log(.trace, "LOAD META FROM DB BY IMAGE URL")
             loadMetaInfoFromDatabase()
             
             if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 {
@@ -436,7 +436,7 @@ class ImageFile {
                 }
                 
             }
-            //self.logger.log("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+            //self.logger.log(.trace, "loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
             if self.imageData?.updateLocationDate == nil {
                 if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                     //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)

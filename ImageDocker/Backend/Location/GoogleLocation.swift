@@ -49,7 +49,7 @@ class GoogleLocation {
                                         let coord:Coord = Coord(latitude: Double(pair[0]) ?? 0, longitude: Double(pair[1]) ?? 0)
                                         //self.logger.log(coord.latitude)
                                         //self.logger.log(coord.longitude)
-                                        //self.logger.log("long,lati=\(coord.longitude),\(coord.latitude)")
+                                        //self.logger.log(.trace, "long,lati=\(coord.longitude),\(coord.latitude)")
                                         
                                         DispatchQueue.main.async {
                                             

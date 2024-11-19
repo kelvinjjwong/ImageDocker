@@ -33,7 +33,7 @@ class ComputerFileManager : FileSystemHandler {
         do {
             try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            self.logger.log("Cannot create directory: \(path)")
+            self.logger.log(.trace, "Cannot create directory: \(path)")
             self.logger.log(.error, error)
             return false
         }
@@ -61,7 +61,7 @@ class ComputerFileManager : FileSystemHandler {
         do {
             try FileManager.default.removeItem(atPath: path)
         }catch {
-            self.logger.log("Cannot delete original copy: \(path)")
+            self.logger.log(.trace, "Cannot delete original copy: \(path)")
             self.logger.log(.error, error)
             return false
         }
@@ -119,17 +119,17 @@ class AndroidFileManager : FileSystemHandler {
     
     func fileExists(atPath path: String, md5: String) -> FileExistState {
         if DeviceBridge.Android().existsFile(device: self.deviceId, path: path) {
-            self.logger.log("exists")
+            self.logger.log(.trace, "exists")
             let md5AtPath = self.md5(pathOfFile: path)
             if md5 == md5AtPath {
-                self.logger.log("with same md5")
+                self.logger.log(.trace, "with same md5")
                 return .existAtPathWithSameMD5
             }else{
-                self.logger.log("with different md5")
+                self.logger.log(.trace, "with different md5")
                 return .existAtPathWithDifferentMD5
             }
         }else{
-            self.logger.log("not exist")
+            self.logger.log(.trace, "not exist")
             return .notExistAtPath
         }
     }

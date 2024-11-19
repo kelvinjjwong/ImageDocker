@@ -39,7 +39,7 @@ class DictionaryTableViewController: NSObject {
         self.table.reloadData()
         
         if let afterLoaded = afterLoaded {
-            self.logger.log("item amount = \(items.count) , checkbox amount = \(self.checkboxes.count)")
+            self.logger.log(.trace, "item amount = \(items.count) , checkbox amount = \(self.checkboxes.count)")
             afterLoaded()
         }
     }
@@ -61,14 +61,14 @@ class DictionaryTableViewController: NSObject {
     }
     
     func setCheckedItems(column:String, from array:[String]) {
-        self.logger.log("setCheckedItems() array: \(array)")
+        self.logger.log(.trace, "setCheckedItems() array: \(array)")
         var indexes:[Int] = []
         for i in 0..<items.count {
             let item = items[i]
             if let columnValue = item[column] {
-                //self.logger.log("checking \(columnValue)")
+                //self.logger.log(.trace, "checking \(columnValue)")
                 if array.contains(columnValue) {
-                    //self.logger.log("containes \(columnValue)")
+                    //self.logger.log(.trace, "containes \(columnValue)")
                     indexes.append(i)
                 }
             }
@@ -81,21 +81,21 @@ class DictionaryTableViewController: NSObject {
             edititem["check"] = "true"
             items[i] = edititem
             if let id = edititem["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
-                self.logger.log("turn \(id) on")
+                self.logger.log(.trace, "turn \(id) on")
                 checkbox.state = .on
             }
         }
     }
     
     func uncheckAll() {
-        self.logger.log("uncheckAll()")
+        self.logger.log(.trace, "uncheckAll()")
         for i in 0..<items.count {
             var item = items[i]
             item["check"] = "false"
             items[i] = item
             
             if let id = item["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
-                self.logger.log("turn \(id) off")
+                self.logger.log(.trace, "turn \(id) off")
                 checkbox.state = .off
             }
         }
@@ -108,7 +108,7 @@ class DictionaryTableViewController: NSObject {
             items[i] = item
             
             if let id = item["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
-                self.logger.log("turn \(id) on")
+                self.logger.log(.trace, "turn \(id) on")
                 checkbox.state = .on
             }
         }
@@ -123,7 +123,7 @@ class DictionaryTableViewController: NSObject {
                 let length = value.lengthOfBytes(using: .utf8)
                 if length > 0 {
                     let newValue = value.replacingOccurrences(of: "\"", with: "")
-                    self.logger.log("unquoted: \(newValue)")
+                    self.logger.log(.trace, "unquoted: \(newValue)")
                     array.append(newValue)
                 }
             }
@@ -199,14 +199,14 @@ extension DictionaryTableViewController: NSTableViewDelegate {
         if index >= 0 {
             var edititem = items[index]
             
-            self.logger.log("actioned: \(edititem)")
+            self.logger.log(.trace, "actioned: \(edititem)")
             self.onAction?(id)
         }
     }
     
     @objc @IBAction func onCheckboxClicked(sender:NSButton) {
-        //self.logger.log("checkbox clicked \(sender.identifier?.rawValue ?? "")")
-//        print(sender.identifier?.rawValue)
+        //self.logger.log(.trace, "checkbox clicked \(sender.identifier?.rawValue ?? "")")
+//        self.logger.log(.trace, sender.identifier?.rawValue)
         let id = sender.identifier?.rawValue.replacingFirstOccurrence(of: "checkbox_", with: "") ?? ""
 //        if id != "" {
             var index = -1
@@ -227,7 +227,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 }
                 items[index] = edititem
             }
-            self.logger.log("checked: \(self.getCheckedItemAsQuotedString(column: "name", separator: ","))")
+            self.logger.log(.trace, "checked: \(self.getCheckedItemAsQuotedString(column: "name", separator: ","))")
             if self.onCheck != nil {
                 self.onCheck!(id, sender.state == .on)
             }
@@ -256,7 +256,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                     for key in item.keys {
                         if id == NSUserInterfaceItemIdentifier(key) {
                             value = item[key] ?? ""
-                            //self.logger.log("LOOP RESULT: \(key), \(value)")
+                            //self.logger.log(.trace, "LOOP RESULT: \(key), \(value)")
                             break
                         }
                     }

@@ -66,7 +66,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.treeViewController = CheckableTreeViewControllerWrapper(self.treeView, checkable: true, dataLoader: {
             return self.loadPeopleGroups()
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
-            print("tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+            self.logger.log(.trace, "tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             self.updateCheckedAmount()
         })
         self.progressIndicator.isHidden = true
@@ -96,7 +96,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         }, onRemoveNode: { treeNode in
             
             if let item = treeNode as? CoreMember {
-                print("add empty people group for: \(item.nickname)")
+                self.logger.log(.trace, "add empty people group for: \(item.nickname)")
                 let idx = item.groups.count + 1
                 let groupId = "\(item.id)_group_\(idx)"
                 let groupName = "\(Words.new_people_group.word()) \(idx)"
@@ -117,7 +117,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
                 
             }
             if let item = treeNode as? PeopleGroup {
-                print("remove people group: \(item.name)")
+                self.logger.log(.trace, "remove people group: \(item.name)")
                 
                 // delete people group
                 
@@ -136,7 +136,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
                 }
             }
             if let item = treeNode as? PeopleGroupMember {
-                print("remove people: \(item.id)")
+                self.logger.log(.trace, "remove people: \(item.id)")
                 
                 if let peopleGroup = item.parent {
                     peopleGroup.members.removeAll { member in
@@ -155,7 +155,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             return false
             
         }, afterChange: {
-            print("after change tree view")
+            self.logger.log(.trace, "after change tree view")
             self.treeViewController?.reloadNodes()
         })
         
@@ -231,7 +231,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
                                     content: self.getText(image: image).joined(separator: ", "))
             
             self.flowListItems[image.id ?? ""] = viewController
-//            print("addImageFlowListItem, id:\(image.id ?? "") , total:\(self.flowListItems.count)")
+//            self.logger.log(.trace, "addImageFlowListItem, id:\(image.id ?? "") , total:\(self.flowListItems.count)")
             self.collectImagesDiff()
             self.checkLinkedFamilies()
         }
@@ -368,7 +368,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         }else {
             return false
         }
-        print("dragged \(draggedString) to group:\(peopleGroupName)")
+        self.logger.log(.trace, "dragged \(draggedString) to group:\(peopleGroupName)")
         
         let newMember = PeopleGroupMember()
         newMember.id = json["id"].stringValue
@@ -414,8 +414,8 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
 //        let checkedGroupIds = checkedGroups.map { g in
 //            return g.id
 //        }
-//        self.logger.log("selected images: \(imageIds)")
-//        self.logger.log("checked families: \(checkedGroupIds)")
+//        self.logger.log(.trace, "selected images: \(imageIds)")
+//        self.logger.log(.trace, "checked families: \(checkedGroupIds)")
         
         if Alert.dialogOKCancel(question: Words.dialog_update_images.word()) {
             self.btnApply.isEnabled = false

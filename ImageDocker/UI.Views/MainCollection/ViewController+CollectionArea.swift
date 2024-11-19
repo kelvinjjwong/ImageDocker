@@ -47,7 +47,7 @@ extension ViewController {
     
     internal func selectImageFile(_ imageFile:ImageFile){
         self.selectedImageFile = imageFile.fileName
-        //self.logger.log("selected image file: \(filename)")
+        //self.logger.log(.trace, "selected image file: \(filename)")
         //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
         DispatchQueue.main.async {
             self.loadImageMetaAndPreview(imageFile: imageFile)

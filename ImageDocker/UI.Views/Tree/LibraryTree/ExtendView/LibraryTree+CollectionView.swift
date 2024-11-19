@@ -11,7 +11,7 @@ import Cocoa
 extension ViewController {
     
     internal func loadCollectionByContainer(name:String, containerId:Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        self.logger.log("loadCollectionByContainer(name:\(name), containerId:\(containerId), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
+        self.logger.log(.trace, "loadCollectionByContainer(name:\(name), containerId:\(containerId), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
         
         self.collectionPaginationController?.initPageSize(pageSize: pageSize)
         self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)

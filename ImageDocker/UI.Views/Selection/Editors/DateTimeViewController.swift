@@ -656,7 +656,7 @@ class DateTimeViewController: NSViewController {
     }
     
     @IBAction func onStepperAdjustMonthClicked(_ sender: NSStepper) {
-        self.logger.log("clicked month stepper")
+        self.logger.log(.trace, "clicked month stepper")
         let newValue = sender.integerValue
         let oldValue = self.txtAdjustMonth.integerValue
         if newValue > oldValue {
@@ -1410,7 +1410,7 @@ extension DateTimeViewController {
     }
     
     @objc func copyDateAction(sender: NSButton) {
-        self.logger.log("Copy: \(sender.title)")
+        self.logger.log(.trace, "Copy: \(sender.title)")
         self.setFixedDate(value: sender.title)
     }
 }

@@ -23,7 +23,7 @@ extension ViewController {
     }
     
     @objc func processMainSearch() {
-//        self.logger.log("======== process main search === \(self.txtSearch.tokenStringValue)")
+//        self.logger.log(.trace, "======== process main search === \(self.txtSearch.tokenStringValue)")
         let keywords = self.txtSearch.tokenStringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if keywords != "" {
             let conditions = SearchCondition.get(from: keywords, includeHidden: (false), filter: ViewController.collectionFilter) //self.chbShowHidden.state == .on

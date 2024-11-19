@@ -153,7 +153,7 @@ class Accumulator : NSObject {
                 }
             }
             if self.hasOnCompleted {
-                //self.logger.log("ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
+                //self.logger.log(.trace, "ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
                 self.onCompleted(self.data)
             }
             

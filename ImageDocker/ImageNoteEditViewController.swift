@@ -99,8 +99,8 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
             }) {
                 grid.append(("\(o.value * 100) %", o.key))
             }
-            print("collectImagesDiff:")
-            print(grid)
+            self.logger.log(.trace, "collectImagesDiff:")
+            self.logger.log(.trace, grid)
             
             DispatchQueue.main.async {
                 self.tableViewController?.load(grid)

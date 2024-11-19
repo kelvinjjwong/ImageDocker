@@ -311,11 +311,11 @@ class ViewController: NSViewController {
         var _missingVolumes:Set<String> = []
         let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
         let volumes = LocalDirectory.bridge.mountpoints().appending(Setting.localEnvironment.localDiskMountPoints())
-        self.logger.log("mounted volumes: \(volumes)")
+        self.logger.log(.trace, "mounted volumes: \(volumes)")
         for repo in repos {
             let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo, volumes: volumes)
-            self.logger.log("[connected volumes] \(connectedVolumes)")
-            self.logger.log("[missing   volumes] \(missingVolumes)")
+            self.logger.log(.trace, "[connected volumes] \(connectedVolumes)")
+            self.logger.log(.trace, "[missing   volumes] \(missingVolumes)")
             for volume in connectedVolumes {
                 if !_connectedVolumes.contains(volume) {
                     _connectedVolumes.insert(volume)
@@ -347,11 +347,11 @@ class ViewController: NSViewController {
         self.screenDockPosition = position
         // do on changed
         if(changed && position != "N/A") {
-            self.logger.log("[MAIN-VIEW] RESIZE WINDOW to \(screenWidth) x \(screenHeight)")
+            self.logger.log(.trace, "[MAIN-VIEW] RESIZE WINDOW to \(screenWidth) x \(screenHeight)")
             self.resize(width: screenWidth, height: screenHeight)
             
             
-            self.logger.log("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
+            self.logger.log(.trace, "[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
         }
     }
     
@@ -363,17 +363,17 @@ class ViewController: NSViewController {
             
             if (visibleFrame.origin.x > screenFrame.origin.x) {
                 self.onScreenDockHeightDetected(position: "LEFT", height: Int(visibleFrame.origin.x - screenFrame.origin.x), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
-                self.logger.log("[MAIN-VIEW] Dock is positioned on the LEFT")
-                self.logger.log("[MAIN-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
+                self.logger.log(.trace, "[MAIN-VIEW] Dock is positioned on the LEFT")
+                self.logger.log(.trace, "[MAIN-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
             } else if (visibleFrame.origin.y > screenFrame.origin.y) {
                 self.onScreenDockHeightDetected(position: "BOTTOM", height: Int(visibleFrame.origin.y - screenFrame.origin.y), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
-                self.logger.log("[MAIN-VIEW] Dock is positioned on the BOTTOM")
-                self.logger.log("[MAIN-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
+                self.logger.log(.trace, "[MAIN-VIEW] Dock is positioned on the BOTTOM")
+                self.logger.log(.trace, "[MAIN-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
             } else if (visibleFrame.size.width < screenFrame.size.width) {
                 self.onScreenDockHeightDetected(position: "RIGHT", height: Int(screenFrame.size.width - visibleFrame.size.width), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
             } else {
                 self.onScreenDockHeightDetected(position: "HIDDEN", height: 0, screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
-                self.logger.log("[MAIN-VIEW] Dock is HIDDEN");
+                self.logger.log(.trace, "[MAIN-VIEW] Dock is HIDDEN");
             }
         }else {
             self.onScreenDockHeightDetected(position: "N/A", height: -1, screenWidth: 0, screenHeight: 0)
@@ -383,8 +383,8 @@ class ViewController: NSViewController {
     
     func checkMissingVolumes() -> ([String], [String]) {
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
-        self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
-        self.logger.log("[STARTUP] volumes_connected: \(volumes_connected)")
+        self.logger.log(.trace, "[STARTUP] volumes_lasttime: \(volumes_lasttime)")
+        self.logger.log(.trace, "[STARTUP] volumes_connected: \(volumes_connected)")
         if volumes_missing.count > 0 {
             self.logger.log(.error, "[STARTUP] volumes_missing: \(volumes_missing)")
             self.logger.log(.warning, "[STARTUP] decide NOT to Quit")
@@ -393,20 +393,20 @@ class ViewController: NSViewController {
 //            return
         }else {
             PreferencesController.saveRepositoryVolumes(volumes_connected)
-            self.logger.log("[STARTUP] saved volumes_connected: \(volumes_connected)")
+            self.logger.log(.trace, "[STARTUP] saved volumes_connected: \(volumes_connected)")
         }
         return (volumes_connected, volumes_missing)
     }
     
     internal func initView() {
 //        whereIsDock()
-        print(self.view.window?.screen?.frame)
-        print(self.view.window?.screen?.visibleFrame)
+        self.logger.log(.trace, self.view.window?.screen?.frame)
+        self.logger.log(.trace, self.view.window?.screen?.visibleFrame)
         let dockLeft = self.view.window?.screen?.visibleFrame.origin.x ?? 0 - (self.view.window?.screen?.frame.origin.x ?? 0)
         let dockHeight = self.view.window?.screen?.visibleFrame.origin.y ?? 0 - (self.view.window?.screen?.frame.origin.y ?? 0)
         let dockRight = self.view.window?.screen?.frame.size.width ?? 0 - (self.view.window?.screen?.visibleFrame.size.width ?? 0)
-        print(dockHeight)
-        print(NSStatusBar.system.thickness)
+        self.logger.log(.trace, dockHeight)
+        self.logger.log(.trace, NSStatusBar.system.thickness)
         
         let (volumes_connected, volumes_missing) = self.checkMissingVolumes()
         
@@ -482,7 +482,7 @@ class ViewController: NSViewController {
         
 //        whereIsDock()
         
-        self.logger.log("before splash - frame \(self.view.bounds)")
+        self.logger.log(.trace, "before splash - frame \(self.view.bounds)")
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeTasksCount(notification:)), name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: nil)
         
@@ -493,7 +493,7 @@ class ViewController: NSViewController {
         self.btnCombineDuplicates.toolTip = Words.main_combineTooltip.word()
         
         self.splashController = SplashViewController(onStartup: {
-            self.logger.log("startup frame \(self.view.bounds)")
+            self.logger.log(.trace, "startup frame \(self.view.bounds)")
             self.splashController.view.frame = self.view.bounds
             self.doStartWork()
         }, onCompleted: {
@@ -605,12 +605,12 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
-        self.logger.log("clicked previous page")
+        self.logger.log(.trace, "clicked previous page")
         self.collectionPaginationController?.onPreviousPage()
     }
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
-        self.logger.log("clicked next page")
+        self.logger.log(.trace, "clicked next page")
         self.collectionPaginationController?.onNextPage()
     }
     
@@ -619,7 +619,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
-        self.logger.log("reload collection view button clicked")
+        self.logger.log(.trace, "reload collection view button clicked")
         self.collectionPaginationController?.onReload()
     }
     
@@ -644,7 +644,7 @@ class ViewController: NSViewController {
     var runningSearch = false
     
     @IBAction func onSearchAction(_ sender: NSTokenField) {
-        self.logger.log("action on search: \(self.txtSearch.stringValue)")
+        self.logger.log(.trace, "action on search: \(self.txtSearch.stringValue)")
     }
     
     

@@ -30,7 +30,7 @@ class NotificationMessageViewController: NSViewController {
     // run only once
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.logger.log("popover did load")
+//        self.logger.log(.trace, "popover did load")
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
@@ -43,7 +43,7 @@ class NotificationMessageViewController: NSViewController {
     }
     
     func onPopoverShow() {
-//        self.logger.log("popover show")
+//        self.logger.log(.trace, "popover show")
         for notificationMessage in notificationMessages {
             notificationMessage.notifyChange()
         }
