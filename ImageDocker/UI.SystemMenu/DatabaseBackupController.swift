@@ -101,12 +101,11 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var txtDatabaseName: NSTextField!
     @IBOutlet weak var txtDatabaseSchema: NSTextField!
     @IBOutlet weak var txtDatabaseUsername: NSTextField!
-    @IBOutlet weak var txtDatabasePassword: NSTextField!
     @IBOutlet weak var chkDatabaseUseSSL: NSButton!
     @IBOutlet weak var chkDatabaseNoPsw: NSButton!
-    @IBOutlet weak var btnSeeDatabasePassword: NSButton!
     @IBOutlet weak var btnSaveDatabaseProfile: NSButton!
     @IBOutlet weak var btnClearDatabaseProfile: NSButton!
+    @IBOutlet weak var txtDatabasePassword: DSFSecureTextField!
     
     
     
@@ -1174,44 +1173,99 @@ final class DatabaseBackupController: NSViewController {
         profile.host = "127.0.0.1"
         profile.database = "ImageDocker"
         profile.engine = "postgresql"
-        profile.port = 5234
+        profile.port = 5432
         profile.schema = "public"
         profile.user = "public"
         profile.nopsw = true
         profile.ssl = false
         profile.selected = true
-        viewController.initView(databaseProfile: profile) {
+        viewController.initView(databaseProfile: profile,
+        onSelect: {
             // onSelect
+            print("click select")
             
-        } onEdit: {
+        }, onEdit: {
+            print("click edit")
+            self.databaseProfileToForm(profile: profile)
+        }, onDelete: {
+            print("click delete")
             
-        } onDelete: {
-            
-        }
+        })
 
         self.databaseProfilesStackView.addArrangedSubview(viewController.view)
+        self.databaseProfileFlowListItems[profile.id()] = viewController
         //addChildViewController(viewController)
     }
     
+    func databaseProfileToForm(profile:DatabaseProfile) {
+        self.txtDatabaseHost.stringValue = profile.host
+        self.txtDatabasePort.integerValue = profile.port
+        self.txtDatabaseName.stringValue = profile.database
+        self.txtDatabaseSchema.stringValue = profile.schema
+        self.txtDatabaseUsername.stringValue = profile.user
+        self.txtDatabasePassword.stringValue = profile.password
+        self.chkDatabaseUseSSL.state = profile.ssl ? .on : .off
+        self.chkDatabaseNoPsw.state = profile.nopsw ? .on : .off
+        
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        switch(profile.engine.lowercased()) {
+        case "postgresql":
+            self.chkDatabasePostgresql.state = .on
+            break
+        case "mysql":
+            self.chkDatabaseMysql.state = .on
+        default:
+            break
+        }
+    }
+    
     @IBAction func onNewDatabaseProfileClicked(_ sender: NSButton) {
+        print("click new")
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "postgresql"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "public"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = true
+        self.databaseProfileToForm(profile: profile)
     }
     
     @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
     }
     
     @IBAction func onClearDatabaseProfileClicked(_ sender: NSButton) {
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "postgresql"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "public"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = true
+        self.databaseProfileToForm(profile: profile)
     }
     
     @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabasePostgresql.state = .on
     }
     
     @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabaseMysql.state = .on
     }
-    
-    @IBAction func onSeeDatabasePasswordClicked(_ sender: NSButton) {
-    }
-    
-    
     
 }
 

@@ -144,6 +144,8 @@
 		8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194F24225728002BAAAE /* ExportDaoInterface.swift */; };
 		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
 		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
+		8E7D4F832D1DD52900EC77F8 /* DSFSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */; };
+		8E7D4F852D1DD55A00EC77F8 /* DSFPasswordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoDelegate.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
@@ -533,6 +535,8 @@
 		8E74194F24225728002BAAAE /* ExportDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDaoInterface.swift; sourceTree = "<group>"; };
 		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
 		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSFSecureTextField.swift; sourceTree = "<group>"; };
+		8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSFPasswordButton.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoDelegate.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
@@ -1431,6 +1435,8 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */,
+				8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */,
 				5C511756297C3AA500F64CF6 /* FontAwesome */,
 				8ECA1FE723E3269F00F56895 /* CustomComboDropdown */,
 				8E08D87125DB695E009A365F /* CustomTableView */,
@@ -2146,6 +2152,7 @@
 				8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */,
 				8E481487277DAFF10097493E /* Words+Splash.swift in Sources */,
 				8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */,
+				8E7D4F832D1DD52900EC77F8 /* DSFSecureTextField.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EBA759723B55BCA00548376 /* RepositoryTreeDataSource.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
@@ -2160,6 +2167,7 @@
 				8EECD8F02ADE5ADC009F6571 /* ImageFamilyDao.swift in Sources */,
 				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
+				8E7D4F852D1DD55A00EC77F8 /* DSFPasswordButton.swift in Sources */,
 				8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */,
 				8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,

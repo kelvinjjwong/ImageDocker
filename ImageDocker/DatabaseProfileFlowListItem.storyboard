@@ -68,18 +68,9 @@
                                             <action selector="onSelectClicked:" target="bU7-R8-ocO" id="JE9-1D-rHa"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x6I-HP-bHx">
-                                        <rect key="frame" x="309" y="70" width="16" height="15"/>
-                                        <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="edit" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="qxy-ce-zxz">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                            <font key="font" metaFont="systemBold" size="12"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="onEditClicked:" target="bU7-R8-ocO" id="mfL-Cz-a5d"/>
-                                        </connections>
-                                    </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Apy-Ag-exl">
-                                        <rect key="frame" x="311" y="16.5" width="13" height="12.5"/>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Apy-Ag-exl">
+                                        <rect key="frame" x="283" y="76.5" width="13" height="12.5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="NSStopProgressTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="huK-fx-CYd">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="systemBold" size="12"/>
@@ -88,10 +79,19 @@
                                             <action selector="onDeleteClicked:" target="bU7-R8-ocO" id="jCE-Zm-g36"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x6I-HP-bHx">
+                                        <rect key="frame" x="281" y="8" width="16" height="15"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="edit" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="qxy-ce-zxz">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onEditClicked:" target="bU7-R8-ocO" id="mfL-Cz-a5d"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="x6I-HP-bHx" firstAttribute="leading" secondItem="dzU-0D-PUe" secondAttribute="trailing" constant="6" id="COq-w1-9hI"/>
-                                    <constraint firstItem="x6I-HP-bHx" firstAttribute="top" secondItem="lIO-BQ-bwR" secondAttribute="top" constant="15" id="Ce4-d0-Zz9"/>
                                     <constraint firstItem="Aud-w3-sWM" firstAttribute="top" secondItem="lIO-BQ-bwR" secondAttribute="top" constant="44" id="Eaw-kz-Q8W"/>
                                     <constraint firstItem="0UX-Jw-29R" firstAttribute="top" secondItem="lIO-BQ-bwR" secondAttribute="top" constant="5" id="Jes-Dg-K5M"/>
                                     <constraint firstAttribute="height" constant="100" id="LZj-a0-QUL"/>
@@ -103,8 +103,6 @@
                                     <constraint firstItem="ami-Du-etv" firstAttribute="top" secondItem="0UX-Jw-29R" secondAttribute="bottom" constant="5" id="iz9-R6-ruw"/>
                                     <constraint firstItem="Aud-w3-sWM" firstAttribute="leading" secondItem="dzU-0D-PUe" secondAttribute="trailing" constant="8" symbolic="YES" id="nBJ-Tb-ssP"/>
                                     <constraint firstItem="NFN-pE-IWG" firstAttribute="leading" secondItem="lIO-BQ-bwR" secondAttribute="leading" constant="5" id="sK7-oq-foN"/>
-                                    <constraint firstItem="Apy-Ag-exl" firstAttribute="leading" secondItem="dzU-0D-PUe" secondAttribute="trailing" constant="8" id="uop-Vx-QaE"/>
-                                    <constraint firstItem="Apy-Ag-exl" firstAttribute="top" secondItem="Aud-w3-sWM" secondAttribute="bottom" constant="15" id="yCW-39-3pn"/>
                                     <constraint firstAttribute="width" constant="330" id="zag-Dn-Cub"/>
                                 </constraints>
                             </customView>
