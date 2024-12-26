@@ -76,6 +76,39 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var btnRemoteDBServerBackup: NSButton!
     @IBOutlet weak var lblRemoteDBServerMessage: NSTextField!
     
+    // MARK: DATABASE PROFILES
+    
+    
+    @IBOutlet weak var databaseProfilesStackView: NSStackView!
+    var databaseProfileFlowListItems:[String:DatabaseProfileFlowListItemController] = [:]
+    
+    @IBOutlet weak var boxDatabaseProfile: NSBox!
+    @IBOutlet weak var btnNewDatabaseProfile: NSButton!
+    @IBOutlet weak var lblDatabaseEngine: NSTextField!
+    @IBOutlet weak var lblDatabaseHost: NSTextField!
+    @IBOutlet weak var lblDatabasePort: NSTextField!
+    @IBOutlet weak var lblDatabaseName: NSTextField!
+    @IBOutlet weak var lblDatabaseSchema: NSTextField!
+    @IBOutlet weak var lblDatabaseUsername: NSTextField!
+    @IBOutlet weak var lblDatabasePassword: NSTextField!
+    @IBOutlet weak var lblDatabaseNoPsw: NSTextField!
+    @IBOutlet weak var imgDatabasePostgresql: NSImageView!
+    @IBOutlet weak var imgDatabaseMysql: NSImageView!
+    @IBOutlet weak var chkDatabasePostgresql: NSButton!
+    @IBOutlet weak var chkDatabaseMysql: NSButton!
+    @IBOutlet weak var txtDatabaseHost: NSTextField!
+    @IBOutlet weak var txtDatabasePort: NSTextField!
+    @IBOutlet weak var txtDatabaseName: NSTextField!
+    @IBOutlet weak var txtDatabaseSchema: NSTextField!
+    @IBOutlet weak var txtDatabaseUsername: NSTextField!
+    @IBOutlet weak var txtDatabasePassword: NSTextField!
+    @IBOutlet weak var chkDatabaseUseSSL: NSButton!
+    @IBOutlet weak var chkDatabaseNoPsw: NSButton!
+    @IBOutlet weak var btnSeeDatabasePassword: NSButton!
+    @IBOutlet weak var btnSaveDatabaseProfile: NSButton!
+    @IBOutlet weak var btnClearDatabaseProfile: NSButton!
+    
+    
     
     // MARK: BACKUP
     
@@ -123,6 +156,8 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var lblDataCloneTo: NSTextField!
     @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
     @IBOutlet weak var lblDataCloneToPgCmdline: NSTextField!
+    
+    
     
     // MARK: - DATABASE SAVE BUTTON
     @IBAction func onButtonApplyClick(_ sender: NSButton) {
@@ -889,6 +924,9 @@ final class DatabaseBackupController: NSViewController {
     
     
     func initDatabaseSection() {
+        
+        self.databaseProfilesStackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        
         self.boxLocalSQLite.title = Words.preference_tab_database_box_local_sqlite.word()
         self.boxLocalPostgres.title = Words.preference_tab_database_box_local_postgres.word()
         self.boxRemotePostgres.title = Words.preference_tab_database_box_remote_postgres.word()
@@ -949,7 +987,11 @@ final class DatabaseBackupController: NSViewController {
             self.chkLocalDBNoPassword.state = .off
             self.txtLocalDBPassword.isEditable = true
         }
+        
+        self.addDatabaseProfile()
     }
+    
+    
     
     class func getPostgresCommandPath() -> String? {
         let keys:[String] = [
@@ -1074,6 +1116,7 @@ final class DatabaseBackupController: NSViewController {
         self.btnSaveDatabase.title = Words.apply.word()
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_database.word()
         self.tabs.tabViewItem(at: 1).label = Words.preference_tab_backup.word()
+        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_database.word()
     }
     
     override var representedObject: Any? {
@@ -1084,9 +1127,91 @@ final class DatabaseBackupController: NSViewController {
     
     
     
+    /// Used to add a particular view controller as an item to our stack view.
+    func addDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
+        
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        
+            
+        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
+        //addChildViewController(viewController)
+        viewController.initView(databaseProfile: databaseProfile)
+        
+        self.databaseProfileFlowListItems[databaseProfile.id()] = viewController
+        
+    }
+    
+    func removeDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
+        if let vc = self.databaseProfileFlowListItems[databaseProfile.id()] {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeValue(forKey: databaseProfile.id())
+    }
+    
+    
+    func removeAllDatabaseProfileFlowListItems() {
+        for vc in self.databaseProfileFlowListItems.values {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeAll()
+    }
+    
+    
+    
     var backupArchives:[(String, String, String, String)] = []
     
     var shouldLoadPostgresBackupArchives = true
+    
+    
+    
+    func addDatabaseProfile() {
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "postgresql"
+        profile.port = 5234
+        profile.schema = "public"
+        profile.user = "public"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = true
+        viewController.initView(databaseProfile: profile) {
+            // onSelect
+            
+        } onEdit: {
+            
+        } onDelete: {
+            
+        }
+
+        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
+        //addChildViewController(viewController)
+    }
+    
+    @IBAction func onNewDatabaseProfileClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onClearDatabaseProfileClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onSeeDatabasePasswordClicked(_ sender: NSButton) {
+    }
+    
+    
     
 }
 

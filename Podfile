@@ -15,4 +15,5 @@ target 'ImageDocker' do
   pod 'AndroidDeviceReader', '1.0.1'
   pod 'IPhoneDeviceReader', '1.0.4'
   pod 'nonamecat-swift-commons', '1.0.2'
+  pod 'SwiftyGifMac', '5.4.5'
 end

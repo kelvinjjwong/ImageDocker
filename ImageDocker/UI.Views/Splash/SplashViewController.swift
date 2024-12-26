@@ -8,10 +8,20 @@
 
 import Cocoa
 import LoggerFactory
+import SwiftyGifMac
 
 class SplashViewController: NSViewController {
     
     let logger = LoggerFactory.get(category: "Startup", subCategory: "Splash")
+    
+    @IBOutlet weak var Gif1: NSImageView!
+    @IBOutlet weak var Gif2: NSImageView!
+    @IBOutlet weak var Gif3: NSImageView!
+    @IBOutlet weak var Gif4: NSImageView!
+    @IBOutlet weak var Gif5: NSImageView!
+    @IBOutlet weak var Gif6: NSImageView!
+    @IBOutlet weak var Gif7: NSImageView!
+    
     
     // MARK: PROPERTIES
     @IBOutlet weak var lblMessage: NSTextField!
@@ -85,6 +95,8 @@ class SplashViewController: NSViewController {
             self.view.window?.performZoom(self)
         }
     }
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,6 +125,21 @@ class SplashViewController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(setTotalOfSubProgress(notification:)), name: NSNotification.Name(rawValue: "FOLDERSETTER_TOTAL"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(increSubProgress(notification:)), name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+        
+        self.Gif1.alphaValue = 0.1
+        self.Gif2.alphaValue = 0.1
+        self.Gif3.alphaValue = 0.1
+        self.Gif4.alphaValue = 0.1
+        self.Gif5.alphaValue = 0.1
+        self.Gif6.alphaValue = 0.1
+        self.Gif7.alphaValue = 0.1
+        Icons.show_gif(name: "running2", view: self.Gif1)
+        Icons.show_gif(name: "running", view: self.Gif2)
+        Icons.show_gif(name: "sailing", view: self.Gif3)
+        Icons.show_gif(name: "boating", view: self.Gif4)
+        Icons.show_gif(name: "flying", view: self.Gif5)
+        Icons.show_gif(name: "forward", view: self.Gif6)
+        Icons.show_gif(name: "open-box", view: self.Gif7)
         
         self.onStartup()
     }

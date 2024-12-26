@@ -33,7 +33,7 @@ class TwoColumnTableViewController: NSViewController {
             array.append((item, item, ""))
         }
         self.items = array
-        self.logger.log(items.count)
+//        self.logger.log(.trace, "items: \(items.count)")
         self.table.reloadData()
     }
     

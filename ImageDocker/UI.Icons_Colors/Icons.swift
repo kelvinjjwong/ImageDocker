@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftyGifMac
 
 struct Icons {
     static let node:NSImage = NSImage(imageLiteralResourceName: "photos")
@@ -55,5 +56,29 @@ struct Icons {
     static let remove:NSImage = NSImage(imageLiteralResourceName: "ClearDarkGray")
     static let edit:NSImage = NSImage(imageLiteralResourceName: "edit")
     static let saveEdit:NSImage = NSImage(named: NSImage.menuOnStateTemplateName)!
+    
+    static let database_postgresql = NSImage(imageLiteralResourceName: "database_postgresql")
+    static let database_mysql = NSImage(imageLiteralResourceName: "database_mysql")
+    
+    static let disk_local = NSImage(imageLiteralResourceName: "disk_local")
+    static let disk_network = NSImage(imageLiteralResourceName: "disk_network")
+    
+    static let gif_open_box = try? NSImage(imageName: "open-box.gif")
+    static let gif_boating = try? NSImage(imageName: "boating.gif")
+    static let gif_flying = try? NSImage(imageName: "flying.gif")
+    static let gif_forward = try? NSImage(imageName: "forward.gif")
+    static let gif_running = try? NSImage(imageName: "running.gif")
+    static let gif_running2 = try? NSImage(imageName: "running2.gif")
+    static let gif_sailing = try? NSImage(imageName: "sailing.gif")
 
+    static let gifManager = SwiftyGifManager(memoryLimit:100)
+    
+    static func show_gif(name:String, view:NSImageView) {
+        if let gif = try? NSImage(imageName: "\(name).gif") {
+            view.setImage(gif, manager: gifManager, loopCount: -1)
+            
+        }else{
+            view.clear()
+        }
+    }
 }
