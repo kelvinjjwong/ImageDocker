@@ -110,6 +110,7 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var txtDatabasePassword: DSFSecureTextField!
     @IBOutlet weak var lblDatabaseTimeout: NSTextField!
     @IBOutlet weak var lstDatabaseTimeout: NSComboBox!
+    @IBOutlet weak var lblDatabaseMessage: NSTextField!
     
     
     
@@ -149,8 +150,6 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var btnCreateDatabase: NSButton!
     @IBOutlet weak var btnReloadDBArchives: NSButton!
     @IBOutlet weak var btnDeleteDBArchives: NSButton!
-    
-    @IBOutlet weak var txtLocalDBBinPath: NSTextField!
     @IBOutlet weak var chkPostgresInApp: NSButton!
     @IBOutlet weak var chkPostgresByBrew: NSButton!
     
@@ -158,7 +157,41 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var lblDataCloneFrom: NSTextField!
     @IBOutlet weak var lblDataCloneTo: NSTextField!
     @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
+    
+    // MARK: ENGINE
+    
+    @IBOutlet weak var txtLocalDBBinPath: NSTextField!
     @IBOutlet weak var lblDataCloneToPgCmdline: NSTextField!
+    @IBOutlet weak var lblDatabaseEngineMessage: NSTextField!
+    
+    
+    
+    // MARK: ENGINE - TOGGLE GROUP - Postgres Command Path
+    
+    var toggleGroup_InstalledPostgres:ToggleGroup!
+    
+    @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
+        let path = "/usr/local/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+        }else{
+            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_homebrew_error.fill(arguments: path)
+            sender.state = .off
+        }
+       
+    }
+    
+    @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
+        let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+        }else{
+            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_postgresapp_error.fill(arguments: path)
+            sender.state = .off
+        }
+    }
     
     
     
@@ -865,33 +898,6 @@ final class DatabaseBackupController: NSViewController {
         self.lblCheckDatabaseName.stringValue = ""
     }
     
-    // MARK: TOGGLE GROUP - Postgres Command Path
-    
-    var toggleGroup_InstalledPostgres:ToggleGroup!
-    
-    @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
-        let path = "/usr/local/bin"
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
-            self.txtLocalDBBinPath.stringValue = postgresCommandPath
-        }else{
-            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_by_homebrew_error.fill(arguments: path)
-            sender.state = .off
-        }
-       
-    }
-    
-    @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
-        let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
-            self.txtLocalDBBinPath.stringValue = postgresCommandPath
-        }else{
-            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_by_postgresapp_error.fill(arguments: path)
-            sender.state = .off
-        }
-    }
-    
     // MARK: - SAVE SETTINGS
     
     
@@ -996,7 +1002,9 @@ final class DatabaseBackupController: NSViewController {
         self.chkDatabaseUseSSL.state = .off
         self.chkDatabaseNoPsw.state = .on
         
+        self.lblDatabaseMessage.stringValue = ""
         self.loadDatabaseProfiles()
+        
     }
     
     
@@ -1032,9 +1040,6 @@ final class DatabaseBackupController: NSViewController {
         self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
         self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
         self.lblDataCloneToDatabase.stringValue = Words.preference_tab_backup_to_database.word()
-        self.lblDataCloneToPgCmdline.stringValue = Words.preference_tab_backup_pg_cmdline.word()
-        self.chkPostgresByBrew.title = Words.preference_tab_backup_installed_by_homebrew.word()
-        self.chkPostgresInApp.title = Words.preference_tab_backup_installed_by_postgresapp.word()
         self.btnDeleteDBArchives.title = Words.preference_tab_backup_delete_backup.word()
         self.btnReloadDBArchives.title = Words.preference_tab_backup_reload_backup.word()
         
@@ -1049,8 +1054,6 @@ final class DatabaseBackupController: NSViewController {
         
         self.chkDeleteAllBeforeClone.state = .on
         self.chkDeleteAllBeforeClone.isEnabled = false
-        
-        self.txtLocalDBBinPath.isEditable = false
         
         self.toggleGroup_InstalledPostgres = ToggleGroup([
             "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
@@ -1098,13 +1101,23 @@ final class DatabaseBackupController: NSViewController {
         
         self.loadBackupArchives(postgres: true)
         
+    }
+    
+    func initEngineSection() {
+        
+        self.lblDataCloneToPgCmdline.stringValue = Words.preference_tab_backup_pg_cmdline.word()
+        self.chkPostgresByBrew.title = Words.preference_tab_backup_installed_by_homebrew.word()
+        self.chkPostgresInApp.title = Words.preference_tab_backup_installed_by_postgresapp.word()
+        
+        self.lblDatabaseEngineMessage.stringValue = ""
+        self.txtLocalDBBinPath.isEditable = false
+        
         if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
             self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
             self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_error.word()
         }
-        
     }
     
     // MARK: VIEW INIT
@@ -1116,6 +1129,7 @@ final class DatabaseBackupController: NSViewController {
         self.setupTabs()
         self.initDatabaseSection()
         self.initBackupSection()
+        self.initEngineSection()
         
     }
     
@@ -1125,6 +1139,8 @@ final class DatabaseBackupController: NSViewController {
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_database.word()
         self.tabs.tabViewItem(at: 1).label = Words.preference_tab_backup.word()
         self.tabs.tabViewItem(at: 2).label = Words.preference_tab_database.word()
+        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_engine.word()
+        self.tabs.tabViewItem(at: 4).label = Words.preference_tab_backup.word()
     }
     
     override var representedObject: Any? {
@@ -1178,11 +1194,24 @@ final class DatabaseBackupController: NSViewController {
         Setting.database.saveDatabaseJson(self.databaseProfilesToJSON())
     }
     
+    var _selectedProfileId = ""
+    
+    func changeSelectedProfileId(profile:DatabaseProfile) {
+        if _selectedProfileId != profile.id() && _selectedProfileId != "" {
+            self.lblDatabaseMessage.stringValue = "You have changed database, would you like a restart?"
+        }
+    }
+    
     func loadDatabaseProfiles() {
         let json = Setting.database.databaseJson()
         print(json)
         let profiles = self.databaseProfilesFromJSON(json).sorted { p1, p2 in
             return p1.id() < p2.id()
+        }
+        if let selectedProfile = profiles.first(where: { p in
+            return p.selected
+        }) {
+            self.changeSelectedProfileId(profile: selectedProfile)
         }
         var dict:[String:DatabaseProfile] = [:]
         for profile in profiles {
@@ -1273,6 +1302,7 @@ final class DatabaseBackupController: NSViewController {
         }
         if let profile = self.databaseProfiles[profile.id()] {
             profile.selected = true
+            self.changeSelectedProfileId(profile: profile)
         }
         self.saveDatabaseProfiles()
     }
@@ -1429,6 +1459,9 @@ final class DatabaseBackupController: NSViewController {
     }
     
     @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
+        if self.txtDatabaseHost.stringValue == "" || self.txtDatabaseName.stringValue == "" {
+            return
+        }
         let profile = self.databaseProfileFromForm()
         self.updateDatabaseProfile(profile: profile)
     }

@@ -1783,7 +1783,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
                                                                             <rect key="frame" x="0.0" y="0.0" width="269" height="127"/>
@@ -1982,14 +1982,14 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YdL-33-14t">
-                                                    <rect key="frame" x="-3" y="6" width="356" height="617"/>
+                                                    <rect key="frame" x="-3" y="6" width="356" height="572"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="UOp-hS-3gF">
-                                                        <rect key="frame" x="0.0" y="0.0" width="341" height="617"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="341" height="572"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I3D-pG-MK4" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="617" width="341" height="0.0"/>
+                                                                <rect key="frame" x="0.0" y="572" width="341" height="0.0"/>
                                                             </stackView>
                                                         </subviews>
                                                         <constraints>
@@ -2003,12 +2003,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="pFd-R3-f7F">
-                                                        <rect key="frame" x="341" y="0.0" width="15" height="617"/>
+                                                        <rect key="frame" x="341" y="0.0" width="15" height="572"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
                                                 <box fixedFrame="YES" title="Profile" translatesAutoresizingMaskIntoConstraints="NO" id="ETz-Dc-dH3">
-                                                    <rect key="frame" x="358" y="366" width="380" height="257"/>
+                                                    <rect key="frame" x="358" y="321" width="380" height="257"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="Quf-zo-vMN">
                                                         <rect key="frame" x="4" y="5" width="372" height="237"/>
@@ -2371,7 +2371,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     </view>
                                                 </box>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtU-rG-Oic">
-                                                    <rect key="frame" x="701" y="613" width="34" height="19"/>
+                                                    <rect key="frame" x="701" y="570" width="34" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PYM-Wa-hnH">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2381,13 +2381,131 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <action selector="onNewDatabaseProfileClicked:" target="ld1-y7-yeS" id="6KH-f3-sG1"/>
                                                     </connections>
                                                 </button>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tJo-tO-ZyN">
+                                                    <rect key="frame" x="120" y="600" width="504" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="500" id="ENR-Za-1K1"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="ynG-ok-isw">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tJo-tO-ZyN" firstAttribute="centerX" secondItem="AS4-EJ-wPx" secondAttribute="centerX" id="5Fa-ov-1Z9"/>
+                                                <constraint firstItem="tJo-tO-ZyN" firstAttribute="top" secondItem="AS4-EJ-wPx" secondAttribute="top" constant="10" id="oKg-b1-6IQ"/>
+                                            </constraints>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Engine" identifier="" id="bWF-pW-RxH">
                                         <view key="view" id="eDl-sf-AxA">
                                             <rect key="frame" x="10" y="33" width="744" height="626"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <box fixedFrame="YES" title="PostgreSQL" translatesAutoresizingMaskIntoConstraints="NO" id="5Yt-8x-Wrt">
+                                                    <rect key="frame" x="16" y="347" width="708" height="260"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="frb-Eb-5hh">
+                                                        <rect key="frame" x="4" y="5" width="700" height="240"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xfT-Za-vRI">
+                                                                <rect key="frame" x="299" y="84" width="170" height="18"/>
+                                                                <buttonCell key="cell" type="check" title="Installed PostgresApp" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="b6G-d3-Xrb">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="168" id="Lt7-5Y-ZvB"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <action selector="onCheckInstallPostgresInApp:" target="ld1-y7-yeS" id="ogi-PK-cYH"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aqb-xW-cQS">
+                                                                <rect key="frame" x="20" y="163" width="660" height="21"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="3dX-on-viR">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T4M-gX-5pc">
+                                                                <rect key="frame" x="18" y="199" width="331" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="327" id="A4H-m3-HZI"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="PostgreSQL command path:" id="psU-9Z-h7x">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RRx-Fb-VF6">
+                                                                <rect key="frame" x="299" y="121" width="170" height="18"/>
+                                                                <buttonCell key="cell" type="check" title="Installed by Homebrew" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zL1-sm-jwk">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="168" id="QEb-zD-hZc"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <action selector="onCheckInstallPostgresByBrew:" target="ld1-y7-yeS" id="OPI-qI-jPL"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fi3-Tw-5bW">
+                                                                <rect key="frame" x="498" y="119" width="172" height="19"/>
+                                                                <buttonCell key="cell" type="roundRect" title="brew install postgresql" bezelStyle="roundedRect" image="NSFollowLinkFreestandingTemplate" imagePosition="left" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QGT-US-CS5">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="cellTitle"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="172" id="jvu-bR-chl"/>
+                                                                </constraints>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Rzu-4C-q9o">
+                                                                <rect key="frame" x="498" y="82" width="172" height="19"/>
+                                                                <buttonCell key="cell" type="roundRect" title="https://postgresapp.com" bezelStyle="roundedRect" image="NSFollowLinkFreestandingTemplate" imagePosition="left" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r8V-Rd-z2f">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="cellTitle"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="172" id="SHm-IC-SJd"/>
+                                                                </constraints>
+                                                            </button>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E8C-IJ-hS4">
+                                                                <rect key="frame" x="20" y="48" width="660" height="16"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="Ffj-Xv-b6K">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="Fi3-Tw-5bW" secondAttribute="trailing" constant="30" id="2SI-RQ-VIR"/>
+                                                            <constraint firstItem="RRx-Fb-VF6" firstAttribute="top" secondItem="aqb-xW-cQS" secondAttribute="bottom" constant="25" id="7Om-IG-gAu"/>
+                                                            <constraint firstAttribute="trailing" secondItem="aqb-xW-cQS" secondAttribute="trailing" constant="20" id="Dyj-KT-S3e"/>
+                                                            <constraint firstItem="Fi3-Tw-5bW" firstAttribute="leading" secondItem="RRx-Fb-VF6" secondAttribute="trailing" constant="29" id="IVV-KK-79s"/>
+                                                            <constraint firstItem="E8C-IJ-hS4" firstAttribute="leading" secondItem="frb-Eb-5hh" secondAttribute="leading" constant="22" id="JEX-TJ-SjE"/>
+                                                            <constraint firstItem="aqb-xW-cQS" firstAttribute="top" secondItem="T4M-gX-5pc" secondAttribute="bottom" constant="15" id="LXl-3U-g8A"/>
+                                                            <constraint firstItem="xfT-Za-vRI" firstAttribute="top" secondItem="RRx-Fb-VF6" secondAttribute="bottom" constant="21" id="QoA-kF-Sti"/>
+                                                            <constraint firstItem="E8C-IJ-hS4" firstAttribute="top" secondItem="xfT-Za-vRI" secondAttribute="bottom" constant="21" id="TNm-XR-y6J"/>
+                                                            <constraint firstItem="aqb-xW-cQS" firstAttribute="leading" secondItem="frb-Eb-5hh" secondAttribute="leading" constant="20" id="U6w-9k-epN"/>
+                                                            <constraint firstItem="T4M-gX-5pc" firstAttribute="top" secondItem="frb-Eb-5hh" secondAttribute="top" constant="25" id="YPs-YG-PQV"/>
+                                                            <constraint firstItem="Rzu-4C-q9o" firstAttribute="leading" secondItem="xfT-Za-vRI" secondAttribute="trailing" constant="29" id="e5l-59-Ly0"/>
+                                                            <constraint firstItem="T4M-gX-5pc" firstAttribute="leading" secondItem="frb-Eb-5hh" secondAttribute="leading" constant="20" symbolic="YES" id="kkD-mj-C82"/>
+                                                            <constraint firstItem="Fi3-Tw-5bW" firstAttribute="top" secondItem="aqb-xW-cQS" secondAttribute="bottom" constant="25" id="oGb-2d-gDW"/>
+                                                            <constraint firstItem="Rzu-4C-q9o" firstAttribute="top" secondItem="Fi3-Tw-5bW" secondAttribute="bottom" constant="19" id="sgj-Ka-oJe"/>
+                                                            <constraint firstAttribute="trailing" secondItem="E8C-IJ-hS4" secondAttribute="trailing" constant="22" id="uW6-7q-aSV"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Rzu-4C-q9o" secondAttribute="trailing" constant="30" id="yDg-or-h06"/>
+                                                        </constraints>
+                                                    </view>
+                                                </box>
+                                            </subviews>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Backup" identifier="" id="P71-V1-UnZ">
@@ -2446,8 +2564,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="chkLocalDBServer" destination="Jvh-V6-Q0t" id="EYO-4z-hhG"/>
                         <outlet property="chkLocalLocation" destination="tIl-8e-ihe" id="5Cg-9Y-i3z"/>
                         <outlet property="chkNetworkLocation" destination="aIp-OP-C38" id="Qtu-oQ-pKz"/>
-                        <outlet property="chkPostgresByBrew" destination="U3p-1M-iFH" id="AqE-bf-y2y"/>
-                        <outlet property="chkPostgresInApp" destination="RF5-kj-Fdz" id="rCh-4M-iZp"/>
+                        <outlet property="chkPostgresByBrew" destination="RRx-Fb-VF6" id="seX-b2-8Ls"/>
+                        <outlet property="chkPostgresInApp" destination="xfT-Za-vRI" id="efJ-bf-b3Q"/>
                         <outlet property="chkRemoteDBNoPassword" destination="bTL-Qq-lff" id="FVz-MB-b2P"/>
                         <outlet property="chkToLocalDBFile" destination="eJc-Jw-Plk" id="JFv-6q-rb4"/>
                         <outlet property="chkToLocalDBServer" destination="PdS-0v-Ccz" id="2dG-Z6-HZB"/>
@@ -2462,10 +2580,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="lblDataCloneMessage" destination="R9F-1u-QrQ" id="Ccd-iw-wzh"/>
                         <outlet property="lblDataCloneTo" destination="Cyi-ws-5zG" id="8ec-cA-aDc"/>
                         <outlet property="lblDataCloneToDatabase" destination="S1V-CZ-5Ye" id="kaE-be-bY8"/>
-                        <outlet property="lblDataCloneToPgCmdline" destination="Qhy-VL-vZc" id="BUB-ss-AQT"/>
+                        <outlet property="lblDataCloneToPgCmdline" destination="T4M-gX-5pc" id="A0l-wC-KWt"/>
                         <outlet property="lblDatabaseBackupPath" destination="iO2-M1-Omx" id="ZYW-Nl-4hN"/>
                         <outlet property="lblDatabaseEngine" destination="TCu-bL-3mq" id="9ls-Sn-6Je"/>
+                        <outlet property="lblDatabaseEngineMessage" destination="E8C-IJ-hS4" id="3Ib-IJ-RO0"/>
                         <outlet property="lblDatabaseHost" destination="YLE-Sz-5yY" id="hZK-BX-GdW"/>
+                        <outlet property="lblDatabaseMessage" destination="tJo-tO-ZyN" id="sna-hU-vwt"/>
                         <outlet property="lblDatabaseName" destination="9KC-L0-4HL" id="Mjv-st-0KH"/>
                         <outlet property="lblDatabaseNoPsw" destination="ijB-hL-GWs" id="aBH-dU-6YO"/>
                         <outlet property="lblDatabasePassword" destination="d1l-D2-Rfg" id="MBd-AG-yI1"/>
@@ -2500,7 +2620,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="txtDatabasePort" destination="NSF-H6-ZOW" id="BGa-I6-SsJ"/>
                         <outlet property="txtDatabaseSchema" destination="Kac-E0-ywC" id="vI9-DO-0hN"/>
                         <outlet property="txtDatabaseUsername" destination="hdf-G8-qnw" id="E4N-Z4-8vR"/>
-                        <outlet property="txtLocalDBBinPath" destination="VxA-nh-cKd" id="fRx-jS-cdr"/>
+                        <outlet property="txtLocalDBBinPath" destination="aqb-xW-cQS" id="O6D-RA-m3V"/>
                         <outlet property="txtLocalDBDatabase" destination="acw-JH-guN" id="YdX-e0-d8E"/>
                         <outlet property="txtLocalDBFilePath" destination="f7U-ZI-Phh" id="tRU-1Q-pEh"/>
                         <outlet property="txtLocalDBPassword" destination="Zva-Fr-MSg" id="hFf-Hn-RLC"/>

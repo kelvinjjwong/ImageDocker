@@ -190,6 +190,11 @@ extension Words {
         chs: "打开"
     )
     
+    static let preference_tab_engine = Localize(
+        eng: "Engine",
+        chs: "数据引擎"
+    )
+    
     static let preference_tab_backup = Localize(
         eng: "Backup",
         chs: "备份"
