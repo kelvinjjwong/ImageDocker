@@ -1138,9 +1138,7 @@ final class DatabaseBackupController: NSViewController {
         self.btnSaveDatabase.title = Words.apply.word()
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_database.word()
         self.tabs.tabViewItem(at: 1).label = Words.preference_tab_backup.word()
-        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_database.word()
-        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_engine.word()
-        self.tabs.tabViewItem(at: 4).label = Words.preference_tab_backup.word()
+        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_engine.word()
     }
     
     override var representedObject: Any? {
