@@ -169,6 +169,14 @@ final class DatabaseBackupController: NSViewController {
             self.txtLocalDBPassword.isEditable = true
         }
         
+        self.toggleGroup_DBLocation = ToggleGroup([
+//            "local"       : self.chkLocalLocation,
+            "localServer" : self.chkLocalDBServer,
+            "network"     : self.chkNetworkLocation
+        ], keysOrderred: ["local", "localServer", "network"])
+        
+        self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
+        
         self.chkDatabaseMysql.state = .off
         self.chkDatabasePostgresql.state = .on
         self.chkDatabaseUseSSL.state = .off
@@ -895,11 +903,19 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.lblDatabaseEngineMessage.stringValue = ""
         self.txtLocalDBBinPath.isEditable = false
         
+        self.toggleGroup_InstalledPostgres = ToggleGroup([
+            "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
+            "/usr/local/bin"                                          : self.chkPostgresByBrew
+        ], keysOrderred: [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+            ])
+        
         if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
             self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
-            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_error.word()
+            self.lblBackupMessage.stringValue = Words.preference_tab_backup_installed_error.word()
         }
     }
     
@@ -942,9 +958,13 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
     @IBOutlet weak var boxDataClone: NSBox!
     @IBOutlet weak var boxBackupDestination: NSBox!
     
+    @IBOutlet weak var lblBackupMessage: NSTextField!
+    
+    
     @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
     @IBOutlet weak var btnBackupNow: NSButton!
+    @IBOutlet weak var btnCloneLocalToRemote: NSButton!
     @IBOutlet weak var btnCalculateBackupDiskSpace: NSButton!
     @IBOutlet weak var btnGotoDBBackupPath: NSButton!
     
@@ -958,7 +978,6 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
     @IBOutlet weak var chkToLocalDBFile: NSButton!
     @IBOutlet weak var chkToLocalDBServer: NSButton!
     @IBOutlet weak var chkToRemoteDBServer: NSButton!
-    @IBOutlet weak var btnCloneLocalToRemote: NSButton!
     @IBOutlet weak var lblDataCloneMessage: NSTextField!
     
     
@@ -1016,13 +1035,6 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.lblDataCloneTo.stringValue = Words.preference_tab_backup_to.word()
         self.chkDeleteAllBeforeClone.title = Words.preference_tab_backup_delete_original_data.word()
         self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
-        self.chkFromLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
-        self.chkFromLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
-        self.chkFromRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
-        self.chkFromBackupArchive.title = Words.preference_tab_backup_restore_from_backup.word()
-        self.chkToLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
-        self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
-        self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
         self.lblDataCloneToDatabase.stringValue = Words.preference_tab_backup_to_database.word()
         self.btnDeleteDBArchives.title = Words.preference_tab_backup_delete_backup.word()
         self.btnReloadDBArchives.title = Words.preference_tab_backup_reload_backup.word()
@@ -1032,27 +1044,22 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.tblDatabaseArchives.dataSource = self
         self.tblDatabaseArchives.allowsMultipleSelection = true
         
-        self.btnCreateDatabase.isHidden = true
         
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
         
         self.chkDeleteAllBeforeClone.state = .on
         self.chkDeleteAllBeforeClone.isEnabled = false
         
-        self.toggleGroup_InstalledPostgres = ToggleGroup([
-            "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
-            "/usr/local/bin"                                          : self.chkPostgresByBrew
-        ], keysOrderred: [
-            "/Applications/Postgres.app/Contents/Versions/latest/bin",
-            "/usr/local/bin"
-            ])
         
-        self.toggleGroup_DBLocation = ToggleGroup([
-//            "local"       : self.chkLocalLocation,
-            "localServer" : self.chkLocalDBServer,
-            "network"     : self.chkNetworkLocation
-        ], keysOrderred: ["local", "localServer", "network"])
-        
+        // ---------------
+        self.chkFromLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkFromLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkFromRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.chkFromBackupArchive.title = Words.preference_tab_backup_restore_from_backup.word()
+        self.chkToLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.btnCreateDatabase.isHidden = true
         self.toggleGroup_CloneFromDBLocation = ToggleGroup([
 //            "localDBFile"   :self.chkFromLocalDBFile,
             "localDBServer" :self.chkFromLocalDBServer,
@@ -1072,8 +1079,6 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                     self.txtRestoreToDatabaseName.stringValue = Setting.database.remotePostgres.database()
                 }
         })
-        
-        self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
         self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
         self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
             if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
@@ -1082,10 +1087,39 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         })
         self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
         self.toggleCreatePostgresDatabase(state: true)
+        // ---------------
         
+        self.backupSourceDatabaseProfile = nil
+        self.backupDestinationDatabaseProfile = nil
+        
+        self.changeBackupNowButtonState()
         self.loadBackupArchives(postgres: true)
         self.loadBackupDatabaseProfiles()
         self.calculateBackupUsedSpace(path: URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path)
+    }
+    
+    func changeBackupNowButtonState() {
+        self.btnCloneLocalToRemote.isEnabled = false
+        self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
+        if let source = self.backupSourceDatabaseProfile, let target = self.backupDestinationDatabaseProfile {
+            if source.engine.lowercased() == "archive" && target.engine.lowercased() == "archive" {
+                self.btnCloneLocalToRemote.isEnabled = false
+            }else if self.lblBackupSourceStatus1.stringValue == "Connectable" && self.lblBackupDestinationStatus1.stringValue == "Connectable" {
+                self.btnCloneLocalToRemote.isEnabled = true
+            }else if target.database == "ImageDocker.backup.gz" && self.lblBackupSourceStatus1.stringValue == "Connectable" {
+                self.btnCloneLocalToRemote.isEnabled = true
+            }else{
+                self.btnCloneLocalToRemote.isEnabled = false
+            }
+            if source.engine.lowercased() == "archive" {
+                self.btnCloneLocalToRemote.title = Words.preference_tab_backup_restore_now.word()
+            }
+            if target.engine.lowercased() == "archive" {
+                self.btnCloneLocalToRemote.title = Words.preference_tab_database_backup_now.word()
+            }
+        }else{
+            self.btnCloneLocalToRemote.isEnabled = false
+        }
     }
     
     func loadBackupDatabaseProfiles() {
@@ -1206,6 +1240,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
             }
             self.checkBackupDatabaseVersion(profile: profile, isSource: false)
         }
+        self.changeBackupNowButtonState()
     }
     
     @IBAction func onNewBackupArchiveClicked(_ sender: NSButton) {
@@ -1223,6 +1258,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.lblBackupDestinationStatus1.stringValue = ""
         self.lblBackupDestinationStatus2.stringValue = ""
         
+        self.changeBackupNowButtonState()
     }
     
     func selectBackupArchiveAsSource(archive:(String, String, String, String)) {
@@ -1239,6 +1275,8 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.lblBackupSourceContent3.stringValue = ""
         
         self.checkBackupDatabaseVersion(profile: profile, isSource: true)
+        
+        self.changeBackupNowButtonState()
     }
     
     func checkBackupDatabaseVersion(profile:DatabaseProfile, isSource:Bool) {
@@ -1268,6 +1306,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             self.lblBackupDestinationStatus1.stringValue = "Connectable"
                             self.lblBackupDestinationStatus1.textColor = Colors.Green
                         }
+                        self.changeBackupNowButtonState()
                     }
                     let schemaVersion = self.checkSchemaVersion(profile: profile)
                     
@@ -1278,6 +1317,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             }else{
                                 self.lblBackupDestinationContent3.stringValue = schemaVersion
                             }
+                            self.changeBackupNowButtonState()
                         }
                     }else if schemaVersion.starts(with: "error_"){
                         DispatchQueue.main.async {
@@ -1286,6 +1326,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             }else{
                                 self.lblBackupDestinationContent3.stringValue = "数据库错误"
                             }
+                            self.changeBackupNowButtonState()
                         }
                     }else{
                         DispatchQueue.main.async {
@@ -1294,6 +1335,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             }else{
                                 self.lblBackupDestinationContent3.stringValue = Words.preference_tab_backup_no_schema.word()
                             }
+                            self.changeBackupNowButtonState()
                         }
                     }
                     
@@ -1339,6 +1381,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             self.lblBackupDestinationStatus1.stringValue = "Connectable"
                             self.lblBackupDestinationStatus1.textColor = Colors.Green
                         }
+                        self.changeBackupNowButtonState()
                     }
                 }else{
                     DispatchQueue.main.async {
@@ -1351,6 +1394,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                             self.lblBackupDestinationStatus1.stringValue = "Unreachable"
                             self.lblBackupDestinationStatus1.textColor = Colors.Red
                         }
+                        self.changeBackupNowButtonState()
                     }
                 }
             }
@@ -1383,27 +1427,24 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         }
     }
     
-    @IBAction func onBackupNowClicked(_ sender: NSButton) {
-        // TODO: SAVE ALL FIELDS BEFORE START BACKUP
+    func backupNow(profile:DatabaseProfile) {
         self.btnBackupNow.isEnabled = false
         self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_creating_backup.word()
         DispatchQueue.global().async {
-            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(suffix: "-on-runtime")
+            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(profile: profile, suffix: "-on-runtime")
             DispatchQueue.main.async {
                 self.btnBackupNow.isEnabled = true
                 if status == false {
-                    self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
+                    self.lblBackupMessage.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
                 }else{
-                    self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
+                    self.lblBackupMessage.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
+                self.toggleDatabaseClonerButtons(state: true)
             }
         }
     }
     
-    
-    
-    @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
-        // TODO: SAVE ALL FIELDS BEFORE START CLONE
+    func cloneNow() {
         let dropBeforeCreate = self.chkDeleteAllBeforeClone.state == .on
         
         self.scrDatabaseArchives.layer?.borderColor = NSColor.clear.cgColor
@@ -1412,18 +1453,18 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
         self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.clear.cgColor
         self.txtRestoreToDatabaseName.layer?.borderWidth = 0.0
         
-        self.lblDataCloneMessage.stringValue = ""
+        self.lblBackupMessage.stringValue = ""
         
          // TODO: avoid select both from-sqlite and to-sqlite
         if self.toggleGroup_CloneFromDBLocation.selected == "backupArchive" {
             guard self.tblDatabaseArchives.numberOfSelectedRows == 1 else {
                 self.scrDatabaseArchives.layer?.borderColor = NSColor.red.cgColor
                 self.scrDatabaseArchives.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_one_row_should_be_selected.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_one_row_should_be_selected.word()
                 return
             }
             guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1440,7 +1481,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                    || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             let row = self.tblDatabaseArchives.selectedRow
@@ -1463,16 +1504,16 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                 user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_backup_restoring_archive_to_remote_postgres.fill(arguments: "\(timestamp)", "\(database)")
             }else{
-                self.lblDataCloneMessage.stringValue = "TODO: from backup archive to sqlite"
+                self.lblBackupMessage.stringValue = "TODO: from backup archive to sqlite"
                 return
             }
             self.toggleDatabaseClonerButtons(state: false)
-            self.lblDataCloneMessage.stringValue = message
+            self.lblBackupMessage.stringValue = message
             DispatchQueue.global().async {
                 let (_, _) = PostgresConnection.default.restoreDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupFolder: folder)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_restore_archive_completed.fill(arguments: "\(timestamp)", "\(database)")
+                    self.lblBackupMessage.stringValue = Words.preference_tab_backup_restore_archive_completed.fill(arguments: "\(timestamp)", "\(database)")
                 }
             }
             
@@ -1513,26 +1554,26 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                 databaseProfile.database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             self.toggleDatabaseClonerButtons(state: false)
-            self.lblDataCloneMessage.stringValue = message
+            self.lblBackupMessage.stringValue = message
             DispatchQueue.global().async {
                 ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
                     postgresDB: { () -> PostgresDB in
                         return PostgresConnection.database(databaseProfile: databaseProfile)
                 }, message: { msg in
                     DispatchQueue.main.async {
-                        self.lblDataCloneMessage.stringValue = msg
+                        self.lblBackupMessage.stringValue = msg
                     }
                 }, onComplete: {
                     DispatchQueue.main.async {
                         self.toggleDatabaseClonerButtons(state: true)
-                        self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_completed.word()
+                        self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_completed.word()
                     }
                 })
             }
         }else if self.toggleGroup_CloneFromDBLocation.selected == "localDBServer" {
             
             guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1549,7 +1590,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                    || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             var host = ""
@@ -1567,11 +1608,11 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                 user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_data_clone_from_local_postgres_to_remote_postgres.word()
             }else{
-                self.lblDataCloneMessage.stringValue = "TODO from local postgres to sqlite"
+                self.lblBackupMessage.stringValue = "TODO from local postgres to sqlite"
                 return
             }
             self.toggleDatabaseClonerButtons(state: false)
-            self.lblDataCloneMessage.stringValue = message
+            self.lblBackupMessage.stringValue = message
             DispatchQueue.global().async {
                 let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
                                                                       srcDatabase: Setting.database.localPostgres.database(),
@@ -1584,13 +1625,13 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                                                                       destUser: user)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_from_local_postgres_completed.fill(arguments: "\(database)")
+                    self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_from_local_postgres_completed.fill(arguments: "\(database)")
                 }
             }
         }else if self.toggleGroup_CloneFromDBLocation.selected == "remoteDBServer" {
             
             guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1607,7 +1648,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                    || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
+                self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             var host = ""
@@ -1625,11 +1666,11 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                 user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_data_clone_from_remote_postgres_to_remote_postgres.word()
             }else{
-                self.lblDataCloneMessage.stringValue = "TODO from remote postgres to sqlite"
+                self.lblBackupMessage.stringValue = "TODO from remote postgres to sqlite"
                 return
             }
             self.toggleDatabaseClonerButtons(state: false)
-            self.lblDataCloneMessage.stringValue = message
+            self.lblBackupMessage.stringValue = message
             DispatchQueue.global().async {
                 let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
                                                                       srcDatabase: Setting.database.remotePostgres.database(),
@@ -1642,13 +1683,40 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                                                                       destUser: user)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_from_remote_postgres_completed.fill(arguments: "\(database)")
+                    self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_from_remote_postgres_completed.fill(arguments: "\(database)")
                 }
             }
         }else{
             // more options?
         }
+    }
+    
+    func restoreNow() {
         
+    }
+    
+    @IBAction func onBackupNowClicked(_ sender: NSButton) {
+        // TODO: SAVE ALL FIELDS BEFORE START BACKUP
+        
+    }
+    
+    
+    
+    @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
+        // TODO: SAVE ALL FIELDS BEFORE START CLONE
+        if !self.btnCloneLocalToRemote.isEnabled {
+            return
+        }
+        if let source = self.backupSourceDatabaseProfile, let target = self.backupDestinationDatabaseProfile {
+            self.toggleDatabaseClonerButtons(state: false)
+            if self.btnCloneLocalToRemote.title == Words.preference_tab_database_backup_now.word() {
+                self.backupNow(profile: source)
+            }else if self.btnCloneLocalToRemote.title == Words.preference_tab_backup_restore_now.word() {
+                self.restoreNow()
+            }else{
+                self.cloneNow()
+            }
+        }
     }
     
     // MARK: TOGGLE GROUP - CLONE FROM DB

@@ -8,6 +8,7 @@
 
 import Foundation
 import LoggerFactory
+import PostgresModelFactory
 
 struct ExecutionEnvironment {
     
@@ -323,6 +324,22 @@ pip3 install face_recognition
             return self.createPostgresDatabaseBackup(suffix: suffix)
         }else if (location == .fromSetting && Setting.database.databaseLocation() == "network") || location == .remoteDBServer {
             return self.createPostgresDatabaseBackup(suffix: suffix)
+        }else{
+            self.logger.log(.trace, "Database location error. backup aborted.")
+            return ("", false, nil)
+        }
+    }
+    
+    func createDatabaseBackup(profile:DatabaseProfile, suffix:String) -> (String, Bool, Error?) {
+        if profile.engine.lowercased() == "postgresql" {
+            guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
+                self.logger.log(.error, "Unable to locate pg_dump command in macOS, backup aborted.")
+                return ("", false, nil)
+            }
+            
+            let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+            
+            return PostgresConnection.default.backupDatabase(commandPath: cmd, database: profile.database, host: profile.host, port: profile.port, user: profile.user, backupPath: backupPath, suffix: suffix)
         }else{
             self.logger.log(.trace, "Database location error. backup aborted.")
             return ("", false, nil)

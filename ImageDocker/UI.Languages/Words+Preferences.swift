@@ -235,6 +235,11 @@ extension Words {
         chs: "立即复制"
     )
     
+    static let preference_tab_backup_restore_now = Localize(
+        eng: "Restore Now",
+        chs: "立即还原"
+    )
+    
     static let preference_tab_backup_create_db = Localize(
         eng: "Create DB",
         chs: "新建数据库"
