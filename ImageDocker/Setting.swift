@@ -93,6 +93,8 @@ struct DatabaseSetting {
     
     // MARK: DATABASE
     
+    fileprivate let databaseJsonKey = "DatabaseJsonKey"
+    
     fileprivate let databaseLocationKey = "DatabaseLocationKey"
     
     fileprivate static let remoteDBServerKey = "RemoteDBServer"
@@ -159,6 +161,18 @@ struct DatabaseSetting {
             }
         }
         return (location, dbEngine, server, dbName)
+    }
+    
+    
+    
+    func databaseJson() -> String {
+        let defaults = UserDefaults.standard
+        return defaults.string(forKey: databaseJsonKey) ?? ""
+    }
+    
+    func saveDatabaseJson(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: databaseJsonKey)
     }
 }
 

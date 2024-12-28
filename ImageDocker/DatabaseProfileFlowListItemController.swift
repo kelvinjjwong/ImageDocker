@@ -18,10 +18,10 @@ class DatabaseProfileFlowListItemController : NSViewController {
     @IBOutlet weak var checkbox: NSButton!
     @IBOutlet weak var btnEdit: NSButton!
     @IBOutlet weak var btnDelete: NSButton!
+    @IBOutlet weak var lblContent2: NSTextField!
     
     var status1 = ""
     var status2 = ""
-    var checkState = false
     
     var data:DatabaseProfile?
     var onSelect:(() -> Void)?
@@ -41,10 +41,15 @@ class DatabaseProfileFlowListItemController : NSViewController {
         super.viewDidLoad()
         view.wantsLayer = true
         
-        self.lblContent.stringValue = "\(self.data?.database ?? "") @ \(self.data?.host ?? "")"
+        self.reloadControls()
+    }
+    
+    func reloadControls() {
+        self.lblContent2.stringValue = "\(self.data?.user ?? ""):\(self.data?.database ?? "")/\(self.data?.schema ?? "")"
+        self.lblContent.stringValue = "\(self.data?.host ?? ""):\(self.data?.port ?? -9999) \(self.data?.ssl ?? false ? "(ssl)" : "")"
         self.lblStatus1.stringValue = status1
         self.lblStatus2.stringValue = status2
-        self.checkbox.state = checkState ? .on : .off
+        self.checkbox.state = (self.data?.selected ?? false) ? .on : .off
         
         switch(self.data?.engine.lowercased() ?? "") {
             case "postgresql":
@@ -57,9 +62,16 @@ class DatabaseProfileFlowListItemController : NSViewController {
                 break
         }
         
+        if status1.starts(with: "Un") {
+            self.lblStatus1.textColor = Colors.Red
+        }else if status1 == "Connectable" {
+            self.lblStatus1.textColor = Colors.Green
+        }else{
+            self.lblStatus1.textColor = Colors.White
+        }
     }
     
-    func initView(databaseProfile:DatabaseProfile, status1:String = "", status2:String = "", checkState:Bool = false,
+    func initView(databaseProfile:DatabaseProfile, status1:String = "", status2:String = "",
                   onSelect:(() -> Void)? = nil,
                   onEdit:(() -> Void)? = nil,
                   onDelete:(() -> Void)? = nil) {
@@ -67,10 +79,38 @@ class DatabaseProfileFlowListItemController : NSViewController {
 //        self.imageView.image = nsImage
         self.status1 = status1
         self.status2 = status2
-        self.checkState = checkState
         self.onSelect = onSelect
         self.onEdit = onEdit
         self.onDelete = onDelete
+    }
+    
+    func updateFields(databaseProfile:DatabaseProfile) {
+        self.data = databaseProfile
+        self.reloadControls()
+    }
+    
+    func updateStatus1(_ value:String) {
+        self.status1 = value
+        self.reloadControls()
+    }
+    
+    func updateStatus2(_ value:String) {
+        self.status2 = value
+        self.reloadControls()
+    }
+    
+    func select() {
+        self.checkbox.state = .on
+        self.data?.selected = true
+    }
+    
+    func unselect() {
+        self.checkbox.state = .off
+        self.data?.selected = false
+    }
+    
+    func isConnectable() -> Bool {
+        return self.lblStatus1.stringValue == "Connectable"
     }
     
     @IBAction func onSelectClicked(_ sender: NSButton) {

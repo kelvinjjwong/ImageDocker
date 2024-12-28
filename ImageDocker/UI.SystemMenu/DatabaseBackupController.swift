@@ -9,6 +9,7 @@
 import Cocoa
 import LoggerFactory
 import PostgresModelFactory
+import CryptoSwift
 
 final class DatabaseBackupController: NSViewController {
     
@@ -81,6 +82,7 @@ final class DatabaseBackupController: NSViewController {
     
     @IBOutlet weak var databaseProfilesStackView: NSStackView!
     var databaseProfileFlowListItems:[String:DatabaseProfileFlowListItemController] = [:]
+    var databaseProfiles:[String:DatabaseProfile] = [:]
     
     @IBOutlet weak var boxDatabaseProfile: NSBox!
     @IBOutlet weak var btnNewDatabaseProfile: NSButton!
@@ -106,6 +108,8 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var btnSaveDatabaseProfile: NSButton!
     @IBOutlet weak var btnClearDatabaseProfile: NSButton!
     @IBOutlet weak var txtDatabasePassword: DSFSecureTextField!
+    @IBOutlet weak var lblDatabaseTimeout: NSTextField!
+    @IBOutlet weak var lstDatabaseTimeout: NSComboBox!
     
     
     
@@ -987,7 +991,12 @@ final class DatabaseBackupController: NSViewController {
             self.txtLocalDBPassword.isEditable = true
         }
         
-        self.addDatabaseProfile()
+        self.chkDatabaseMysql.state = .off
+        self.chkDatabasePostgresql.state = .on
+        self.chkDatabaseUseSSL.state = .off
+        self.chkDatabaseNoPsw.state = .on
+        
+        self.loadDatabaseProfiles()
     }
     
     
@@ -1165,36 +1174,217 @@ final class DatabaseBackupController: NSViewController {
     var shouldLoadPostgresBackupArchives = true
     
     
+    func saveDatabaseProfiles() {
+        Setting.database.saveDatabaseJson(self.databaseProfilesToJSON())
+    }
     
-    func addDatabaseProfile() {
-        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+    func loadDatabaseProfiles() {
+        let json = Setting.database.databaseJson()
+        print(json)
+        let profiles = self.databaseProfilesFromJSON(json).sorted { p1, p2 in
+            return p1.id() < p2.id()
+        }
+        var dict:[String:DatabaseProfile] = [:]
+        for profile in profiles {
+            dict[profile.id()] = profile
+        }
+        self.databaseProfiles = dict
+        
+        for profile in profiles {
+            self.updateDatabaseProfile(profile: profile)
+            
+            
+        }
+        
+        if self.databaseProfileFlowListItems.count == 0 {
+            self.addEmptyDatabaseProfile()
+        }
+    }
+    
+    
+    
+    public func databaseProfilesToJSON() -> String {
+        let array = self.databaseProfiles.values.map { dp in
+            return dp
+        }
+        let jsonEncoder = JSONEncoder()
+        do {
+            let jsonData = try jsonEncoder.encode(array)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            return json ?? "{}"
+        }catch{
+            print(error)
+            return "{}"
+        }
+    }
+    
+    public func databaseProfilesFromJSON(_ jsonString:String) -> [DatabaseProfile]{
+        let jsonDecoder = JSONDecoder()
+        do{
+            return try jsonDecoder.decode([DatabaseProfile].self, from: jsonString.data(using: .utf8)!)
+        }catch{
+            print(error)
+            return []
+        }
+    }
+    
+    func addEmptyDatabaseProfile() {
         let profile = DatabaseProfile()
         profile.host = "127.0.0.1"
         profile.database = "ImageDocker"
-        profile.engine = "postgresql"
+        profile.engine = "PostgreSQL"
         profile.port = 5432
         profile.schema = "public"
-        profile.user = "public"
+        profile.user = "postgres"
         profile.nopsw = true
         profile.ssl = false
         profile.selected = true
+        self.updateDatabaseProfile(profile: profile)
+    }
+    
+    func updateDatabaseProfile(profile:DatabaseProfile) {
+        if let viewController = self.databaseProfileFlowListItems[profile.id()] {
+            viewController.updateFields(databaseProfile: profile)
+            self.databaseProfiles[profile.id()] = profile
+        }else{
+            self.addDatabaseProfile(profile: profile)
+        }
+        self.saveDatabaseProfiles()
+        self.checkDatabaseVersion(profile: profile)
+    }
+    
+    func selectDatabaseProfile(profile:DatabaseProfile) {
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            if !vc.isConnectable() {
+                vc.unselect()
+                return
+            }
+        }else{
+            return
+        }
+        for vc in self.databaseProfileFlowListItems.values {
+            vc.unselect()
+        }
+        for profile in self.databaseProfiles.values {
+            profile.selected = false
+        }
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            vc.select()
+        }
+        if let profile = self.databaseProfiles[profile.id()] {
+            profile.selected = true
+        }
+        self.saveDatabaseProfiles()
+    }
+    
+    func deleteDatabaseProfile(profile:DatabaseProfile) {
+        if profile.selected {
+            return
+        }
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeValue(forKey: profile.id())
+        self.databaseProfiles.removeValue(forKey: profile.id())
+        
+        self.saveDatabaseProfiles()
+        
+        if self.databaseProfileFlowListItems.count == 0 {
+            self.addEmptyDatabaseProfile()
+        }
+    }
+    
+    func checkDatabaseVersion(profile:DatabaseProfile) {
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            vc.updateStatus2("")
+            vc.updateStatus1("Connecting...")
+        }
+        if profile.engine.lowercased() == "postgresql" {
+            DispatchQueue.global().async {
+                let rtn = self.checkPostgreSQLVersion(profile: profile)
+                if rtn.starts(with: "PostgreSQL") {
+                    let parts = rtn.components(separatedBy: " ")
+                    let version = parts[1]
+                    
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2(version)
+                            vc.updateStatus1("Connectable")
+                        }
+                    }
+                }else if rtn.contains(find: "socketError") {
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2("")
+                            vc.updateStatus1("Unreachable")
+                        }
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2("")
+                            vc.updateStatus1("Unauthorized")
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    func checkPostgreSQLVersion(profile:DatabaseProfile) -> String {
+        let db = Database(profile: profile)
+        do {
+            try db.connect()
+            return try db.version()
+        }catch{
+            return "\(error)"
+        }
+    }
+    
+    func addDatabaseProfile(profile:DatabaseProfile) {
+        if self.databaseProfileFlowListItems[profile.id()] != nil {
+            return
+        }
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        
+        self.databaseProfiles[profile.id()] = profile
         viewController.initView(databaseProfile: profile,
         onSelect: {
-            // onSelect
-            print("click select")
-            
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.selectDatabaseProfile(profile: profile)
+            }
         }, onEdit: {
-            print("click edit")
-            self.databaseProfileToForm(profile: profile)
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.databaseProfileToForm(profile: profile)
+                self.loadDatabaseProfiles()
+            }
         }, onDelete: {
-            print("click delete")
-            
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.deleteDatabaseProfile(profile: profile)
+            }
         })
 
         self.databaseProfilesStackView.addArrangedSubview(viewController.view)
         self.databaseProfileFlowListItems[profile.id()] = viewController
         //addChildViewController(viewController)
+    }
+    
+    func databaseProfileFromForm() -> DatabaseProfile {
+        let profile = DatabaseProfile()
+        profile.engine = self.chkDatabasePostgresql.state == .on ? "PostgreSQL" : "MySQL"
+        profile.host = self.txtDatabaseHost.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.port = self.txtDatabasePort.integerValue
+        profile.database = self.txtDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.schema = self.txtDatabaseSchema.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.user = self.txtDatabaseUsername.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.password =  self.txtDatabasePassword.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.ssl = self.chkDatabaseUseSSL.state == .on
+        profile.nopsw = self.chkDatabaseNoPsw.state == .on
+        profile.socketTimeoutInSeconds = self.lstDatabaseTimeout.integerValue
+        return profile
     }
     
     func databaseProfileToForm(profile:DatabaseProfile) {
@@ -1219,37 +1409,42 @@ final class DatabaseBackupController: NSViewController {
         default:
             break
         }
+        
+        self.lstDatabaseTimeout.integerValue = profile.socketTimeoutInSeconds
     }
     
     @IBAction func onNewDatabaseProfileClicked(_ sender: NSButton) {
-        print("click new")
         let profile = DatabaseProfile()
         profile.host = "127.0.0.1"
         profile.database = "ImageDocker"
-        profile.engine = "postgresql"
+        profile.engine = "PostgreSQL"
         profile.port = 5432
         profile.schema = "public"
-        profile.user = "public"
+        profile.user = "postgres"
         profile.nopsw = true
         profile.ssl = false
-        profile.selected = true
+        profile.selected = false
+        profile.socketTimeoutInSeconds = 10
         self.databaseProfileToForm(profile: profile)
     }
     
     @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
+        let profile = self.databaseProfileFromForm()
+        self.updateDatabaseProfile(profile: profile)
     }
     
     @IBAction func onClearDatabaseProfileClicked(_ sender: NSButton) {
         let profile = DatabaseProfile()
         profile.host = "127.0.0.1"
         profile.database = "ImageDocker"
-        profile.engine = "postgresql"
+        profile.engine = "PostgreSQL"
         profile.port = 5432
         profile.schema = "public"
-        profile.user = "public"
+        profile.user = "postgres"
         profile.nopsw = true
         profile.ssl = false
-        profile.selected = true
+        profile.selected = false
+        profile.socketTimeoutInSeconds = 10
         self.databaseProfileToForm(profile: profile)
     }
     
