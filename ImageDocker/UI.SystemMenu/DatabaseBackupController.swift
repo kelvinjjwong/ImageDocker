@@ -16,10 +16,36 @@ final class DatabaseBackupController: NSViewController {
     let logger = LoggerFactory.get(category: "DatabaseBackupController")
     
     
+    // MARK: - VIEW INIT
     @IBOutlet weak var tabs: NSTabView!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = Words.database_backup_dialog_title.word()
+        // Do any additional setup after loading the view.
+        self.setupTabs()
+        self.initDatabaseSection()
+        self.initBackupSection()
+        self.initEngineSection()
+        
+    }
     
-    // MARK: DATABASE
+    func setupTabs() {
+        self.view.window?.title = Words.mainmenu_database_and_backup.word()
+        self.btnSaveDatabase.title = Words.apply.word()
+        self.tabs.tabViewItem(at: 0).label = Words.preference_tab_database.word()
+        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_backup.word()
+        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_engine.word()
+    }
+    
+    override var representedObject: Any? {
+        didSet {
+            // Update the view, if already loaded.
+        }
+    }
+    
+    
+    // MARK: - DATABASE
     
     
     @IBOutlet weak var btnSaveDatabase: NSButton!
@@ -77,132 +103,112 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var btnRemoteDBServerBackup: NSButton!
     @IBOutlet weak var lblRemoteDBServerMessage: NSTextField!
     
-    // MARK: DATABASE PROFILES
     
-    
-    @IBOutlet weak var databaseProfilesStackView: NSStackView!
-    var databaseProfileFlowListItems:[String:DatabaseProfileFlowListItemController] = [:]
-    var databaseProfiles:[String:DatabaseProfile] = [:]
-    
-    @IBOutlet weak var boxDatabaseProfile: NSBox!
-    @IBOutlet weak var btnNewDatabaseProfile: NSButton!
-    @IBOutlet weak var lblDatabaseEngine: NSTextField!
-    @IBOutlet weak var lblDatabaseHost: NSTextField!
-    @IBOutlet weak var lblDatabasePort: NSTextField!
-    @IBOutlet weak var lblDatabaseName: NSTextField!
-    @IBOutlet weak var lblDatabaseSchema: NSTextField!
-    @IBOutlet weak var lblDatabaseUsername: NSTextField!
-    @IBOutlet weak var lblDatabasePassword: NSTextField!
-    @IBOutlet weak var lblDatabaseNoPsw: NSTextField!
-    @IBOutlet weak var imgDatabasePostgresql: NSImageView!
-    @IBOutlet weak var imgDatabaseMysql: NSImageView!
-    @IBOutlet weak var chkDatabasePostgresql: NSButton!
-    @IBOutlet weak var chkDatabaseMysql: NSButton!
-    @IBOutlet weak var txtDatabaseHost: NSTextField!
-    @IBOutlet weak var txtDatabasePort: NSTextField!
-    @IBOutlet weak var txtDatabaseName: NSTextField!
-    @IBOutlet weak var txtDatabaseSchema: NSTextField!
-    @IBOutlet weak var txtDatabaseUsername: NSTextField!
-    @IBOutlet weak var chkDatabaseUseSSL: NSButton!
-    @IBOutlet weak var chkDatabaseNoPsw: NSButton!
-    @IBOutlet weak var btnSaveDatabaseProfile: NSButton!
-    @IBOutlet weak var btnClearDatabaseProfile: NSButton!
-    @IBOutlet weak var txtDatabasePassword: DSFSecureTextField!
-    @IBOutlet weak var lblDatabaseTimeout: NSTextField!
-    @IBOutlet weak var lstDatabaseTimeout: NSComboBox!
-    @IBOutlet weak var lblDatabaseMessage: NSTextField!
-    
-    
-    
-    // MARK: BACKUP
-    
-    @IBOutlet weak var boxBackup: NSBox!
-    @IBOutlet weak var boxDataClone: NSBox!
-    
-    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
-    @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
-    @IBOutlet weak var btnBackupNow: NSButton!
-    @IBOutlet weak var btnCalculateBackupDiskSpace: NSButton!
-    @IBOutlet weak var btnGotoDBBackupPath: NSButton!
-    
-    
-    @IBOutlet weak var chkDeleteAllBeforeClone: NSButton!
-    @IBOutlet weak var chkFromLocalDBFile: NSButton!
-    @IBOutlet weak var chkFromLocalDBServer: NSButton!
-    @IBOutlet weak var chkFromRemoteDBServer: NSButton!
-    @IBOutlet weak var chkFromBackupArchive: NSButton!
-    
-    @IBOutlet weak var chkToLocalDBFile: NSButton!
-    @IBOutlet weak var chkToLocalDBServer: NSButton!
-    @IBOutlet weak var chkToRemoteDBServer: NSButton!
-    @IBOutlet weak var btnCloneLocalToRemote: NSButton!
-    @IBOutlet weak var lblDataCloneMessage: NSTextField!
-    
-    
-    @IBOutlet weak var scrDatabaseArchives: NSScrollView!
-    @IBOutlet weak var tblDatabaseArchives: NSTableView!
-    @IBOutlet weak var txtRestoreToDatabaseName: NSTextField!
-    @IBOutlet weak var lblRestoreToDatabaseName: NSTextField!
-    @IBOutlet weak var btnCheckDatabaseName: NSButton!
-    @IBOutlet weak var lblCheckDatabaseName: NSTextField!
-    
-    
-    @IBOutlet weak var btnCreateDatabase: NSButton!
-    @IBOutlet weak var btnReloadDBArchives: NSButton!
-    @IBOutlet weak var btnDeleteDBArchives: NSButton!
-    @IBOutlet weak var chkPostgresInApp: NSButton!
-    @IBOutlet weak var chkPostgresByBrew: NSButton!
-    
-    @IBOutlet weak var lblBackupLocation: NSTextField!
-    @IBOutlet weak var lblDataCloneFrom: NSTextField!
-    @IBOutlet weak var lblDataCloneTo: NSTextField!
-    @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
-    
-    // MARK: ENGINE
-    
-    @IBOutlet weak var txtLocalDBBinPath: NSTextField!
-    @IBOutlet weak var lblDataCloneToPgCmdline: NSTextField!
-    @IBOutlet weak var lblDatabaseEngineMessage: NSTextField!
-    
-    
-    
-    // MARK: ENGINE - TOGGLE GROUP - Postgres Command Path
-    
-    var toggleGroup_InstalledPostgres:ToggleGroup!
-    
-    @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
-        let path = "/usr/local/bin"
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
-            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+    func initDatabaseSection() {
+        
+        self.databaseProfilesStackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        
+        self.boxLocalSQLite.title = Words.preference_tab_database_box_local_sqlite.word()
+        self.boxLocalPostgres.title = Words.preference_tab_database_box_local_postgres.word()
+        self.boxRemotePostgres.title = Words.preference_tab_database_box_remote_postgres.word()
+        self.lblLocalSQLitePath.stringValue = Words.preference_tab_database_sqlite_location.word()
+        self.btnBrowseLocalDBFilePath.title = Words.preference_tab_database_browse.word()
+        self.btnGotoLocalDBFilePath.title = Words.preference_tab_database_goto.word()
+        self.btnLocalDBFileBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnLocalDBFileTest.title = Words.preference_tab_database_test_connect.word()
+        self.lblLocalPgServer.stringValue = Words.preference_tab_database_postgre_server.word()
+        self.lblLocalPgPort.stringValue = Words.preference_tab_database_postgre_port.word()
+        self.lblLocalPgUser.stringValue = Words.preference_tab_database_postgre_user.word()
+        self.lblLocalPgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
+        self.lblLocalPgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
+        self.lblLocalPgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
+        self.chkLocalDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
+        self.btnLocalDBServerBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnLocalDBServerTest.title = Words.preference_tab_database_test_connect.word()
+        self.lblRemotePgServer.stringValue = Words.preference_tab_database_postgre_server.word()
+        self.lblRemotePgPort.stringValue = Words.preference_tab_database_postgre_port.word()
+        self.lblRemotePgUser.stringValue = Words.preference_tab_database_postgre_user.word()
+        self.lblRemotePgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
+        self.lblRemotePgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
+        self.lblRemotePgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
+        self.chkRemoteDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
+        self.btnRemoteDBServerBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnRemoteDBTest.title = Words.preference_tab_database_test_connect.word()
+        
+        txtLocalDBFilePath.stringValue = Setting.database.sqlite.databasePath()
+        
+        txtRemoteDBServer.stringValue = Setting.database.remotePostgres.server()
+        txtRemoteDBPort.stringValue = "\(Setting.database.remotePostgres.port())"
+        txtRemoteDBUser.stringValue = Setting.database.remotePostgres.username()
+        txtRemoteDBPassword.stringValue = Setting.database.remotePostgres.password()
+        txtRemoteDBSchema.stringValue = Setting.database.remotePostgres.schema()
+        txtRemoteDBDatabase.stringValue = Setting.database.remotePostgres.database()
+        
+        let remoteDBNoPassword = Setting.database.remotePostgres.noPassword()
+        if remoteDBNoPassword {
+            self.chkRemoteDBNoPassword.state = .on
+            self.txtRemoteDBPassword.isEditable = false
         }else{
-            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_homebrew_error.fill(arguments: path)
-            sender.state = .off
+            self.chkRemoteDBNoPassword.state = .off
+            self.txtRemoteDBPassword.isEditable = true
         }
-       
+        
+        txtLocalDBServer.stringValue = Setting.database.localPostgres.server()
+        txtLocalDBPort.stringValue = "\(Setting.database.localPostgres.port())"
+        txtLocalDBUser.stringValue = Setting.database.localPostgres.username()
+        txtLocalDBPassword.stringValue = Setting.database.localPostgres.password()
+        txtLocalDBSchema.stringValue = Setting.database.localPostgres.schema()
+        txtLocalDBDatabase.stringValue = Setting.database.localPostgres.database()
+        
+        let localDBNoPassword = Setting.database.localPostgres.noPassword()
+        if localDBNoPassword {
+            self.chkLocalDBNoPassword.state = .on
+            self.txtLocalDBPassword.isEditable = false
+        }else{
+            self.chkLocalDBNoPassword.state = .off
+            self.txtLocalDBPassword.isEditable = true
+        }
+        
+        self.chkDatabaseMysql.state = .off
+        self.chkDatabasePostgresql.state = .on
+        self.chkDatabaseUseSSL.state = .off
+        self.chkDatabaseNoPsw.state = .on
+        
+        self.lblDatabaseMessage.stringValue = ""
+        self.loadDatabaseProfiles()
+        
     }
     
-    @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
-        let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
-            self.txtLocalDBBinPath.stringValue = postgresCommandPath
-        }else{
-            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_postgresapp_error.fill(arguments: path)
-            sender.state = .off
-        }
+    func saveDatabaseSection(_ defaults:UserDefaults) {
+        Setting.database.saveDatabaseLocation(self.toggleGroup_DBLocation.selected)
+        
+        Setting.database.sqlite.saveDatabasePath(txtLocalDBFilePath.stringValue)
+        
+        Setting.database.localPostgres.saveHost(txtLocalDBServer.stringValue)
+        Setting.database.localPostgres.savePort(txtLocalDBPort.stringValue)
+        Setting.database.localPostgres.saveUsername(txtLocalDBUser.stringValue)
+        Setting.database.localPostgres.savePassword(txtLocalDBPassword.stringValue)
+        Setting.database.localPostgres.saveNoPassword(chkLocalDBNoPassword.state == .on)
+        Setting.database.localPostgres.saveSchema(txtLocalDBSchema.stringValue)
+        Setting.database.localPostgres.saveDatabase(txtLocalDBDatabase.stringValue)
+        
+        Setting.database.remotePostgres.saveHost(txtRemoteDBServer.stringValue)
+        Setting.database.remotePostgres.savePort(txtRemoteDBPort.stringValue)
+        Setting.database.remotePostgres.saveUsername(txtRemoteDBUser.stringValue)
+        Setting.database.remotePostgres.savePassword(txtRemoteDBPassword.stringValue)
+        Setting.database.remotePostgres.saveNoPassword(chkRemoteDBNoPassword.state == .on)
+        Setting.database.remotePostgres.saveSchema(txtRemoteDBSchema.stringValue)
+        Setting.database.remotePostgres.saveDatabase(txtRemoteDBDatabase.stringValue)
     }
     
-    
-    
-    // MARK: - DATABASE SAVE BUTTON
+    // MARK: DATABASE SAVE BUTTON
     @IBAction func onButtonApplyClick(_ sender: NSButton) {
         let defaults = UserDefaults.standard
         self.saveDatabaseSection(defaults)
         self.dismiss(sender)
     }
     
-    // MARK: - ACTION FOR DATABASE SECTION
+    // MARK: ACTION FOR DATABASE SECTION
     
     @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
@@ -361,8 +367,599 @@ final class DatabaseBackupController: NSViewController {
         self.lblRemoteDBServerMessage.stringValue = "TODO version test"
     }
     
+    // MARK: - DATABASE PROFILES
     
-    // MARK: - ACTION FOR BACKUP SECTION
+    
+    @IBOutlet weak var databaseProfilesStackView: NSStackView!
+    var databaseProfileFlowListItems:[String:DatabaseProfileFlowListItemController] = [:]
+    var databaseProfiles:[String:DatabaseProfile] = [:]
+    
+    @IBOutlet weak var boxDatabaseProfile: NSBox!
+    @IBOutlet weak var btnNewDatabaseProfile: NSButton!
+    @IBOutlet weak var lblDatabaseEngine: NSTextField!
+    @IBOutlet weak var lblDatabaseHost: NSTextField!
+    @IBOutlet weak var lblDatabasePort: NSTextField!
+    @IBOutlet weak var lblDatabaseName: NSTextField!
+    @IBOutlet weak var lblDatabaseSchema: NSTextField!
+    @IBOutlet weak var lblDatabaseUsername: NSTextField!
+    @IBOutlet weak var lblDatabasePassword: NSTextField!
+    @IBOutlet weak var lblDatabaseNoPsw: NSTextField!
+    @IBOutlet weak var imgDatabasePostgresql: NSImageView!
+    @IBOutlet weak var imgDatabaseMysql: NSImageView!
+    @IBOutlet weak var chkDatabasePostgresql: NSButton!
+    @IBOutlet weak var chkDatabaseMysql: NSButton!
+    @IBOutlet weak var txtDatabaseHost: NSTextField!
+    @IBOutlet weak var txtDatabasePort: NSTextField!
+    @IBOutlet weak var txtDatabaseName: NSTextField!
+    @IBOutlet weak var txtDatabaseSchema: NSTextField!
+    @IBOutlet weak var txtDatabaseUsername: NSTextField!
+    @IBOutlet weak var chkDatabaseUseSSL: NSButton!
+    @IBOutlet weak var chkDatabaseNoPsw: NSButton!
+    @IBOutlet weak var btnSaveDatabaseProfile: NSButton!
+    @IBOutlet weak var btnClearDatabaseProfile: NSButton!
+    @IBOutlet weak var txtDatabasePassword: DSFSecureTextField!
+    @IBOutlet weak var lblDatabaseTimeout: NSTextField!
+    @IBOutlet weak var lstDatabaseTimeout: NSComboBox!
+    @IBOutlet weak var lblDatabaseMessage: NSTextField!
+    
+    @IBOutlet weak var btnCreateDatabase: NSButton!
+    
+    func saveDatabaseProfiles() {
+        Setting.database.saveDatabaseJson(self.databaseProfilesToJSON())
+    }
+    
+    var _selectedProfileId = ""
+    
+    func changeSelectedProfileId(profile:DatabaseProfile) {
+        if _selectedProfileId != profile.id() && _selectedProfileId != "" {
+            self.lblDatabaseMessage.stringValue = "You have changed database, would you like a restart?"
+        }
+    }
+    
+    func loadDatabaseProfiles() {
+        self.lblDatabaseMessage.stringValue = ""
+        let json = Setting.database.databaseJson()
+        print(json)
+        let profiles = self.databaseProfilesFromJSON(json).sorted { p1, p2 in
+            return p1.id() < p2.id()
+        }
+        if let selectedProfile = profiles.first(where: { p in
+            return p.selected
+        }) {
+            self.changeSelectedProfileId(profile: selectedProfile)
+        }
+        var dict:[String:DatabaseProfile] = [:]
+        for profile in profiles {
+            dict[profile.id()] = profile
+        }
+        self.databaseProfiles = dict
+        
+        for profile in profiles {
+            self.updateDatabaseProfile(profile: profile)
+            
+            
+        }
+        
+        if self.databaseProfileFlowListItems.count == 0 {
+            self.addEmptyDatabaseProfile()
+        }
+    }
+    
+    
+    
+    public func databaseProfilesToJSON() -> String {
+        let array = self.databaseProfiles.values.map { dp in
+            return dp
+        }
+        let jsonEncoder = JSONEncoder()
+        do {
+            let jsonData = try jsonEncoder.encode(array)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            return json ?? "{}"
+        }catch{
+            print(error)
+            return "{}"
+        }
+    }
+    
+    public func databaseProfilesFromJSON(_ jsonString:String) -> [DatabaseProfile]{
+        let jsonDecoder = JSONDecoder()
+        do{
+            return try jsonDecoder.decode([DatabaseProfile].self, from: jsonString.data(using: .utf8)!)
+        }catch{
+            print(error)
+            return []
+        }
+    }
+    
+    func addEmptyDatabaseProfile() {
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "PostgreSQL"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "postgres"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = true
+        self.updateDatabaseProfile(profile: profile)
+    }
+    
+    func updateDatabaseProfile(profile:DatabaseProfile) {
+        if let viewController = self.databaseProfileFlowListItems[profile.id()] {
+            viewController.updateFields(databaseProfile: profile)
+            self.databaseProfiles[profile.id()] = profile
+        }else{
+            self.addDatabaseProfile(profile: profile)
+        }
+        self.saveDatabaseProfiles()
+        self.checkDatabaseVersion(profile: profile)
+    }
+    
+    func selectDatabaseProfile(profile:DatabaseProfile) {
+        self.lblDatabaseMessage.stringValue = ""
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            if !vc.isConnectable() {
+                vc.unselect()
+                return
+            }
+        }else{
+            return
+        }
+        for vc in self.databaseProfileFlowListItems.values {
+            vc.unselect()
+        }
+        for profile in self.databaseProfiles.values {
+            profile.selected = false
+        }
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            vc.select()
+        }
+        if let profile = self.databaseProfiles[profile.id()] {
+            profile.selected = true
+            self.changeSelectedProfileId(profile: profile)
+        }
+        self.saveDatabaseProfiles()
+    }
+    
+    func deleteDatabaseProfile(profile:DatabaseProfile) {
+        self.lblDatabaseMessage.stringValue = ""
+        if profile.selected {
+            return
+        }
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeValue(forKey: profile.id())
+        self.databaseProfiles.removeValue(forKey: profile.id())
+        
+        self.saveDatabaseProfiles()
+        
+        if self.databaseProfileFlowListItems.count == 0 {
+            self.addEmptyDatabaseProfile()
+        }
+    }
+    
+    func checkDatabaseVersion(profile:DatabaseProfile) {
+        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+            vc.updateStatus2("")
+            vc.updateStatus1("Connecting...")
+        }
+        if profile.engine.lowercased() == "postgresql" {
+            DispatchQueue.global().async {
+                let rtn = self.checkPostgreSQLVersion(profile: profile)
+                if rtn.starts(with: "PostgreSQL") {
+                    let parts = rtn.components(separatedBy: " ")
+                    let version = parts[1]
+                    
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2(version)
+                            vc.updateStatus1("Connectable")
+                        }
+                    }
+                }else if rtn.contains(find: "socketError") {
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2("")
+                            vc.updateStatus1("Unreachable")
+                        }
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2("")
+                            vc.updateStatus1("Unauthorized")
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    func checkPostgreSQLVersion(profile:DatabaseProfile) -> String {
+        let db = Database(profile: profile)
+        do {
+            try db.connect()
+            return try db.version()
+        }catch{
+            return "\(error)"
+        }
+    }
+    
+    func addDatabaseProfile(profile:DatabaseProfile) {
+        self.lblDatabaseMessage.stringValue = ""
+        if self.databaseProfileFlowListItems[profile.id()] != nil {
+            return
+        }
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        
+        self.databaseProfiles[profile.id()] = profile
+        viewController.initView(databaseProfile: profile,
+        onSelect: {
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.selectDatabaseProfile(profile: profile)
+            }
+        }, onEdit: {
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.databaseProfileToForm(profile: profile)
+            }
+        }, onDelete: {
+            if let profile = self.databaseProfiles[profile.id()] {
+                self.deleteDatabaseProfile(profile: profile)
+            }
+        })
+
+        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
+        self.databaseProfileFlowListItems[profile.id()] = viewController
+        //addChildViewController(viewController)
+    }
+    
+    func databaseProfileFromForm() -> DatabaseProfile {
+        let profile = DatabaseProfile()
+        profile.engine = self.chkDatabasePostgresql.state == .on ? "PostgreSQL" : "MySQL"
+        profile.host = self.txtDatabaseHost.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.port = self.txtDatabasePort.integerValue
+        profile.database = self.txtDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.schema = self.txtDatabaseSchema.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.user = self.txtDatabaseUsername.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.password =  self.txtDatabasePassword.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        profile.ssl = self.chkDatabaseUseSSL.state == .on
+        profile.nopsw = self.chkDatabaseNoPsw.state == .on
+        profile.socketTimeoutInSeconds = self.lstDatabaseTimeout.integerValue
+        return profile
+    }
+    
+    func databaseProfileToForm(profile:DatabaseProfile) {
+        self.txtDatabaseHost.stringValue = profile.host
+        self.txtDatabasePort.integerValue = profile.port
+        self.txtDatabaseName.stringValue = profile.database
+        self.txtDatabaseSchema.stringValue = profile.schema
+        self.txtDatabaseUsername.stringValue = profile.user
+        self.txtDatabasePassword.stringValue = profile.password
+        self.chkDatabaseUseSSL.state = profile.ssl ? .on : .off
+        self.chkDatabaseNoPsw.state = profile.nopsw ? .on : .off
+        
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        switch(profile.engine.lowercased()) {
+        case "postgresql":
+            self.chkDatabasePostgresql.state = .on
+            break
+        case "mysql":
+            self.chkDatabaseMysql.state = .on
+        default:
+            break
+        }
+        
+        self.lstDatabaseTimeout.integerValue = profile.socketTimeoutInSeconds
+    }
+    
+    @IBAction func onNewDatabaseProfileClicked(_ sender: NSButton) {
+        self.lblDatabaseMessage.stringValue = ""
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "PostgreSQL"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "postgres"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = false
+        profile.socketTimeoutInSeconds = 10
+        self.databaseProfileToForm(profile: profile)
+    }
+    
+    @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
+        self.lblDatabaseMessage.stringValue = ""
+        if self.txtDatabaseHost.stringValue == "" || self.txtDatabaseName.stringValue == "" {
+            return
+        }
+        let profile = self.databaseProfileFromForm()
+        self.updateDatabaseProfile(profile: profile)
+    }
+    
+    @IBAction func onClearDatabaseProfileClicked(_ sender: NSButton) {
+        self.lblDatabaseMessage.stringValue = ""
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "PostgreSQL"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "postgres"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.selected = false
+        profile.socketTimeoutInSeconds = 10
+        self.databaseProfileToForm(profile: profile)
+    }
+    
+    /// Used to add a particular view controller as an item to our stack view.
+    func addDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
+        
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        
+            
+        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
+        //addChildViewController(viewController)
+        viewController.initView(databaseProfile: databaseProfile)
+        
+        self.databaseProfileFlowListItems[databaseProfile.id()] = viewController
+        
+    }
+    
+    func removeDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
+        if let vc = self.databaseProfileFlowListItems[databaseProfile.id()] {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeValue(forKey: databaseProfile.id())
+    }
+    
+    
+    func removeAllDatabaseProfileFlowListItems() {
+        for vc in self.databaseProfileFlowListItems.values {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.databaseProfilesStackView.removeView(vc.view)
+        }
+        self.databaseProfileFlowListItems.removeAll()
+    }
+    
+    @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabasePostgresql.state = .on
+    }
+    
+    @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabaseMysql.state = .on
+    }
+    
+    class func getPostgresCommandPath() -> String? {
+        let keys:[String] = [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+        ]
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: keys) {
+            return postgresCommandPath
+        }else{
+            return nil
+        }
+    }
+    
+    @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
+        self.lblDatabaseMessage.stringValue = ""
+        guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
+            let msg = "Unable to locate psql command in macOS, check db exist aborted."
+            self.lblDatabaseMessage.stringValue = msg
+            self.logger.log(.error, msg)
+            return
+        }
+        let databaseProfile = self.databaseProfileFromForm()
+        
+        guard databaseProfile.database != "" && databaseProfile.host != "" else {
+            self.btnCreateDatabase.isHidden = true
+            return
+        }
+        DispatchQueue.global().async {
+            let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: databaseProfile.host, port: databaseProfile.port)
+            var exists = false
+            for database in databases {
+                if database == databaseProfile.database {
+                    exists = true
+                    break
+                }
+            }
+            if exists {
+                let remotedb = PostgresConnection.database(databaseProfile: databaseProfile)
+                var tables:[TableInfo] = []
+                do {
+                    tables = try remotedb.queryTableInfos()
+                }catch{
+                    self.logger.log(.error, error)
+                    self.lblDatabaseMessage.stringValue = "\(error)"
+                }
+                if tables.count == 0 {
+                    DispatchQueue.main.async {
+                        self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_empty_database.word()
+                        self.btnCreateDatabase.isHidden = true
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_non_empty_database.word()
+                        self.btnCreateDatabase.isHidden = true
+                    }
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_not_exist_database.word()
+                    self.btnCreateDatabase.isHidden = false
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
+        self.lblDatabaseMessage.stringValue = ""
+        let profile = self.databaseProfileFromForm()
+        
+        guard profile.host != "" && profile.database != "" else {
+            let msg = "Error: database host or name is empty"
+            self.logger.log(.error, msg)
+            self.lblDatabaseMessage.stringValue = msg
+            return
+        }
+        guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
+            let msg = "Unable to locate pg_dump command in macOS, createdb aborted."
+            self.logger.log(.error, msg)
+            self.lblDatabaseMessage.stringValue = msg
+            return
+        }
+        if profile.engine.lowercased() != "postgresql" {
+            let msg = "Selected database is not postgres. createdb aborted."
+            self.logger.log(.error, msg)
+            self.lblDatabaseMessage.stringValue = msg
+            return
+        }
+        
+        self.btnCreateDatabase.isEnabled = false
+        
+        DispatchQueue.global().async {
+            
+            let (status, _, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: profile.database, host: profile.host, port: profile.port, user: profile.user)
+            
+            if status == true {
+                self.logger.log(.error, "created database \(profile.database) on \(profile.user)@\(profile.host):\(profile.port)")
+                DispatchQueue.main.async {
+                    self.btnCreateDatabase.isEnabled = true
+                    self.lblDatabaseMessage.stringValue = "\(Words.preference_tab_backup_created_database.word()) \(profile.database)@\(profile.host):\(profile.port)"
+                }
+            }else{
+                self.logger.log(.error, "Unable to create database \(profile.database) on \(profile.user)@\(profile.host):\(profile.port)")
+                self.logger.log(.error, pgError)
+                if let error = err {
+                    self.logger.log(.error, error)
+                }
+                DispatchQueue.main.async {
+                    self.btnCreateDatabase.isEnabled = true
+                    self.lblDatabaseMessage.stringValue = "\(Words.preference_tab_backup_create_database_failed.word()) \(profile.database)@\(profile.host):\(profile.port)"
+                }
+            }
+        }
+    }
+    
+    // MARK: - ENGINE
+    
+    @IBOutlet weak var txtLocalDBBinPath: NSTextField!
+    @IBOutlet weak var lblDataCloneToPgCmdline: NSTextField!
+    @IBOutlet weak var lblDatabaseEngineMessage: NSTextField!
+    @IBOutlet weak var chkPostgresInApp: NSButton!
+    @IBOutlet weak var chkPostgresByBrew: NSButton!
+    
+    
+    func initEngineSection() {
+        
+        self.lblDataCloneToPgCmdline.stringValue = Words.preference_tab_backup_pg_cmdline.word()
+        self.chkPostgresByBrew.title = Words.preference_tab_backup_installed_by_homebrew.word()
+        self.chkPostgresInApp.title = Words.preference_tab_backup_installed_by_postgresapp.word()
+        
+        self.lblDatabaseEngineMessage.stringValue = ""
+        self.txtLocalDBBinPath.isEditable = false
+        
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+        }else{
+            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_error.word()
+        }
+    }
+    
+    
+    
+    // MARK: ENGINE - TOGGLE GROUP - Postgres Command Path
+    
+    var toggleGroup_InstalledPostgres:ToggleGroup!
+    
+    @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
+        let path = "/usr/local/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+        }else{
+            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_homebrew_error.fill(arguments: path)
+            sender.state = .off
+        }
+       
+    }
+    
+    @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
+        let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
+        }else{
+            self.lblDatabaseEngineMessage.stringValue = Words.preference_tab_backup_installed_by_postgresapp_error.fill(arguments: path)
+            sender.state = .off
+        }
+    }
+    
+    
+    
+    
+    
+    // MARK: - BACKUP
+    
+    @IBOutlet weak var boxBackup: NSBox!
+    @IBOutlet weak var boxDataClone: NSBox!
+    
+    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
+    @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
+    @IBOutlet weak var btnBackupNow: NSButton!
+    @IBOutlet weak var btnCalculateBackupDiskSpace: NSButton!
+    @IBOutlet weak var btnGotoDBBackupPath: NSButton!
+    
+    
+    @IBOutlet weak var chkDeleteAllBeforeClone: NSButton!
+    @IBOutlet weak var chkFromLocalDBFile: NSButton!
+    @IBOutlet weak var chkFromLocalDBServer: NSButton!
+    @IBOutlet weak var chkFromRemoteDBServer: NSButton!
+    @IBOutlet weak var chkFromBackupArchive: NSButton!
+    
+    @IBOutlet weak var chkToLocalDBFile: NSButton!
+    @IBOutlet weak var chkToLocalDBServer: NSButton!
+    @IBOutlet weak var chkToRemoteDBServer: NSButton!
+    @IBOutlet weak var btnCloneLocalToRemote: NSButton!
+    @IBOutlet weak var lblDataCloneMessage: NSTextField!
+    
+    
+    @IBOutlet weak var scrDatabaseArchives: NSScrollView!
+    @IBOutlet weak var tblDatabaseArchives: NSTableView!
+    @IBOutlet weak var txtRestoreToDatabaseName: NSTextField!
+    @IBOutlet weak var lblRestoreToDatabaseName: NSTextField!
+    @IBOutlet weak var btnCheckDatabaseName: NSButton!
+    @IBOutlet weak var lblCheckDatabaseName: NSTextField!
+    
+    
+    @IBOutlet weak var btnReloadDBArchives: NSButton!
+    @IBOutlet weak var btnDeleteDBArchives: NSButton!
+    
+    @IBOutlet weak var lblBackupLocation: NSTextField!
+    @IBOutlet weak var lblDataCloneFrom: NSTextField!
+    @IBOutlet weak var lblDataCloneTo: NSTextField!
+    @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
     
     
     private func toggleDatabaseClonerButtons(state: Bool) {
@@ -711,128 +1308,6 @@ final class DatabaseBackupController: NSViewController {
         }
     }
     
-    @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
-        guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-            self.logger.log(.trace, "Unable to locate psql command in macOS, check db exist aborted.")
-            return
-        }
-        var databaseProfile = DatabaseProfile()
-        databaseProfile.host = ""
-        databaseProfile.port = 5432
-        databaseProfile.user = ""
-        databaseProfile.password = ""
-        databaseProfile.nopsw = true
-        if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-            databaseProfile.engine = "PostgreSQL"
-            databaseProfile.host = Setting.database.localPostgres.server()
-            databaseProfile.port = Setting.database.localPostgres.port()
-            databaseProfile.user = Setting.database.localPostgres.username()
-        }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-            databaseProfile.engine = "PostgreSQL"
-            databaseProfile.host = Setting.database.remotePostgres.server()
-            databaseProfile.port = Setting.database.remotePostgres.port()
-            databaseProfile.user = Setting.database.remotePostgres.username()
-        }else{
-            self.logger.log(.trace, "Selected to-database is not postgres. check db exist aborted.")
-            return
-        }
-        let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard targetDatabase != "" else {
-            self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
-            self.btnCreateDatabase.isHidden = true
-            return
-        }
-        DispatchQueue.global().async {
-            let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: databaseProfile.host, port: databaseProfile.port)
-            var exists = false
-            for database in databases {
-                if database == targetDatabase {
-                    exists = true
-                    break
-                }
-            }
-            if exists {
-                let remotedb = PostgresConnection.database(databaseProfile: databaseProfile)
-                var tables:[TableInfo] = []
-                do {
-                    tables = try remotedb.queryTableInfos()
-                }catch{
-                    self.logger.log(.error, error)
-                }
-                if tables.count == 0 {
-                    DispatchQueue.main.async {
-                        self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
-                        self.btnCreateDatabase.isHidden = true
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_non_empty_database.word()
-                        self.btnCreateDatabase.isHidden = true
-                    }
-                }
-            }else{
-                DispatchQueue.main.async {
-                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_not_exist_database.word()
-                    self.btnCreateDatabase.isHidden = false
-                }
-            }
-        }
-    }
-    
-    
-    @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
-        let databaseName = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard databaseName != "" else {
-            self.logger.log(.trace, "Error: database name is empty")
-            return
-        }
-        guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
-            self.logger.log(.trace, "Unable to locate pg_dump command in macOS, createdb aborted.")
-            return
-        }
-        var host = ""
-        var port = 5432
-        var user = ""
-        if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-            host = Setting.database.localPostgres.server()
-            port = Setting.database.localPostgres.port()
-            user = Setting.database.localPostgres.username()
-        }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-            host = Setting.database.remotePostgres.server()
-            port = Setting.database.remotePostgres.port()
-            user = Setting.database.remotePostgres.username()
-        }else{
-            self.logger.log(.trace, "Selected to-database is not postgres. createdb aborted.")
-            return
-        }
-        
-        self.btnCreateDatabase.isEnabled = false
-        
-        // TODO: SAVE ALL FIELDS BEFORE START CREATEDB
-        DispatchQueue.global().async {
-            
-            let (status, _, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
-            
-            if status == true {
-                self.logger.log(.trace, "created database \(databaseName) on \(user)@\(host):\(port)")
-                DispatchQueue.main.async {
-                    self.btnCreateDatabase.isEnabled = true
-                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_created_database.word()
-                }
-            }else{
-                self.logger.log(.trace, "Unable to create database \(databaseName) on \(user)@\(host):\(port)")
-                self.logger.log(pgError)
-                if let error = err {
-                    self.logger.log(.error, error)
-                }
-                DispatchQueue.main.async {
-                    self.btnCreateDatabase.isEnabled = true
-                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_create_database_failed.word()
-                }
-            }
-        }
-    }
-    
     // MARK: TOGGLE GROUP - CLONE FROM DB
     
     var toggleGroup_CloneFromDBLocation:ToggleGroup!
@@ -898,128 +1373,12 @@ final class DatabaseBackupController: NSViewController {
         self.lblCheckDatabaseName.stringValue = ""
     }
     
-    // MARK: - SAVE SETTINGS
-    
-    
-    func saveDatabaseSection(_ defaults:UserDefaults) {
-        Setting.database.saveDatabaseLocation(self.toggleGroup_DBLocation.selected)
-        
-        Setting.database.sqlite.saveDatabasePath(txtLocalDBFilePath.stringValue)
-        
-        Setting.database.localPostgres.saveHost(txtLocalDBServer.stringValue)
-        Setting.database.localPostgres.savePort(txtLocalDBPort.stringValue)
-        Setting.database.localPostgres.saveUsername(txtLocalDBUser.stringValue)
-        Setting.database.localPostgres.savePassword(txtLocalDBPassword.stringValue)
-        Setting.database.localPostgres.saveNoPassword(chkLocalDBNoPassword.state == .on)
-        Setting.database.localPostgres.saveSchema(txtLocalDBSchema.stringValue)
-        Setting.database.localPostgres.saveDatabase(txtLocalDBDatabase.stringValue)
-        
-        Setting.database.remotePostgres.saveHost(txtRemoteDBServer.stringValue)
-        Setting.database.remotePostgres.savePort(txtRemoteDBPort.stringValue)
-        Setting.database.remotePostgres.saveUsername(txtRemoteDBUser.stringValue)
-        Setting.database.remotePostgres.savePassword(txtRemoteDBPassword.stringValue)
-        Setting.database.remotePostgres.saveNoPassword(chkRemoteDBNoPassword.state == .on)
-        Setting.database.remotePostgres.saveSchema(txtRemoteDBSchema.stringValue)
-        Setting.database.remotePostgres.saveDatabase(txtRemoteDBDatabase.stringValue)
-    }
     
     func saveBackupSection(_ defaults:UserDefaults) {
         
     }
     
     
-    
-    // MARK: - INIT SECTIONS
-    
-    
-    func initDatabaseSection() {
-        
-        self.databaseProfilesStackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
-        
-        self.boxLocalSQLite.title = Words.preference_tab_database_box_local_sqlite.word()
-        self.boxLocalPostgres.title = Words.preference_tab_database_box_local_postgres.word()
-        self.boxRemotePostgres.title = Words.preference_tab_database_box_remote_postgres.word()
-        self.lblLocalSQLitePath.stringValue = Words.preference_tab_database_sqlite_location.word()
-        self.btnBrowseLocalDBFilePath.title = Words.preference_tab_database_browse.word()
-        self.btnGotoLocalDBFilePath.title = Words.preference_tab_database_goto.word()
-        self.btnLocalDBFileBackup.title = Words.preference_tab_database_backup_now.word()
-        self.btnLocalDBFileTest.title = Words.preference_tab_database_test_connect.word()
-        self.lblLocalPgServer.stringValue = Words.preference_tab_database_postgre_server.word()
-        self.lblLocalPgPort.stringValue = Words.preference_tab_database_postgre_port.word()
-        self.lblLocalPgUser.stringValue = Words.preference_tab_database_postgre_user.word()
-        self.lblLocalPgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
-        self.lblLocalPgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
-        self.lblLocalPgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
-        self.chkLocalDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
-        self.btnLocalDBServerBackup.title = Words.preference_tab_database_backup_now.word()
-        self.btnLocalDBServerTest.title = Words.preference_tab_database_test_connect.word()
-        self.lblRemotePgServer.stringValue = Words.preference_tab_database_postgre_server.word()
-        self.lblRemotePgPort.stringValue = Words.preference_tab_database_postgre_port.word()
-        self.lblRemotePgUser.stringValue = Words.preference_tab_database_postgre_user.word()
-        self.lblRemotePgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
-        self.lblRemotePgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
-        self.lblRemotePgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
-        self.chkRemoteDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
-        self.btnRemoteDBServerBackup.title = Words.preference_tab_database_backup_now.word()
-        self.btnRemoteDBTest.title = Words.preference_tab_database_test_connect.word()
-        
-        txtLocalDBFilePath.stringValue = Setting.database.sqlite.databasePath()
-        
-        txtRemoteDBServer.stringValue = Setting.database.remotePostgres.server()
-        txtRemoteDBPort.stringValue = "\(Setting.database.remotePostgres.port())"
-        txtRemoteDBUser.stringValue = Setting.database.remotePostgres.username()
-        txtRemoteDBPassword.stringValue = Setting.database.remotePostgres.password()
-        txtRemoteDBSchema.stringValue = Setting.database.remotePostgres.schema()
-        txtRemoteDBDatabase.stringValue = Setting.database.remotePostgres.database()
-        
-        let remoteDBNoPassword = Setting.database.remotePostgres.noPassword()
-        if remoteDBNoPassword {
-            self.chkRemoteDBNoPassword.state = .on
-            self.txtRemoteDBPassword.isEditable = false
-        }else{
-            self.chkRemoteDBNoPassword.state = .off
-            self.txtRemoteDBPassword.isEditable = true
-        }
-        
-        txtLocalDBServer.stringValue = Setting.database.localPostgres.server()
-        txtLocalDBPort.stringValue = "\(Setting.database.localPostgres.port())"
-        txtLocalDBUser.stringValue = Setting.database.localPostgres.username()
-        txtLocalDBPassword.stringValue = Setting.database.localPostgres.password()
-        txtLocalDBSchema.stringValue = Setting.database.localPostgres.schema()
-        txtLocalDBDatabase.stringValue = Setting.database.localPostgres.database()
-        
-        let localDBNoPassword = Setting.database.localPostgres.noPassword()
-        if localDBNoPassword {
-            self.chkLocalDBNoPassword.state = .on
-            self.txtLocalDBPassword.isEditable = false
-        }else{
-            self.chkLocalDBNoPassword.state = .off
-            self.txtLocalDBPassword.isEditable = true
-        }
-        
-        self.chkDatabaseMysql.state = .off
-        self.chkDatabasePostgresql.state = .on
-        self.chkDatabaseUseSSL.state = .off
-        self.chkDatabaseNoPsw.state = .on
-        
-        self.lblDatabaseMessage.stringValue = ""
-        self.loadDatabaseProfiles()
-        
-    }
-    
-    
-    
-    class func getPostgresCommandPath() -> String? {
-        let keys:[String] = [
-            "/Applications/Postgres.app/Contents/Versions/latest/bin",
-            "/usr/local/bin"
-        ]
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: keys) {
-            return postgresCommandPath
-        }else{
-            return nil
-        }
-    }
     
     func initBackupSection() {
         self.boxBackup.title = Words.preference_tab_backup_box_backup.word()
@@ -1103,83 +1462,7 @@ final class DatabaseBackupController: NSViewController {
         
     }
     
-    func initEngineSection() {
-        
-        self.lblDataCloneToPgCmdline.stringValue = Words.preference_tab_backup_pg_cmdline.word()
-        self.chkPostgresByBrew.title = Words.preference_tab_backup_installed_by_homebrew.word()
-        self.chkPostgresInApp.title = Words.preference_tab_backup_installed_by_postgresapp.word()
-        
-        self.lblDatabaseEngineMessage.stringValue = ""
-        self.txtLocalDBBinPath.isEditable = false
-        
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
-            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
-            self.txtLocalDBBinPath.stringValue = postgresCommandPath
-        }else{
-            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_error.word()
-        }
-    }
     
-    // MARK: VIEW INIT
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.title = Words.database_backup_dialog_title.word()
-        // Do any additional setup after loading the view.
-        self.setupTabs()
-        self.initDatabaseSection()
-        self.initBackupSection()
-        self.initEngineSection()
-        
-    }
-    
-    func setupTabs() {
-        self.view.window?.title = Words.mainmenu_database_and_backup.word()
-        self.btnSaveDatabase.title = Words.apply.word()
-        self.tabs.tabViewItem(at: 0).label = Words.preference_tab_database.word()
-        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_backup.word()
-        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_engine.word()
-    }
-    
-    override var representedObject: Any? {
-        didSet {
-            // Update the view, if already loaded.
-        }
-    }
-    
-    
-    
-    /// Used to add a particular view controller as an item to our stack view.
-    func addDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
-        
-        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
-        
-            
-        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
-        //addChildViewController(viewController)
-        viewController.initView(databaseProfile: databaseProfile)
-        
-        self.databaseProfileFlowListItems[databaseProfile.id()] = viewController
-        
-    }
-    
-    func removeDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
-        if let vc = self.databaseProfileFlowListItems[databaseProfile.id()] {
-            NSLayoutConstraint.deactivate(vc.view.constraints)
-            self.databaseProfilesStackView.removeView(vc.view)
-        }
-        self.databaseProfileFlowListItems.removeValue(forKey: databaseProfile.id())
-    }
-    
-    
-    func removeAllDatabaseProfileFlowListItems() {
-        for vc in self.databaseProfileFlowListItems.values {
-            NSLayoutConstraint.deactivate(vc.view.constraints)
-            self.databaseProfilesStackView.removeView(vc.view)
-        }
-        self.databaseProfileFlowListItems.removeAll()
-    }
     
     
     
@@ -1187,311 +1470,6 @@ final class DatabaseBackupController: NSViewController {
     
     var shouldLoadPostgresBackupArchives = true
     
-    
-    func saveDatabaseProfiles() {
-        Setting.database.saveDatabaseJson(self.databaseProfilesToJSON())
-    }
-    
-    var _selectedProfileId = ""
-    
-    func changeSelectedProfileId(profile:DatabaseProfile) {
-        if _selectedProfileId != profile.id() && _selectedProfileId != "" {
-            self.lblDatabaseMessage.stringValue = "You have changed database, would you like a restart?"
-        }
-    }
-    
-    func loadDatabaseProfiles() {
-        let json = Setting.database.databaseJson()
-        print(json)
-        let profiles = self.databaseProfilesFromJSON(json).sorted { p1, p2 in
-            return p1.id() < p2.id()
-        }
-        if let selectedProfile = profiles.first(where: { p in
-            return p.selected
-        }) {
-            self.changeSelectedProfileId(profile: selectedProfile)
-        }
-        var dict:[String:DatabaseProfile] = [:]
-        for profile in profiles {
-            dict[profile.id()] = profile
-        }
-        self.databaseProfiles = dict
-        
-        for profile in profiles {
-            self.updateDatabaseProfile(profile: profile)
-            
-            
-        }
-        
-        if self.databaseProfileFlowListItems.count == 0 {
-            self.addEmptyDatabaseProfile()
-        }
-    }
-    
-    
-    
-    public func databaseProfilesToJSON() -> String {
-        let array = self.databaseProfiles.values.map { dp in
-            return dp
-        }
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try jsonEncoder.encode(array)
-            let json = String(data: jsonData, encoding: String.Encoding.utf8)
-            return json ?? "{}"
-        }catch{
-            print(error)
-            return "{}"
-        }
-    }
-    
-    public func databaseProfilesFromJSON(_ jsonString:String) -> [DatabaseProfile]{
-        let jsonDecoder = JSONDecoder()
-        do{
-            return try jsonDecoder.decode([DatabaseProfile].self, from: jsonString.data(using: .utf8)!)
-        }catch{
-            print(error)
-            return []
-        }
-    }
-    
-    func addEmptyDatabaseProfile() {
-        let profile = DatabaseProfile()
-        profile.host = "127.0.0.1"
-        profile.database = "ImageDocker"
-        profile.engine = "PostgreSQL"
-        profile.port = 5432
-        profile.schema = "public"
-        profile.user = "postgres"
-        profile.nopsw = true
-        profile.ssl = false
-        profile.selected = true
-        self.updateDatabaseProfile(profile: profile)
-    }
-    
-    func updateDatabaseProfile(profile:DatabaseProfile) {
-        if let viewController = self.databaseProfileFlowListItems[profile.id()] {
-            viewController.updateFields(databaseProfile: profile)
-            self.databaseProfiles[profile.id()] = profile
-        }else{
-            self.addDatabaseProfile(profile: profile)
-        }
-        self.saveDatabaseProfiles()
-        self.checkDatabaseVersion(profile: profile)
-    }
-    
-    func selectDatabaseProfile(profile:DatabaseProfile) {
-        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-            if !vc.isConnectable() {
-                vc.unselect()
-                return
-            }
-        }else{
-            return
-        }
-        for vc in self.databaseProfileFlowListItems.values {
-            vc.unselect()
-        }
-        for profile in self.databaseProfiles.values {
-            profile.selected = false
-        }
-        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-            vc.select()
-        }
-        if let profile = self.databaseProfiles[profile.id()] {
-            profile.selected = true
-            self.changeSelectedProfileId(profile: profile)
-        }
-        self.saveDatabaseProfiles()
-    }
-    
-    func deleteDatabaseProfile(profile:DatabaseProfile) {
-        if profile.selected {
-            return
-        }
-        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-            NSLayoutConstraint.deactivate(vc.view.constraints)
-            self.databaseProfilesStackView.removeView(vc.view)
-        }
-        self.databaseProfileFlowListItems.removeValue(forKey: profile.id())
-        self.databaseProfiles.removeValue(forKey: profile.id())
-        
-        self.saveDatabaseProfiles()
-        
-        if self.databaseProfileFlowListItems.count == 0 {
-            self.addEmptyDatabaseProfile()
-        }
-    }
-    
-    func checkDatabaseVersion(profile:DatabaseProfile) {
-        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-            vc.updateStatus2("")
-            vc.updateStatus1("Connecting...")
-        }
-        if profile.engine.lowercased() == "postgresql" {
-            DispatchQueue.global().async {
-                let rtn = self.checkPostgreSQLVersion(profile: profile)
-                if rtn.starts(with: "PostgreSQL") {
-                    let parts = rtn.components(separatedBy: " ")
-                    let version = parts[1]
-                    
-                    DispatchQueue.main.async {
-                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-                            vc.updateStatus2(version)
-                            vc.updateStatus1("Connectable")
-                        }
-                    }
-                }else if rtn.contains(find: "socketError") {
-                    DispatchQueue.main.async {
-                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-                            vc.updateStatus2("")
-                            vc.updateStatus1("Unreachable")
-                        }
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
-                            vc.updateStatus2("")
-                            vc.updateStatus1("Unauthorized")
-                        }
-                    }
-                }
-            }
-            
-        }
-    }
-    
-    func checkPostgreSQLVersion(profile:DatabaseProfile) -> String {
-        let db = Database(profile: profile)
-        do {
-            try db.connect()
-            return try db.version()
-        }catch{
-            return "\(error)"
-        }
-    }
-    
-    func addDatabaseProfile(profile:DatabaseProfile) {
-        if self.databaseProfileFlowListItems[profile.id()] != nil {
-            return
-        }
-        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
-        
-        self.databaseProfiles[profile.id()] = profile
-        viewController.initView(databaseProfile: profile,
-        onSelect: {
-            if let profile = self.databaseProfiles[profile.id()] {
-                self.selectDatabaseProfile(profile: profile)
-            }
-        }, onEdit: {
-            if let profile = self.databaseProfiles[profile.id()] {
-                self.databaseProfileToForm(profile: profile)
-                self.loadDatabaseProfiles()
-            }
-        }, onDelete: {
-            if let profile = self.databaseProfiles[profile.id()] {
-                self.deleteDatabaseProfile(profile: profile)
-            }
-        })
-
-        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
-        self.databaseProfileFlowListItems[profile.id()] = viewController
-        //addChildViewController(viewController)
-    }
-    
-    func databaseProfileFromForm() -> DatabaseProfile {
-        let profile = DatabaseProfile()
-        profile.engine = self.chkDatabasePostgresql.state == .on ? "PostgreSQL" : "MySQL"
-        profile.host = self.txtDatabaseHost.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.port = self.txtDatabasePort.integerValue
-        profile.database = self.txtDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.schema = self.txtDatabaseSchema.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.user = self.txtDatabaseUsername.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.password =  self.txtDatabasePassword.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.ssl = self.chkDatabaseUseSSL.state == .on
-        profile.nopsw = self.chkDatabaseNoPsw.state == .on
-        profile.socketTimeoutInSeconds = self.lstDatabaseTimeout.integerValue
-        return profile
-    }
-    
-    func databaseProfileToForm(profile:DatabaseProfile) {
-        self.txtDatabaseHost.stringValue = profile.host
-        self.txtDatabasePort.integerValue = profile.port
-        self.txtDatabaseName.stringValue = profile.database
-        self.txtDatabaseSchema.stringValue = profile.schema
-        self.txtDatabaseUsername.stringValue = profile.user
-        self.txtDatabasePassword.stringValue = profile.password
-        self.chkDatabaseUseSSL.state = profile.ssl ? .on : .off
-        self.chkDatabaseNoPsw.state = profile.nopsw ? .on : .off
-        
-        self.chkDatabasePostgresql.state = .off
-        self.chkDatabaseMysql.state = .off
-        
-        switch(profile.engine.lowercased()) {
-        case "postgresql":
-            self.chkDatabasePostgresql.state = .on
-            break
-        case "mysql":
-            self.chkDatabaseMysql.state = .on
-        default:
-            break
-        }
-        
-        self.lstDatabaseTimeout.integerValue = profile.socketTimeoutInSeconds
-    }
-    
-    @IBAction func onNewDatabaseProfileClicked(_ sender: NSButton) {
-        let profile = DatabaseProfile()
-        profile.host = "127.0.0.1"
-        profile.database = "ImageDocker"
-        profile.engine = "PostgreSQL"
-        profile.port = 5432
-        profile.schema = "public"
-        profile.user = "postgres"
-        profile.nopsw = true
-        profile.ssl = false
-        profile.selected = false
-        profile.socketTimeoutInSeconds = 10
-        self.databaseProfileToForm(profile: profile)
-    }
-    
-    @IBAction func onSaveDatabaseProfileClicked(_ sender: NSButton) {
-        if self.txtDatabaseHost.stringValue == "" || self.txtDatabaseName.stringValue == "" {
-            return
-        }
-        let profile = self.databaseProfileFromForm()
-        self.updateDatabaseProfile(profile: profile)
-    }
-    
-    @IBAction func onClearDatabaseProfileClicked(_ sender: NSButton) {
-        let profile = DatabaseProfile()
-        profile.host = "127.0.0.1"
-        profile.database = "ImageDocker"
-        profile.engine = "PostgreSQL"
-        profile.port = 5432
-        profile.schema = "public"
-        profile.user = "postgres"
-        profile.nopsw = true
-        profile.ssl = false
-        profile.selected = false
-        profile.socketTimeoutInSeconds = 10
-        self.databaseProfileToForm(profile: profile)
-    }
-    
-    @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
-        self.chkDatabasePostgresql.state = .off
-        self.chkDatabaseMysql.state = .off
-        
-        self.chkDatabasePostgresql.state = .on
-    }
-    
-    @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
-        self.chkDatabasePostgresql.state = .off
-        self.chkDatabaseMysql.state = .off
-        
-        self.chkDatabaseMysql.state = .on
-    }
     
 }
 

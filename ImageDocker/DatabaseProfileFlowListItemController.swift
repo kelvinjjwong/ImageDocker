@@ -45,8 +45,8 @@ class DatabaseProfileFlowListItemController : NSViewController {
     }
     
     func reloadControls() {
-        self.lblContent2.stringValue = "\(self.data?.user ?? ""):\(self.data?.database ?? "")/\(self.data?.schema ?? "")"
         self.lblContent.stringValue = "\(self.data?.host ?? ""):\(self.data?.port ?? -9999) \(self.data?.ssl ?? false ? "(ssl)" : "")"
+        self.lblContent2.stringValue = "\(self.data?.user ?? ""):\(self.data?.database ?? "")"
         self.lblStatus1.stringValue = status1
         self.lblStatus2.stringValue = status2
         self.checkbox.state = (self.data?.selected ?? false) ? .on : .off
