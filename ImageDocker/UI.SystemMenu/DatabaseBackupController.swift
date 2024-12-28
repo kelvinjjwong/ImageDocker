@@ -208,8 +208,6 @@ final class DatabaseBackupController: NSViewController {
         self.dismiss(sender)
     }
     
-    // MARK: ACTION FOR DATABASE SECTION
-    
     @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
     }
@@ -318,28 +316,46 @@ final class DatabaseBackupController: NSViewController {
         }
     }
     
+    func checkSchemaVersion(profile:DatabaseProfile) -> String {
+        final class Version : DatabaseRecord {
+            var ver:Int? = nil
+            public init() {}
+        }
+        do {
+            print(profile.toJSON())
+            if let version = try Version.fetchOne(Database(profile: profile), sql: """
+SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from version_migrations
+""") {
+                if let ver = version.ver {
+                    return "v\(ver)"
+                }else{
+                    return ""
+                }
+            }else{
+                return ""
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return "error_\(error)"
+        }
+    }
+    
     @IBAction func onLocalDBServerTestClicked(_ sender: NSButton) {
         self.lblLocalDBServerMessage.stringValue = "TODO."
         
         DispatchQueue.global().async {
-            final class Version : DatabaseRecord {
-                var ver:Int = 0
-                public init() {}
-            }
-            do {
-                if let version = try Version.fetchOne(PostgresConnection.database(.localDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
-                    DispatchQueue.main.async {
-                        self.lblLocalDBServerMessage.stringValue = "v\(version.ver)"
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_no_schema.word()
-                    }
+            let version = self.checkSchemaVersion(profile: DatabaseProfile())
+            if version.starts(with: "v") {
+                DispatchQueue.main.async {
+                    self.lblLocalDBServerMessage.stringValue = version
                 }
-            }catch{
-                self.logger.log(.error, error)
+            }else if version.starts(with: "error_"){
                 DispatchQueue.main.async {
                     self.lblLocalDBServerMessage.stringValue = "DB ERROR"
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_no_schema.word()
                 }
             }
         }
@@ -924,6 +940,7 @@ final class DatabaseBackupController: NSViewController {
     
     @IBOutlet weak var boxBackup: NSBox!
     @IBOutlet weak var boxDataClone: NSBox!
+    @IBOutlet weak var boxBackupDestination: NSBox!
     
     @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
@@ -961,6 +978,384 @@ final class DatabaseBackupController: NSViewController {
     @IBOutlet weak var lblDataCloneTo: NSTextField!
     @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
     
+    @IBOutlet weak var imgBackupSource: NSImageView!
+    @IBOutlet weak var lblBackupSourceStatus1: NSTextField!
+    @IBOutlet weak var lblBackupSourceStatus2: NSTextField!
+    @IBOutlet weak var lblBackupSourceContent1: NSTextField!
+    @IBOutlet weak var lblBackupSourceContent2: NSTextField!
+    @IBOutlet weak var lblBackupSourceContent3: NSTextField!
+    
+    @IBOutlet weak var imgBackupDestination: NSImageView!
+    @IBOutlet weak var lblBackupDestinationStatus1: NSTextField!
+    @IBOutlet weak var lblBackupDestinationStatus2: NSTextField!
+    @IBOutlet weak var lblBackupDestinationContent1: NSTextField!
+    @IBOutlet weak var lblBackupDestinationContent2: NSTextField!
+    @IBOutlet weak var lblBackupDestinationContent3: NSTextField!
+    
+    @IBOutlet weak var chkSourceOrTarget: NSSegmentedControl!
+    @IBOutlet weak var btnNewBackupArchive: NSButton!
+    
+    @IBOutlet weak var bkDatabaseProfilesStackView: NSStackView!
+    var bkDatabaseProfileFlowListItems:[String:DatabaseProfileFlowListItemController] = [:]
+    var bkDatabaseProfiles:[String:DatabaseProfile] = [:]
+    
+    
+    func saveBackupSection(_ defaults:UserDefaults) {
+        
+    }
+    
+    
+    func initBackupSection() {
+        self.boxBackup.title = Words.preference_tab_backup_box_backup.word()
+        self.boxDataClone.title = Words.preference_tab_backup_box_data_clone.word()
+        self.lblBackupLocation.stringValue = Words.preference_tab_backup_box_backup_location.word()
+        self.btnBackupNow.title = Words.preference_tab_database_backup_now.word()
+        self.btnCalculateBackupDiskSpace.title = Words.preference_tab_backup_calc_disk_space.word()
+        self.btnGotoDBBackupPath.title = Words.preference_tab_database_goto.word()
+        self.lblDataCloneFrom.stringValue = Words.preference_tab_backup_from.word()
+        self.lblDataCloneTo.stringValue = Words.preference_tab_backup_to.word()
+        self.chkDeleteAllBeforeClone.title = Words.preference_tab_backup_delete_original_data.word()
+        self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
+        self.chkFromLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkFromLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkFromRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.chkFromBackupArchive.title = Words.preference_tab_backup_restore_from_backup.word()
+        self.chkToLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.lblDataCloneToDatabase.stringValue = Words.preference_tab_backup_to_database.word()
+        self.btnDeleteDBArchives.title = Words.preference_tab_backup_delete_backup.word()
+        self.btnReloadDBArchives.title = Words.preference_tab_backup_reload_backup.word()
+        
+        self.tblDatabaseArchives.backgroundColor = NSColor.black
+        self.tblDatabaseArchives.delegate = self
+        self.tblDatabaseArchives.dataSource = self
+        self.tblDatabaseArchives.allowsMultipleSelection = true
+        
+        self.btnCreateDatabase.isHidden = true
+        
+        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        
+        self.chkDeleteAllBeforeClone.state = .on
+        self.chkDeleteAllBeforeClone.isEnabled = false
+        
+        self.toggleGroup_InstalledPostgres = ToggleGroup([
+            "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
+            "/usr/local/bin"                                          : self.chkPostgresByBrew
+        ], keysOrderred: [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+            ])
+        
+        self.toggleGroup_DBLocation = ToggleGroup([
+//            "local"       : self.chkLocalLocation,
+            "localServer" : self.chkLocalDBServer,
+            "network"     : self.chkNetworkLocation
+        ], keysOrderred: ["local", "localServer", "network"])
+        
+        self.toggleGroup_CloneFromDBLocation = ToggleGroup([
+//            "localDBFile"   :self.chkFromLocalDBFile,
+            "localDBServer" :self.chkFromLocalDBServer,
+            "remoteDBServer":self.chkFromRemoteDBServer,
+            "backupArchive" :self.chkFromBackupArchive
+            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer", "backupArchive"])
+        
+        self.toggleGroup_CloneToDBLocation = ToggleGroup([
+//            "localDBFile"   :self.chkToLocalDBFile,
+            "localDBServer" :self.chkToLocalDBServer,
+            "remoteDBServer":self.chkToRemoteDBServer
+            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer"],
+               onSelect: { option in
+                if option == "localDBServer" {
+                    self.txtRestoreToDatabaseName.stringValue = Setting.database.localPostgres.database()
+                }else if option == "remoteDBServer" {
+                    self.txtRestoreToDatabaseName.stringValue = Setting.database.remotePostgres.database()
+                }
+        })
+        
+        self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
+        self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
+        self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
+            if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
+                self.loadBackupArchives(postgres: true)
+            }
+        })
+        self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
+        self.toggleCreatePostgresDatabase(state: true)
+        
+        self.loadBackupArchives(postgres: true)
+        self.loadBackupDatabaseProfiles()
+        self.calculateBackupUsedSpace(path: URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path)
+    }
+    
+    func loadBackupDatabaseProfiles() {
+        let json = Setting.database.databaseJson()
+        print(json)
+        let profiles = self.databaseProfilesFromJSON(json).sorted { p1, p2 in
+            return p1.id() < p2.id()
+        }
+        var dict:[String:DatabaseProfile] = [:]
+        for profile in profiles {
+            dict[profile.id()] = profile
+        }
+        self.bkDatabaseProfiles = dict
+        
+        for profile in profiles {
+            profile.selected = false
+            self.updateBackupDatabaseProfile(profile: profile)
+        }
+        
+        if self.bkDatabaseProfileFlowListItems.count == 0 {
+            self.addEmptyBackupDatabaseProfile()
+        }
+    }
+    
+    func addEmptyBackupDatabaseProfile() {
+        let profile = DatabaseProfile()
+        profile.host = "127.0.0.1"
+        profile.database = "ImageDocker"
+        profile.engine = "PostgreSQL"
+        profile.port = 5432
+        profile.schema = "public"
+        profile.user = "postgres"
+        profile.nopsw = true
+        profile.ssl = false
+        profile.socketTimeoutInSeconds = 10
+        profile.selected = false
+        self.updateBackupDatabaseProfile(profile: profile)
+    }
+    
+    func updateBackupDatabaseProfile(profile:DatabaseProfile) {
+        if let viewController = self.bkDatabaseProfileFlowListItems[profile.id()] {
+            viewController.updateFields(databaseProfile: profile)
+            self.bkDatabaseProfiles[profile.id()] = profile
+        }else{
+            self.addBackupDatabaseProfile(profile: profile)
+        }
+    }
+    
+    func addBackupDatabaseProfile(profile:DatabaseProfile) {
+        if self.bkDatabaseProfileFlowListItems[profile.id()] != nil {
+            return
+        }
+        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
+        
+        self.bkDatabaseProfiles[profile.id()] = profile
+        viewController.initView(databaseProfile: profile, editable: false, deletable: false,
+        onSelect: {
+            if let profile = self.bkDatabaseProfiles[profile.id()] {
+                self.selectBackupDatabaseProfile(profile: profile)
+            }
+        })
+
+        self.bkDatabaseProfilesStackView.addArrangedSubview(viewController.view)
+        self.bkDatabaseProfileFlowListItems[profile.id()] = viewController
+        //addChildViewController(viewController)
+    }
+    
+    var backupSourceDatabaseProfile:DatabaseProfile?
+    var backupDestinationDatabaseProfile:DatabaseProfile?
+    
+    func selectBackupDatabaseProfile(profile:DatabaseProfile) {
+        for vc in self.bkDatabaseProfileFlowListItems.values {
+            vc.unselect()
+        }
+        for profile in self.bkDatabaseProfiles.values {
+            profile.selected = false
+        }
+        if let vc = self.bkDatabaseProfileFlowListItems[profile.id()] {
+            vc.select()
+        }
+        if let profile = self.bkDatabaseProfiles[profile.id()] {
+            profile.selected = true
+//            self.changeSelectedProfileId(profile: profile)
+        }
+        
+        if self.chkSourceOrTarget.selectedSegment == 0 {
+            self.backupSourceDatabaseProfile = profile
+            self.imgBackupSource.image = Icons.databaseIcon(engine: profile.engine)
+            self.lblBackupSourceContent1.stringValue = "\(profile.host):\(profile.port) \(profile.ssl ? "(ssl)" : "")"
+            self.lblBackupSourceContent2.stringValue = "\(profile.user):\(profile.database)"
+            self.lblBackupSourceContent3.stringValue = ""
+            if self.backupSourceDatabaseProfile?.id() ?? "" == self.backupDestinationDatabaseProfile?.id() ?? "" {
+                self.imgBackupDestination.image = nil
+                self.lblBackupDestinationStatus1.stringValue = ""
+                self.lblBackupDestinationStatus2.stringValue = ""
+                self.lblBackupDestinationContent1.stringValue = ""
+                self.lblBackupDestinationContent2.stringValue = ""
+                self.lblBackupDestinationContent3.stringValue = ""
+                self.backupDestinationDatabaseProfile = nil
+            }
+            self.tblDatabaseArchives.deselectRow(self.lastSelectedBackupArchiveRow ?? -1)
+            self.checkBackupDatabaseVersion(profile: profile, isSource: true)
+        }else{
+            self.backupDestinationDatabaseProfile = profile
+            self.imgBackupDestination.image = Icons.databaseIcon(engine: profile.engine)
+            self.lblBackupDestinationContent1.stringValue = "\(profile.host):\(profile.port) \(profile.ssl ? "(ssl)" : "")"
+            self.lblBackupDestinationContent2.stringValue = "\(profile.user):\(profile.database)"
+            self.lblBackupDestinationContent3.stringValue = ""
+            if self.backupSourceDatabaseProfile?.id() ?? "" == self.backupDestinationDatabaseProfile?.id() ?? "" {
+                self.imgBackupSource.image = nil
+                self.lblBackupSourceStatus1.stringValue = ""
+                self.lblBackupSourceStatus2.stringValue = ""
+                self.lblBackupSourceContent1.stringValue = ""
+                self.lblBackupSourceContent2.stringValue = ""
+                self.lblBackupSourceContent3.stringValue = ""
+                self.backupSourceDatabaseProfile = nil
+            }
+            self.checkBackupDatabaseVersion(profile: profile, isSource: false)
+        }
+    }
+    
+    @IBAction func onNewBackupArchiveClicked(_ sender: NSButton) {
+        let profile = DatabaseProfile()
+        profile.engine = "archive"
+        profile.host = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        profile.database = "ImageDocker.backup.gz"
+        profile.schema = "-on-runtime"
+        
+        self.backupDestinationDatabaseProfile = profile
+        self.imgBackupDestination.image = Icons.databaseIcon(engine: profile.engine)
+        self.lblBackupDestinationContent1.stringValue = Words.preference_tab_backup_from.word()
+        self.lblBackupDestinationContent2.stringValue = profile.database
+        self.lblBackupDestinationContent3.stringValue = ""
+        self.lblBackupDestinationStatus1.stringValue = ""
+        self.lblBackupDestinationStatus2.stringValue = ""
+        
+    }
+    
+    func selectBackupArchiveAsSource(archive:(String, String, String, String)) {
+        let profile = DatabaseProfile()
+        profile.engine = "archive"
+        profile.host = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        profile.database = archive.0
+        profile.schema = "DataBackup-\(archive.0)-\(archive.1)-on-\(archive.2)"
+        
+        self.backupSourceDatabaseProfile = profile
+        self.imgBackupSource.image = Icons.databaseIcon(engine: profile.engine)
+        self.lblBackupSourceContent1.stringValue = Words.preference_tab_backup_from.word()
+        self.lblBackupSourceContent2.stringValue = profile.database
+        self.lblBackupSourceContent3.stringValue = ""
+        
+        self.checkBackupDatabaseVersion(profile: profile, isSource: true)
+    }
+    
+    func checkBackupDatabaseVersion(profile:DatabaseProfile, isSource:Bool) {
+        if isSource {
+            self.lblBackupSourceStatus2.stringValue = ""
+            self.lblBackupSourceStatus1.stringValue = "Connecting..."
+            self.lblBackupSourceStatus1.textColor = Colors.White
+        }else{
+            self.lblBackupDestinationStatus2.stringValue = ""
+            self.lblBackupDestinationStatus1.stringValue = "Connecting..."
+            self.lblBackupDestinationStatus1.textColor = Colors.White
+        }
+        if profile.engine.lowercased() == "postgresql" {
+            DispatchQueue.global().async {
+                let rtn = self.checkPostgreSQLVersion(profile: profile)
+                if rtn.starts(with: "PostgreSQL") {
+                    let parts = rtn.components(separatedBy: " ")
+                    let version = parts[1]
+                    
+                    DispatchQueue.main.async {
+                        if isSource {
+                            self.lblBackupSourceStatus2.stringValue = version
+                            self.lblBackupSourceStatus1.stringValue = "Connectable"
+                            self.lblBackupSourceStatus1.textColor = Colors.Green
+                        }else{
+                            self.lblBackupDestinationStatus2.stringValue = version
+                            self.lblBackupDestinationStatus1.stringValue = "Connectable"
+                            self.lblBackupDestinationStatus1.textColor = Colors.Green
+                        }
+                    }
+                    let schemaVersion = self.checkSchemaVersion(profile: profile)
+                    
+                    if schemaVersion.starts(with: "v") {
+                        DispatchQueue.main.async {
+                            if isSource {
+                                self.lblBackupSourceContent3.stringValue = schemaVersion
+                            }else{
+                                self.lblBackupDestinationContent3.stringValue = schemaVersion
+                            }
+                        }
+                    }else if schemaVersion.starts(with: "error_"){
+                        DispatchQueue.main.async {
+                            if isSource {
+                                self.lblBackupSourceContent3.stringValue = "数据库错误"
+                            }else{
+                                self.lblBackupDestinationContent3.stringValue = "数据库错误"
+                            }
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            if isSource {
+                                self.lblBackupSourceContent3.stringValue = Words.preference_tab_backup_no_schema.word()
+                            }else{
+                                self.lblBackupDestinationContent3.stringValue = Words.preference_tab_backup_no_schema.word()
+                            }
+                        }
+                    }
+                    
+                    
+                }else if rtn.contains(find: "socketError") {
+                    DispatchQueue.main.async {
+                        if isSource {
+                            self.lblBackupSourceStatus2.stringValue = ""
+                            self.lblBackupSourceStatus1.stringValue = "Unreachable"
+                            self.lblBackupSourceStatus1.textColor = Colors.Red
+                        }else{
+                            self.lblBackupDestinationStatus2.stringValue = ""
+                            self.lblBackupDestinationStatus1.stringValue = "Unreachable"
+                            self.lblBackupDestinationStatus1.textColor = Colors.Red
+                        }
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        if isSource {
+                            self.lblBackupSourceStatus2.stringValue = ""
+                            self.lblBackupSourceStatus1.stringValue = "Unauthorized"
+                            self.lblBackupSourceStatus1.textColor = Colors.Red
+                        }else{
+                            self.lblBackupDestinationStatus2.stringValue = ""
+                            self.lblBackupDestinationStatus1.stringValue = "Unauthorized"
+                            self.lblBackupDestinationStatus1.textColor = Colors.Red
+                        }
+                    }
+                }
+            }
+            
+        }else if profile.engine.lowercased() == "archive" {
+            DispatchQueue.global().async {
+                let path = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(profile.schema).appendingPathComponent("ImageDocker.backup.gz").path
+                if path.isFileExists() {
+                    DispatchQueue.main.async {
+                        if isSource {
+                            self.lblBackupSourceStatus2.stringValue = ""
+                            self.lblBackupSourceStatus1.stringValue = "Connectable"
+                            self.lblBackupSourceStatus1.textColor = Colors.Green
+                        }else{
+                            self.lblBackupDestinationStatus2.stringValue = ""
+                            self.lblBackupDestinationStatus1.stringValue = "Connectable"
+                            self.lblBackupDestinationStatus1.textColor = Colors.Green
+                        }
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        if isSource {
+                            self.lblBackupSourceStatus2.stringValue = ""
+                            self.lblBackupSourceStatus1.stringValue = "Unreachable"
+                            self.lblBackupSourceStatus1.textColor = Colors.Red
+                        }else{
+                            self.lblBackupDestinationStatus2.stringValue = ""
+                            self.lblBackupDestinationStatus1.stringValue = "Unreachable"
+                            self.lblBackupDestinationStatus1.textColor = Colors.Red
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private func toggleDatabaseClonerButtons(state: Bool) {
         self.btnLocalDBFileBackup.isEnabled = state
@@ -985,22 +1380,6 @@ final class DatabaseBackupController: NSViewController {
         }else{
             self.toggleGroup_CloneFromDBLocation.disable()
             self.toggleGroup_CloneToDBLocation.disable()
-        }
-    }
-    
-    func calculateBackupUsedSpace(path:String) {
-        let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
-        DispatchQueue.main.async {
-            self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_used_space.fill(arguments: "\(Double(sizeGB).rounded(toPlaces: 2))", "\(spaceFree)")
-        }
-    }
-    
-    @IBAction func onCalcBackupUsedSpace(_ sender: NSButton) {
-        let path = lblDatabaseBackupPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        if path != "" {
-            DispatchQueue.global().async {
-                self.calculateBackupUsedSpace(path: path)
-            }
         }
     }
     
@@ -1272,42 +1651,6 @@ final class DatabaseBackupController: NSViewController {
         
     }
     
-    @IBAction func onReloadDBArchivesClicked(_ sender: NSButton) {
-        if self.toggleGroup_CloneToDBLocation.selected == "localDBFile" {
-            self.loadBackupArchives(postgres: false)
-        }else{
-            self.loadBackupArchives(postgres: true)
-        }
-    }
-    
-    @IBAction func onDeleteDBArchivesClicked(_ sender: NSButton) {
-        var selected:[String] = []
-        if self.tblDatabaseArchives.numberOfSelectedRows > 0 {
-            for i in 0..<self.backupArchives.count {
-                if self.tblDatabaseArchives.isRowSelected(i) {
-                    let (_, _, _, folder) = self.backupArchives[i]
-                    selected.append(folder)
-                }
-            }
-        }
-        let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup")
-        DispatchQueue.global().async {
-            for folder in selected {
-                let url = backupPath.appendingPathComponent(folder)
-                
-                self.logger.log(.trace, "delete backup folder \(folder)")
-                do{
-                    try FileManager.default.removeItem(at: url)
-                }catch{
-                    self.logger.log(.trace, "Unable to delete backup archive: \(url.path)")
-                    self.logger.log(.error, error)
-                }
-            }
-            self.loadBackupArchives()
-            self.calculateBackupUsedSpace(path: backupPath.path)
-        }
-    }
-    
     // MARK: TOGGLE GROUP - CLONE FROM DB
     
     var toggleGroup_CloneFromDBLocation:ToggleGroup!
@@ -1374,95 +1717,62 @@ final class DatabaseBackupController: NSViewController {
     }
     
     
-    func saveBackupSection(_ defaults:UserDefaults) {
-        
+    
+    // MARK: BACKUP ARCHIVE USED SPACE
+    
+    func calculateBackupUsedSpace(path:String) {
+        let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
+        DispatchQueue.main.async {
+            self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_used_space.fill(arguments: "\(Double(sizeGB).rounded(toPlaces: 2))", "\(spaceFree)")
+        }
     }
     
-    
-    
-    func initBackupSection() {
-        self.boxBackup.title = Words.preference_tab_backup_box_backup.word()
-        self.boxDataClone.title = Words.preference_tab_backup_box_data_clone.word()
-        self.lblBackupLocation.stringValue = Words.preference_tab_backup_box_backup_location.word()
-        self.btnBackupNow.title = Words.preference_tab_database_backup_now.word()
-        self.btnCalculateBackupDiskSpace.title = Words.preference_tab_backup_calc_disk_space.word()
-        self.btnGotoDBBackupPath.title = Words.preference_tab_database_goto.word()
-        self.lblDataCloneFrom.stringValue = Words.preference_tab_backup_from.word()
-        self.lblDataCloneTo.stringValue = Words.preference_tab_backup_to.word()
-        self.chkDeleteAllBeforeClone.title = Words.preference_tab_backup_delete_original_data.word()
-        self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
-        self.chkFromLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
-        self.chkFromLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
-        self.chkFromRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
-        self.chkFromBackupArchive.title = Words.preference_tab_backup_restore_from_backup.word()
-        self.chkToLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
-        self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
-        self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
-        self.lblDataCloneToDatabase.stringValue = Words.preference_tab_backup_to_database.word()
-        self.btnDeleteDBArchives.title = Words.preference_tab_backup_delete_backup.word()
-        self.btnReloadDBArchives.title = Words.preference_tab_backup_reload_backup.word()
-        
-        self.tblDatabaseArchives.backgroundColor = NSColor.black
-        self.tblDatabaseArchives.delegate = self
-        self.tblDatabaseArchives.dataSource = self
-        self.tblDatabaseArchives.allowsMultipleSelection = true
-        
-        self.btnCreateDatabase.isHidden = true
-        
-        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
-        
-        self.chkDeleteAllBeforeClone.state = .on
-        self.chkDeleteAllBeforeClone.isEnabled = false
-        
-        self.toggleGroup_InstalledPostgres = ToggleGroup([
-            "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
-            "/usr/local/bin"                                          : self.chkPostgresByBrew
-        ], keysOrderred: [
-            "/Applications/Postgres.app/Contents/Versions/latest/bin",
-            "/usr/local/bin"
-            ])
-        
-        self.toggleGroup_DBLocation = ToggleGroup([
-//            "local"       : self.chkLocalLocation,
-            "localServer" : self.chkLocalDBServer,
-            "network"     : self.chkNetworkLocation
-        ], keysOrderred: ["local", "localServer", "network"])
-        
-        self.toggleGroup_CloneFromDBLocation = ToggleGroup([
-//            "localDBFile"   :self.chkFromLocalDBFile,
-            "localDBServer" :self.chkFromLocalDBServer,
-            "remoteDBServer":self.chkFromRemoteDBServer,
-            "backupArchive" :self.chkFromBackupArchive
-            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer", "backupArchive"])
-        
-        self.toggleGroup_CloneToDBLocation = ToggleGroup([
-//            "localDBFile"   :self.chkToLocalDBFile,
-            "localDBServer" :self.chkToLocalDBServer,
-            "remoteDBServer":self.chkToRemoteDBServer
-            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer"],
-               onSelect: { option in
-                if option == "localDBServer" {
-                    self.txtRestoreToDatabaseName.stringValue = Setting.database.localPostgres.database()
-                }else if option == "remoteDBServer" {
-                    self.txtRestoreToDatabaseName.stringValue = Setting.database.remotePostgres.database()
-                }
-        })
-        
-        self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
-        self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
-        self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
-            if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
-                self.loadBackupArchives(postgres: true)
+    @IBAction func onCalcBackupUsedSpace(_ sender: NSButton) {
+        let path = lblDatabaseBackupPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if path != "" {
+            DispatchQueue.global().async {
+                self.calculateBackupUsedSpace(path: path)
             }
-        })
-        self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
-        self.toggleCreatePostgresDatabase(state: true)
-        
-        self.loadBackupArchives(postgres: true)
-        
+        }
     }
     
+    // MARK: BACKUP ARCHIVE TABLE
     
+    @IBAction func onReloadDBArchivesClicked(_ sender: NSButton) {
+        if self.toggleGroup_CloneToDBLocation.selected == "localDBFile" {
+            self.loadBackupArchives(postgres: false)
+        }else{
+            self.loadBackupArchives(postgres: true)
+        }
+    }
+    
+    @IBAction func onDeleteDBArchivesClicked(_ sender: NSButton) {
+        var selected:[String] = []
+        if self.tblDatabaseArchives.numberOfSelectedRows > 0 {
+            for i in 0..<self.backupArchives.count {
+                if self.tblDatabaseArchives.isRowSelected(i) {
+                    let (_, _, _, folder) = self.backupArchives[i]
+                    selected.append(folder)
+                }
+            }
+        }
+        let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup")
+        DispatchQueue.global().async {
+            for folder in selected {
+                let url = backupPath.appendingPathComponent(folder)
+                
+                self.logger.log(.trace, "delete backup folder \(folder)")
+                do{
+                    try FileManager.default.removeItem(at: url)
+                }catch{
+                    self.logger.log(.trace, "Unable to delete backup archive: \(url.path)")
+                    self.logger.log(.error, error)
+                }
+            }
+            self.loadBackupArchives()
+            self.calculateBackupUsedSpace(path: backupPath.path)
+        }
+    }
     
     
     
@@ -1470,7 +1780,14 @@ final class DatabaseBackupController: NSViewController {
     
     var shouldLoadPostgresBackupArchives = true
     
-    
+    var lastSelectedBackupArchiveRow:Int? {
+        didSet {
+            if let row = lastSelectedBackupArchiveRow, row >= 0 {
+                let archive = self.backupArchives[row]
+                self.selectBackupArchiveAsSource(archive: archive)
+            }
+        }
+    }
 }
 
 
@@ -1536,6 +1853,7 @@ extension DatabaseBackupController : NSTableViewDelegate, NSTableViewDataSource{
             colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
 //                colView.textField?.textColor = NSColor.yellow
+                
             } else {
 //                colView.textField?.textColor = nil
             }
@@ -1549,6 +1867,7 @@ extension DatabaseBackupController : NSTableViewDelegate, NSTableViewDataSource{
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        lastSelectedBackupArchiveRow = row
         return true
     }
     

@@ -28,6 +28,9 @@ class DatabaseProfileFlowListItemController : NSViewController {
     var onEdit:(() -> Void)?
     var onDelete:(() -> Void)?
     
+    var editable = true
+    var deletable = true
+    
     init() {
         super.init(nibName: "DatabaseProfileFlowListItemController", bundle: nil)
     }
@@ -45,22 +48,12 @@ class DatabaseProfileFlowListItemController : NSViewController {
     }
     
     func reloadControls() {
+        self.imageView.image = Icons.databaseIcon(engine: self.data?.engine ?? "")
         self.lblContent.stringValue = "\(self.data?.host ?? ""):\(self.data?.port ?? -9999) \(self.data?.ssl ?? false ? "(ssl)" : "")"
         self.lblContent2.stringValue = "\(self.data?.user ?? ""):\(self.data?.database ?? "")"
         self.lblStatus1.stringValue = status1
         self.lblStatus2.stringValue = status2
-        self.checkbox.state = (self.data?.selected ?? false) ? .on : .off
         
-        switch(self.data?.engine.lowercased() ?? "") {
-            case "postgresql":
-                self.imageView.image = Icons.database_postgresql
-                break
-            case "mysql":
-                self.imageView.image = Icons.database_mysql
-                break
-            default:
-                break
-        }
         
         if status1.starts(with: "Un") {
             self.lblStatus1.textColor = Colors.Red
@@ -69,13 +62,20 @@ class DatabaseProfileFlowListItemController : NSViewController {
         }else{
             self.lblStatus1.textColor = Colors.White
         }
+        self.btnEdit.isHidden = !self.editable
+        self.btnDelete.isHidden = !self.deletable
+        self.checkbox.state = (self.data?.selected ?? false) ? .on : .off
     }
     
     func initView(databaseProfile:DatabaseProfile, status1:String = "", status2:String = "",
+                  editable:Bool = true,
+                  deletable:Bool = true,
                   onSelect:(() -> Void)? = nil,
                   onEdit:(() -> Void)? = nil,
                   onDelete:(() -> Void)? = nil) {
         self.data = databaseProfile
+        self.editable = editable
+        self.deletable = deletable
 //        self.imageView.image = nsImage
         self.status1 = status1
         self.status2 = status2

@@ -1520,81 +1520,201 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <rect key="frame" x="10" y="33" width="744" height="626"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <box fixedFrame="YES" title="Backup" translatesAutoresizingMaskIntoConstraints="NO" id="ELN-dH-HeW">
-                                                    <rect key="frame" x="36" y="524" width="672" height="92"/>
+                                                <box fixedFrame="YES" title="源" translatesAutoresizingMaskIntoConstraints="NO" id="ELN-dH-HeW">
+                                                    <rect key="frame" x="18" y="485" width="307" height="125"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="siQ-Lx-ss0">
-                                                        <rect key="frame" x="4" y="5" width="664" height="72"/>
+                                                        <rect key="frame" x="4" y="5" width="299" height="105"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-M1-Omx">
-                                                                <rect key="frame" x="99" y="46" width="498" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="SWy-6B-uLw">
+                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UwM-ui-VDF">
+                                                                <rect key="frame" x="10" y="42" width="50" height="50"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="50" id="Clf-la-Xrn"/>
+                                                                    <constraint firstAttribute="width" constant="50" id="EOr-Zf-pg0"/>
+                                                                </constraints>
+                                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="6SW-j4-yee"/>
+                                                            </imageView>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idj-Gj-Vk6">
+                                                                <rect key="frame" x="1" y="35" width="74" height="12"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="70" id="dJY-V4-4Ob"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="B6k-aX-Avb">
+                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dA-Kx-Wkb">
+                                                                <rect key="frame" x="1" y="15" width="74" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="70" id="hyC-V6-WZN"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="Mvr-ge-LY2">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F1p-Jz-Hvk">
-                                                                <rect key="frame" x="596" y="35" width="64" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SbI-MP-KlP">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onFindDatabaseBackupClicked:" target="UOy-CF-cGN" id="ENt-n2-VTf"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33T-wC-Oxh">
-                                                                <rect key="frame" x="11" y="14" width="365" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="zQe-g3-g6y">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZH-l4-8nO">
-                                                                <rect key="frame" x="372" y="2" width="168" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Calculate Disk Space" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vGK-vG-Hbq">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCalcBackupUsedSpace:" target="ld1-y7-yeS" id="JxH-8f-6zi"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTo-Vp-N6L">
-                                                                <rect key="frame" x="23" y="44" width="72" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Location:" id="eBe-KT-ADl">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPS-Tf-tx8">
-                                                                <rect key="frame" x="534" y="2" width="126" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9l0-32-QrK">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupNowClicked:" target="ld1-y7-yeS" id="axC-Vp-rSz"/>
-                                                                </connections>
-                                                            </button>
+                                                            <box ambiguous="YES" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="lKU-0L-2Zo">
+                                                                <rect key="frame" x="70" y="5" width="223" height="96"/>
+                                                                <view key="contentView" id="nlM-Di-ORG">
+                                                                    <rect key="frame" x="4" y="5" width="215" height="88"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JbY-oT-iAf">
+                                                                            <rect key="frame" x="8" y="43" width="194" height="25"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="190" id="4Xm-nc-3Ih"/>
+                                                                                <constraint firstAttribute="height" constant="25" id="iKq-4o-lpm"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" selectable="YES" alignment="left" id="WQ9-Iv-E73">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Iim-u2-WDi">
+                                                                            <rect key="frame" x="8" y="27" width="194" height="16"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="190" id="HUJ-Zy-9gc"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" selectable="YES" alignment="left" id="3mU-b0-4OO">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X2V-Fe-Yyx">
+                                                                            <rect key="frame" x="8" y="3" width="194" height="16"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="190" id="XuU-hc-VBU"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" lineBreakMode="clipping" id="Olp-WN-0Zn">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="JbY-oT-iAf" firstAttribute="leading" secondItem="nlM-Di-ORG" secondAttribute="leading" constant="10" id="BPW-2R-TRc"/>
+                                                                        <constraint firstItem="Iim-u2-WDi" firstAttribute="leading" secondItem="nlM-Di-ORG" secondAttribute="leading" constant="10" id="FBT-w0-yDD"/>
+                                                                        <constraint firstItem="Iim-u2-WDi" firstAttribute="top" secondItem="JbY-oT-iAf" secondAttribute="bottom" id="GNE-kb-DYk"/>
+                                                                        <constraint firstItem="X2V-Fe-Yyx" firstAttribute="top" secondItem="Iim-u2-WDi" secondAttribute="bottom" constant="8" symbolic="YES" id="M9a-ci-CIj"/>
+                                                                        <constraint firstItem="JbY-oT-iAf" firstAttribute="top" secondItem="nlM-Di-ORG" secondAttribute="top" constant="20" id="jTa-YG-Htd"/>
+                                                                        <constraint firstItem="X2V-Fe-Yyx" firstAttribute="leading" secondItem="nlM-Di-ORG" secondAttribute="leading" constant="10" id="z2l-6D-cb8"/>
+                                                                    </constraints>
+                                                                </view>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="90" id="1go-8G-4v7"/>
+                                                                    <constraint firstAttribute="width" constant="217" id="qSj-xr-gcl"/>
+                                                                </constraints>
+                                                            </box>
                                                         </subviews>
                                                     </view>
                                                 </box>
-                                                <box fixedFrame="YES" title="Data Clone" translatesAutoresizingMaskIntoConstraints="NO" id="9cl-Oo-Ly7">
-                                                    <rect key="frame" x="36" y="80" width="672" height="433"/>
+                                                <box fixedFrame="YES" title="目标" translatesAutoresizingMaskIntoConstraints="NO" id="DAd-uT-7RE">
+                                                    <rect key="frame" x="420" y="485" width="307" height="125"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="Njk-9U-1p0">
+                                                        <rect key="frame" x="4" y="5" width="299" height="105"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zce-vX-cVi">
+                                                                <rect key="frame" x="10" y="42" width="50" height="50"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="50" id="LM2-Bd-eJF"/>
+                                                                    <constraint firstAttribute="height" constant="50" id="bQA-bo-Zhb"/>
+                                                                </constraints>
+                                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="NVs-7M-LIy"/>
+                                                            </imageView>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6YA-7W-Uv7">
+                                                                <rect key="frame" x="1" y="35" width="74" height="12"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="70" id="qUP-gk-xyo"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="RCa-Ph-G8m">
+                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hD3-0I-Vn9">
+                                                                <rect key="frame" x="1" y="15" width="74" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="70" id="1JT-FX-d8Z"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="Hcv-KC-Dwx">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <box ambiguous="YES" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="YQr-wM-rEV">
+                                                                <rect key="frame" x="70" y="5" width="223" height="96"/>
+                                                                <view key="contentView" id="dh2-T4-HCh">
+                                                                    <rect key="frame" x="4" y="5" width="215" height="88"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Ge2-DT-2dn">
+                                                                            <rect key="frame" x="8" y="43" width="194" height="25"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="25" id="j4I-HY-8T4"/>
+                                                                                <constraint firstAttribute="width" constant="190" id="n8k-LE-4aO"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" selectable="YES" alignment="left" id="VBs-Qa-06H">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="COH-vF-Dt0">
+                                                                            <rect key="frame" x="8" y="27" width="194" height="16"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="190" id="JTP-j2-vw8"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" selectable="YES" alignment="left" id="ljX-Ha-2AY">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qda-SQ-c3v">
+                                                                            <rect key="frame" x="8" y="3" width="194" height="16"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="190" id="aGc-od-vNW"/>
+                                                                            </constraints>
+                                                                            <textFieldCell key="cell" lineBreakMode="clipping" id="CwG-II-S78">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="COH-vF-Dt0" firstAttribute="top" secondItem="Ge2-DT-2dn" secondAttribute="bottom" id="0bQ-ab-plx"/>
+                                                                        <constraint firstItem="COH-vF-Dt0" firstAttribute="leading" secondItem="dh2-T4-HCh" secondAttribute="leading" constant="10" id="6pM-bF-iIo"/>
+                                                                        <constraint firstItem="qda-SQ-c3v" firstAttribute="leading" secondItem="dh2-T4-HCh" secondAttribute="leading" constant="10" id="DEi-UF-vAe"/>
+                                                                        <constraint firstItem="Ge2-DT-2dn" firstAttribute="top" secondItem="dh2-T4-HCh" secondAttribute="top" constant="20" id="Nm3-0m-XoE"/>
+                                                                        <constraint firstItem="qda-SQ-c3v" firstAttribute="top" secondItem="COH-vF-Dt0" secondAttribute="bottom" constant="8" symbolic="YES" id="qhA-VJ-d4p"/>
+                                                                        <constraint firstItem="Ge2-DT-2dn" firstAttribute="leading" secondItem="dh2-T4-HCh" secondAttribute="leading" constant="10" id="swh-fr-fvB"/>
+                                                                    </constraints>
+                                                                </view>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="217" id="04Z-GT-TMv"/>
+                                                                    <constraint firstAttribute="height" constant="90" id="Q6b-My-icf"/>
+                                                                </constraints>
+                                                            </box>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <box fixedFrame="YES" title="数据来源" translatesAutoresizingMaskIntoConstraints="NO" id="9cl-Oo-Ly7">
+                                                    <rect key="frame" x="18" y="17" width="709" height="433"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="dkQ-fH-cJo">
-                                                        <rect key="frame" x="4" y="5" width="664" height="413"/>
+                                                        <rect key="frame" x="4" y="5" width="701" height="413"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R9F-1u-QrQ">
@@ -1606,25 +1726,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NYl-LK-fmS">
-                                                                <rect key="frame" x="480" y="383" width="168" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Delete all original data" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VIA-Zc-4Kr">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6b-3S-cT0">
-                                                                <rect key="frame" x="546" y="329" width="106" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Clone Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UAb-pr-mG0">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCloneLocalToRemoteClicked:" target="ld1-y7-yeS" id="nEI-iK-zm7"/>
-                                                                </connections>
-                                                            </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TXt-9o-d1h">
                                                                 <rect key="frame" x="32" y="353" width="99" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1637,7 +1738,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IJi-Dn-ugh">
-                                                                <rect key="frame" x="32" y="323" width="187" height="18"/>
+                                                                <rect key="frame" x="44" y="353" width="187" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6te-dQ-hX5">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1648,7 +1749,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oBH-43-Xm3">
-                                                                <rect key="frame" x="32" y="291" width="187" height="18"/>
+                                                                <rect key="frame" x="33" y="355" width="187" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PIJ-CS-CBT">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1659,7 +1760,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJc-Jw-Plk">
-                                                                <rect key="frame" x="296" y="353" width="99" height="18"/>
+                                                                <rect key="frame" x="44" y="353" width="99" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Local SQLite" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="y4n-ph-ryA">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1670,7 +1771,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-0v-Ccz">
-                                                                <rect key="frame" x="296" y="323" width="159" height="18"/>
+                                                                <rect key="frame" x="33" y="353" width="159" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ds1-Fd-lXU">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1681,7 +1782,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-Hj-JCX">
-                                                                <rect key="frame" x="296" y="291" width="178" height="18"/>
+                                                                <rect key="frame" x="53" y="355" width="178" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="28K-2S-aiz">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1692,33 +1793,20 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gpg-i7-Ko0">
-                                                                <rect key="frame" x="120" y="387" width="42" height="16"/>
+                                                                <rect key="frame" x="100" y="387" width="99" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="FROM" id="nFs-Le-8Fo">
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="备份档案" id="nFs-Le-8Fo">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cyi-ws-5zG">
-                                                                <rect key="frame" x="373" y="387" width="22" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="TO" id="fBs-Vj-i8h">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="vj3-jv-ZSA">
-                                                                <rect key="frame" x="275" y="290" width="5" height="114"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            </box>
                                                             <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="8KH-sE-kjs">
-                                                                <rect key="frame" x="34" y="383" width="440" height="5"/>
+                                                                <rect key="frame" x="12" y="383" width="669" height="5"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             </box>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uQQ-na-8F6">
-                                                                <rect key="frame" x="28" y="42" width="93" height="32"/>
+                                                                <rect key="frame" x="5" y="62" width="93" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wGN-pf-N7w">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1729,7 +1817,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-CZ-5Ye">
-                                                                <rect key="frame" x="313" y="263" width="178" height="16"/>
+                                                                <rect key="frame" x="38" y="356" width="178" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="To Database:" id="pnK-mk-dlO">
                                                                     <font key="font" metaFont="system"/>
@@ -1738,14 +1826,14 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </textFieldCell>
                                                             </textField>
                                                             <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="44" horizontalPageScroll="10" verticalLineScroll="44" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fKq-lX-LNT">
-                                                                <rect key="frame" x="34" y="81" width="230" height="170"/>
+                                                                <rect key="frame" x="12" y="99" width="319" height="247"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="319" height="247"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="269" height="127"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="319" height="219"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1783,7 +1871,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </tableCellView>
                                                                                     </prototypeCellViews>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="value2" width="108" minWidth="40" maxWidth="1000" id="y0g-1q-KcC">
+                                                                                <tableColumn identifier="value2" width="158" minWidth="40" maxWidth="1000" id="y0g-1q-KcC">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="At moment">
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1796,11 +1884,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                     <prototypeCellViews>
                                                                                         <tableCellView id="nrO-gg-jDh">
-                                                                                            <rect key="frame" x="145" y="1" width="112" height="42"/>
+                                                                                            <rect key="frame" x="145" y="1" width="162" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
                                                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-T4-zG5">
-                                                                                                    <rect key="frame" x="0.0" y="25" width="112" height="17"/>
+                                                                                                    <rect key="frame" x="0.0" y="25" width="162" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="YcX-ar-chC">
                                                                                                         <font key="font" metaFont="system"/>
@@ -1820,8 +1908,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     </subviews>
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
-                                                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="kjg-Qg-z1A">
-                                                                    <rect key="frame" x="0.0" y="155" width="230" height="15"/>
+                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="kjg-Qg-z1A">
+                                                                    <rect key="frame" x="0.0" y="155" width="267" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="mZk-PA-1Ik">
@@ -1829,23 +1917,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <tableHeaderView key="headerView" wantsLayer="YES" id="s4r-tD-ASl">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="269" height="28"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="319" height="28"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhM-u8-JAQ">
-                                                                <rect key="frame" x="175" y="42" width="95" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rDb-Kz-jKE">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onReloadDBArchivesClicked:" target="ld1-y7-yeS" id="uTY-mg-WiZ"/>
-                                                                </connections>
-                                                            </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KBm-w5-ELx">
-                                                                <rect key="frame" x="32" y="260" width="149" height="18"/>
+                                                                <rect key="frame" x="43" y="355" width="149" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Restore from backup" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="qiK-hc-flb">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1856,20 +1933,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </connections>
                                                             </button>
                                                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ud-ED-5l4">
-                                                                <rect key="frame" x="313" y="49" width="333" height="28"/>
+                                                                <rect key="frame" x="149" y="353" width="111" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" selectable="YES" alignment="center" id="PTt-4J-G3Z">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Chg-Mg-GQN">
-                                                                <rect key="frame" x="315" y="232" width="109" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="WPf-oi-gWL">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
@@ -1882,9 +1950,178 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTo-Vp-N6L">
+                                                                <rect key="frame" x="10" y="11" width="72" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Location:" id="eBe-KT-ADl">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-M1-Omx">
+                                                                <rect key="frame" x="88" y="10" width="539" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="SWy-6B-uLw">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZH-l4-8nO">
+                                                                <rect key="frame" x="198" y="62" width="140" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Calculate Space" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vGK-vG-Hbq">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCalcBackupUsedSpace:" target="ld1-y7-yeS" id="JxH-8f-6zi"/>
+                                                                </connections>
+                                                            </button>
+                                                            <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uym-i5-xP9">
+                                                                <rect key="frame" x="339" y="42" width="342" height="328"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="HD6-p9-OiP">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="328"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MtS-0T-KSK" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="328" width="327" height="0.0"/>
+                                                                        </stackView>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="MtS-0T-KSK" firstAttribute="leading" secondItem="HD6-p9-OiP" secondAttribute="leading" id="QEP-nH-3fq"/>
+                                                                        <constraint firstItem="MtS-0T-KSK" firstAttribute="top" secondItem="HD6-p9-OiP" secondAttribute="top" id="Yum-Rx-wFY"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="MtS-0T-KSK" secondAttribute="trailing" id="rFc-zB-Hjh"/>
+                                                                    </constraints>
+                                                                </clipView>
+                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="6uA-ZV-mti">
+                                                                    <rect key="frame" x="-100" y="-100" width="1163" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="SjS-fK-ymS">
+                                                                    <rect key="frame" x="327" y="0.0" width="15" height="328"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                            </scrollView>
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Chg-Mg-GQN">
+                                                                <rect key="frame" x="200" y="356" width="109" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="WPf-oi-gWL">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33T-wC-Oxh">
+                                                                <rect key="frame" x="10" y="45" width="323" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="zQe-g3-g6y">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cyi-ws-5zG">
+                                                                <rect key="frame" x="468" y="387" width="54" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="数据库" id="fBs-Vj-i8h">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="vj3-jv-ZSA">
+                                                                <rect key="frame" x="337" y="35" width="5" height="348"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPS-Tf-tx8">
+                                                                <rect key="frame" x="258" y="378" width="80" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Backup" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9l0-32-QrK">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onBackupNowClicked:" target="ld1-y7-yeS" id="axC-Vp-rSz"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtT-5e-4Ak">
+                                                                <rect key="frame" x="567" y="390" width="39" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="作为:" id="zk4-mP-fNY">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F1p-Jz-Hvk">
+                                                                <rect key="frame" x="624" y="1" width="64" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SbI-MP-KlP">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onFindDatabaseBackupClicked:" target="ld1-y7-yeS" id="vY3-Bb-FLI"/>
+                                                                </connections>
+                                                            </button>
+                                                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1k2-xS-U1x">
+                                                                <rect key="frame" x="610" y="386" width="73" height="24"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <segmentedCell key="cell" alignment="left" style="texturedRounded" trackingMode="selectOne" id="VdK-Va-fm0">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <segments>
+                                                                        <segment label="源" width="32"/>
+                                                                        <segment label="目标" width="32" selected="YES" tag="1"/>
+                                                                    </segments>
+                                                                </segmentedCell>
+                                                            </segmentedControl>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMb-dK-lgB">
+                                                                <rect key="frame" x="0.0" y="379" width="86" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="新的备份" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBB-qV-J6o">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onNewBackupArchiveClicked:" target="ld1-y7-yeS" id="3xv-5R-lfU"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhM-u8-JAQ">
+                                                                <rect key="frame" x="102" y="62" width="95" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rDb-Kz-jKE">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onReloadDBArchivesClicked:" target="ld1-y7-yeS" id="uTY-mg-WiZ"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NYl-LK-fmS">
+                                                    <rect key="frame" x="287" y="457" width="168" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="Delete all original data" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VIA-Zc-4Kr">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6b-3S-cT0">
+                                                    <rect key="frame" x="319" y="497" width="106" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clone Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UAb-pr-mG0">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onCloneLocalToRemoteClicked:" target="ld1-y7-yeS" id="nEI-iK-zm7"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
@@ -2473,7 +2710,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bkDatabaseProfilesStackView" destination="MtS-0T-KSK" id="Vwk-9w-gtq"/>
                         <outlet property="boxBackup" destination="ELN-dH-HeW" id="18n-Qw-VHO"/>
+                        <outlet property="boxBackupDestination" destination="DAd-uT-7RE" id="fhM-Vj-K5y"/>
                         <outlet property="boxDataClone" destination="9cl-Oo-Ly7" id="jfe-G7-lyp"/>
                         <outlet property="boxDatabaseProfile" destination="ETz-Dc-dH3" id="LKN-cA-GtU"/>
                         <outlet property="boxLocalPostgres" destination="ptW-Qc-XwN" id="TgK-ED-Fzr"/>
@@ -2493,6 +2732,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnLocalDBFileTest" destination="zHJ-fw-fbJ" id="tSr-RY-lO7"/>
                         <outlet property="btnLocalDBServerBackup" destination="pmb-Ll-IHK" id="OUv-0e-UJL"/>
                         <outlet property="btnLocalDBServerTest" destination="7D2-tn-kFX" id="3Cu-8A-wHn"/>
+                        <outlet property="btnNewBackupArchive" destination="yMb-dK-lgB" id="peG-KD-KLU"/>
                         <outlet property="btnNewDatabaseProfile" destination="NtU-rG-Oic" id="fOo-6m-XcP"/>
                         <outlet property="btnReloadDBArchives" destination="uhM-u8-JAQ" id="6R0-zl-oqj"/>
                         <outlet property="btnRemoteDBServerBackup" destination="xtE-T2-erg" id="SCV-LC-G3z"/>
@@ -2515,13 +2755,26 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="chkPostgresByBrew" destination="RRx-Fb-VF6" id="seX-b2-8Ls"/>
                         <outlet property="chkPostgresInApp" destination="xfT-Za-vRI" id="efJ-bf-b3Q"/>
                         <outlet property="chkRemoteDBNoPassword" destination="bTL-Qq-lff" id="FVz-MB-b2P"/>
+                        <outlet property="chkSourceOrTarget" destination="1k2-xS-U1x" id="CuU-fT-35f"/>
                         <outlet property="chkToLocalDBFile" destination="eJc-Jw-Plk" id="JFv-6q-rb4"/>
                         <outlet property="chkToLocalDBServer" destination="PdS-0v-Ccz" id="2dG-Z6-HZB"/>
                         <outlet property="chkToRemoteDBServer" destination="cjk-Hj-JCX" id="ch5-Sh-2Of"/>
                         <outlet property="databaseProfilesStackView" destination="I3D-pG-MK4" id="evT-Wc-k89"/>
+                        <outlet property="imgBackupDestination" destination="zce-vX-cVi" id="RgY-D0-YSl"/>
+                        <outlet property="imgBackupSource" destination="UwM-ui-VDF" id="giQ-qd-Giu"/>
                         <outlet property="imgDatabaseMysql" destination="zC6-o5-zDB" id="tIn-iX-wiA"/>
                         <outlet property="imgDatabasePostgresql" destination="DGm-wI-Wmj" id="cRN-Tj-d2r"/>
+                        <outlet property="lblBackupDestinationContent1" destination="Ge2-DT-2dn" id="nZn-il-kv2"/>
+                        <outlet property="lblBackupDestinationContent2" destination="COH-vF-Dt0" id="Y7S-at-QHg"/>
+                        <outlet property="lblBackupDestinationContent3" destination="qda-SQ-c3v" id="Ph0-21-CEH"/>
+                        <outlet property="lblBackupDestinationStatus1" destination="6YA-7W-Uv7" id="oYr-AW-V0o"/>
+                        <outlet property="lblBackupDestinationStatus2" destination="hD3-0I-Vn9" id="84f-Om-qd7"/>
                         <outlet property="lblBackupLocation" destination="FTo-Vp-N6L" id="QmF-Ar-Sf7"/>
+                        <outlet property="lblBackupSourceContent1" destination="JbY-oT-iAf" id="nzC-He-qLO"/>
+                        <outlet property="lblBackupSourceContent2" destination="Iim-u2-WDi" id="28Z-fB-1TQ"/>
+                        <outlet property="lblBackupSourceContent3" destination="X2V-Fe-Yyx" id="KYn-uz-JJb"/>
+                        <outlet property="lblBackupSourceStatus1" destination="idj-Gj-Vk6" id="Da7-UT-Pf4"/>
+                        <outlet property="lblBackupSourceStatus2" destination="1dA-Kx-Wkb" id="dvz-uC-3Fg"/>
                         <outlet property="lblCheckDatabaseName" destination="vaW-a2-G3e" id="mWc-uC-X8e"/>
                         <outlet property="lblDBBackupUsedSpace" destination="33T-wC-Oxh" id="8t3-Ab-EZO"/>
                         <outlet property="lblDataCloneFrom" destination="Gpg-i7-Ko0" id="4w5-0k-8lh"/>

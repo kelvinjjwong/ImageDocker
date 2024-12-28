@@ -59,6 +59,8 @@ struct Icons {
     
     static let database_postgresql = NSImage(imageLiteralResourceName: "database_postgresql")
     static let database_mysql = NSImage(imageLiteralResourceName: "database_mysql")
+    static let database_archive = NSImage(imageLiteralResourceName: "database_archive")
+    static let database_unknown = NSImage(imageLiteralResourceName: "database_unknown")
     
     static let disk_local = NSImage(imageLiteralResourceName: "disk_local")
     static let disk_network = NSImage(imageLiteralResourceName: "disk_network")
@@ -79,6 +81,19 @@ struct Icons {
             
         }else{
             view.clear()
+        }
+    }
+    
+    static func databaseIcon(engine:String) -> NSImage {
+        switch(engine.lowercased()) {
+            case "postgresql":
+                return Icons.database_postgresql
+            case "mysql":
+                return Icons.database_mysql
+            case "archive":
+                return Icons.database_archive
+            default:
+                return Icons.database_unknown
         }
     }
 }

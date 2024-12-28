@@ -201,13 +201,13 @@ extension Words {
     )
     
     static let preference_tab_backup_box_backup = Localize(
-        eng: "Backup",
-        chs: "数据库备份"
+        eng: "Source",
+        chs: "源"
     )
     
     static let preference_tab_backup_box_data_clone = Localize(
-        eng: "Data Clone",
-        chs: "复制结构和数据"
+        eng: "Data Source",
+        chs: "数据来源"
     )
     
     static let preference_tab_backup_box_backup_location = Localize(
@@ -216,13 +216,13 @@ extension Words {
     )
     
     static let preference_tab_backup_from = Localize(
-        eng: "FROM",
-        chs: "从"
+        eng: "Backup Archives",
+        chs: "备份归档"
     )
     
     static let preference_tab_backup_to = Localize(
-        eng: "TO",
-        chs: "到"
+        eng: "Database",
+        chs: "数据库"
     )
     
     static let preference_tab_backup_delete_original_data = Localize(
