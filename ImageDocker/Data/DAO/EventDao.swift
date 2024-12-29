@@ -17,12 +17,7 @@ class EventDao {
     }
     
     static var `default`:EventDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return EventDao(EventDaoPostgresCK())
-        }else{
-            return EventDao(EventDaoPostgresCK())
-        }
+        return EventDao(EventDaoPostgresCK())
     }
     
     func getOrCreateEvent(name:String) -> ImageEvent{

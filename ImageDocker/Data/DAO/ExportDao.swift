@@ -17,12 +17,7 @@ class ExportDao {
     }
     
     static var `default`:ExportDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ExportDao(ExportDaoPostgresCK())
-        }else{
-            return ExportDao(ExportDaoPostgresCK())
-        }
+        return ExportDao(ExportDaoPostgresCK())
     }
     
     // MARK: - PROFILE CRUD

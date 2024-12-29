@@ -95,79 +95,37 @@ struct DatabaseSetting {
     
     let logger = LoggerFactory.get(category: "Setting", subCategory: "Database")
     
+    fileprivate let databasePathKey = "DatabasePathKey"
+    
+    // MARK: SQLITE
+    
+    let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
+    
+    func databasePath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: databasePathKey) else {
+            return predefinedLocalDBFilePath
+        }
+        if txt.isDirectoryExists() {
+            return txt
+        }else{
+            return predefinedLocalDBFilePath
+        }
+    }
+    
+    func databasePath(filename: String) -> String {
+        let url = URL(fileURLWithPath: databasePath()).appendingPathComponent(filename)
+        return url.path
+    }
+    
+    func saveDatabasePath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: databasePathKey)
+    }
+    
     // MARK: DATABASE
     
     fileprivate let databaseJsonKey = "DatabaseJsonKey"
-    
-    fileprivate let databaseLocationKey = "DatabaseLocationKey"
-    
-    fileprivate static let remoteDBServerKey = "RemoteDBServer"
-    fileprivate static let remoteDBPortKey = "RemoteDBPort"
-    fileprivate static let remoteDBUsernameKey = "RemoteDBUsername"
-    fileprivate static let remoteDBPasswordKey = "RemoteDBPassword"
-    fileprivate static let remoteDBSchemaKey = "RemoteDBSchema"
-    fileprivate static let remoteDBDatabaseKey = "RemoteDBDatabase"
-    fileprivate static let remoteDBNoPasswordKey = "RemoteDBNoPassword"
-    
-    fileprivate static let localDBServerKey = "LocalDBServer"
-    fileprivate static let localDBPortKey = "LocalDBPort"
-    fileprivate static let localDBUsernameKey = "LocalDBUsername"
-    fileprivate static let localDBPasswordKey = "LocalDBPassword"
-    fileprivate static let localDBSchemaKey = "LocalDBSchema"
-    fileprivate static let localDBDatabaseKey = "LocalDBDatabase"
-    fileprivate static let localDBNoPasswordKey = "LocalDBNoPassword"
-    
-    let sqlite = SQLiteDatabaseSetting()
-    let localPostgres = PostgresDatabaseSetting(hostKey: localDBServerKey, portKey: localDBPortKey, userKey: localDBUsernameKey, passwordKey: localDBPasswordKey, noPasswordKey: localDBNoPasswordKey, schemaKey: localDBSchemaKey, databaseKey: localDBDatabaseKey)
-    let remotePostgres = PostgresDatabaseSetting(hostKey: remoteDBServerKey, portKey: remoteDBPortKey, userKey: remoteDBUsernameKey, passwordKey: remoteDBPasswordKey, noPasswordKey: remoteDBNoPasswordKey, schemaKey: remoteDBSchemaKey, databaseKey: remoteDBDatabaseKey)
-    
-    func databaseLocation() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: databaseLocationKey) else {return "local"}
-        return txt
-    }
-    
-    func isSQLite() -> Bool {
-        if databaseLocation() == "local" {
-            return true
-        }else{
-            return false
-        }
-    }
-    
-    func saveDatabaseLocation(_ value:String){
-        let defaults = UserDefaults.standard
-        defaults.set(value, forKey: databaseLocationKey)
-    }
-    
-    func configuredDatabaseInfo() -> (String, String, String, String) {
-        var dbEngine = ""
-        var location = Setting.database.databaseLocation()
-        if location == "local" {
-            dbEngine = "SQLite"
-        }else if location == "localServer" {
-            dbEngine = "PostgreSQL"
-            location = "local"
-        }else if location == "network" {
-            dbEngine = "PostgreSQL"
-            location = "remote"
-        }
-        
-        var server = ""
-        var dbName = ""
-        if dbEngine == "PostgreSQL" {
-            if location == "local" {
-                server = Setting.database.localPostgres.server()
-                dbName = Setting.database.localPostgres.database()
-            }else {
-                server = Setting.database.remotePostgres.server()
-                dbName = Setting.database.remotePostgres.database()
-            }
-        }
-        return (location, dbEngine, server, dbName)
-    }
-    
-    
     
     func databaseJson() -> String {
         let defaults = UserDefaults.standard

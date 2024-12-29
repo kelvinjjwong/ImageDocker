@@ -20,12 +20,7 @@ public final class ImageFamilyDao {
     }
     
     static var `default`:ImageFamilyDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageFamilyDao(ImageFamilyDaoPostgresCK())
-        }else{
-            return ImageFamilyDao(ImageFamilyDaoPostgresCK())
-        }
+        return ImageFamilyDao(ImageFamilyDaoPostgresCK())
     }
     
     func getFamilies(imageId:String) -> [ImageFamily] {

@@ -22,12 +22,7 @@ public final class ImageRecordDao {
     }
     
     static var `default`:ImageRecordDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageRecordDao(ImageRecordDaoPostgresCK())
-        }else{
-            return ImageRecordDao(ImageRecordDaoPostgresCK())
-        }
+        return ImageRecordDao(ImageRecordDaoPostgresCK())
     }
     
     // MARK: QUERY
@@ -303,12 +298,7 @@ class ImageSearchDao {
     }
     
     static var `default`:ImageSearchDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageSearchDao(ImageSearchDaoPostgresCK())
-        }else{
-            return ImageSearchDao(ImageSearchDaoPostgresCK())
-        }
+        return ImageSearchDao(ImageSearchDaoPostgresCK())
     }
     
     // MARK: QUERY FOR Options
@@ -526,12 +516,7 @@ class ImageCountDao {
     }
     
     static var `default`:ImageCountDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageCountDao(ImageCountDaoPostgresCK())
-        }else{
-            return ImageCountDao(ImageCountDaoPostgresCK())
-        }
+        return ImageCountDao(ImageCountDaoPostgresCK())
     }
     
     /// - caller:
@@ -764,12 +749,7 @@ class ImageDuplicationDao {
     }
     
     static var `default`:ImageDuplicationDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
-        }else{
-            return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
-        }
+        return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
     }
     
     /// - caller: NONE
@@ -842,12 +822,7 @@ class ImageFaceDao {
     }
     
     static var `default`:ImageFaceDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return ImageFaceDao(ImageFaceDaoPostgresCK())
-        }else{
-            return ImageFaceDao(ImageFaceDaoPostgresCK())
-        }
+        return ImageFaceDao(ImageFaceDaoPostgresCK())
     }
     
     /// - caller: NONE

@@ -90,13 +90,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if !self.terminateWithoutBackupDB {
             let alert = NSAlert()
             DispatchQueue.global().async {
-                let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
-                
-                DispatchQueue.main.async {
-                    alert.buttons[0].title = "Quit"
-                    alert.buttons[0].isEnabled = true
-                    alert.window.close()
-                    exit(0)
+                if let databaseProfile = Setting.database.selectedDatabaseProfile() {
+                    let _ = ExecutionEnvironment.default.createDatabaseBackup(profile: databaseProfile, suffix:"-on-exit")
+                    
+                    DispatchQueue.main.async {
+                        alert.buttons[0].title = "Quit"
+                        alert.buttons[0].isEnabled = true
+                        alert.window.close()
+                        exit(0)
+                    }
                 }
             }
             

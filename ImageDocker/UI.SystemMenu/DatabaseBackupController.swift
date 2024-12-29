@@ -702,7 +702,7 @@ final class DatabaseBackupController: NSViewController {
         self.tblDatabaseArchives.allowsMultipleSelection = true
         
         
-        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup").path
         
         self.chkDeleteAllBeforeClone.state = .on
         self.chkDeleteAllBeforeClone.isEnabled = false
@@ -713,7 +713,7 @@ final class DatabaseBackupController: NSViewController {
         self.changeBackupNowButtonState()
         self.loadBackupArchives(postgres: true)
         self.loadBackupDatabaseProfiles()
-        self.calculateBackupUsedSpace(path: URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path)
+        self.calculateBackupUsedSpace(path: URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup").path)
     }
     
     @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
@@ -868,7 +868,7 @@ final class DatabaseBackupController: NSViewController {
     @IBAction func onNewBackupArchiveClicked(_ sender: NSButton) {
         let profile = DatabaseProfile()
         profile.engine = "archive"
-        profile.host = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        profile.host = URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup").path
         profile.database = "ImageDocker.backup.gz"
         profile.schema = "-on-runtime"
         
@@ -886,7 +886,7 @@ final class DatabaseBackupController: NSViewController {
     func selectBackupArchiveAsSource(archive:(String, String, String, String)) {
         let profile = DatabaseProfile()
         profile.engine = "archive"
-        profile.host = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
+        profile.host = URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup").path
         profile.database = archive.0
         profile.schema = "DataBackup-\(archive.0)-\(archive.1)-on-\(archive.2)"
         
@@ -991,7 +991,7 @@ final class DatabaseBackupController: NSViewController {
             
         }else if profile.engine.lowercased() == "archive" {
             DispatchQueue.global().async {
-                let path = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(profile.schema).appendingPathComponent("ImageDocker.backup.gz").path
+                let path = URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(profile.schema).appendingPathComponent("ImageDocker.backup.gz").path
                 if path.isFileExists() {
                     DispatchQueue.main.async {
                         if isSource {
@@ -1136,7 +1136,7 @@ final class DatabaseBackupController: NSViewController {
                 }
             }
         }
-        let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup")
+        let backupPath = URL(fileURLWithPath: Setting.database.databasePath()).appendingPathComponent("DataBackup")
         DispatchQueue.global().async {
             for folder in selected {
                 let url = backupPath.appendingPathComponent(folder)

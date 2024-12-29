@@ -18,12 +18,7 @@ class DeviceDao {
     }
     
     static var `default`:DeviceDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return DeviceDao(DeviceDaoPostgresCK())
-        }else{
-            return DeviceDao(DeviceDaoPostgresCK())
-        }
+        return DeviceDao(DeviceDaoPostgresCK())
     }
     
     func getDevices() -> [ImageDevice] {

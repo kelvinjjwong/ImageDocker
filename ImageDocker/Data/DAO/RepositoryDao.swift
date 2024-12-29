@@ -20,12 +20,7 @@ class RepositoryDao {
     }
     
     static var `default`:RepositoryDao {
-        let location = Setting.database.databaseLocation()
-        if location == "local" {
-            return RepositoryDao(RepositoryDaoPostgresCK())
-        }else{
-            return RepositoryDao(RepositoryDaoPostgresCK())
-        }
+        return RepositoryDao(RepositoryDaoPostgresCK())
     }
     
     func getPhysicalPath(container:ImageContainer) -> String {

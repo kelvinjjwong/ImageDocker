@@ -34,7 +34,7 @@ public final class SQLiteDataSource {
     
     func getDataSource() -> String {
         if _dbFile == "" {
-            _dbFile = Setting.database.sqlite.databasePath(filename: "ImageDocker.sqlite")
+            _dbFile = Setting.database.databasePath(filename: "ImageDocker.sqlite")
         }
         return _dbFile
     }

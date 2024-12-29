@@ -96,7 +96,7 @@ class NotificationMessageManager {
     // MARK: - SINGLE THREAD MODE QUEUE TIMER
     
     func isSingleMode() -> Bool {
-        return Setting.database.isSQLite()
+        return false
     }
     
     func updateMessagesCountInMainWindow() {

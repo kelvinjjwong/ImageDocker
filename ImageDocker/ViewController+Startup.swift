@@ -18,7 +18,7 @@ extension ViewController {
         
         self.txtSearch.isEnabled = false
         
-        let _ = Setting.database.sqlite.predefinedLocalDBFilePath // must do in main thread
+        let _ = Setting.database.predefinedLocalDBFilePath // must do in main thread
         
         
         var dbConnected = false

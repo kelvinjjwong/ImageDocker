@@ -14,18 +14,12 @@ public final class ImageDB {
     
     let impl:ImageDBInterface
     
-    static let local = ImageDB(impl: PostgresConnection.default)
-    
-    static let remote = ImageDB(impl: PostgresConnection.default)
+    static let db = ImageDB(impl: PostgresConnection.default)
     
     /// - caller:
     ///   - ViewController.doStartWork()
     static func current() -> ImageDB{
-        if Setting.database.databaseLocation() == "local" {
-            return local
-        }else{
-            return remote
-        }
+        return db
     }
     
     private init(impl:ImageDBInterface) {
