@@ -224,11 +224,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="laD-z9-Hbk">
-                                                                                <rect key="frame" x="320" y="0.0" width="4" height="24"/>
+                                                                                <rect key="frame" x="320" y="0.0" width="0.0" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vH-yC-RDp">
-                                                                                        <rect key="frame" x="0.0" y="4" width="8" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="4" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Ja4-6R-SGj">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -256,11 +256,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="cha-Sj-3VA">
-                                                                                <rect key="frame" x="357" y="0.0" width="268" height="17"/>
+                                                                                <rect key="frame" x="357" y="0.0" width="240" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxw-2X-mVv">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="268" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="240" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="g6z-WI-PcU">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -1747,7 +1747,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="319" height="278"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
                                                                             <rect key="frame" x="0.0" y="0.0" width="319" height="250"/>
@@ -1801,11 +1801,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                     <prototypeCellViews>
                                                                                         <tableCellView id="nrO-gg-jDh">
-                                                                                            <rect key="frame" x="144" y="1" width="161.5" height="42"/>
+                                                                                            <rect key="frame" x="144" y="1" width="162" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
                                                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-T4-zG5">
-                                                                                                    <rect key="frame" x="0.0" y="25" width="161.5" height="17"/>
+                                                                                                    <rect key="frame" x="0.0" y="25" width="162" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="YcX-ar-chC">
                                                                                                         <font key="font" metaFont="system"/>
@@ -1872,7 +1872,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="HD6-p9-OiP">
                                                                     <rect key="frame" x="0.0" y="0.0" width="327" height="328"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MtS-0T-KSK" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="328" width="327" height="0.0"/>
@@ -2000,6 +2000,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EBG-s1-0Dg">
+                                                    <rect key="frame" x="340" y="511" width="64" height="64"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="SnE-hj-L3J"/>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
@@ -2150,6 +2155,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="databaseProfilesStackView" destination="I3D-pG-MK4" id="evT-Wc-k89"/>
                         <outlet property="imgBackupDestination" destination="zce-vX-cVi" id="RgY-D0-YSl"/>
                         <outlet property="imgBackupSource" destination="UwM-ui-VDF" id="giQ-qd-Giu"/>
+                        <outlet property="imgBackupStatus" destination="EBG-s1-0Dg" id="ueZ-xP-jqq"/>
                         <outlet property="imgDatabaseMysql" destination="zC6-o5-zDB" id="tIn-iX-wiA"/>
                         <outlet property="imgDatabasePostgresql" destination="DGm-wI-Wmj" id="cRN-Tj-d2r"/>
                         <outlet property="lblBackupDestinationContent1" destination="Ge2-DT-2dn" id="nZn-il-kv2"/>
@@ -3598,7 +3604,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="47" y="1" width="63" height="17"/>
+                                                            <rect key="frame" x="47" y="1" width="35" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">

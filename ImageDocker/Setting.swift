@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 struct Setting {
     
@@ -91,6 +93,8 @@ class LoggingSetting {
 
 struct DatabaseSetting {
     
+    let logger = LoggerFactory.get(category: "Setting", subCategory: "Database")
+    
     // MARK: DATABASE
     
     fileprivate let databaseJsonKey = "DatabaseJsonKey"
@@ -173,6 +177,51 @@ struct DatabaseSetting {
     func saveDatabaseJson(_ value:String) {
         let defaults = UserDefaults.standard
         defaults.set(value, forKey: databaseJsonKey)
+    }
+    
+    func selectedDatabaseProfile() -> DatabaseProfile? {
+        let json = databaseJson()
+        let profiles = self.databaseProfilesFromJSON(json)
+        if let selectedProfile = profiles.first(where: { p in
+            return p.selected
+        }) {
+            return selectedProfile
+        }
+        return nil
+    }
+    
+    func databaseProfilesFromJSON(_ jsonString:String) -> [DatabaseProfile]{
+        let jsonDecoder = JSONDecoder()
+        do{
+            return try jsonDecoder.decode([DatabaseProfile].self, from: jsonString.data(using: .utf8)!)
+        }catch{
+            print(error)
+            return []
+        }
+    }
+    
+    func checkSchemaVersion(profile:DatabaseProfile) -> String {
+        final class Version : DatabaseRecord {
+            var ver:Int? = nil
+            public init() {}
+        }
+        do {
+            print(profile.toJSON())
+            if let version = try Version.fetchOne(Database(profile: profile), sql: """
+SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from version_migrations
+""") {
+                if let ver = version.ver {
+                    return "v\(ver)"
+                }else{
+                    return ""
+                }
+            }else{
+                return ""
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return "error_\(error)"
+        }
     }
 }
 

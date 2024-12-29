@@ -64,30 +64,6 @@ final class DatabaseBackupController: NSViewController {
         
     }
     
-    func checkSchemaVersion(profile:DatabaseProfile) -> String {
-        final class Version : DatabaseRecord {
-            var ver:Int? = nil
-            public init() {}
-        }
-        do {
-            print(profile.toJSON())
-            if let version = try Version.fetchOne(Database(profile: profile), sql: """
-SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from version_migrations
-""") {
-                if let ver = version.ver {
-                    return "v\(ver)"
-                }else{
-                    return ""
-                }
-            }else{
-                return ""
-            }
-        }catch{
-            self.logger.log(.error, error)
-            return "error_\(error)"
-        }
-    }
-    
     // MARK: - DATABASE PROFILES
     
     
@@ -657,6 +633,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
     @IBOutlet weak var boxBackupDestination: NSBox!
     
     @IBOutlet weak var lblBackupMessage: NSTextField!
+    @IBOutlet weak var imgBackupStatus: NSImageView!
     
     
     @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
@@ -953,7 +930,7 @@ SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from versi
                         }
                         self.changeBackupNowButtonState()
                     }
-                    let schemaVersion = self.checkSchemaVersion(profile: profile)
+                    let schemaVersion = Setting.database.checkSchemaVersion(profile: profile)
                     
                     if schemaVersion.starts(with: "v") {
                         DispatchQueue.main.async {

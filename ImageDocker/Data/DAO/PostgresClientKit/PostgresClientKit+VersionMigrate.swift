@@ -20,7 +20,7 @@ extension PostgresConnection {
     }
     
     func versionCheck(dropBeforeCreate:Bool, location:ImageDBLocation) {
-        self.versionCheck(dropBeforeCreate: dropBeforeCreate, db: PostgresConnection.database(location))
+        self.versionCheck(dropBeforeCreate: dropBeforeCreate, db: PostgresConnection.database())
     }
     
     func versionCheck(dropBeforeCreate:Bool, db:PostgresDB) {
