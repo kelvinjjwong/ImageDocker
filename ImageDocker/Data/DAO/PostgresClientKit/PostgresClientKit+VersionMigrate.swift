@@ -16,12 +16,12 @@ extension PostgresConnection {
     }
     
     func versionCheck(dropBeforeCreate:Bool) {
-        self.versionCheck(dropBeforeCreate: dropBeforeCreate, location: .fromSetting)
-    }
-    
-    func versionCheck(dropBeforeCreate:Bool, location:ImageDBLocation) {
         self.versionCheck(dropBeforeCreate: dropBeforeCreate, db: PostgresConnection.database())
     }
+    
+//    func versionCheck(dropBeforeCreate:Bool, location:ImageDBLocation) {
+//        self.versionCheck(dropBeforeCreate: dropBeforeCreate, db: PostgresConnection.database())
+//    }
     
     func versionCheck(dropBeforeCreate:Bool, db:PostgresDB) {
         let migrator = DatabaseVersionMigrator(db).dropBeforeCreate(dropBeforeCreate).cleanVersions(false)
