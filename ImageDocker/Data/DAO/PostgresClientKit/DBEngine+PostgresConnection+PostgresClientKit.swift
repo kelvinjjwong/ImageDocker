@@ -17,63 +17,6 @@ public final class PostgresConnection : ImageDBInterface {
     
     static let `default` = PostgresConnection()
     
-//    public static func database(_ location:ImageDBLocation = .fromSetting) -> PostgresDB {
-//        var host = "127.0.0.1"
-//        var port = 5432
-//        var user = "postgres"
-//        var psw = ""
-//        var nopsw = false
-//        var schema = "unknown"
-//        var database = "unknown"
-//        
-//        var loc = ""
-//        if location == .remoteDBServer {
-//            loc = "network"
-//        }else if location == .localDBServer {
-//            loc = "localServer"
-//        }else{
-//            loc = Setting.database.databaseLocation()
-//        }
-//        if loc == "" {
-//            loc = Setting.database.databaseLocation()
-//        }
-//        
-//        // default value
-//        if loc == "" {
-//            loc = "network"
-//        }
-//        
-//        var databaseProfile = DatabaseProfile()
-//        if loc == "localServer" {
-//            databaseProfile.engine = "PostgreSQL"
-//            databaseProfile.host = Setting.database.localPostgres.server()
-//            databaseProfile.port = Setting.database.localPostgres.port()
-//            databaseProfile.user = Setting.database.localPostgres.username()
-//            databaseProfile.password = Setting.database.localPostgres.password()
-//            databaseProfile.nopsw = Setting.database.localPostgres.noPassword()
-//            databaseProfile.schema = Setting.database.localPostgres.schema()
-//            if databaseProfile.schema == "" {
-//                databaseProfile.schema = "public"
-//            }
-//            databaseProfile.database = Setting.database.localPostgres.database()
-//            
-//        }else if loc == "network" {
-//            databaseProfile.engine = "PostgreSQL"
-//            databaseProfile.host = Setting.database.remotePostgres.server()
-//            databaseProfile.port = Setting.database.remotePostgres.port()
-//            databaseProfile.user = Setting.database.remotePostgres.username()
-//            databaseProfile.password = Setting.database.remotePostgres.password()
-//            databaseProfile.nopsw = Setting.database.remotePostgres.noPassword()
-//            databaseProfile.schema = Setting.database.remotePostgres.schema()
-//            if databaseProfile.schema == "" {
-//                databaseProfile.schema = "public"
-//            }
-//            databaseProfile.database = Setting.database.remotePostgres.database()
-//        }
-//        
-//        return PostgresConnection.database(databaseProfile: databaseProfile)
-//    }
-    
     public static func database() -> PostgresDB {
         return PostgresDB(databaseProfile: Setting.database.selectedDatabaseProfile()!)
     }
