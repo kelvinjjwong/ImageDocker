@@ -1041,6 +1041,7 @@ final class DatabaseBackupController: NSViewController {
                     self.lblBackupMessage.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
                 self.toggleDatabaseClonerButtons(state: true)
+                Icons.show_gif(name: "success", view: self.imgBackupStatus, loopCount: 1)
             }
         }
     }
@@ -1048,12 +1049,14 @@ final class DatabaseBackupController: NSViewController {
     func restoreNow(source:DatabaseProfile, target:DatabaseProfile) {
         guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
             self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
+            Icons.show_gif(name: "failure", view: self.imgBackupStatus, loopCount: 1)
             return
         }
         DispatchQueue.global().async {
             let (_, _) = PostgresConnection.default.restoreDatabase(commandPath: cmd, database: target.database, host: target.host, port: target.port, user: target.user, backupFolder: source.schema)
             DispatchQueue.main.async {
                 self.toggleDatabaseClonerButtons(state: true)
+                Icons.show_gif(name: "success", view: self.imgBackupStatus, loopCount: 1)
                 self.lblBackupMessage.stringValue = Words.preference_tab_backup_restore_archive_completed.fill(arguments: "\(source.database)", "\(target.database)")
             }
         }
@@ -1062,6 +1065,7 @@ final class DatabaseBackupController: NSViewController {
     func cloneNow(source:DatabaseProfile, target:DatabaseProfile) {
         guard let cmd = DatabaseBackupController.getPostgresCommandPath() else {
             self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
+            Icons.show_gif(name: "failure", view: self.imgBackupStatus, loopCount: 1)
             return
         }
         DispatchQueue.global().async {
@@ -1076,6 +1080,7 @@ final class DatabaseBackupController: NSViewController {
                                                                   destUser: target.user)
             DispatchQueue.main.async {
                 self.toggleDatabaseClonerButtons(state: true)
+                Icons.show_gif(name: "success", view: self.imgBackupStatus, loopCount: 1)
                 self.lblBackupMessage.stringValue = Words.preference_tab_data_clone_from_remote_postgres_completed.fill(arguments: "\(source.database)")
             }
         }
@@ -1090,6 +1095,7 @@ final class DatabaseBackupController: NSViewController {
         if let source = self.backupSourceDatabaseProfile, let target = self.backupDestinationDatabaseProfile {
             self.lblBackupMessage.stringValue = ""
             self.toggleDatabaseClonerButtons(state: false)
+            Icons.show_gif(name: "loading_colorful", view: self.imgBackupStatus)
             if self.btnCloneLocalToRemote.title == Words.preference_tab_database_backup_now.word() {
                 self.backupNow(profile: source)
             }else if self.btnCloneLocalToRemote.title == Words.preference_tab_backup_restore_now.word() {

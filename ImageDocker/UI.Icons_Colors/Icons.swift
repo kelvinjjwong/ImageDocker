@@ -72,12 +72,20 @@ struct Icons {
     static let gif_running = try? NSImage(imageName: "running.gif")
     static let gif_running2 = try? NSImage(imageName: "running2.gif")
     static let gif_sailing = try? NSImage(imageName: "sailing.gif")
+    static let gif_package_time = try? NSImage(imageName: "package_time.gif")
+    static let gif_vehicle = try? NSImage(imageName: "vehicle.gif")
+    static let gif_success = try? NSImage(imageName: "success.gif")
+    static let gif_scan = try? NSImage(imageName: "scan.gif")
+    static let gif_failure = try? NSImage(imageName: "failure.gif")
+    static let gif_loading_fade = try? NSImage(imageName: "loading_fade.gif")
+    static let gif_loading_hand = try? NSImage(imageName: "loading_hand.gif")
+    static let gif_loading_colorful = try? NSImage(imageName: "loading_colorful.gif")
 
     static let gifManager = SwiftyGifManager(memoryLimit:100)
     
-    static func show_gif(name:String, view:NSImageView) {
+    static func show_gif(name:String, view:NSImageView, loopCount:Int = -1) {
         if let gif = try? NSImage(imageName: "\(name).gif") {
-            view.setImage(gif, manager: gifManager, loopCount: -1)
+            view.setImage(gif, manager: gifManager, loopCount: loopCount)
             
         }else{
             view.clear()

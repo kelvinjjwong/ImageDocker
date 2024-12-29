@@ -279,6 +279,14 @@
 		8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB8D6FD22E456160096DD75 /* WebKit.framework */; };
 		8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */; };
 		8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */; };
+		8ED0696A2D216339004A9ED8 /* success.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069682D216339004A9ED8 /* success.gif */; };
+		8ED0696B2D216339004A9ED8 /* package_time.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069662D216339004A9ED8 /* package_time.gif */; };
+		8ED0696C2D216339004A9ED8 /* scan.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069672D216339004A9ED8 /* scan.gif */; };
+		8ED0696D2D216339004A9ED8 /* vehicle.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069692D216339004A9ED8 /* vehicle.gif */; };
+		8ED069722D216E72004A9ED8 /* failure.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED0696E2D216E72004A9ED8 /* failure.gif */; };
+		8ED069732D216E72004A9ED8 /* loading_colorful.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED0696F2D216E72004A9ED8 /* loading_colorful.gif */; };
+		8ED069742D216E72004A9ED8 /* loading_fade.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069702D216E72004A9ED8 /* loading_fade.gif */; };
+		8ED069752D216E72004A9ED8 /* loading_hand.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8ED069712D216E72004A9ED8 /* loading_hand.gif */; };
 		8ED8333F27B7EA5800B31319 /* ExternalAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */; };
 		8ED8334127B9144B00B31319 /* DatabaseBackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
@@ -669,6 +677,14 @@
 		8ECA200723E5B0AA00F56895 /* EventsTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventsTree+CollectionView.swift"; sourceTree = "<group>"; };
 		8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubContainersManageViewController.swift; sourceTree = "<group>"; };
 		8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubContainersManageViewController.xib; sourceTree = "<group>"; };
+		8ED069662D216339004A9ED8 /* package_time.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = package_time.gif; sourceTree = "<group>"; };
+		8ED069672D216339004A9ED8 /* scan.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = scan.gif; sourceTree = "<group>"; };
+		8ED069682D216339004A9ED8 /* success.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = success.gif; sourceTree = "<group>"; };
+		8ED069692D216339004A9ED8 /* vehicle.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = vehicle.gif; sourceTree = "<group>"; };
+		8ED0696E2D216E72004A9ED8 /* failure.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = failure.gif; sourceTree = "<group>"; };
+		8ED0696F2D216E72004A9ED8 /* loading_colorful.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_colorful.gif; sourceTree = "<group>"; };
+		8ED069702D216E72004A9ED8 /* loading_fade.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_fade.gif; sourceTree = "<group>"; };
+		8ED069712D216E72004A9ED8 /* loading_hand.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_hand.gif; sourceTree = "<group>"; };
 		8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAPIController.swift; sourceTree = "<group>"; };
 		8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseBackupController.swift; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
@@ -1398,6 +1414,14 @@
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8ED0696E2D216E72004A9ED8 /* failure.gif */,
+				8ED0696F2D216E72004A9ED8 /* loading_colorful.gif */,
+				8ED069702D216E72004A9ED8 /* loading_fade.gif */,
+				8ED069712D216E72004A9ED8 /* loading_hand.gif */,
+				8ED069662D216339004A9ED8 /* package_time.gif */,
+				8ED069672D216339004A9ED8 /* scan.gif */,
+				8ED069682D216339004A9ED8 /* success.gif */,
+				8ED069692D216339004A9ED8 /* vehicle.gif */,
 				8EEAF6FC2CEF7B170007D3A9 /* boating.gif */,
 				8EEAF6FD2CEF7B170007D3A9 /* flying.gif */,
 				8EEAF6FE2CEF7B170007D3A9 /* forward.gif */,
@@ -1849,11 +1873,19 @@
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
 				8EB271A623418503003BF3AF /* ExportProfileItemConfig.storyboard in Resources */,
+				8ED0696A2D216339004A9ED8 /* success.gif in Resources */,
+				8ED0696B2D216339004A9ED8 /* package_time.gif in Resources */,
+				8ED0696C2D216339004A9ED8 /* scan.gif in Resources */,
+				8ED0696D2D216339004A9ED8 /* vehicle.gif in Resources */,
 				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
 				8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */,
 				5CA18B5429EB294300C5502E /* NotificationMessageStackItem.storyboard in Resources */,
 				8E0D3B382C8A06C30049807B /* ImageFlowListItem.storyboard in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
+				8ED069722D216E72004A9ED8 /* failure.gif in Resources */,
+				8ED069732D216E72004A9ED8 /* loading_colorful.gif in Resources */,
+				8ED069742D216E72004A9ED8 /* loading_fade.gif in Resources */,
+				8ED069752D216E72004A9ED8 /* loading_hand.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
