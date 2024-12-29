@@ -118,12 +118,13 @@ public final class PostgresConnection : ImageDBInterface {
         return result
     }
     
-    func cloneDatabase(commandPath:String, srcDatabase:String, srcHost:String, srcPort:Int, srcUser:String, destDatabase:String, destHost:String, destPort:Int, destUser:String) -> (Bool, Error?) {
+    func cloneDatabase(commandPath:String, source:DatabaseProfile, target:DatabaseProfile) -> (Bool, Error?) {
         
         let pgdump_path = URL(fileURLWithPath: commandPath).appendingPathComponent("pg_dump").path
         let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
         
-        let cmd = "\(pgdump_path) -h \(srcHost) -U \(srcUser) \"\(srcDatabase)\" | \(psql_path) -h \(destHost) -U \(destUser) \"\(destDatabase)\""
+        let cmd = "\(pgdump_path) -h \(source.host) -p \(source.port) -U \(source.user) \"\(source.database)\" | \(psql_path) -h \(target.host) -p \(target.port) -U \(target.user) \"\(target.database)\""
+        print(cmd)
         self.logger.log(cmd)
         let pipe = Pipe()
         let pgdump = Process("/bin/bash", ["-c", cmd])
@@ -133,10 +134,11 @@ public final class PostgresConnection : ImageDBInterface {
         let startTime = Date()
         self.logger.log(.trace, "doing pgdump clone")
         pgdump.launch()
-        pgdump.waitUntilExit()
+//        pgdump.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
+        print(string)
         let lines = string.components(separatedBy: "\n")
         var errors:[String] = []
         var hasError = false

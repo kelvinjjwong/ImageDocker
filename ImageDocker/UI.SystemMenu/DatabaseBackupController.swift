@@ -202,6 +202,10 @@ final class DatabaseBackupController: NSViewController {
                 vc.unselect()
                 return
             }
+            if !vc.lblContent3.stringValue.starts(with: "v") {
+                vc.unselect()
+                return
+            }
         }else{
             return
         }
@@ -271,6 +275,8 @@ final class DatabaseBackupController: NSViewController {
                                 })?.replacingFirstOccurrence(of: "message: ", with: "") {
                                     if rtnMessage == "database \"\(profile.database)\" does not exist" {
                                         vc.updateSchemaStatus(Words.preference_tab_backup_not_exist_database.word())
+                                    }else if rtnMessage == "relation \"version_migrations\" does not exist" {
+                                        vc.updateSchemaStatus(Words.preference_tab_backup_empty_database.word())
                                     }else{
                                         vc.updateSchemaStatus(rtnMessage)
                                     }
@@ -299,6 +305,12 @@ final class DatabaseBackupController: NSViewController {
                             DispatchQueue.main.async {
                                 if let vc = self.databaseProfileFlowListItems[profile.id()] {
                                     vc.updateSchemaStatus(Words.preference_tab_backup_not_exist_database.word())
+                                }
+                            }
+                        }else if rtnMessage == "relation \"version_migrations\" does not exist" {
+                            DispatchQueue.main.async {
+                                if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                                    vc.updateSchemaStatus(Words.preference_tab_backup_empty_database.word())
                                 }
                             }
                         }else{
@@ -533,6 +545,16 @@ final class DatabaseBackupController: NSViewController {
                             if rtnMessage == "database \"\(databaseProfile.database)\" does not exist" {
                                 DispatchQueue.main.async {
                                     self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_not_exist_database.word()
+                                    self.btnCheckDatabaseName.isEnabled = true
+                                }
+                            }else if rtnMessage == "relation \"version_migrations\" does not exist" {
+                                DispatchQueue.main.async {
+                                    self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_empty_database.word()
+                                    self.btnCheckDatabaseName.isEnabled = true
+                                }
+                            }else{
+                                DispatchQueue.main.async {
+                                    self.lblDatabaseMessage.stringValue = rtnMessage
                                     self.btnCheckDatabaseName.isEnabled = true
                                 }
                             }
@@ -802,7 +824,7 @@ final class DatabaseBackupController: NSViewController {
         self.btnCloneLocalToRemote.isEnabled = false
         self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
         if let source = self.backupSourceDatabaseProfile, let target = self.backupDestinationDatabaseProfile {
-            if self.lblBackupSourceContent3.stringValue == Words.preference_tab_backup_not_exist_database.word() || self.lblBackupDestinationContent3.stringValue == Words.preference_tab_backup_not_exist_database.word() {
+            if self.lblBackupSourceContent3.textColor == Colors.Red || self.lblBackupDestinationContent3.stringValue == Words.preference_tab_backup_not_exist_database.word() {
                 self.btnCloneLocalToRemote.isEnabled = false
             }else{
                 if source.engine.lowercased() == "archive" && target.engine.lowercased() == "archive" {
@@ -1049,6 +1071,17 @@ final class DatabaseBackupController: NSViewController {
                                     }
                                     self.changeBackupNowButtonState()
                                 }
+                            }else if rtnMessage == "relation \"version_migrations\" does not exist" {
+                                DispatchQueue.main.async {
+                                    if isSource {
+                                        self.lblBackupSourceContent3.stringValue = Words.preference_tab_backup_empty_database.word()
+                                        self.lblBackupSourceContent3.textColor = Colors.Red
+                                    }else{
+                                        self.lblBackupDestinationContent3.stringValue = Words.preference_tab_backup_empty_database.word()
+                                        self.lblBackupDestinationContent3.textColor = Colors.Red
+                                    }
+                                    self.changeBackupNowButtonState()
+                                }
                             }else{
                                 if isSource {
                                     self.lblBackupSourceContent3.stringValue = "数据库错误 \(rtnMessage)"
@@ -1193,15 +1226,7 @@ final class DatabaseBackupController: NSViewController {
             return
         }
         DispatchQueue.global().async {
-            let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
-                                                                  srcDatabase: source.database,
-                                                                  srcHost: source.host,
-                                                                  srcPort: source.port,
-                                                                  srcUser: source.user,
-                                                                  destDatabase: target.database,
-                                                                  destHost: target.host,
-                                                                  destPort: target.port,
-                                                                  destUser: target.user)
+            let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd, source: source, target: target)
             DispatchQueue.main.async {
                 self.toggleDatabaseClonerButtons(state: true)
                 Icons.show_gif(name: "success", view: self.imgBackupStatus, loopCount: 1)
