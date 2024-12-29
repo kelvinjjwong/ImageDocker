@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <plugIn identifier="com.apple.WebKit2IBPlugin" version="23504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -168,17 +169,17 @@
                                                     <rect key="frame" x="47" y="240" width="650" height="245"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="C0F-5g-OmR">
-                                                        <rect key="frame" x="1" y="1" width="648" height="243"/>
+                                                        <rect key="frame" x="1" y="1" width="648" height="228"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="KPT-FF-9YM">
-                                                                <rect key="frame" x="0.0" y="0.0" width="648" height="243"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="650" height="228"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="value" editable="NO" width="295.5" minWidth="40" maxWidth="1000" id="tYn-fc-a8C">
+                                                                    <tableColumn identifier="value" editable="NO" width="296.5" minWidth="40" maxWidth="1000" id="tYn-fc-a8C">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -223,11 +224,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="laD-z9-Hbk">
-                                                                                <rect key="frame" x="319" y="0.0" width="20" height="24"/>
+                                                                                <rect key="frame" x="320" y="0.0" width="4" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vH-yC-RDp">
-                                                                                        <rect key="frame" x="0.0" y="4" width="20" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="8" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Ja4-6R-SGj">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -242,7 +243,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="destination" editable="NO" width="286" minWidth="50" maxWidth="3.4028234663852886e+38" id="STQ-QN-gDG">
+                                                                    <tableColumn identifier="destination" editable="NO" width="287" minWidth="50" maxWidth="3.4028234663852886e+38" id="STQ-QN-gDG">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -255,11 +256,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="cha-Sj-3VA">
-                                                                                <rect key="frame" x="356" y="0.0" width="283" height="17"/>
+                                                                                <rect key="frame" x="357" y="0.0" width="268" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxw-2X-mVv">
-                                                                                        <rect key="frame" x="0.0" y="-3" width="283" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="268" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="g6z-WI-PcU">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -278,7 +279,7 @@
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.33333333333333331" horizontal="YES" id="txp-LP-kdB">
+                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="txp-LP-kdB">
                                                         <rect key="frame" x="1" y="229" width="648" height="15"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
@@ -1717,72 +1718,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="4" y="5" width="701" height="413"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TXt-9o-d1h">
-                                                                <rect key="frame" x="32" y="353" width="99" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Local SQLite" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="Fpr-nE-Syq">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckFromLocalDBFile:" target="ld1-y7-yeS" id="PzD-X2-k6m"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IJi-Dn-ugh">
-                                                                <rect key="frame" x="44" y="353" width="187" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6te-dQ-hX5">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckFromLocalDBServer:" target="ld1-y7-yeS" id="0KF-bc-R6j"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oBH-43-Xm3">
-                                                                <rect key="frame" x="33" y="355" width="187" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PIJ-CS-CBT">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckFromRemoteDBServer:" target="ld1-y7-yeS" id="7Ro-ha-DWt"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJc-Jw-Plk">
-                                                                <rect key="frame" x="44" y="353" width="99" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Local SQLite" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="y4n-ph-ryA">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckToLocalDBFile:" target="ld1-y7-yeS" id="RD6-3G-85h"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-0v-Ccz">
-                                                                <rect key="frame" x="33" y="353" width="159" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ds1-Fd-lXU">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckToLocalDBServer:" target="ld1-y7-yeS" id="gu3-Gk-xmh"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-Hj-JCX">
-                                                                <rect key="frame" x="53" y="355" width="178" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="28K-2S-aiz">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckToRemoteDBServer:" target="ld1-y7-yeS" id="bHr-ap-YBX"/>
-                                                                </connections>
-                                                            </button>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gpg-i7-Ko0">
                                                                 <rect key="frame" x="100" y="387" width="99" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
@@ -1807,31 +1742,22 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onDeleteDBArchivesClicked:" target="ld1-y7-yeS" id="kbE-N4-bbI"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-CZ-5Ye">
-                                                                <rect key="frame" x="38" y="356" width="178" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="To Database:" id="pnK-mk-dlO">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="44" horizontalPageScroll="10" verticalLineScroll="44" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fKq-lX-LNT">
-                                                                <rect key="frame" x="12" y="99" width="319" height="247"/>
+                                                                <rect key="frame" x="12" y="99" width="319" height="278"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="319" height="247"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="319" height="278"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="319" height="219"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="319" height="250"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                             <tableColumns>
-                                                                                <tableColumn identifier="value1" width="126" minWidth="40" maxWidth="1000" id="liS-8z-dMh">
-                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Date">
+                                                                                <tableColumn identifier="value1" width="125" minWidth="40" maxWidth="1000" id="liS-8z-dMh">
+                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="日期时间">
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -1843,13 +1769,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                     <prototypeCellViews>
                                                                                         <tableCellView id="nBn-Go-OzY">
-                                                                                            <rect key="frame" x="11" y="1" width="131" height="42"/>
+                                                                                            <rect key="frame" x="11" y="1" width="130" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
                                                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="281-GE-GdZ">
-                                                                                                    <rect key="frame" x="0.0" y="25" width="131" height="17"/>
+                                                                                                    <rect key="frame" x="0.0" y="25" width="130" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="Lxl-J3-J5Q">
+                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="Lxl-J3-J5Q">
                                                                                                         <font key="font" metaFont="system"/>
                                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1862,8 +1788,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </tableCellView>
                                                                                     </prototypeCellViews>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="value2" width="158" minWidth="40" maxWidth="1000" id="y0g-1q-KcC">
-                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="At moment">
+                                                                                <tableColumn identifier="value2" width="157.5" minWidth="40" maxWidth="1000" id="y0g-1q-KcC">
+                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="时刻">
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -1875,13 +1801,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                     <prototypeCellViews>
                                                                                         <tableCellView id="nrO-gg-jDh">
-                                                                                            <rect key="frame" x="145" y="1" width="162" height="42"/>
+                                                                                            <rect key="frame" x="144" y="1" width="161.5" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
                                                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-T4-zG5">
-                                                                                                    <rect key="frame" x="0.0" y="25" width="162" height="17"/>
+                                                                                                    <rect key="frame" x="0.0" y="25" width="161.5" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="YcX-ar-chC">
+                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="YcX-ar-chC">
                                                                                                         <font key="font" metaFont="system"/>
                                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1912,35 +1838,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KBm-w5-ELx">
-                                                                <rect key="frame" x="43" y="355" width="149" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Restore from backup" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="qiK-hc-flb">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckFromBackupArchive:" target="ld1-y7-yeS" id="IcV-og-1fq"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ud-ED-5l4">
-                                                                <rect key="frame" x="149" y="353" width="111" height="28"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" selectable="YES" alignment="center" id="PTt-4J-G3Z">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vaW-a2-G3e">
-                                                                <rect key="frame" x="461" y="232" width="89" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="LB4-jB-tQc">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTo-Vp-N6L">
                                                                 <rect key="frame" x="10" y="11" width="72" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
@@ -1975,7 +1872,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="HD6-p9-OiP">
                                                                     <rect key="frame" x="0.0" y="0.0" width="327" height="328"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MtS-0T-KSK" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="328" width="327" height="0.0"/>
@@ -1996,15 +1893,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Chg-Mg-GQN">
-                                                                <rect key="frame" x="200" y="356" width="109" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="WPf-oi-gWL">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33T-wC-Oxh">
                                                                 <rect key="frame" x="10" y="45" width="323" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
@@ -2027,17 +1915,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <rect key="frame" x="337" y="35" width="5" height="348"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             </box>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPS-Tf-tx8">
-                                                                <rect key="frame" x="258" y="378" width="80" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9l0-32-QrK">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupNowClicked:" target="ld1-y7-yeS" id="axC-Vp-rSz"/>
-                                                                </connections>
-                                                            </button>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtT-5e-4Ak">
                                                                 <rect key="frame" x="567" y="390" width="39" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2069,17 +1946,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     </segments>
                                                                 </segmentedCell>
                                                             </segmentedControl>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMb-dK-lgB">
-                                                                <rect key="frame" x="0.0" y="379" width="86" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="新的备份" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBB-qV-J6o">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onNewBackupArchiveClicked:" target="ld1-y7-yeS" id="3xv-5R-lfU"/>
-                                                                </connections>
-                                                            </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhM-u8-JAQ">
                                                                 <rect key="frame" x="102" y="62" width="95" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2091,15 +1957,18 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onReloadDBArchivesClicked:" target="ld1-y7-yeS" id="uTY-mg-WiZ"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R9F-1u-QrQ">
-                                                                <rect key="frame" x="3" y="356" width="136" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="iLo-YB-qTe">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
+                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMb-dK-lgB">
+                                                                <rect key="frame" x="271" y="387" width="69" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="recessed" title="新的备份" bezelStyle="recessed" alignment="center" imageScaling="proportionallyDown" inset="2" id="vBB-qV-J6o">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                                                    <font key="font" metaFont="systemBold" size="12"/>
+                                                                </buttonCell>
+                                                                <color key="contentTintColor" name="controlAccentColor" catalog="System" colorSpace="catalog"/>
+                                                                <connections>
+                                                                    <action selector="onNewBackupArchiveClicked:" target="ld1-y7-yeS" id="3xv-5R-lfU"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>
@@ -2243,471 +2112,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             </subviews>
                                         </view>
                                     </tabViewItem>
-                                    <tabViewItem label="Backup" identifier="" id="P71-V1-UnZ">
-                                        <view key="view" id="wsM-Yd-C82">
-                                            <rect key="frame" x="10" y="33" width="744" height="626"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="Database" identifier="" id="e21-Lh-aw7">
-                                        <view key="view" id="HLm-oe-39S">
-                                            <rect key="frame" x="10" y="33" width="744" height="626"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tIl-8e-ihe">
-                                                    <rect key="frame" x="24" y="587" width="22" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="4AN-L8-QQo">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onCheckLocalLocationClicked:" target="ld1-y7-yeS" id="feK-sb-qWb"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jvh-V6-Q0t">
-                                                    <rect key="frame" x="24" y="472" width="22" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="f4E-TE-m41">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onCheckLocalDBServerClicked:" target="ld1-y7-yeS" id="1kl-WL-Vlt"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIp-OP-C38">
-                                                    <rect key="frame" x="24" y="248" width="22" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="XXW-C6-lhx">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onCheckNetworkLocationClicked:" target="ld1-y7-yeS" id="CYz-7j-9Pc"/>
-                                                    </connections>
-                                                </button>
-                                                <box fixedFrame="YES" title="Local Database (SQLite)" translatesAutoresizingMaskIntoConstraints="NO" id="e5u-Vo-jbF">
-                                                    <rect key="frame" x="49" y="503" width="672" height="100"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="IpR-vT-Bc1">
-                                                        <rect key="frame" x="4" y="5" width="664" height="80"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7U-ZI-Phh">
-                                                                <rect key="frame" x="176" y="45" width="303" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="784-IV-58j">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zus-nJ-Z1a">
-                                                                <rect key="frame" x="18" y="48" width="149" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Database File Location" id="QhG-3T-E19">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Rh-VQ-EFo">
-                                                                <rect key="frame" x="491" y="38" width="96" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Browse..." bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VK0-hv-rXF">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBrowseDatabasePathClicked:" target="ld1-y7-yeS" id="Jy8-ra-gBH"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vBy-J2-WFo">
-                                                                <rect key="frame" x="582" y="38" width="70" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AeG-A8-X6I">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onGotoLocalDBFilePathClicked:" target="ld1-y7-yeS" id="bXU-sg-B1Q"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zHJ-fw-fbJ">
-                                                                <rect key="frame" x="534" y="5" width="118" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s3P-Ju-eg3">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onLocalSchemaVersionClicked:" target="ld1-y7-yeS" id="M4y-sX-eiS"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e6t-Tz-o8R">
-                                                                <rect key="frame" x="14" y="5" width="116" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dce-eT-NCw">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupLocalClicked:" target="ld1-y7-yeS" id="V7i-h5-Q2V"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iCR-RF-P8q">
-                                                                <rect key="frame" x="139" y="17" width="265" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="yqb-dS-Zf3">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                        </subviews>
-                                                    </view>
-                                                </box>
-                                                <box fixedFrame="YES" title="Local Database (PostgreSQL)" translatesAutoresizingMaskIntoConstraints="NO" id="ptW-Qc-XwN">
-                                                    <rect key="frame" x="49" y="287" width="672" height="200"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="aJ1-Yc-n6Q">
-                                                        <rect key="frame" x="4" y="5" width="664" height="180"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="75z-pH-wFs">
-                                                                <rect key="frame" x="33" y="144" width="55" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Server:" id="y8v-l3-AIn">
-                                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qxo-EX-rNE">
-                                                                <rect key="frame" x="94" y="139" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="dGA-C0-dzz">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1if-QP-mTW">
-                                                                <rect key="frame" x="245" y="144" width="34" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Port:" id="0O7-sL-n1l">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="htq-4K-SAh">
-                                                                <rect key="frame" x="286" y="139" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Gs1-Ib-hls">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RGi-Oh-gEG">
-                                                                <rect key="frame" x="18" y="107" width="70" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Username:" id="uhm-VB-jl0">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W5P-Kh-Sry">
-                                                                <rect key="frame" x="94" y="102" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="5j0-XG-9Rz">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6ze-af-4iU">
-                                                                <rect key="frame" x="207" y="106" width="73" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Password:" id="qV8-qx-Ubd">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <secureTextField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zva-Fr-MSg">
-                                                                <rect key="frame" x="286" y="99" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="m0X-qq-I9U">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <allowedInputSourceLocales>
-                                                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                                                    </allowedInputSourceLocales>
-                                                                </secureTextFieldCell>
-                                                            </secureTextField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="90Y-Jg-qLY">
-                                                                <rect key="frame" x="22" y="70" width="66" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Schema:" id="ON3-V3-XIZ">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Di-VI-f9C">
-                                                                <rect key="frame" x="94" y="64" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="s3a-A1-U0F">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emr-Xc-tbi">
-                                                                <rect key="frame" x="214" y="69" width="66" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Database:" id="hJC-WD-lu9">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="acw-JH-guN">
-                                                                <rect key="frame" x="286" y="64" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="QK3-vB-ArD">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K5q-Ol-JmC">
-                                                                <rect key="frame" x="132" y="22" width="402" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="U1e-UF-nG2">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lkv-50-3t3">
-                                                                <rect key="frame" x="400" y="102" width="101" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="No password" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yBF-Uz-d6e">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckLocalNoPasswordClicked:" target="ld1-y7-yeS" id="NYr-FT-gKw"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pmb-Ll-IHK">
-                                                                <rect key="frame" x="14" y="13" width="116" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cGT-Fv-OJ8">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupLocalServerClicked:" target="ld1-y7-yeS" id="Ayt-hg-hvN"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7D2-tn-kFX">
-                                                                <rect key="frame" x="534" y="13" width="118" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OYf-Oz-ebN">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onLocalDBServerTestClicked:" target="ld1-y7-yeS" id="rkw-9g-9jW"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </view>
-                                                </box>
-                                                <box fixedFrame="YES" title="Network Shared Database (PostgreSQL)" translatesAutoresizingMaskIntoConstraints="NO" id="UF4-8T-qav">
-                                                    <rect key="frame" x="49" y="73" width="672" height="191"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="HVr-6i-Yp6">
-                                                        <rect key="frame" x="4" y="5" width="664" height="171"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7YM-oG-WrZ">
-                                                                <rect key="frame" x="19" y="130" width="71" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Server:" id="czS-qg-gyy">
-                                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h6p-eR-at1">
-                                                                <rect key="frame" x="96" y="129" width="96" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="ueU-MV-z2K">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wg-LG-TlG">
-                                                                <rect key="frame" x="241" y="130" width="44" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Port:" id="uRs-re-j5y">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFy-8t-8k5">
-                                                                <rect key="frame" x="291" y="129" width="97" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="6sa-GR-G57">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QPg-vN-9Rx">
-                                                                <rect key="frame" x="18" y="94" width="73" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Username:" id="EXP-iA-6wS">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4VZ-F3-rNq">
-                                                                <rect key="frame" x="96" y="92" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="A4p-K9-tcn">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sID-zx-fTM">
-                                                                <rect key="frame" x="211" y="95" width="74" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Password:" id="Is2-Za-HAP">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <secureTextField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="46f-3C-Zzy">
-                                                                <rect key="frame" x="291" y="90" width="97" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="T41-2q-ZWs">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <allowedInputSourceLocales>
-                                                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                                                    </allowedInputSourceLocales>
-                                                                </secureTextFieldCell>
-                                                            </secureTextField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bTL-Qq-lff">
-                                                                <rect key="frame" x="404" y="93" width="101" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="No password" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Zy4-Cg-ce9">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckRemoteNopasswordClicked:" target="ld1-y7-yeS" id="WBQ-4y-k9V"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D7q-s8-HQR">
-                                                                <rect key="frame" x="29" y="59" width="61" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Schema:" id="Z2c-Zu-1wd">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fLH-ba-dCI">
-                                                                <rect key="frame" x="96" y="54" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="I0o-xF-Dlc">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8HF-0r-BmS">
-                                                                <rect key="frame" x="211" y="59" width="74" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Database:" id="nPL-Rk-OcS">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ofs-Ua-xva">
-                                                                <rect key="frame" x="291" y="54" width="97" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="JP8-Di-FXz">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DGR-4f-75Y">
-                                                                <rect key="frame" x="534" y="11" width="118" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KhR-tW-B0T">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onRemoteDBServerTestClicked:" target="ld1-y7-yeS" id="kSI-Id-ea0"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xtE-T2-erg">
-                                                                <rect key="frame" x="14" y="11" width="116" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bIq-Qb-cJs">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupRemoteServerClicked:" target="ld1-y7-yeS" id="FjT-FC-lyL"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FQZ-GD-3go">
-                                                                <rect key="frame" x="132" y="18" width="402" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="zdH-FO-omI">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                        </subviews>
-                                                    </view>
-                                                </box>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjO-t6-IBC">
-                                                    <rect key="frame" x="341" y="0.0" width="64" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SVU-9f-58s">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onButtonApplyClick:" target="ld1-y7-yeS" id="qsc-ta-bqQ"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
                                 </tabViewItems>
                             </tabView>
                         </subviews>
@@ -2724,11 +2128,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="boxBackupDestination" destination="DAd-uT-7RE" id="fhM-Vj-K5y"/>
                         <outlet property="boxDataClone" destination="9cl-Oo-Ly7" id="jfe-G7-lyp"/>
                         <outlet property="boxDatabaseProfile" destination="ETz-Dc-dH3" id="LKN-cA-GtU"/>
-                        <outlet property="boxLocalPostgres" destination="ptW-Qc-XwN" id="TgK-ED-Fzr"/>
-                        <outlet property="boxLocalSQLite" destination="e5u-Vo-jbF" id="AyQ-Vc-ViL"/>
-                        <outlet property="boxRemotePostgres" destination="UF4-8T-qav" id="ol0-in-Oa2"/>
-                        <outlet property="btnBackupNow" destination="RPS-Tf-tx8" id="DCh-by-oAL"/>
-                        <outlet property="btnBrowseLocalDBFilePath" destination="4Rh-VQ-EFo" id="7xQ-2b-uVs"/>
                         <outlet property="btnCalculateBackupDiskSpace" destination="KZH-l4-8nO" id="TYV-qt-vwi"/>
                         <outlet property="btnCheckDatabaseName" destination="WPb-7f-3Co" id="Ob1-ou-JiG"/>
                         <outlet property="btnClearDatabaseProfile" destination="45d-g0-H8T" id="ZiT-3K-K3A"/>
@@ -2736,38 +2135,18 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnCreateDatabase" destination="ecv-eA-vNr" id="0ux-Us-mPL"/>
                         <outlet property="btnDeleteDBArchives" destination="uQQ-na-8F6" id="4i3-Qb-MDE"/>
                         <outlet property="btnGotoDBBackupPath" destination="F1p-Jz-Hvk" id="XYc-gT-9Pz"/>
-                        <outlet property="btnGotoLocalDBFilePath" destination="vBy-J2-WFo" id="DXc-rv-urN"/>
-                        <outlet property="btnLocalDBFileBackup" destination="e6t-Tz-o8R" id="Q3M-Ln-iUX"/>
-                        <outlet property="btnLocalDBFileTest" destination="zHJ-fw-fbJ" id="tSr-RY-lO7"/>
-                        <outlet property="btnLocalDBServerBackup" destination="pmb-Ll-IHK" id="OUv-0e-UJL"/>
-                        <outlet property="btnLocalDBServerTest" destination="7D2-tn-kFX" id="3Cu-8A-wHn"/>
                         <outlet property="btnNewBackupArchive" destination="yMb-dK-lgB" id="peG-KD-KLU"/>
                         <outlet property="btnNewDatabaseProfile" destination="NtU-rG-Oic" id="fOo-6m-XcP"/>
                         <outlet property="btnReloadDBArchives" destination="uhM-u8-JAQ" id="6R0-zl-oqj"/>
-                        <outlet property="btnRemoteDBServerBackup" destination="xtE-T2-erg" id="SCV-LC-G3z"/>
-                        <outlet property="btnRemoteDBTest" destination="DGR-4f-75Y" id="Mva-LW-NVA"/>
-                        <outlet property="btnSaveDatabase" destination="wjO-t6-IBC" id="Zu6-CA-pxZ"/>
                         <outlet property="btnSaveDatabaseProfile" destination="nKa-Lk-Ufc" id="Yc1-zn-ujo"/>
                         <outlet property="chkDatabaseMysql" destination="GWE-9x-Jnv" id="DRe-kE-M4s"/>
                         <outlet property="chkDatabaseNoPsw" destination="1E0-GB-w67" id="zxn-5A-siO"/>
                         <outlet property="chkDatabasePostgresql" destination="gal-85-3p7" id="qn9-8V-DAm"/>
                         <outlet property="chkDatabaseUseSSL" destination="YzM-X1-tp2" id="p8E-W9-rz1"/>
                         <outlet property="chkDeleteAllBeforeClone" destination="NYl-LK-fmS" id="PDS-vw-PDd"/>
-                        <outlet property="chkFromBackupArchive" destination="KBm-w5-ELx" id="Hpb-qN-Cm5"/>
-                        <outlet property="chkFromLocalDBFile" destination="TXt-9o-d1h" id="VK5-0u-Tli"/>
-                        <outlet property="chkFromLocalDBServer" destination="IJi-Dn-ugh" id="W9i-2H-zTg"/>
-                        <outlet property="chkFromRemoteDBServer" destination="oBH-43-Xm3" id="doh-yh-F3m"/>
-                        <outlet property="chkLocalDBNoPassword" destination="Lkv-50-3t3" id="MS2-Lw-s3p"/>
-                        <outlet property="chkLocalDBServer" destination="Jvh-V6-Q0t" id="EYO-4z-hhG"/>
-                        <outlet property="chkLocalLocation" destination="tIl-8e-ihe" id="5Cg-9Y-i3z"/>
-                        <outlet property="chkNetworkLocation" destination="aIp-OP-C38" id="Qtu-oQ-pKz"/>
                         <outlet property="chkPostgresByBrew" destination="RRx-Fb-VF6" id="seX-b2-8Ls"/>
                         <outlet property="chkPostgresInApp" destination="xfT-Za-vRI" id="efJ-bf-b3Q"/>
-                        <outlet property="chkRemoteDBNoPassword" destination="bTL-Qq-lff" id="FVz-MB-b2P"/>
                         <outlet property="chkSourceOrTarget" destination="1k2-xS-U1x" id="CuU-fT-35f"/>
-                        <outlet property="chkToLocalDBFile" destination="eJc-Jw-Plk" id="JFv-6q-rb4"/>
-                        <outlet property="chkToLocalDBServer" destination="PdS-0v-Ccz" id="2dG-Z6-HZB"/>
-                        <outlet property="chkToRemoteDBServer" destination="cjk-Hj-JCX" id="ch5-Sh-2Of"/>
                         <outlet property="databaseProfilesStackView" destination="I3D-pG-MK4" id="evT-Wc-k89"/>
                         <outlet property="imgBackupDestination" destination="zce-vX-cVi" id="RgY-D0-YSl"/>
                         <outlet property="imgBackupSource" destination="UwM-ui-VDF" id="giQ-qd-Giu"/>
@@ -2785,12 +2164,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="lblBackupSourceContent3" destination="X2V-Fe-Yyx" id="KYn-uz-JJb"/>
                         <outlet property="lblBackupSourceStatus1" destination="idj-Gj-Vk6" id="Da7-UT-Pf4"/>
                         <outlet property="lblBackupSourceStatus2" destination="1dA-Kx-Wkb" id="dvz-uC-3Fg"/>
-                        <outlet property="lblCheckDatabaseName" destination="vaW-a2-G3e" id="mWc-uC-X8e"/>
                         <outlet property="lblDBBackupUsedSpace" destination="33T-wC-Oxh" id="8t3-Ab-EZO"/>
                         <outlet property="lblDataCloneFrom" destination="Gpg-i7-Ko0" id="4w5-0k-8lh"/>
-                        <outlet property="lblDataCloneMessage" destination="R9F-1u-QrQ" id="Ccd-iw-wzh"/>
                         <outlet property="lblDataCloneTo" destination="Cyi-ws-5zG" id="8ec-cA-aDc"/>
-                        <outlet property="lblDataCloneToDatabase" destination="S1V-CZ-5Ye" id="kaE-be-bY8"/>
                         <outlet property="lblDataCloneToPgCmdline" destination="T4M-gX-5pc" id="A0l-wC-KWt"/>
                         <outlet property="lblDatabaseBackupPath" destination="iO2-M1-Omx" id="ZYW-Nl-4hN"/>
                         <outlet property="lblDatabaseEngine" destination="TCu-bL-3mq" id="9ls-Sn-6Je"/>
@@ -2804,23 +2180,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="lblDatabaseSchema" destination="RY2-Si-Jev" id="kXg-Mo-Q3H"/>
                         <outlet property="lblDatabaseTimeout" destination="VAU-tf-zIN" id="iX9-Yo-WTQ"/>
                         <outlet property="lblDatabaseUsername" destination="Kkp-S2-phZ" id="bS0-II-ZSD"/>
-                        <outlet property="lblLocalDBFileMessage" destination="iCR-RF-P8q" id="o1e-Bc-0ep"/>
-                        <outlet property="lblLocalDBServerMessage" destination="K5q-Ol-JmC" id="1Ob-Le-LZT"/>
-                        <outlet property="lblLocalPgDatabase" destination="emr-Xc-tbi" id="NxN-Tk-wiK"/>
-                        <outlet property="lblLocalPgPassword" destination="6ze-af-4iU" id="48R-Ts-NsS"/>
-                        <outlet property="lblLocalPgPort" destination="1if-QP-mTW" id="U0Y-bB-0Cp"/>
-                        <outlet property="lblLocalPgSchema" destination="90Y-Jg-qLY" id="rwm-eO-7PF"/>
-                        <outlet property="lblLocalPgServer" destination="75z-pH-wFs" id="dd5-ld-YrI"/>
-                        <outlet property="lblLocalPgUser" destination="RGi-Oh-gEG" id="kOQ-oW-5LQ"/>
-                        <outlet property="lblLocalSQLitePath" destination="zus-nJ-Z1a" id="V5q-Sc-ptn"/>
-                        <outlet property="lblRemoteDBServerMessage" destination="FQZ-GD-3go" id="k79-kb-CcU"/>
-                        <outlet property="lblRemotePgDatabase" destination="8HF-0r-BmS" id="1mW-jw-gFc"/>
-                        <outlet property="lblRemotePgPassword" destination="sID-zx-fTM" id="NVM-nS-Rba"/>
-                        <outlet property="lblRemotePgPort" destination="4wg-LG-TlG" id="LeI-fE-Fi4"/>
-                        <outlet property="lblRemotePgSchema" destination="D7q-s8-HQR" id="pRN-1L-vnp"/>
-                        <outlet property="lblRemotePgServer" destination="7YM-oG-WrZ" id="gTG-Sz-WrK"/>
-                        <outlet property="lblRemotePgUser" destination="QPg-vN-9Rx" id="e0p-o4-hkV"/>
-                        <outlet property="lblRestoreToDatabaseName" destination="9ud-ED-5l4" id="MX3-X5-xQH"/>
                         <outlet property="lstDatabaseTimeout" destination="LsI-Lf-LCJ" id="4MB-7P-Bn3"/>
                         <outlet property="scrDatabaseArchives" destination="fKq-lX-LNT" id="7Ck-om-ua2"/>
                         <outlet property="tabs" destination="Qgg-h0-u77" id="M4b-Zl-2VR"/>
@@ -2832,20 +2191,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="txtDatabaseSchema" destination="Kac-E0-ywC" id="vI9-DO-0hN"/>
                         <outlet property="txtDatabaseUsername" destination="hdf-G8-qnw" id="E4N-Z4-8vR"/>
                         <outlet property="txtLocalDBBinPath" destination="aqb-xW-cQS" id="O6D-RA-m3V"/>
-                        <outlet property="txtLocalDBDatabase" destination="acw-JH-guN" id="YdX-e0-d8E"/>
-                        <outlet property="txtLocalDBFilePath" destination="f7U-ZI-Phh" id="tRU-1Q-pEh"/>
-                        <outlet property="txtLocalDBPassword" destination="Zva-Fr-MSg" id="hFf-Hn-RLC"/>
-                        <outlet property="txtLocalDBPort" destination="htq-4K-SAh" id="8SE-8h-0u3"/>
-                        <outlet property="txtLocalDBSchema" destination="8Di-VI-f9C" id="HRe-Pu-bJj"/>
-                        <outlet property="txtLocalDBServer" destination="qxo-EX-rNE" id="afz-tX-Gfk"/>
-                        <outlet property="txtLocalDBUser" destination="W5P-Kh-Sry" id="P7H-Q2-kMK"/>
-                        <outlet property="txtRemoteDBDatabase" destination="Ofs-Ua-xva" id="NxS-Wu-0Y0"/>
-                        <outlet property="txtRemoteDBPassword" destination="46f-3C-Zzy" id="GzE-y8-Tmj"/>
-                        <outlet property="txtRemoteDBPort" destination="yFy-8t-8k5" id="d0c-oO-Agf"/>
-                        <outlet property="txtRemoteDBSchema" destination="fLH-ba-dCI" id="fnS-aH-ZFX"/>
-                        <outlet property="txtRemoteDBServer" destination="h6p-eR-at1" id="dLw-sa-PNM"/>
-                        <outlet property="txtRemoteDBUser" destination="4VZ-F3-rNq" id="CzM-dT-Cqc"/>
-                        <outlet property="txtRestoreToDatabaseName" destination="Chg-Mg-GQN" id="886-4S-Tft"/>
                     </connections>
                 </viewController>
                 <customObject id="MO7-Mv-2h8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -4216,13 +3561,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="83L-7M-nLg" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="1348" height="174"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1347" height="174"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="copy" width="28" minWidth="10" maxWidth="3.4028234663852886e+38" id="XVh-ga-BeT" userLabel="copy">
+                                                <tableColumn identifier="copy" width="27.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="XVh-ga-BeT" userLabel="copy">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4240,7 +3585,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="category" editable="NO" width="79.5" minWidth="40" maxWidth="1000" id="MgS-47-4tt" userLabel="category">
+                                                <tableColumn identifier="category" editable="NO" width="78.5" minWidth="40" maxWidth="1000" id="MgS-47-4tt" userLabel="category">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Category">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4253,11 +3598,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="47" y="1" width="36" height="17"/>
+                                                            <rect key="frame" x="47" y="1" width="63" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
-                                                                    <rect key="frame" x="0.0" y="1" width="77" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="78" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="AO3-Oz-ers">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -4325,7 +3670,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="LZz-Pm-q22">
-                                                            <rect key="frame" x="129" y="1" width="125" height="17"/>
+                                                            <rect key="frame" x="128" y="1" width="125" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
@@ -4361,7 +3706,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="257" y="1" width="1078" height="17"/>
+                                                            <rect key="frame" x="256" y="1" width="1078" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
@@ -4724,7 +4069,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <color key="backgroundColor" name="DarkGray"/>
                                                                 <color key="gridColor" name="DarkGray"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="value1" width="80" minWidth="40" maxWidth="80" id="hh7-Mp-cV1">
+                                                                    <tableColumn identifier="value1" width="79.5" minWidth="40" maxWidth="80" id="hh7-Mp-cV1">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4756,7 +4101,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="value2" width="441.5" minWidth="40" maxWidth="1000" id="q7W-Wf-qK9">
+                                                                    <tableColumn identifier="value2" width="440.5" minWidth="40" maxWidth="1000" id="q7W-Wf-qK9">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4769,11 +4114,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="y3n-J7-jvs">
-                                                                                <rect key="frame" x="113" y="0.0" width="438" height="24"/>
+                                                                                <rect key="frame" x="113" y="0.0" width="437" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jdq-LT-MUs">
-                                                                                        <rect key="frame" x="0.0" y="4" width="438" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="437" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="vBy-O8-sGN">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -5090,7 +4435,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <color key="backgroundColor" name="DarkGray"/>
                                                                 <color key="gridColor" name="DarkGray"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="value1" width="80" minWidth="40" maxWidth="80" id="Rcw-7k-jYd">
+                                                                    <tableColumn identifier="value1" width="79.5" minWidth="40" maxWidth="80" id="Rcw-7k-jYd">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -5122,7 +4467,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="value2" width="405.5" minWidth="40" maxWidth="1000" id="YMy-ap-S0I">
+                                                                    <tableColumn identifier="value2" width="404.5" minWidth="40" maxWidth="1000" id="YMy-ap-S0I">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -5135,11 +4480,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="Nvz-Jn-9As">
-                                                                                <rect key="frame" x="113" y="0.0" width="402" height="24"/>
+                                                                                <rect key="frame" x="113" y="0.0" width="401" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LUf-Xv-2xu">
-                                                                                        <rect key="frame" x="0.0" y="4" width="402" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="401" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="NDS-pv-oTx">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -5921,7 +5266,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <color key="backgroundColor" name="DarkGray"/>
                                                                 <color key="gridColor" name="DarkGray"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="value1" width="80" minWidth="40" maxWidth="80" id="cd5-c9-ZTZ">
+                                                                    <tableColumn identifier="value1" width="79.5" minWidth="40" maxWidth="80" id="cd5-c9-ZTZ">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -5953,7 +5298,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn identifier="value2" width="441.5" minWidth="40" maxWidth="1000" id="OhF-cT-olI">
+                                                                    <tableColumn identifier="value2" width="440.5" minWidth="40" maxWidth="1000" id="OhF-cT-olI">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -5966,11 +5311,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="pc2-Bg-SwW">
-                                                                                <rect key="frame" x="113" y="0.0" width="438" height="24"/>
+                                                                                <rect key="frame" x="113" y="0.0" width="437" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6IJ-ir-7TV">
-                                                                                        <rect key="frame" x="0.0" y="4" width="438" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="437" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="lfp-mv-DQH">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
