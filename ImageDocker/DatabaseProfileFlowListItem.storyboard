@@ -90,12 +90,23 @@
                                                     </connections>
                                                 </button>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vh-kl-bXj">
-                                                    <rect key="frame" x="8" y="3" width="194" height="40"/>
+                                                    <rect key="frame" x="8" y="23" width="194" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="190" id="lUi-gP-FP7"/>
-                                                        <constraint firstAttribute="height" constant="40" id="v8q-CK-n7Q"/>
+                                                        <constraint firstAttribute="height" constant="20" id="v8q-CK-n7Q"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" selectable="YES" alignment="left" id="jc4-nX-rY4">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3qQ-ox-ztO">
+                                                    <rect key="frame" x="8" y="7" width="194" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="190" id="OfP-hM-3TG"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" id="ZHx-ue-ewH">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -105,9 +116,11 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="x6I-HP-bHx" secondAttribute="trailing" id="C6v-Em-oBT"/>
                                                 <constraint firstItem="Apy-Ag-exl" firstAttribute="top" secondItem="5E2-Lm-lhG" secondAttribute="top" constant="5" id="JdG-rO-MIl"/>
+                                                <constraint firstItem="3qQ-ox-ztO" firstAttribute="top" secondItem="2vh-kl-bXj" secondAttribute="bottom" id="M96-pF-h9Q"/>
                                                 <constraint firstItem="2vh-kl-bXj" firstAttribute="leading" secondItem="5E2-Lm-lhG" secondAttribute="leading" constant="10" id="WaH-Z0-7bU"/>
                                                 <constraint firstItem="dzU-0D-PUe" firstAttribute="leading" secondItem="5E2-Lm-lhG" secondAttribute="leading" constant="10" id="YOT-l8-ZmH"/>
                                                 <constraint firstItem="2vh-kl-bXj" firstAttribute="top" secondItem="dzU-0D-PUe" secondAttribute="bottom" id="lK6-yo-gc4"/>
+                                                <constraint firstItem="3qQ-ox-ztO" firstAttribute="leading" secondItem="5E2-Lm-lhG" secondAttribute="leading" constant="10" id="lKY-UV-Ukb"/>
                                                 <constraint firstAttribute="bottom" secondItem="x6I-HP-bHx" secondAttribute="bottom" id="pFB-k0-HBc"/>
                                                 <constraint firstAttribute="trailing" secondItem="Apy-Ag-exl" secondAttribute="trailing" id="pJz-vE-dpQ"/>
                                                 <constraint firstItem="dzU-0D-PUe" firstAttribute="top" secondItem="5E2-Lm-lhG" secondAttribute="top" constant="20" id="txY-Vj-GPz"/>
@@ -160,6 +173,7 @@
                         <outlet property="imageView" destination="ami-Du-etv" id="BXz-aO-bgh"/>
                         <outlet property="lblContent" destination="dzU-0D-PUe" id="aUl-tw-lHr"/>
                         <outlet property="lblContent2" destination="2vh-kl-bXj" id="0hn-nK-uck"/>
+                        <outlet property="lblContent3" destination="3qQ-ox-ztO" id="g9M-z4-hMo"/>
                         <outlet property="lblStatus1" destination="0UX-Jw-29R" id="ANx-ak-gc7"/>
                         <outlet property="lblStatus2" destination="NFN-pE-IWG" id="L0i-Py-h68"/>
                     </connections>

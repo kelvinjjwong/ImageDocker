@@ -19,6 +19,7 @@ class DatabaseProfileFlowListItemController : NSViewController {
     @IBOutlet weak var btnEdit: NSButton!
     @IBOutlet weak var btnDelete: NSButton!
     @IBOutlet weak var lblContent2: NSTextField!
+    @IBOutlet weak var lblContent3: NSTextField!
     
     var status1 = ""
     var status2 = ""
@@ -97,6 +98,15 @@ class DatabaseProfileFlowListItemController : NSViewController {
     func updateStatus2(_ value:String) {
         self.status2 = value
         self.reloadControls()
+    }
+    
+    func updateSchemaStatus(_ value:String) {
+        self.lblContent3.stringValue = value
+        if value.starts(with: "v") {
+            self.lblContent3.textColor = Colors.Green
+        }else{
+            self.lblContent3.textColor = Colors.Red
+        }
     }
     
     func select() {

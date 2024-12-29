@@ -244,21 +244,77 @@ final class DatabaseBackupController: NSViewController {
         if let vc = self.databaseProfileFlowListItems[profile.id()] {
             vc.updateStatus2("")
             vc.updateStatus1("Connecting...")
+            vc.updateSchemaStatus("")
         }
         if profile.engine.lowercased() == "postgresql" {
             DispatchQueue.global().async {
                 let rtn = self.checkPostgreSQLVersion(profile: profile)
+                print(">>> rtn >>> \(rtn) <<<")
                 if rtn.starts(with: "PostgreSQL") {
                     let parts = rtn.components(separatedBy: " ")
                     let version = parts[1]
+                    
+                    let schemaVersion = Setting.database.checkSchemaVersion(profile: profile)
                     
                     DispatchQueue.main.async {
                         if let vc = self.databaseProfileFlowListItems[profile.id()] {
                             vc.updateStatus2(version)
                             vc.updateStatus1("Connectable")
+                            
+                            if schemaVersion.starts(with: "v") {
+                                vc.updateSchemaStatus(schemaVersion)
+                            }else if schemaVersion.starts(with: "error_") {
+                                if let rtnMessage = schemaVersion.components(separatedBy: "\n").map({ line in
+                                    return line.trimmingCharacters(in: .whitespacesAndNewlines)
+                                }).first(where: { line in
+                                    return line.starts(with: "message: ")
+                                })?.replacingFirstOccurrence(of: "message: ", with: "") {
+                                    if rtnMessage == "database \"\(profile.database)\" does not exist" {
+                                        vc.updateSchemaStatus(Words.preference_tab_backup_not_exist_database.word())
+                                    }else{
+                                        vc.updateSchemaStatus(rtnMessage)
+                                    }
+                                }else{
+                                    vc.updateSchemaStatus(schemaVersion)
+                                }
+                            }else{
+                                vc.updateSchemaStatus(Words.preference_tab_backup_empty_database.word())
+                            }
                         }
                     }
                 }else if rtn.contains(find: "socketError") {
+                    DispatchQueue.main.async {
+                        if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                            vc.updateStatus2("")
+                            vc.updateStatus1("Unreachable")
+                        }
+                    }
+                }else if rtn.contains(find: "sqlError") {
+                    if let rtnMessage = rtn.components(separatedBy: "\n").map({ line in
+                        return line.trimmingCharacters(in: .whitespacesAndNewlines)
+                    }).first(where: { line in
+                        return line.starts(with: "message: ")
+                    })?.replacingFirstOccurrence(of: "message: ", with: "") {
+                        if rtnMessage == "database \"\(profile.database)\" does not exist" {
+                            DispatchQueue.main.async {
+                                if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                                    vc.updateSchemaStatus(Words.preference_tab_backup_not_exist_database.word())
+                                }
+                            }
+                        }else{
+                            DispatchQueue.main.async {
+                                if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                                    vc.updateSchemaStatus(rtnMessage)
+                                }
+                            }
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            if let vc = self.databaseProfileFlowListItems[profile.id()] {
+                                vc.updateSchemaStatus("SQL Error: \(rtn)")
+                            }
+                        }
+                    }
                     DispatchQueue.main.async {
                         if let vc = self.databaseProfileFlowListItems[profile.id()] {
                             vc.updateStatus2("")
@@ -279,6 +335,27 @@ final class DatabaseBackupController: NSViewController {
     }
     
     func checkPostgreSQLVersion(profile:DatabaseProfile) -> String {
+        let profile1 = DatabaseProfile()
+        profile1.engine = profile.engine
+        profile1.host = profile.host
+        profile1.port = profile.port
+        profile1.database = "postgres"
+        profile1.schema = "public"
+        profile1.user = "postgres"
+        profile1.nopsw = true
+        profile1.ssl = profile.ssl
+        profile1.socketTimeoutInSeconds = profile.socketTimeoutInSeconds
+        
+        let db1 = Database(profile: profile1)
+        do {
+            try db1.connect()
+            return try db1.version()
+        }catch{
+            return "\(error)"
+        }
+    }
+    
+    func checkIfDatabaseExist(profile:DatabaseProfile) -> String {
         let db = Database(profile: profile)
         do {
             try db.connect()
@@ -334,7 +411,7 @@ final class DatabaseBackupController: NSViewController {
     
     func databaseProfileToForm(profile:DatabaseProfile) {
         self.txtDatabaseHost.stringValue = profile.host
-        self.txtDatabasePort.integerValue = profile.port
+        self.txtDatabasePort.stringValue = "\(profile.port)"
         self.txtDatabaseName.stringValue = profile.database
         self.txtDatabaseSchema.stringValue = profile.schema
         self.txtDatabaseUsername.stringValue = profile.user
@@ -399,63 +476,6 @@ final class DatabaseBackupController: NSViewController {
         self.databaseProfileToForm(profile: profile)
     }
     
-    /// Used to add a particular view controller as an item to our stack view.
-    func addDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
-        
-        let storyboard = NSStoryboard(name: "DatabaseProfileFlowListItem", bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: "DatabaseProfileFlowListItem") as! DatabaseProfileFlowListItemController
-        
-            
-        self.databaseProfilesStackView.addArrangedSubview(viewController.view)
-        //addChildViewController(viewController)
-        viewController.initView(databaseProfile: databaseProfile)
-        
-        self.databaseProfileFlowListItems[databaseProfile.id()] = viewController
-        
-    }
-    
-    func removeDatabaseProfileFlowListItem(databaseProfile:DatabaseProfile) {
-        if let vc = self.databaseProfileFlowListItems[databaseProfile.id()] {
-            NSLayoutConstraint.deactivate(vc.view.constraints)
-            self.databaseProfilesStackView.removeView(vc.view)
-        }
-        self.databaseProfileFlowListItems.removeValue(forKey: databaseProfile.id())
-    }
-    
-    
-    func removeAllDatabaseProfileFlowListItems() {
-        for vc in self.databaseProfileFlowListItems.values {
-            NSLayoutConstraint.deactivate(vc.view.constraints)
-            self.databaseProfilesStackView.removeView(vc.view)
-        }
-        self.databaseProfileFlowListItems.removeAll()
-    }
-    
-    @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
-        self.chkDatabasePostgresql.state = .off
-        self.chkDatabaseMysql.state = .off
-        
-        self.chkDatabasePostgresql.state = .on
-    }
-    
-    @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
-        self.chkDatabasePostgresql.state = .off
-        self.chkDatabaseMysql.state = .off
-        
-        self.chkDatabaseMysql.state = .on
-    }
-    
-    class func getPostgresCommandPath() -> String? {
-        let keys:[String] = [
-            "/Applications/Postgres.app/Contents/Versions/latest/bin",
-            "/usr/local/bin"
-        ]
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: keys) {
-            return postgresCommandPath
-        }else{
-            return nil
-        }
-    }
     
     @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
         self.lblDatabaseMessage.stringValue = ""
@@ -471,6 +491,8 @@ final class DatabaseBackupController: NSViewController {
             self.btnCreateDatabase.isHidden = true
             return
         }
+        
+        self.btnCheckDatabaseName.isEnabled = false
         DispatchQueue.global().async {
             let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: databaseProfile.host, port: databaseProfile.port)
             var exists = false
@@ -485,25 +507,54 @@ final class DatabaseBackupController: NSViewController {
                 var tables:[TableInfo] = []
                 do {
                     tables = try remotedb.queryTableInfos()
+                    
+                    if tables.count == 0 {
+                        DispatchQueue.main.async {
+                            self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_empty_database.word()
+                            self.btnCreateDatabase.isHidden = true
+                            self.btnCheckDatabaseName.isEnabled = true
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_non_empty_database.word()
+                            self.btnCreateDatabase.isHidden = true
+                            self.btnCheckDatabaseName.isEnabled = true
+                        }
+                    }
                 }catch{
                     self.logger.log(.error, error)
-                    self.lblDatabaseMessage.stringValue = "\(error)"
-                }
-                if tables.count == 0 {
-                    DispatchQueue.main.async {
-                        self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_empty_database.word()
-                        self.btnCreateDatabase.isHidden = true
+                    let rtn = "\(error)"
+                    if rtn.contains(find: "sqlError") {
+                        if let rtnMessage = rtn.components(separatedBy: "\n").map({ line in
+                            return line.trimmingCharacters(in: .whitespacesAndNewlines)
+                        }).first(where: { line in
+                            return line.starts(with: "message: ")
+                        })?.replacingFirstOccurrence(of: "message: ", with: "") {
+                            if rtnMessage == "database \"\(databaseProfile.database)\" does not exist" {
+                                DispatchQueue.main.async {
+                                    self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_not_exist_database.word()
+                                    self.btnCheckDatabaseName.isEnabled = true
+                                }
+                            }
+                        }else{
+                            DispatchQueue.main.async {
+                                self.lblDatabaseMessage.stringValue = "\(error)"
+                                self.btnCheckDatabaseName.isEnabled = true
+                            }
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblDatabaseMessage.stringValue = "\(error)"
+                            self.btnCheckDatabaseName.isEnabled = true
+                        }
                     }
-                }else{
-                    DispatchQueue.main.async {
-                        self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_non_empty_database.word()
-                        self.btnCreateDatabase.isHidden = true
-                    }
+                    
                 }
             }else{
                 DispatchQueue.main.async {
                     self.lblDatabaseMessage.stringValue = Words.preference_tab_backup_not_exist_database.word()
                     self.btnCreateDatabase.isHidden = false
+                    self.btnCheckDatabaseName.isEnabled = true
                 }
             }
         }
@@ -558,6 +609,33 @@ final class DatabaseBackupController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onDatabasePostgresqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabasePostgresql.state = .on
+    }
+    
+    @IBAction func onDatabaseMysqlClicked(_ sender: NSButton) {
+        self.chkDatabasePostgresql.state = .off
+        self.chkDatabaseMysql.state = .off
+        
+        self.chkDatabaseMysql.state = .on
+    }
+    
+    class func getPostgresCommandPath() -> String? {
+        let keys:[String] = [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+        ]
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: keys) {
+            return postgresCommandPath
+        }else{
+            return nil
+        }
+    }
+    
     
     // MARK: - ENGINE
     
@@ -724,20 +802,30 @@ final class DatabaseBackupController: NSViewController {
         self.btnCloneLocalToRemote.isEnabled = false
         self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
         if let source = self.backupSourceDatabaseProfile, let target = self.backupDestinationDatabaseProfile {
-            if source.engine.lowercased() == "archive" && target.engine.lowercased() == "archive" {
+            if self.lblBackupSourceContent3.stringValue == Words.preference_tab_backup_not_exist_database.word() || self.lblBackupDestinationContent3.stringValue == Words.preference_tab_backup_not_exist_database.word() {
                 self.btnCloneLocalToRemote.isEnabled = false
-            }else if self.lblBackupSourceStatus1.stringValue == "Connectable" && self.lblBackupDestinationStatus1.stringValue == "Connectable" {
-                self.btnCloneLocalToRemote.isEnabled = true
-            }else if target.database == "ImageDocker.backup.gz" && self.lblBackupSourceStatus1.stringValue == "Connectable" {
-                self.btnCloneLocalToRemote.isEnabled = true
             }else{
-                self.btnCloneLocalToRemote.isEnabled = false
-            }
-            if source.engine.lowercased() == "archive" {
-                self.btnCloneLocalToRemote.title = Words.preference_tab_backup_restore_now.word()
-            }
-            if target.engine.lowercased() == "archive" {
-                self.btnCloneLocalToRemote.title = Words.preference_tab_database_backup_now.word()
+                if source.engine.lowercased() == "archive" && target.engine.lowercased() == "archive" {
+                    self.btnCloneLocalToRemote.isEnabled = false
+                }else if self.lblBackupSourceStatus1.stringValue == "Connectable" && self.lblBackupDestinationStatus1.stringValue == "Connectable" {
+                    if source.engine.lowercased() == "archive" {
+                        self.btnCloneLocalToRemote.isEnabled = true
+                    }else if self.lblBackupSourceContent3.stringValue.starts(with: "v"){
+                        self.btnCloneLocalToRemote.isEnabled = true
+                    }else{
+                        self.btnCloneLocalToRemote.isEnabled = false
+                    }
+                }else if target.database == "ImageDocker.backup.gz" && self.lblBackupSourceStatus1.stringValue == "Connectable" && self.lblBackupSourceContent3.stringValue.starts(with: "v") {
+                    self.btnCloneLocalToRemote.isEnabled = true
+                }else{
+                    self.btnCloneLocalToRemote.isEnabled = false
+                }
+                if source.engine.lowercased() == "archive" {
+                    self.btnCloneLocalToRemote.title = Words.preference_tab_backup_restore_now.word()
+                }
+                if target.engine.lowercased() == "archive" {
+                    self.btnCloneLocalToRemote.title = Words.preference_tab_database_backup_now.word()
+                }
             }
         }else{
             self.btnCloneLocalToRemote.isEnabled = false
@@ -914,6 +1002,7 @@ final class DatabaseBackupController: NSViewController {
         if profile.engine.lowercased() == "postgresql" {
             DispatchQueue.global().async {
                 let rtn = self.checkPostgreSQLVersion(profile: profile)
+                print(">>> rtn >>> \(rtn) <<<")
                 if rtn.starts(with: "PostgreSQL") {
                     let parts = rtn.components(separatedBy: " ")
                     let version = parts[1]
@@ -936,26 +1025,61 @@ final class DatabaseBackupController: NSViewController {
                         DispatchQueue.main.async {
                             if isSource {
                                 self.lblBackupSourceContent3.stringValue = schemaVersion
+                                self.lblBackupSourceContent3.textColor = Colors.Green
                             }else{
                                 self.lblBackupDestinationContent3.stringValue = schemaVersion
+                                self.lblBackupDestinationContent3.textColor = Colors.Green
                             }
                             self.changeBackupNowButtonState()
                         }
                     }else if schemaVersion.starts(with: "error_"){
-                        DispatchQueue.main.async {
-                            if isSource {
-                                self.lblBackupSourceContent3.stringValue = "数据库错误"
+                        if let rtnMessage = schemaVersion.components(separatedBy: "\n").map({ line in
+                            return line.trimmingCharacters(in: .whitespacesAndNewlines)
+                        }).first(where: { line in
+                            return line.starts(with: "message: ")
+                        })?.replacingFirstOccurrence(of: "message: ", with: "") {
+                            if rtnMessage == "database \"\(profile.database)\" does not exist" {
+                                DispatchQueue.main.async {
+                                    if isSource {
+                                        self.lblBackupSourceContent3.stringValue = Words.preference_tab_backup_not_exist_database.word()
+                                        self.lblBackupSourceContent3.textColor = Colors.Red
+                                    }else{
+                                        self.lblBackupDestinationContent3.stringValue = Words.preference_tab_backup_not_exist_database.word()
+                                        self.lblBackupDestinationContent3.textColor = Colors.Red
+                                    }
+                                    self.changeBackupNowButtonState()
+                                }
                             }else{
-                                self.lblBackupDestinationContent3.stringValue = "数据库错误"
+                                if isSource {
+                                    self.lblBackupSourceContent3.stringValue = "数据库错误 \(rtnMessage)"
+                                    self.lblBackupSourceContent3.textColor = Colors.Red
+                                }else{
+                                    self.lblBackupDestinationContent3.stringValue = "数据库错误 \(rtnMessage)"
+                                    self.lblBackupDestinationContent3.textColor = Colors.Red
+                                }
+                                self.changeBackupNowButtonState()
                             }
-                            self.changeBackupNowButtonState()
+                        }else{
+                            DispatchQueue.main.async {
+                                if isSource {
+                                    self.lblBackupSourceContent3.stringValue = "数据库错误 \(schemaVersion)"
+                                    self.lblBackupSourceContent3.textColor = Colors.Red
+                                }else{
+                                    self.lblBackupDestinationContent3.stringValue = "数据库错误 \(schemaVersion)"
+                                    self.lblBackupDestinationContent3.textColor = Colors.Red
+                                }
+                                self.changeBackupNowButtonState()
+                            }
                         }
+                        
                     }else{
                         DispatchQueue.main.async {
                             if isSource {
                                 self.lblBackupSourceContent3.stringValue = Words.preference_tab_backup_no_schema.word()
+                                self.lblBackupSourceContent3.textColor = Colors.Red
                             }else{
                                 self.lblBackupDestinationContent3.stringValue = Words.preference_tab_backup_no_schema.word()
+                                self.lblBackupDestinationContent3.textColor = Colors.Red
                             }
                             self.changeBackupNowButtonState()
                         }

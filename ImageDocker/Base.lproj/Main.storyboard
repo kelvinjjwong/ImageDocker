@@ -224,11 +224,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="laD-z9-Hbk">
-                                                                                <rect key="frame" x="320" y="0.0" width="0.0" height="24"/>
+                                                                                <rect key="frame" x="320" y="0.0" width="8" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vH-yC-RDp">
-                                                                                        <rect key="frame" x="0.0" y="4" width="4" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="4" width="12" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Ja4-6R-SGj">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -256,11 +256,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="cha-Sj-3VA">
-                                                                                <rect key="frame" x="357" y="0.0" width="240" height="17"/>
+                                                                                <rect key="frame" x="357" y="0.0" width="272" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxw-2X-mVv">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="240" height="16"/>
+                                                                                        <rect key="frame" x="0.0" y="1" width="272" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="g6z-WI-PcU">
                                                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -3604,7 +3604,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="47" y="1" width="35" height="17"/>
+                                                            <rect key="frame" x="47" y="1" width="67" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
