@@ -26,8 +26,8 @@ extension Words {
     )
     
     static let mainmenu_local_environment = Localize(
-        eng: "Environment and Mount",
-        chs: "运行环境和挂载点"
+        eng: "External Tools",
+        chs: "外挂工具"
     )
     
     static let mainmenu_quit = Localize(
