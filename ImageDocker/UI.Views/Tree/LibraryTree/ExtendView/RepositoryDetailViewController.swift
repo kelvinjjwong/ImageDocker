@@ -270,7 +270,7 @@ class RepositoryDetailViewController: NSViewController {
                         if !connectedDeviceIds.contains(repository.deviceId) {
                             
                             DispatchQueue.main.async {
-                                MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: "Device is not connected")
+//                                MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: "Device is not connected")
                                 if isAndroid {
                                     MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_need_debug_mode.word())
                                 }else{

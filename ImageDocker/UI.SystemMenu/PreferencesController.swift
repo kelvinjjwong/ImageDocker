@@ -35,6 +35,8 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblLanguage: NSTextField!
     @IBOutlet weak var popupLanguage: NSPopUpButton!
     
+    // MARK: STORAGE
+    
     @IBOutlet weak var boxLogging: NSBox!
     @IBOutlet weak var lblLogPath: NSTextField!
     @IBOutlet weak var txtLogPath: NSTextField!
@@ -47,6 +49,14 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtToolsPath: NSTextField!
     @IBOutlet weak var btnBrowseToolsPath: NSButton!
     @IBOutlet weak var btnOpenToolsPath: NSButton!
+    
+    @IBOutlet weak var lblLocalMountPointPrompt: NSTextField!
+    @IBOutlet weak var txtPathForLocalMountPoint: NSTextField!
+    @IBOutlet weak var btnAddLocalMountPoint: NSButton!
+    @IBOutlet weak var tblLocalMountPoints: NSTableView!
+    @IBOutlet weak var lblLocalMountPoint: NSTextField!
+    
+    var localMountPointsTableController : DictionaryTableViewController!
     
     
     // MARK: MOBILE DEVICE
@@ -293,7 +303,9 @@ final class PreferencesController: NSViewController {
         if oldValue != value {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
         }
-        
+    }
+    
+    func saveStorage() {
         let logPath = self.txtLogPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if logPath != "" && logPath.isDirectoryExists() {
             Setting.logging.saveLogPath(logPath)
@@ -329,6 +341,7 @@ final class PreferencesController: NSViewController {
         let defaults = UserDefaults.standard
         
         self.saveGeneralSection(defaults)
+        self.saveStorage()
         self.savePerformanceSection(defaults)
         self.saveMobileSection(defaults)
     }
@@ -404,6 +417,9 @@ final class PreferencesController: NSViewController {
         }else{
             self.popupLanguage.selectItem(withTitle: "English")
         }
+    }
+    
+    func initStorage() {
         
         self.boxLogging.title = Words.preference_tab_general_box_logging.word()
         self.lblLogPath.stringValue = Words.preference_tab_general_log_path.word()
@@ -418,6 +434,25 @@ final class PreferencesController: NSViewController {
         self.btnOpenToolsPath.title = Words.preference_tab_general_log_path_reveal_in_finder.word()
         
         self.txtToolsPath.stringValue = Setting.tools.toolsPath()
+        
+        self.localMountPointsTableController = DictionaryTableViewController(self.tblLocalMountPoints)
+        self.localMountPointsTableController.actionIcon = Icons.remove
+        self.localMountPointsTableController.onAction = { id in
+            
+            var records = Setting.localEnvironment.localDiskMountPoints()
+            if let idx = records.firstIndex(of: id) {
+                records.remove(at: idx)
+            }
+            Setting.localEnvironment.saveLocalDiskMountPoints(records)
+            
+            // reload table view
+            self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+            })
+        }
+        
+        self.txtPathForLocalMountPoint.stringValue = ""
+        self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+        })
     }
     
     func initPerformanceSection() {
@@ -447,8 +482,9 @@ final class PreferencesController: NSViewController {
         // Do any additional setup after loading the view.
         self.setupTabs()
         self.initGeneral()
-        self.initPerformanceSection()
+        self.initStorage()
         self.initMobileSection()
+        self.initPerformanceSection()
         
     }
     
@@ -456,8 +492,9 @@ final class PreferencesController: NSViewController {
         self.view.window?.title = Words.mainmenu_preferences.word()
         self.btnApply.title = Words.apply.word()
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_general.word()
-        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_performance.word()
+        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_storage.word()
         self.tabs.tabViewItem(at: 2).label = Words.preference_tab_mobile.word()
+        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_performance.word()
     }
     
     fileprivate func setupMemorySlider() {
@@ -488,6 +525,39 @@ final class PreferencesController: NSViewController {
         didSet {
             // Update the view, if already loaded.
         }
+    }
+    
+    
+    
+    @IBAction func onAddLocalMountPointClicked(_ sender: NSButton) {
+        let newPath = self.txtPathForLocalMountPoint.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if newPath != "" {
+            var records = Setting.localEnvironment.localDiskMountPoints()
+            if !records.contains(newPath) {
+                records.append(newPath)
+            }
+            Setting.localEnvironment.saveLocalDiskMountPoints(records)
+            
+            // reload table view
+            self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+            })
+        }
+    }
+    
+    func loadLocalMountPoints() -> [[String:String]] {
+        var records:[[String:String]] = []
+        let localMountPoints = Setting.localEnvironment.localDiskMountPoints()
+        for p in localMountPoints {
+            var record:[String:String] = [:]
+            record["id"] = p
+            record["value"] = p
+            record["check"] = "false"
+            
+            let dest = LocalDirectory.bridge.getSymbolicLinkDestination(path: p)
+            record["destination"] = dest
+            records.append(record)
+        }
+        return records
     }
 }
 

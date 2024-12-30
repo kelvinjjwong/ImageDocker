@@ -11,8 +11,8 @@ import Foundation
 extension Words {
     
     static let mainmenu_preferences = Localize(
-        eng: "Preferences",
-        chs: "偏好配置"
+        eng: "Storage & Performance",
+        chs: "存储和性能"
     )
     
     static let mainmenu_database_and_backup = Localize(

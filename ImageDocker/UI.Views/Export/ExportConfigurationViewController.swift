@@ -250,7 +250,7 @@ class ExportConfigurationViewController: NSViewController {
         
         if state {
             self.repositoryTableController.enableCheckboxes()
-            self.eventCategoriesTableController.enableCheckboxes()
+//            self.eventCategoriesTableController.enableCheckboxes()
             
             self.toggleGroup_Repository.enable()
             self.toggleGroup_Family.enable()
@@ -258,7 +258,7 @@ class ExportConfigurationViewController: NSViewController {
             
         }else{
             self.repositoryTableController.disableCheckboxes()
-            self.eventCategoriesTableController.disableCheckboxes()
+//            self.eventCategoriesTableController.disableCheckboxes()
             
             self.toggleGroup_Repository.disable()
             self.toggleGroup_Family.disable()
@@ -356,18 +356,18 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_EventCategory.selected = "include"
             let value = eventCategories.replacingFirstOccurrence(of: "include:", with: "")
             self.logger.log(.trace, "eventCategory: \(value)")
-            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+//            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
         }else if eventCategories.hasPrefix("exclude:") {
             self.toggleGroup_EventCategory.selected = "exclude"
             let value = eventCategories.replacingFirstOccurrence(of: "exclude:", with: "")
             self.logger.log(.trace, "eventCategory: \(value)")
-            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+//            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
         }
         if !specifyEventCategory {
-            self.eventCategoriesTableController.disableCheckboxes()
+//            self.eventCategoriesTableController.disableCheckboxes()
             self.toggleGroup_EventCategory.disable()
         }else{
-            self.eventCategoriesTableController.enableCheckboxes()
+//            self.eventCategoriesTableController.enableCheckboxes()
             self.toggleGroup_EventCategory.enable()
         }
         
@@ -376,7 +376,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBAction func onCleanClicked(_ sender: NSButton) {
         self.cleanFields()
         self.repositoryTableController.uncheckAll()
-        self.eventCategoriesTableController.uncheckAll()
+//        self.eventCategoriesTableController.uncheckAll()
     }
     
     
@@ -408,16 +408,16 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         
-        if self.chkEventCategories.state == .on {
-            let checked = self.eventCategoriesTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
-            if checked != "" {
-                if self.chkIncludeEventCategories.state == .on {
-                    eventCategories = "include:\(checked)"
-                }else if self.chkExcludeEventCategories.state == .on {
-                    eventCategories = "exclude:\(checked)"
-                }
-            }
-        }
+//        if self.chkEventCategories.state == .on {
+//            let checked = self.eventCategoriesTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+//            if checked != "" {
+//                if self.chkIncludeEventCategories.state == .on {
+//                    eventCategories = "include:\(checked)"
+//                }else if self.chkExcludeEventCategories.state == .on {
+//                    eventCategories = "exclude:\(checked)"
+//                }
+//            }
+//        }
         self.logger.log(.trace, "selected category: \(eventCategories)")
         
         profile.name = name

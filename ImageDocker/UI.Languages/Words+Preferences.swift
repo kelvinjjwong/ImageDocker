@@ -60,6 +60,11 @@ extension Words {
         chs: "用户界面语言:"
     )
     
+    static let preference_tab_storage = Localize(
+        eng: "Storage",
+        chs: "存储"
+    )
+    
     static let preference_tab_performance = Localize(
         eng: "Performance",
         chs: "性能"
