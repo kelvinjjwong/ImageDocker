@@ -196,9 +196,22 @@ class ExportConfigurationViewController: NSViewController {
         self.treeViewController = CheckableTreeViewControllerWrapper(self.treeEvents, checkable: true, dataLoader: {
             return self.loadEvents(selectedOwners: self.repositoryTableController.getCheckedItems(column: "id"))
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
-            self.logger.log(.trace, "tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+            self.logger.log(.info, "tree node check: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             if let vc = self.treeViewController {
                 print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+                if nodeType == "PeopleGroup" {
+                    if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let groupNodeCellView = _groupNodeCellView {
+                        for member in groupNodeData.getChildren() {
+                            if let (nodeData, _nodeCellView) = vc.getCheckableNode(id: member.getId()), let nodeCellView = _nodeCellView {
+                                print("need to cascade check \(nodeData.getText())")
+                                nodeCellView.checkbox.state = newValue ? .on : .off
+                                nodeData.setCheckState(state: newValue)
+                            }
+                        }
+                    }
+                }
+                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+                vc.refresh()
             }
         })
         
@@ -224,7 +237,7 @@ class ExportConfigurationViewController: NSViewController {
                 
                 for eventCategory in categories {
                     let group = PeopleGroup()
-                    group.id = eventCategory
+                    group.id = "\(m.id)|\(eventCategory)"
                     group.name = eventCategory
                     group.parent = coreMember
                     group.setNodeIcon(Icons.folder)
@@ -238,7 +251,7 @@ class ExportConfigurationViewController: NSViewController {
                         if owner3 != "" {owners.append(owner3)}
                         let member = PeopleGroupMember()
                         //                group.id = "\(owners.joined(separator: ","))_\(eventName)"
-                        member.id = eventName
+                        member.id = "\(m.id)|\(group.id)|\(eventName)"
                         
                         var partOwner = "(\(owners.joined(separator: ",")))"
                         if coreMember.getText() == owners.joined(separator: ",") {

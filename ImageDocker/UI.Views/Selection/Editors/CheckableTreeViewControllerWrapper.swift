@@ -90,6 +90,10 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         self.setCheckedItems(ids: checkedIds)
     }
     
+    public func refresh() {
+        self.treeView.reloadData()
+    }
+    
     
     func getCheckedItems() -> [TreeNodeData] {
         var checkedGroups:[TreeNodeData] = []
@@ -97,6 +101,11 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
             for g in cm.getChildren() {
                 if g.checked() {
                     checkedGroups.append(g)
+                    for m in g.getChildren() {
+                        if m.checked() {
+                            checkedGroups.append(m)
+                        }
+                    }
                 }
             }
         }
@@ -168,6 +177,10 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
             // not existing stored
             self.checkableItems[node.getId()] = (node, item)
         }
+    }
+    
+    public func getCheckableNode(id:String) -> (TreeNodeData, CheckableTableCellView?)? {
+        return self.checkableItems[id]
     }
     
     func removeAllCheckableNodes() {
