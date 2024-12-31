@@ -86,4 +86,6 @@ protocol ExportDaoInterface {
     func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState
     
     func deleteExportLog(imageId:String, profileId:String) -> ExecuteState
+    
+    func getTargetVolumes() -> [String]
 }

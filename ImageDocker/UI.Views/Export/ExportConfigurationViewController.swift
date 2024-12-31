@@ -86,6 +86,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkIncludeEventCategories: NSButton!
     @IBOutlet weak var chkExcludeEventCategories: NSButton!
     @IBOutlet weak var treeEvents: NSOutlineView!
+    var treeViewController: CheckableTreeViewControllerWrapper? = nil
     
     var repoNames:[String:String] = [:]
     
@@ -192,20 +193,89 @@ class ExportConfigurationViewController: NSViewController {
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
+        self.treeViewController = CheckableTreeViewControllerWrapper(self.treeEvents, checkable: true, dataLoader: {
+            return self.loadEvents()
+        }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
+            self.logger.log(.trace, "tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+            if let vc = self.treeViewController {
+                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+            }
+        })
+        
         self.logger.log(.trace, "view did load")
+    }
+    
+    private func loadEvents() -> [CoreMember] {
+        
+        var coreMembers:[CoreMember] = []
+        let ms = FaceDao.default.getCoreMembers()
+        for m in ms {
+            let coreMember = CoreMember()
+            coreMember.id = m.id
+            coreMember.name = m.name
+            coreMember.nickname = m.shortName ?? m.name
+            coreMember.groups = []
+            
+            let events = EventDao.default.getEventsByOwner(ownerId: m.id)
+
+            for (category, eventName, owner1, owner2, owner3) in events {
+                var owners:[String] = []
+                if owner1 != "" {owners.append(owner1)}
+                if owner2 != "" {owners.append(owner2)}
+                if owner3 != "" {owners.append(owner3)}
+                let group = PeopleGroup()
+//                group.id = "\(owners.joined(separator: ","))_\(eventName)"
+                group.id = eventName
+                
+                var partOwner = "(\(owners.joined(separator: ",")))"
+                if coreMember.getText() == owners.joined(separator: ",") {
+                    partOwner = ""
+                }
+                var partCategory = "[\(category)]"
+                if coreMember.getText() == category || eventName.contains(find: category) {
+                    partCategory = ""
+                }
+                var name = "\(eventName) \(partOwner) \(partCategory)".trimmingCharacters(in: .whitespacesAndNewlines)
+                if name.count > 30 {
+                    name = "\(name[0..<30])..."
+                }
+                group.name = name
+                group.parent = coreMember
+                group.members = []
+                
+                self.logger.log(.trace, "Add event: id:\(group.id) name:\(group.name)")
+                coreMember.groups.append(group)
+            }
+            
+            coreMembers.append(coreMember)
+        }
+        return coreMembers
+        
     }
     
     func refreshMountedVolumes(append items:[String] = []) {
         
-        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        var volumes:[String] = []
         
         for item in items {
-            if !mountedVolumes.contains(item) {
-                mountedVolumes.append(item)
+            if !volumes.contains(item) {
+                volumes.append(item)
             }
         }
         
-        self.volumesListController.load(mountedVolumes)
+        for item in LocalDirectory.bridge.listMountedVolumes() {
+            if !volumes.contains(item) {
+                volumes.append(item)
+            }
+        }
+        
+        for item in ExportDao.default.getTargetVolumes() {
+            if !volumes.contains(item) {
+                volumes.append(item)
+            }
+        }
+        
+        self.volumesListController.load(volumes)
     }
     
     private func loadStackItems() {
@@ -221,7 +291,7 @@ class ExportConfigurationViewController: NSViewController {
     // MARK: - CLEAN FIELDS
     
     private func reloadTables() {
-        self.refreshMountedVolumes()
+        self.refreshMountedVolumes(append: Setting.localEnvironment.localDiskMountPoints())
         
         self.repositoryTableController.load(self.loadRepositoryOwners(), afterLoaded: {
         })

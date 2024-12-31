@@ -45,6 +45,11 @@ extension Words {
         chs: "日志文件"
     )
     
+    static let mainmenu_logfolder = Localize(
+        eng: "Log Folder",
+        chs: "日志文件夹"
+    )
+    
     
     static let tasks = Localize(
         eng: "Tasks (%s/%s)",

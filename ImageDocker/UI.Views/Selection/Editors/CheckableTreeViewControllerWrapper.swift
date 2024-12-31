@@ -10,7 +10,7 @@ import LoggerFactory
 
 public class CheckableTreeViewControllerWrapper : NSViewController {
     
-    private let logger = LoggerFactory.get(category: "FamilyTreeViewController")
+    private let logger = LoggerFactory.get(category: "CheckableTreeView")
     
     private var treeView: NSOutlineView!
     

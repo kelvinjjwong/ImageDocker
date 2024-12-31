@@ -499,4 +499,28 @@ delete from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(prof
         }
         return .OK
     }
+    
+    func getTargetVolumes() -> [String] {
+        var result:[String] = []
+        
+        let sql = """
+        select distinct "targetVolume" from "ExportProfile"
+        """
+//        self.logger.log(sql)
+        
+        final class TempRecord : DatabaseRecord {
+            var targetVolume:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.targetVolume)
+            }
+        }catch{
+            self.logger.log(.error, error)
+        }
+        return result
+    }
 }

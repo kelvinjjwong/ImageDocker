@@ -54,6 +54,9 @@
                                         <menuItem title="Log File" id="Om0-QW-kKO">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
+                                        <menuItem title="Log Folder" id="no1-4n-5xa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Udc-qK-DQz"/>
                                         <menuItem title="Quit ImageDocker" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
@@ -3608,7 +3611,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="47" y="1" width="50" height="17"/>
+                                                            <rect key="frame" x="47" y="1" width="4" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">

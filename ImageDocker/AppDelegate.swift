@@ -27,12 +27,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         self.mainMenu.item(at: 4)?.title = Words.mainmenu_local_environment.word()
         self.mainMenu.item(at: 5)?.title = Words.mainmenu_external_api.word()
         self.mainMenu.item(at: 7)?.title = Words.mainmenu_logfile.word()
-        self.mainMenu.item(at: 9)?.title = Words.mainmenu_quit.word()
+        self.mainMenu.item(at: 8)?.title = Words.mainmenu_logfolder.word()
+        self.mainMenu.item(at: 10)?.title = Words.mainmenu_quit.word()
         
         self.mainMenu.item(at: 7)?.action = #selector(open_log_file(_:))
+        self.mainMenu.item(at: 8)?.action = #selector(open_log_folder(_:))
     }
     
     @objc func open_log_file(_ menuItem:NSMenuItem) {
+        autoreleasepool { () -> Void in
+            let proc = Process()
+            proc.launchPath = "/usr/bin/open"
+            proc.arguments = [URL(fileURLWithPath: AppDelegate.current.logFilePath()).appendingPathComponent(defaultLoggingFilename()).path()]
+            proc.launch()
+        }
+    }
+    
+    @objc func open_log_folder(_ menuItem:NSMenuItem) {
         let url = URL(fileURLWithPath: AppDelegate.current.logFilePath())
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }

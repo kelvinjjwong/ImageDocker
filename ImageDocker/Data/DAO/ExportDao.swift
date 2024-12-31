@@ -166,4 +166,8 @@ class ExportDao {
     func deleteExportLog(imageId:String, profileId:String) -> ExecuteState {
         return self.impl.deleteExportLog(imageId: imageId, profileId: profileId)
     }
+    
+    func getTargetVolumes() -> [String] {
+        return self.impl.getTargetVolumes()
+    }
 }

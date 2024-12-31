@@ -53,7 +53,7 @@ extension Words {
     
     static let export_profile_to_directory = Localize (
         eng: "To directory:",
-        chs: "导出到文件夹:"
+        chs: "导出到:"
     )
     
     static let export_profile_repositories = Localize (
@@ -220,8 +220,8 @@ extension Words {
     )
     
     static let export_profile_copy_sql_to_clipboard = Localize (
-        eng: "Copy SQL to Clipboard",
-        chs: "复制 SQL 语句到剪贴板"
+        eng: "SQL",
+        chs: "SQL"
     )
     
     static let export_profile_export = Localize (
