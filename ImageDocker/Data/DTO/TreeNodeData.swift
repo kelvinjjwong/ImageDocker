@@ -104,6 +104,7 @@ public class PeopleGroup : TreeNodeData {
     var parent:CoreMember? = nil
     var members:[PeopleGroupMember] = []
     var isChecked = false
+    var _nodeIcon = Icons.people
     
     public func getId() -> String {
         return self.id
@@ -126,7 +127,11 @@ public class PeopleGroup : TreeNodeData {
     }
     
     public func nodeIcon() -> NSImage {
-        return Icons.people
+        return _nodeIcon
+    }
+    
+    public func setNodeIcon(_ value:NSImage) {
+        self._nodeIcon = value
     }
     
     public func actionIcon() -> NSImage {
@@ -172,6 +177,7 @@ public class PeopleGroupMember : TreeNodeData {
     var groupName:String = ""
     var parent:PeopleGroup? = nil
     var isChecked = false
+    var _nodeIcon = Icons.smile
     
     public func getId() -> String {
         return self.id
@@ -194,7 +200,11 @@ public class PeopleGroupMember : TreeNodeData {
     }
     
     public func nodeIcon() -> NSImage {
-        return Icons.smile
+        return self._nodeIcon
+    }
+    
+    public func setNodeIcon(_ value:NSImage) {
+        self._nodeIcon = value
     }
     
     public func actionIcon() -> NSImage {

@@ -194,7 +194,7 @@ class ExportConfigurationViewController: NSViewController {
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
         self.treeViewController = CheckableTreeViewControllerWrapper(self.treeEvents, checkable: true, dataLoader: {
-            return self.loadEvents()
+            return self.loadEvents(selectedOwners: self.repositoryTableController.getCheckedItems(column: "id"))
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
             self.logger.log(.trace, "tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             if let vc = self.treeViewController {
@@ -205,49 +205,67 @@ class ExportConfigurationViewController: NSViewController {
         self.logger.log(.trace, "view did load")
     }
     
-    private func loadEvents() -> [CoreMember] {
+    private func loadEvents(selectedOwners:[String] = []) -> [CoreMember] {
         
         var coreMembers:[CoreMember] = []
         let ms = FaceDao.default.getCoreMembers()
         for m in ms {
-            let coreMember = CoreMember()
-            coreMember.id = m.id
-            coreMember.name = m.name
-            coreMember.nickname = m.shortName ?? m.name
-            coreMember.groups = []
-            
-            let events = EventDao.default.getEventsByOwner(ownerId: m.id)
-
-            for (category, eventName, owner1, owner2, owner3) in events {
-                var owners:[String] = []
-                if owner1 != "" {owners.append(owner1)}
-                if owner2 != "" {owners.append(owner2)}
-                if owner3 != "" {owners.append(owner3)}
-                let group = PeopleGroup()
-//                group.id = "\(owners.joined(separator: ","))_\(eventName)"
-                group.id = eventName
+            if selectedOwners.count == 0 || (selectedOwners.count > 0 && selectedOwners.contains(where: { o in
+                o == m.id || o == "shared"
+            })) {
                 
-                var partOwner = "(\(owners.joined(separator: ",")))"
-                if coreMember.getText() == owners.joined(separator: ",") {
-                    partOwner = ""
-                }
-                var partCategory = "[\(category)]"
-                if coreMember.getText() == category || eventName.contains(find: category) {
-                    partCategory = ""
-                }
-                var name = "\(eventName) \(partOwner) \(partCategory)".trimmingCharacters(in: .whitespacesAndNewlines)
-                if name.count > 30 {
-                    name = "\(name[0..<30])..."
-                }
-                group.name = name
-                group.parent = coreMember
-                group.members = []
+                let coreMember = CoreMember()
+                coreMember.id = m.id
+                coreMember.name = m.name
+                coreMember.nickname = m.shortName ?? m.name
+                coreMember.groups = []
                 
-                self.logger.log(.trace, "Add event: id:\(group.id) name:\(group.name)")
-                coreMember.groups.append(group)
+                let categories = EventDao.default.getEventCategoriesByOwner(ownerId: m.id)
+                
+                for eventCategory in categories {
+                    let group = PeopleGroup()
+                    group.id = eventCategory
+                    group.name = eventCategory
+                    group.parent = coreMember
+                    group.setNodeIcon(Icons.folder)
+                    
+                    let events = EventDao.default.getEventsByOwnerAndCategory(ownerId: m.id, category: eventCategory)
+                    
+                    for (category, eventName, owner1, owner2, owner3) in events {
+                        var owners:[String] = []
+                        if owner1 != "" {owners.append(owner1)}
+                        if owner2 != "" {owners.append(owner2)}
+                        if owner3 != "" {owners.append(owner3)}
+                        let member = PeopleGroupMember()
+                        //                group.id = "\(owners.joined(separator: ","))_\(eventName)"
+                        member.id = eventName
+                        
+                        var partOwner = "(\(owners.joined(separator: ",")))"
+                        if coreMember.getText() == owners.joined(separator: ",") {
+                            partOwner = ""
+                        }
+                        var partCategory = "[\(category)]"
+                        if coreMember.getText() == category || eventName.contains(find: category) {
+                            partCategory = ""
+                        }
+                        var name = "\(eventName) \(partOwner) \(partCategory)".trimmingCharacters(in: .whitespacesAndNewlines)
+                        if name.count > 30 {
+                            name = "\(name[0..<30])..."
+                        }
+                        member.name = name
+                        member.nickname = name
+                        member.parent = group
+                        member.setNodeIcon(Icons.events2)
+                        
+                        self.logger.log(.info, "Tree add event: id:\(member.id) name:\(member.name)")
+                        group.members.append(member)
+                    }
+                    
+                    coreMember.groups.append(group)
+                }
+                
+                coreMembers.append(coreMember)
             }
-            
-            coreMembers.append(coreMember)
         }
         return coreMembers
         
@@ -821,6 +839,9 @@ class ExportConfigurationViewController: NSViewController {
 //        self.toggleGroup_EventCategory.selected = "include"
         
         self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
+        self.repositoryTableController.onCheck = { id, state in
+            self.treeViewController?.reloadNodes()
+        }
         
 //        self.eventCategoriesTableController = DictionaryTableViewController(self.tblEventCategories)
 //        self.eventCategoriesTableController.onCheck = { id, state in

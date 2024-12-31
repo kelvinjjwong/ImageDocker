@@ -19,6 +19,7 @@ struct Icons {
 
     static let photos:NSImage = NSImage(imageLiteralResourceName: "photos")
     static let events:NSImage = NSImage(imageLiteralResourceName: "airplane")
+    static let events2:NSImage = NSImage(imageLiteralResourceName: "events")
     static let people:NSImage = NSImage(imageLiteralResourceName: "people")
     static let places:NSImage = NSImage(imageLiteralResourceName: "places")
     static let album:NSImage = NSImage(imageLiteralResourceName: "album")

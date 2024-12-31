@@ -84,6 +84,14 @@ class EventDao {
         return self.impl.getEventsByOwner(ownerId: ownerId)
     }
     
+    func getEventCategoriesByOwner(ownerId:String) -> [String] {
+        return self.impl.getEventCategoriesByOwner(ownerId: ownerId)
+    }
+    
+    func getEventsByOwnerAndCategory(ownerId:String, category:String) -> [(String, String, String, String, String)] {
+        return self.impl.getEventsByOwnerAndCategory(ownerId: ownerId, category: category.replacingOccurrences(of: "'", with: "''"))
+    }
+    
     func getEvents(imageIds:[String]) -> [String] {
         return self.impl.getEvents(imageIds: imageIds)
     }
