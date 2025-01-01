@@ -26,7 +26,10 @@
                 <outlet property="btnLogFile" destination="Hre-Ie-vnv" id="EBo-w3-fDM"/>
                 <outlet property="btnRehearsal" destination="CRY-eq-UaW" id="pJZ-Je-605"/>
                 <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
+                <outlet property="chkApplePhotos" destination="exV-eR-hSc" id="m9q-13-6Qc"/>
+                <outlet property="chkCustomizedStyle" destination="ETG-pc-SpR" id="x3Q-jC-ZhN"/>
                 <outlet property="chkDateEventSubFolder" destination="X3B-lY-Z62" id="Mct-iW-aS9"/>
+                <outlet property="chkDateSubFolder" destination="QFg-C5-4Kp" id="abD-Jf-g3p"/>
                 <outlet property="chkDateTimeBriefFilename" destination="qcD-JS-5AE" id="a8i-5u-X6R"/>
                 <outlet property="chkDateTimeFilename" destination="RSU-ky-kP1" id="yCh-gy-faV"/>
                 <outlet property="chkDeviceModelSuffix" destination="RTE-n8-rbD" id="tSy-kj-II6"/>
@@ -36,6 +39,7 @@
                 <outlet property="chkExcludeEventCategories" destination="hgX-sy-XRi" id="Jmb-KZ-6Bz"/>
                 <outlet property="chkExcludeRepository" destination="KES-Ya-Jpa" id="NKQ-ST-kHu"/>
                 <outlet property="chkExportDateTimeSubFolder" destination="ngP-eZ-9kY" id="zgA-wd-37K"/>
+                <outlet property="chkImageIdFilename" destination="EgL-9g-dso" id="dZk-Fk-ZsV"/>
                 <outlet property="chkIncludeEventCategories" destination="95P-8W-6h2" id="kN4-y5-qaW"/>
                 <outlet property="chkIncludeRepository" destination="cMz-TV-PXZ" id="NXU-MO-pSB"/>
                 <outlet property="chkNoSubFolder" destination="FbC-um-0dY" id="ezS-6p-yyn"/>
@@ -45,6 +49,7 @@
                 <outlet property="chkPatchDateTime" destination="wyc-bl-J1o" id="9vd-RK-W2U"/>
                 <outlet property="chkPatchGeolocation" destination="YvT-oX-grX" id="vIG-J3-Jgq"/>
                 <outlet property="chkPatchImageDescription" destination="e7j-or-OMl" id="XG5-FT-L3E"/>
+                <outlet property="chkPlex" destination="CGW-lg-BlM" id="zFc-18-rdm"/>
                 <outlet property="chkRepository" destination="ebe-RW-NOI" id="9hb-5j-vPC"/>
                 <outlet property="ddlTargetVolume" destination="6LH-DJ-JWk" id="d6c-sC-4hS"/>
                 <outlet property="lblCalculate" destination="wC2-0l-112" id="ePe-b3-Vea"/>
@@ -849,6 +854,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onImageIdFilenameClicked:" target="-2" id="W8Q-Wn-7qL"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -864,7 +872,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FbC-um-0dY">
-                                            <rect key="frame" x="18" y="118" width="200" height="18"/>
+                                            <rect key="frame" x="18" y="124" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="No sub-folder" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9oI-5A-hN7">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -875,7 +883,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Lk-gv-sAn">
-                                            <rect key="frame" x="18" y="49" width="200" height="18"/>
+                                            <rect key="frame" x="18" y="38" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="EVENT /" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Xwm-0R-GaF">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -886,7 +894,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X3B-lY-Z62">
-                                            <rect key="frame" x="18" y="83" width="200" height="18"/>
+                                            <rect key="frame" x="18" y="96" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="YEAR / MONTH (EVENT) /" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ugc-JP-sUB">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -896,8 +904,19 @@
                                                 <action selector="onDateEventSubFolderClicked:" target="-2" id="gNr-g2-3Tj"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QFg-C5-4Kp">
+                                            <rect key="frame" x="18" y="68" width="240" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="YEAR / MONTH / DAY" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TcZ-l8-AoS">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onDateSubFolderClicked:" target="-2" id="M7A-O2-J21"/>
+                                            </connections>
+                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ngP-eZ-9kY">
-                                            <rect key="frame" x="18" y="13" width="200" height="18"/>
+                                            <rect key="frame" x="18" y="8" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Export Date &amp; Time /" bezelStyle="regularSquare" imagePosition="left" inset="2" id="f7A-g4-U7x">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -932,6 +951,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onApplePhotosClicked:" target="-2" id="4yW-vR-a7A"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y3a-g1-W6J">
                                             <rect key="frame" x="6" y="6" width="69" height="13"/>
@@ -963,6 +985,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onCustomizedStyleClicked:" target="-2" id="I3w-l5-pAd"/>
+                                            </connections>
                                         </button>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JqN-JH-qXL">
                                             <rect key="frame" x="115" y="18" width="48" height="48"/>
@@ -976,6 +1001,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onPlexClicked:" target="-2" id="PZa-ar-KVm"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TyZ-kS-UL5">
                                             <rect key="frame" x="124" y="5" width="30" height="12"/>

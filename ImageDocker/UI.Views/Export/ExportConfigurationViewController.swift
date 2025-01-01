@@ -44,6 +44,11 @@ class ExportConfigurationViewController: NSViewController {
     
     var eventCategoriesTableController : DictionaryTableViewController!
     
+    @IBOutlet weak var chkApplePhotos: NSButton!
+    @IBOutlet weak var chkPlex: NSButton!
+    @IBOutlet weak var chkCustomizedStyle: NSButton!
+    
+    
     @IBOutlet weak var chkOverwriteDuplicate: NSButton!
     @IBOutlet weak var chkDeviceNameSuffix: NSButton!
     @IBOutlet weak var chkDeviceModelSuffix: NSButton!
@@ -58,10 +63,12 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkDateEventSubFolder: NSButton!
     @IBOutlet weak var chkEventSubFolder: NSButton!
     @IBOutlet weak var chkExportDateTimeSubFolder: NSButton!
+    @IBOutlet weak var chkDateSubFolder: NSButton!
     
     @IBOutlet weak var chkOriginFilename: NSButton!
     @IBOutlet weak var chkDateTimeFilename: NSButton!
     @IBOutlet weak var chkDateTimeBriefFilename: NSButton!
+    @IBOutlet weak var chkImageIdFilename: NSButton!
     
     
     @IBOutlet weak var btnCalculate: NSButton!
@@ -154,6 +161,7 @@ class ExportConfigurationViewController: NSViewController {
         self.chkDateEventSubFolder.title = Words.export_profile_sub_folder_year_month_event.word()
         self.chkEventSubFolder.title = Words.export_profile_sub_folder_event.word()
         self.chkExportDateTimeSubFolder.title = Words.export_profile_sub_folder_export_date_time.word()
+        self.chkDateSubFolder.title = Words.export_profile_sub_folder_year_month_day.word()
         
         self.btnCalculate.title = Words.export_profile_calculate_images.word()
         self.btnCopySQLToClipboard.title = Words.export_profile_copy_sql_to_clipboard.word()
@@ -947,6 +955,7 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkEventSubFolder.state == .on {return "EVENT"}
         if self.chkDateEventSubFolder.state == .on {return "DATE_EVENT"}
         if self.chkExportDateTimeSubFolder.state == .on {return "EXPORT_TIME"}
+        if self.chkDateSubFolder.state == .on {return "DATE"}
         return ""
     }
     
@@ -954,6 +963,7 @@ class ExportConfigurationViewController: NSViewController {
         self.chkNoSubFolder.state = .off
         self.chkEventSubFolder.state = .off
         self.chkDateEventSubFolder.state = .off
+        self.chkDateSubFolder.state = .off
         self.chkExportDateTimeSubFolder.state = .off
         if value == "NONE" {
             self.chkNoSubFolder.state = .on
@@ -963,6 +973,8 @@ class ExportConfigurationViewController: NSViewController {
             self.chkDateEventSubFolder.state = .on
         }else if value == "EXPORT_TIME" {
             self.chkExportDateTimeSubFolder.state = .on
+        }else if value == "DATE" {
+            self.chkDateSubFolder.state = .on
         }else{
             // default
             self.chkDateEventSubFolder.state = .on
@@ -974,6 +986,7 @@ class ExportConfigurationViewController: NSViewController {
             self.chkDateEventSubFolder.state = .off
             self.chkEventSubFolder.state = .off
             self.chkExportDateTimeSubFolder.state = .off
+            self.chkDateSubFolder.state = .off
         }else {
             if self.getSubFolderStrategy() == "" {
                 sender.state = .on
@@ -986,6 +999,20 @@ class ExportConfigurationViewController: NSViewController {
             self.chkNoSubFolder.state = .off
             self.chkEventSubFolder.state = .off
             self.chkExportDateTimeSubFolder.state = .off
+            self.chkDateSubFolder.state = .off
+        }else {
+            if self.getSubFolderStrategy() == "" {
+                sender.state = .on
+            }
+        }
+    }
+    
+    @IBAction func onDateSubFolderClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkNoSubFolder.state = .off
+            self.chkEventSubFolder.state = .off
+            self.chkExportDateTimeSubFolder.state = .off
+            self.chkDateEventSubFolder.state = .off
         }else {
             if self.getSubFolderStrategy() == "" {
                 sender.state = .on
@@ -994,11 +1021,13 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     
+    
     @IBAction func onEventSubFolderClicked(_ sender: NSButton) {
         if sender.state == .on {
             self.chkDateEventSubFolder.state = .off
             self.chkNoSubFolder.state = .off
             self.chkExportDateTimeSubFolder.state = .off
+            self.chkDateSubFolder.state = .off
         }else {
             if self.getSubFolderStrategy() == "" {
                 sender.state = .on
@@ -1011,6 +1040,7 @@ class ExportConfigurationViewController: NSViewController {
             self.chkDateEventSubFolder.state = .off
             self.chkEventSubFolder.state = .off
             self.chkNoSubFolder.state = .off
+            self.chkDateSubFolder.state = .off
         }else {
             if self.getSubFolderStrategy() == "" {
                 sender.state = .on
@@ -1024,6 +1054,7 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkOriginFilename.state == .on {return "ORIGIN"}
         if self.chkDateTimeFilename.state == .on {return "DATETIME"}
         if self.chkDateTimeBriefFilename.state == .on {return "DATETIME_BRIEF"}
+        if self.chkImageIdFilename.state == .on {return "IMAGEID"}
         return ""
     }
     
@@ -1031,12 +1062,15 @@ class ExportConfigurationViewController: NSViewController {
         self.chkOriginFilename.state = .off
         self.chkDateTimeFilename.state = .off
         self.chkDateTimeBriefFilename.state = .off
+        self.chkImageIdFilename.state = .off
         if value == "ORIGIN" {
             self.chkOriginFilename.state = .on
         }else if value == "DATETIME" {
             self.chkDateTimeFilename.state = .on
         }else if value == "DATETIME_BRIEF" {
             self.chkDateTimeBriefFilename.state = .on
+        }else if value == "IMAGEID" {
+            self.chkImageIdFilename.state = .on
         }else{
             // default
             self.chkDateTimeBriefFilename.state = .on
@@ -1047,6 +1081,7 @@ class ExportConfigurationViewController: NSViewController {
         if sender.state == .on {
             self.chkDateTimeFilename.state = .off
             self.chkDateTimeBriefFilename.state = .off
+            self.chkImageIdFilename.state = .off
         }else {
             if self.getFileNamingStrategy() == "" {
                 sender.state = .on
@@ -1058,6 +1093,7 @@ class ExportConfigurationViewController: NSViewController {
         if sender.state == .on {
             self.chkOriginFilename.state = .off
             self.chkDateTimeBriefFilename.state = .off
+            self.chkImageIdFilename.state = .off
         }else {
             if self.getFileNamingStrategy() == "" {
                 sender.state = .on
@@ -1069,12 +1105,26 @@ class ExportConfigurationViewController: NSViewController {
         if sender.state == .on {
             self.chkDateTimeFilename.state = .off
             self.chkOriginFilename.state = .off
+            self.chkImageIdFilename.state = .off
         }else {
             if self.getFileNamingStrategy() == "" {
                 sender.state = .on
             }
         }
     }
+    
+    @IBAction func onImageIdFilenameClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkDateTimeFilename.state = .off
+            self.chkOriginFilename.state = .off
+            self.chkDateTimeBriefFilename.state = .off
+        }else {
+            if self.getFileNamingStrategy() == "" {
+                sender.state = .on
+            }
+        }
+    }
+    
     
     // MARK: - TOGGLE GROUP - EXIF PATCHING OPTIONS
     
@@ -1185,6 +1235,74 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
     }
+    
+    // MARK: - TOGGLE GROUP - STYLE
+    
+    private func getStyle() -> String {
+        if self.chkApplePhotos.state == .on {return "APPLE_PHOTOS"}
+        if self.chkPlex.state == .on {return "PLEX"}
+        if self.chkCustomizedStyle.state == .on {return ""}
+        return ""
+    }
+    
+    private func setStyle(_ value:String) {
+        self.chkApplePhotos.state = .off
+        self.chkPlex.state = .off
+        self.chkCustomizedStyle.state = .off
+        if value == "APPLE_PHOTOS" {
+            self.chkApplePhotos.state = .on
+        }else if value == "PLEX" {
+            self.chkPlex.state = .on
+        }else{
+            // default
+            self.chkCustomizedStyle.state = .on
+        }
+    }
+    
+    @IBAction func onApplePhotosClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkPlex.state = .off
+            self.chkCustomizedStyle.state = .off
+        }else {
+            if self.getStyle() == "" {
+                sender.state = .on
+            }
+        }
+        if sender.state == .on {
+            self.setFileNamingStrategy("IMAGEID")
+            self.setSubFolderStrategy("DATE")
+            self.setFilenameDuplicatedStrategy("OVERWRITE")
+        }
+    }
+    
+    @IBAction func onPlexClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkApplePhotos.state = .off
+            self.chkCustomizedStyle.state = .off
+        }else {
+            if self.getStyle() == "" {
+                sender.state = .on
+            }
+        }
+        if sender.state == .on {
+            self.setFileNamingStrategy("DATETIME_BRIEF")
+            self.setSubFolderStrategy("DATE_EVENT")
+            self.setFilenameDuplicatedStrategy("NUMBER")
+        }
+    }
+    
+    @IBAction func onCustomizedStyleClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkApplePhotos.state = .off
+            self.chkPlex.state = .off
+        }else {
+            if self.getStyle() == "" {
+                sender.state = .on
+            }
+        }
+    }
+    
+    
     
     @IBAction func onLogFileClicked(_ sender: NSButton) {
         let url = URL(fileURLWithPath: AppDelegate.current.logFilePath())

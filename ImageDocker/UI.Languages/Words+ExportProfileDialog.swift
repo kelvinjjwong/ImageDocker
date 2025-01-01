@@ -177,6 +177,11 @@ extension Words {
         chs: "年份 / 月份 (活动名称) /"
     )
     
+    static let export_profile_sub_folder_year_month_day = Localize (
+        eng: "YEAR / MONTH / DAY",
+        chs: "年 / 月 / 日 /"
+    )
+    
     static let export_profile_sub_folder_event = Localize (
         eng: "EVENT /",
         chs: "活动名称 /"
