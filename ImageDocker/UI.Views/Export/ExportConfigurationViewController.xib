@@ -51,6 +51,7 @@
                 <outlet property="lblProfileName" destination="Jyr-h1-K6M" id="5QB-4q-bHD"/>
                 <outlet property="lblProfileToRepository" destination="w55-yG-MjF" id="0s8-ug-eNC"/>
                 <outlet property="lstRehearsalAmount" destination="DV0-my-FgX" id="qPq-EB-dgx"/>
+                <outlet property="scrollEvents" destination="KNH-1i-hDn" id="GJ4-zW-64j"/>
                 <outlet property="stackView" destination="Bfq-zr-1HI" id="jDm-gU-rvK"/>
                 <outlet property="tblRepository" destination="3nA-IU-EQh" id="PFo-fx-d8O"/>
                 <outlet property="treeEvents" destination="fWd-EL-7Fg" id="Trj-mT-lxD"/>

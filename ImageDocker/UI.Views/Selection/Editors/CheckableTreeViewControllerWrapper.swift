@@ -94,6 +94,43 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         self.treeView.reloadData()
     }
     
+    func setTreeNodeDataCheckState(id:String, state:Bool) {
+        for c in self.coreMembers {
+            if c.getId() == id {
+                c.setCheckState(state: state)
+            }
+            for g in c.getChildren() {
+                if g.getId() == id {
+                    g.setCheckState(state: state)
+                }
+                for m in g.getChildren() {
+                    if m.getId() == id {
+                        m.setCheckState(state: state)
+                    }
+                }
+            }
+        }
+    }
+    
+    func getTreeNodeDataCheckState(id:String) -> Bool {
+        for c in self.coreMembers {
+            if c.getId() == id {
+                return c.checked()
+            }
+            for g in c.getChildren() {
+                if g.getId() == id {
+                    return g.checked()
+                }
+                for m in g.getChildren() {
+                    if m.getId() == id {
+                        return m.checked()
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
     
     func getCheckedItems() -> [TreeNodeData] {
         var checkedGroups:[TreeNodeData] = []
@@ -279,11 +316,12 @@ extension CheckableTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.checkbox.isHidden = !(item.isCheckable() && self.checkable)
 //            self.logger.log(.trace, "refresh outlineView viewFor: id:\(item.id) check state: \(item.isChecked)")
             
-            if let (node, _) = self.checkableItems[item.getId()] {
-                cell.checkbox.state = node.checked() ? .on : .off
-            }else{
-                cell.checkbox.state = item.checked() ? .on : .off
-            }
+            cell.checkbox.state = self.getTreeNodeDataCheckState(id: item.getId()) ? .on : .off
+//            if let (node, _) = self.checkableItems[item.getId()] {
+//                cell.checkbox.state = node.checked() ? .on : .off
+//            }else{
+//                cell.checkbox.state = item.checked() ? .on : .off
+//            }
             cell.removeButton.isEnabled = self.removable
             cell.removeButton.isHidden = !self.removable
             cell.removeButton.image = item.actionIcon()

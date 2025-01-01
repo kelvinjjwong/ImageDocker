@@ -39,8 +39,8 @@ class ExportProfileViewController : NSViewController {
         self.lblProfileName.stringValue = Words.export_profile_name.word()
         self.lblProfileToDirectory.stringValue = Words.export_profile_to_directory.word()
         
-        self.btnEdit.title = Words.export_profile_item_edit.word()
-        self.btnDelete.title = Words.export_profile_item_delete.word()
+//        self.btnEdit.title = Words.export_profile_item_edit.word()
+//        self.btnDelete.title = Words.export_profile_item_delete.word()
         
         view.wantsLayer = true
         self.refreshFields()

@@ -86,6 +86,8 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkIncludeEventCategories: NSButton!
     @IBOutlet weak var chkExcludeEventCategories: NSButton!
     @IBOutlet weak var treeEvents: NSOutlineView!
+    
+    @IBOutlet weak var scrollEvents: NSScrollView!
     var treeViewController: CheckableTreeViewControllerWrapper? = nil
     
     var repoNames:[String:String] = [:]
@@ -202,6 +204,7 @@ class ExportConfigurationViewController: NSViewController {
                 if nodeType == "PeopleGroup" {
                     if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let groupNodeCellView = _groupNodeCellView {
                         for member in groupNodeData.getChildren() {
+                            vc.setTreeNodeDataCheckState(id: member.getId(), state: newValue)
                             if let (nodeData, _nodeCellView) = vc.getCheckableNode(id: member.getId()), let nodeCellView = _nodeCellView {
                                 print("need to cascade check \(nodeData.getText())")
                                 nodeCellView.checkbox.state = newValue ? .on : .off
