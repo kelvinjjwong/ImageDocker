@@ -200,20 +200,20 @@ class ExportConfigurationViewController: NSViewController {
         }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
             self.logger.log(.info, "tree node check: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             if let vc = self.treeViewController {
-                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
                 if nodeType == "PeopleGroup" {
-                    if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let groupNodeCellView = _groupNodeCellView {
+                    if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let _ = _groupNodeCellView {
                         for member in groupNodeData.getChildren() {
                             vc.setTreeNodeDataCheckState(id: member.getId(), state: newValue)
                             if let (nodeData, _nodeCellView) = vc.getCheckableNode(id: member.getId()), let nodeCellView = _nodeCellView {
-                                print("need to cascade check \(nodeData.getText())")
+//                                print("need to cascade check \(nodeData.getText())")
                                 nodeCellView.checkbox.state = newValue ? .on : .off
                                 nodeData.setCheckState(state: newValue)
                             }
                         }
                     }
                 }
-                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
                 vc.refresh()
             }
         })

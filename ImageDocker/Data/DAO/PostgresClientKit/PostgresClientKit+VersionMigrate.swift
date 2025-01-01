@@ -714,6 +714,22 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v61") { db in
+            try db.create(table: "ExportProfileEvent", body: { t in
+                t.column("id", .serial).primaryKey().unique().notNull()
+                t.column("profileId", .text).notNull().indexed()
+                t.column("eventId", .text).notNull().indexed()
+                t.column("eventName", .text).notNull().indexed()
+                t.column("eventNodeType", .text).notNull().indexed()
+                t.column("eventOwner", .text).notNull().indexed()
+                t.column("exclude", .boolean).defaults(to: true)
+            })
+            
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add("style", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

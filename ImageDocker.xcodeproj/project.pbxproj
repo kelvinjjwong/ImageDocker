@@ -185,6 +185,7 @@
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
+		8EA4B7712D254B7600A9EA98 /* ExportProfileEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA4B7702D254B7200A9EA98 /* ExportProfileEvent.swift */; };
 		8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA643F4208D6E5100C7D695 /* PreferencesController.swift */; };
 		8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */; };
 		8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */; };
@@ -584,6 +585,7 @@
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
+		8EA4B7702D254B7200A9EA98 /* ExportProfileEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfileEvent.swift; sourceTree = "<group>"; };
 		8EA643F4208D6E5100C7D695 /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFolderViewController.swift; sourceTree = "<group>"; };
 		8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceFolderViewController.xib; sourceTree = "<group>"; };
@@ -1395,6 +1397,7 @@
 				8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */,
 				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
 				8E9D803C2348AA550062692A /* ExportProfile.swift */,
+				8EA4B7702D254B7200A9EA98 /* ExportProfileEvent.swift */,
 				8EF0C1F0277B5431001E3366 /* Face.swift */,
 				5C51173E296998A900F64CF6 /* RepositoryDevice.swift */,
 			);
@@ -2142,6 +2145,7 @@
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */,
 				8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */,
+				8EA4B7712D254B7600A9EA98 /* ExportProfileEvent.swift in Sources */,
 				8E0D3B322C870ECC0049807B /* ImageFamilyEditViewController.swift in Sources */,
 				8E4134902A64B59A00258755 /* CollectionPaginationController.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,

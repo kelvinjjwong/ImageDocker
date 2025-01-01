@@ -33,6 +33,7 @@ public final class ExportProfile : Codable {
     var family: String = ""
     var eventCategories: String? = ""
     var specifyEventCategory: Bool? = false
+    var style:String = ""
     
     public init() {
         

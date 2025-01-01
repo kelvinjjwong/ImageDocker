@@ -85,6 +85,7 @@ extension ViewController {
                         let schemaVersion = Setting.database.checkSchemaVersion(profile: databaseProfile)
                         if schemaVersion.starts(with: "v") {
                             dbConnected = true
+                            ImageDB.current().versionCheck()
                             self.splashController.hideRetry()
                         }else{
                             additionalMessage = Words.preference_tab_backup_no_schema.word()
