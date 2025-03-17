@@ -17,7 +17,7 @@ import SharedDeviceLib
 
 class ViewController: NSViewController {
     
-    let logger = LoggerFactory.get(category: "MAIN", subCategory: "VIEW", includeTypes: [.trace])
+    let logger = LoggerFactory.get(category: "MAIN", subCategory: "VIEW")
     
     var childWindows:[String:NSWindow] = [:]
     
@@ -311,11 +311,14 @@ class ViewController: NSViewController {
         var _missingVolumes:Set<String> = []
         let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
         let volumes = LocalDirectory.bridge.mountpoints().appending(Setting.localEnvironment.localDiskMountPoints())
-        self.logger.log(.trace, "mounted volumes: \(volumes)")
+        self.logger.log(.info, "mounted volumes: \(volumes)")
+        print("mounted volumes: \(volumes)")
         for repo in repos {
             let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo, volumes: volumes)
-            self.logger.log(.trace, "[connected volumes] \(connectedVolumes)")
-            self.logger.log(.trace, "[missing   volumes] \(missingVolumes)")
+            self.logger.log(.info, "[connected volumes] \(connectedVolumes)")
+            self.logger.log(.info, "[missing   volumes] \(missingVolumes)")
+            print("[connected volumes] \(connectedVolumes)")
+            print("[missing   volumes] \(missingVolumes)")
             for volume in connectedVolumes {
                 if !_connectedVolumes.contains(volume) {
                     _connectedVolumes.insert(volume)

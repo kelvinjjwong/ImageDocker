@@ -55,11 +55,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 //        }
     }
     
+    fileprivate var _defaultLoggingFilename = ""
+    
     func defaultLoggingFilename() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd_HHmm"
-        let datePart = dateFormatter.string(from: Date())
-        return "\(datePart).log"
+        if self._defaultLoggingFilename != "" {
+            return self._defaultLoggingFilename
+        }else{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd_HHmm"
+            let datePart = dateFormatter.string(from: Date())
+            self._defaultLoggingFilename = "\(datePart).log"
+            return self._defaultLoggingFilename
+        }
     }
     
     fileprivate var _logFilePath = ""

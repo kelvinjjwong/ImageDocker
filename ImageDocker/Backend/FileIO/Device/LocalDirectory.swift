@@ -444,33 +444,39 @@ struct LocalDirectory {
     public func getRepositoryVolume(repository:ImageRepository, volumes:[String]) -> ([String], [String]) {
         var connectedVolumes:Set<String> = []
         var missingVolumes:Set<String> = []
+        print("=======")
+        print("check repository storage volume: id=\(repository.id) name=\(repository.name)")
         let (mountpoint_home, mp_home_symbolic, mp_home_exists) = repository.homeVolume.getPathOfSoftlink()
+        print(repository.homeVolume, mountpoint_home, mp_home_symbolic, mp_home_exists)
         let (mountpoint_repository, mp_repository_symbolic, mp_repository_exists) = repository.repositoryVolume.getPathOfSoftlink()
+        print(repository.repositoryVolume, mountpoint_repository, mp_repository_symbolic, mp_repository_exists)
         let (mountpoint_storage, mp_storage_symbolic, mp_storage_exists) = repository.storageVolume.getPathOfSoftlink()
+        print(repository.storageVolume, mountpoint_storage, mp_storage_symbolic, mp_storage_exists)
         let (mountpoint_face, mp_face_symbolic, mp_face_exists) = repository.faceVolume.getPathOfSoftlink()
         let (mountpoint_crop, mp_crop_symbolic, mp_crop_exists) = repository.cropVolume.getPathOfSoftlink()
+        print("=======")
         
-        if mountpoint_home != "" && volumes.contains(mountpoint_home) {
+        if mountpoint_home != "" && ( (mp_home_symbolic && mp_home_exists) || (volumes.contains(mountpoint_home)) ){
             connectedVolumes.insert(mountpoint_home)
         }else if mountpoint_home != ""{
             missingVolumes.insert(mountpoint_home)
         }
-        if mountpoint_repository != "" && volumes.contains(mountpoint_repository) {
+        if mountpoint_repository != "" && ( (mp_repository_symbolic && mp_repository_exists) || (volumes.contains(mountpoint_repository)) ) {
             connectedVolumes.insert(mountpoint_repository)
         }else if mountpoint_repository != ""{
             missingVolumes.insert(mountpoint_repository)
         }
-        if mountpoint_storage != "" && volumes.contains(mountpoint_storage) {
+        if mountpoint_storage != "" && ( (mp_storage_symbolic && mp_storage_exists) || (volumes.contains(mountpoint_storage)) ) {
             connectedVolumes.insert(mountpoint_storage)
         }else if mountpoint_storage != ""{
             missingVolumes.insert(mountpoint_storage)
         }
-        if mountpoint_face != "" && volumes.contains(mountpoint_face) {
+        if mountpoint_face != "" && ( (mp_face_symbolic && mp_face_exists) || (volumes.contains(mountpoint_face)) ) {
             connectedVolumes.insert(mountpoint_face)
         }else if mountpoint_face != ""{
             missingVolumes.insert(mountpoint_face)
         }
-        if mountpoint_crop != "" && volumes.contains(mountpoint_crop) {
+        if mountpoint_crop != "" && ( (mp_crop_symbolic && mp_crop_exists) || (volumes.contains(mountpoint_crop)) ) {
             connectedVolumes.insert(mountpoint_crop)
         }else if mountpoint_crop != ""{
             missingVolumes.insert(mountpoint_crop)
