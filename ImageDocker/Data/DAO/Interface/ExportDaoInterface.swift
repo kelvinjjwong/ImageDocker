@@ -45,7 +45,7 @@ protocol ExportDaoInterface {
                              fileNaming: String,
                              subFolder: String,
                              eventCategories:String,
-                             specifyEventCategory:Bool) -> ExecuteState
+                             specifyEventCategory:Bool, style:String) -> ExecuteState
     
     func enableExportProfile(id:String) -> ExecuteState
     

@@ -19,6 +19,11 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblProfileName: NSTextField!
     @IBOutlet weak var lblProfileToDirectory: NSTextField!
     
+    @IBOutlet weak var lblStyle: NSTextField!
+    @IBOutlet weak var imgStyle: NSImageView!
+    @IBOutlet weak var lblStyleName: NSTextField!
+    
+    
     var onEdit: (() -> Void)? = nil
     
     var onDelete: (() -> Void)? = nil
@@ -38,6 +43,7 @@ class ExportProfileViewController : NSViewController {
         self.boxProfile.title = Words.export_profile_item.word()
         self.lblProfileName.stringValue = Words.export_profile_name.word()
         self.lblProfileToDirectory.stringValue = Words.export_profile_to_directory.word()
+        self.lblStyle.stringValue = Words.export_profile_style.word()
         
 //        self.btnEdit.title = Words.export_profile_item_edit.word()
 //        self.btnDelete.title = Words.export_profile_item_delete.word()
@@ -50,6 +56,17 @@ class ExportProfileViewController : NSViewController {
         if let profile = self.profile {
             self.lblName.stringValue = profile.name
             self.lblDirectory.stringValue = profile.directory
+            
+            if profile.style == "APPLE_PHOTOS" {
+                self.imgStyle.image = Icons.style_apple_photos
+                self.lblStyleName.stringValue = "Apple Photos"
+            }else if profile.style == "PLEX" {
+                self.imgStyle.image = Icons.style_plex
+                self.lblStyleName.stringValue = "Plex"
+            }else{
+                self.imgStyle.image = Icons.style_customized
+                self.lblStyleName.stringValue = Words.export_profile_style_customized.word()
+            }
         }
     }
     

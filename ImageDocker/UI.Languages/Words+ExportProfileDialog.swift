@@ -56,6 +56,16 @@ extension Words {
         chs: "导出到:"
     )
     
+    static let export_profile_style = Localize (
+        eng: "Style:",
+        chs: "规则:"
+    )
+    
+    static let export_profile_style_customized = Localize (
+        eng: "Customized",
+        chs: "自定义"
+    )
+    
     static let export_profile_repositories = Localize (
         eng: "Repositories:",
         chs: "照片库:"

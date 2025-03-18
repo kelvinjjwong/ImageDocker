@@ -87,7 +87,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                              fileNaming: String,
                              subFolder: String,
                              eventCategories:String,
-                             specifyEventCategory:Bool) -> ExecuteState {
+                             specifyEventCategory:Bool, style:String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
             if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
@@ -110,6 +110,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                 profile.subFolder = subFolder
                 profile.eventCategories = eventCategories
                 profile.specifyEventCategory = specifyEventCategory
+                profile.style = style
                 try profile.save(db)
                 return .OK
             }else{

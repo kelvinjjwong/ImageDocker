@@ -66,6 +66,10 @@ struct Icons {
     static let disk_local = NSImage(imageLiteralResourceName: "disk_local")
     static let disk_network = NSImage(imageLiteralResourceName: "disk_network")
     
+    static let style_apple_photos = NSImage(imageLiteralResourceName: "apple_photos")
+    static let style_plex = NSImage(imageLiteralResourceName: "plex")
+    static let style_customized = NSImage(imageLiteralResourceName: "disk_local")
+    
     static let gif_open_box = try? NSImage(imageName: "open-box.gif")
     static let gif_boating = try? NSImage(imageName: "boating.gif")
     static let gif_flying = try? NSImage(imageName: "flying.gif")

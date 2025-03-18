@@ -528,6 +528,8 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_EventCategory.enable()
         }
         
+        self.setStyle(profile.style)
+        
         self.loadProfileEvents(profile: profile)
         
     }
@@ -614,6 +616,8 @@ class ExportConfigurationViewController: NSViewController {
         profile.fileNaming = fileNaming
         profile.subFolder = subfolder
         profile.eventCategories = eventCategories
+        
+        profile.style = self.getStyle()
 //        profile.specifyEventCategory = self.chkEventCategories.state == .on
         
         return profile
@@ -673,7 +677,8 @@ class ExportConfigurationViewController: NSViewController {
                                                                fileNaming: form.fileNaming,
                                                                subFolder: form.subFolder,
                                                                eventCategories: form.eventCategories ?? "",
-                                                               specifyEventCategory: form.specifyEventCategory ?? false
+                                                               specifyEventCategory: form.specifyEventCategory ?? false,
+                                                               style: form.style
                                                             )
             
             if status != .OK {
@@ -697,7 +702,7 @@ class ExportConfigurationViewController: NSViewController {
         self.turnSaveButtonToDone()
     }
     
-    // MARK: - STACK ITEMS
+    // MARK: - STACK ITEMS - ADD PROFILE
     
     /// Used to add a particular view controller as an item to our stack view.
     func addProfileItem(profile:ExportProfile) {
@@ -1047,6 +1052,8 @@ class ExportConfigurationViewController: NSViewController {
         return ""
     }
     
+    var editing_subfolderStrategy = ""
+    
     private func setSubFolderStrategy(_ value:String) {
         self.chkNoSubFolder.state = .off
         self.chkEventSubFolder.state = .off
@@ -1067,6 +1074,8 @@ class ExportConfigurationViewController: NSViewController {
             // default
             self.chkDateEventSubFolder.state = .on
         }
+        
+        self.editing_subfolderStrategy = value
     }
     
     @IBAction func onNoSubFolderClicked(_ sender: NSButton) {
@@ -1080,6 +1089,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_subfolderStrategy != self.getSubFolderStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onDateEventSubFolderClicked(_ sender: NSButton) {
@@ -1093,6 +1106,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_subfolderStrategy != self.getSubFolderStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onDateSubFolderClicked(_ sender: NSButton) {
@@ -1106,6 +1123,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_subfolderStrategy != self.getSubFolderStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     
@@ -1121,6 +1142,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_subfolderStrategy != self.getSubFolderStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onExportDateTimeSubFolderClicked(_ sender: NSButton) {
@@ -1134,6 +1159,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_subfolderStrategy != self.getSubFolderStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     // MARK: - TOGGLE GROUP - FILE NAMING STRATEGY
@@ -1145,6 +1174,8 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkImageIdFilename.state == .on {return "IMAGEID"}
         return ""
     }
+    
+    var editing_fileNamingStrategy = ""
     
     private func setFileNamingStrategy(_ value:String) {
         self.chkOriginFilename.state = .off
@@ -1163,6 +1194,7 @@ class ExportConfigurationViewController: NSViewController {
             // default
             self.chkDateTimeBriefFilename.state = .on
         }
+        self.editing_fileNamingStrategy = value
     }
     
     @IBAction func onOriginFilenameClicked(_ sender: NSButton) {
@@ -1175,6 +1207,11 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_fileNamingStrategy != self.getFileNamingStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
+        
     }
     
     @IBAction func onDateTimeFilenameClicked(_ sender: NSButton) {
@@ -1187,6 +1224,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_fileNamingStrategy != self.getFileNamingStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onDateTimeBriefFilenameClicked(_ sender: NSButton) {
@@ -1199,6 +1240,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_fileNamingStrategy != self.getFileNamingStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onImageIdFilenameClicked(_ sender: NSButton) {
@@ -1211,6 +1256,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_fileNamingStrategy != self.getFileNamingStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     
@@ -1222,6 +1271,8 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkPatchGeolocation.state == .on {return "GEOLOCATION"}
         return ""
     }
+    
+    var editing_exifPatching = ""
     
     private func setExifPatching(_ value:String) {
         self.chkPatchImageDescription.state = .off
@@ -1236,15 +1287,28 @@ class ExportConfigurationViewController: NSViewController {
         if value.contains("GEOLOCATION") {
             self.chkPatchGeolocation.state = .on
         }
+        self.editing_exifPatching = value
     }
     
     @IBAction func onPatchImageDescriptionClicked(_ sender: NSButton) {
+        if self.editing_exifPatching != self.getExifPatching() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onPatchDateTimeClicked(_ sender: NSButton) {
+        if self.editing_exifPatching != self.getExifPatching() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onPatchGeolocationClicked(_ sender: NSButton) {
+        if self.editing_exifPatching != self.getExifPatching() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     // MARK: - TOGGLE GROUP - DUPLICATED FILENAME RENAMING STRATEGY
@@ -1256,6 +1320,8 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkNumberSuffix.state == .on {return "NUMBER"}
         return ""
     }
+    
+    var editing_filenameDuplicatedStrategy = ""
     
     private func setFilenameDuplicatedStrategy(_ value:String) {
         self.chkOverwriteDuplicate.state = .off
@@ -1274,6 +1340,7 @@ class ExportConfigurationViewController: NSViewController {
             // default
             self.chkOverwriteDuplicate.state = .on
         }
+        self.editing_filenameDuplicatedStrategy = value
     }
     
     @IBAction func onOverwriteClicked(_ sender: NSButton) {
@@ -1286,6 +1353,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_filenameDuplicatedStrategy != self.getFilenameDuplicatedStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onDeviceNameSuffixClicked(_ sender: NSButton) {
@@ -1298,6 +1369,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_filenameDuplicatedStrategy != self.getFilenameDuplicatedStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onDeviceModelSuffixClicked(_ sender: NSButton) {
@@ -1310,6 +1385,10 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_filenameDuplicatedStrategy != self.getFilenameDuplicatedStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     @IBAction func onNumberSuffixClicked(_ sender: NSButton) {
@@ -1322,9 +1401,21 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+        if self.editing_filenameDuplicatedStrategy != self.getFilenameDuplicatedStrategy() {
+            self.turnSaveButtonToEditing()
+        }
+        self.checkIsFixedStyle()
     }
     
     // MARK: - TOGGLE GROUP - STYLE
+    
+    var STYLE_APPLE_PHOTOS_RULES:[String:String] = ["FileNaming":"IMAGEID",
+                                                    "SubFolder":"DATE",
+                                                    "FileDuplicated":"OVERWRITE"]
+    
+    var STYLE_PLEX_RULES:[String:String] = ["FileNaming":"DATETIME_BRIEF",
+                                            "SubFolder":"DATE_EVENT",
+                                            "FileDuplicated":"NUMBER"]
     
     private func getStyle() -> String {
         if self.chkApplePhotos.state == .on {return "APPLE_PHOTOS"}
@@ -1332,6 +1423,8 @@ class ExportConfigurationViewController: NSViewController {
         if self.chkCustomizedStyle.state == .on {return ""}
         return ""
     }
+    
+    var editing_style = ""
     
     private func setStyle(_ value:String) {
         self.chkApplePhotos.state = .off
@@ -1345,6 +1438,40 @@ class ExportConfigurationViewController: NSViewController {
             // default
             self.chkCustomizedStyle.state = .on
         }
+        
+        self.editing_style = value
+    }
+    
+    func setFixedStyle(values:[String:String]) {
+        if let fileNaming = values["FileNaming"] {
+            self.setFileNamingStrategy(fileNaming)
+        }
+        if let subfolder = values["SubFolder"] {
+            self.setSubFolderStrategy(subfolder)
+        }
+        if let fileDuplicated = values["FileDuplicated"] {
+            self.setFilenameDuplicatedStrategy(fileDuplicated)
+        }
+    }
+    
+    func checkIsFixedStyle() {
+        var newStyle = ""
+        if self.getFileNamingStrategy() == self.STYLE_APPLE_PHOTOS_RULES["FileNaming"]
+            && self.getSubFolderStrategy() == self.STYLE_APPLE_PHOTOS_RULES["SubFolder"]
+            && self.getFilenameDuplicatedStrategy() == self.STYLE_APPLE_PHOTOS_RULES["FileDuplicated"]
+        {
+            newStyle = "APPLE_PHOTOS"
+        }
+        else if self.getFileNamingStrategy() == self.STYLE_PLEX_RULES["FileNaming"]
+            && self.getSubFolderStrategy() == self.STYLE_PLEX_RULES["SubFolder"]
+            && self.getFilenameDuplicatedStrategy() == self.STYLE_PLEX_RULES["FileDuplicated"]
+        {
+            newStyle = "PLEX"
+        }
+        if newStyle != self.editing_style {
+            self.turnSaveButtonToEditing()
+        }
+        self.setStyle(newStyle)
     }
     
     @IBAction func onApplePhotosClicked(_ sender: NSButton) {
@@ -1357,9 +1484,10 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         if sender.state == .on {
-            self.setFileNamingStrategy("IMAGEID")
-            self.setSubFolderStrategy("DATE")
-            self.setFilenameDuplicatedStrategy("OVERWRITE")
+            self.setFixedStyle(values: self.STYLE_APPLE_PHOTOS_RULES)
+        }
+        if self.editing_style != self.getStyle() {
+            self.turnSaveButtonToEditing()
         }
     }
     
@@ -1373,9 +1501,10 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         if sender.state == .on {
-            self.setFileNamingStrategy("DATETIME_BRIEF")
-            self.setSubFolderStrategy("DATE_EVENT")
-            self.setFilenameDuplicatedStrategy("NUMBER")
+            self.setFixedStyle(values: self.STYLE_PLEX_RULES)
+        }
+        if self.editing_style != self.getStyle() {
+            self.turnSaveButtonToEditing()
         }
     }
     
@@ -1387,6 +1516,9 @@ class ExportConfigurationViewController: NSViewController {
             if self.getStyle() == "" {
                 sender.state = .on
             }
+        }
+        if self.editing_style != self.getStyle() {
+            self.turnSaveButtonToEditing()
         }
     }
     

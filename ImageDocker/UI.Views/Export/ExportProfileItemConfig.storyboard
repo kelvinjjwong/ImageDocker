@@ -111,6 +111,17 @@
                                                     </constraints>
                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="LbO-m8-jo0"/>
                                                 </imageView>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-zA-zVi">
+                                                    <rect key="frame" x="111" y="4" width="99" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="95" id="KNr-3X-7Hi"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="cjQ-SZ-eaI">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="OEr-7d-Yo7" secondAttribute="trailing" id="2YE-OW-x4h"/>
@@ -120,6 +131,8 @@
                                                 <constraint firstItem="ym9-Zs-iaJ" firstAttribute="leading" secondItem="ORd-H4-6VM" secondAttribute="trailing" constant="10" id="98F-iW-2QM"/>
                                                 <constraint firstItem="aIm-vX-SmL" firstAttribute="leading" secondItem="dN5-lK-Igm" secondAttribute="leading" constant="10" id="EjE-ki-tbw"/>
                                                 <constraint firstItem="4EB-Z0-wdm" firstAttribute="top" secondItem="dN5-lK-Igm" secondAttribute="top" id="Ekr-pV-EAm"/>
+                                                <constraint firstItem="JNo-zA-zVi" firstAttribute="leading" secondItem="amT-gZ-5oS" secondAttribute="trailing" constant="20" id="JHQ-li-hNb"/>
+                                                <constraint firstItem="JNo-zA-zVi" firstAttribute="top" secondItem="jse-dE-Im2" secondAttribute="bottom" constant="11" id="Jsu-ve-p05"/>
                                                 <constraint firstItem="aIm-vX-SmL" firstAttribute="top" secondItem="7pR-ow-Z5H" secondAttribute="bottom" constant="10" id="Lsz-qP-xZD"/>
                                                 <constraint firstItem="amT-gZ-5oS" firstAttribute="leading" secondItem="aIm-vX-SmL" secondAttribute="trailing" constant="8" symbolic="YES" id="PRQ-zi-vZm"/>
                                                 <constraint firstItem="jse-dE-Im2" firstAttribute="top" secondItem="ym9-Zs-iaJ" secondAttribute="bottom" constant="11" id="Pjx-JF-2tj"/>
@@ -160,10 +173,13 @@
                         <outlet property="boxProfile" destination="Vfq-GX-RU6" id="4jO-zT-Rip"/>
                         <outlet property="btnDelete" destination="4EB-Z0-wdm" id="BbI-JY-gI4"/>
                         <outlet property="btnEdit" destination="OEr-7d-Yo7" id="2i0-pF-z30"/>
+                        <outlet property="imgStyle" destination="amT-gZ-5oS" id="G2O-BF-qIl"/>
                         <outlet property="lblDirectory" destination="jse-dE-Im2" id="ebC-vt-jMv"/>
                         <outlet property="lblName" destination="ym9-Zs-iaJ" id="tx8-LD-aTr"/>
                         <outlet property="lblProfileName" destination="ORd-H4-6VM" id="4Q7-gk-3zi"/>
                         <outlet property="lblProfileToDirectory" destination="7pR-ow-Z5H" id="lof-kK-Z0G"/>
+                        <outlet property="lblStyle" destination="aIm-vX-SmL" id="vdd-25-lzV"/>
+                        <outlet property="lblStyleName" destination="JNo-zA-zVi" id="ghm-7C-q6T"/>
                     </connections>
                 </viewController>
                 <customObject id="B3Z-cA-NQG" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

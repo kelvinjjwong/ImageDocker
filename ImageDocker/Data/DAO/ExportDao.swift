@@ -72,7 +72,7 @@ class ExportDao {
                              fileNaming: String,
                              subFolder: String,
                              eventCategories:String,
-                             specifyEventCategory: Bool) -> ExecuteState{
+                             specifyEventCategory: Bool, style:String) -> ExecuteState{
         return self.impl.updateExportProfile(id: id,
                                              name: name,
                                              targetVolume: targetVolume,
@@ -88,7 +88,8 @@ class ExportDao {
                                              fileNaming: fileNaming,
                                              subFolder: subFolder,
                                              eventCategories: eventCategories,
-                                             specifyEventCategory: specifyEventCategory)
+                                             specifyEventCategory: specifyEventCategory,
+                                             style: style)
     }
     
     func enableExportProfile(id:String) -> ExecuteState{
