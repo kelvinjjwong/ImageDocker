@@ -806,7 +806,7 @@ class ExportConfigurationViewController: NSViewController {
         return profile
     }
     
-    // MARK: ACTION BUTTONS
+    // MARK: - EXPORT
     
     @IBAction func onExportClicked(_ sender: NSButton) {
         // real export with file i/o and amount limitation
@@ -829,6 +829,7 @@ class ExportConfigurationViewController: NSViewController {
         }
     }
     
+    // MARK: - EXPORT Exercise
     
     @IBAction func onRehearsalClicked(_ sender: NSButton) {
         // rehearsal export (query from db, no file i/o)
