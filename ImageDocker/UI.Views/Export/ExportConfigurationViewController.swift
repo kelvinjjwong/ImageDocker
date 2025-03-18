@@ -35,7 +35,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var btnAssign: NSButton!
     @IBOutlet weak var btnGoto: NSButton!
     
-    @IBOutlet weak var chkRepository: NSButton!
+//    @IBOutlet weak var chkRepository: NSButton!
     @IBOutlet weak var chkIncludeRepository: NSButton!
     @IBOutlet weak var chkExcludeRepository: NSButton!
     @IBOutlet weak var tblRepository: NSTableView!
@@ -89,7 +89,7 @@ class ExportConfigurationViewController: NSViewController {
     
     
     @IBOutlet weak var boxEventCategories: NSBox!
-    @IBOutlet weak var chkEventCategories: NSButton!
+//    @IBOutlet weak var chkEventCategories: NSButton!
     @IBOutlet weak var chkIncludeEventCategories: NSButton!
     @IBOutlet weak var chkExcludeEventCategories: NSButton!
     @IBOutlet weak var treeEvents: NSOutlineView!
@@ -136,9 +136,9 @@ class ExportConfigurationViewController: NSViewController {
 //        self.btnGoto.title = Words.export_profile_goto_to_directory.word()
         
         self.boxRepositories.title = Words.export_profile_repositories.word()
-        self.chkRepository.title = Words.export_profile_has_limit.word()
+//        self.chkRepository.title = Words.export_profile_has_limit.word()
         self.boxEventCategories.title = Words.export_profile_events.word()
-        self.chkEventCategories.title = Words.export_profile_has_limit.word()
+//        self.chkEventCategories.title = Words.export_profile_has_limit.word()
         
         self.chkIncludeRepository.title = Words.export_profile_include.word()
         self.chkExcludeRepository.title = Words.export_profile_exclude.word()
@@ -174,6 +174,7 @@ class ExportConfigurationViewController: NSViewController {
         
         self.reloadTables()
         self.cleanFields()
+        self.turnSaveButtonToEditing()
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -194,6 +195,26 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: INIT VIEW
     
+    func turnSaveButtonToEditing() {
+        self.btnSave.bezelColor = Colors.Yellow
+        self.btnSave.image = Icons.pause
+    }
+    
+    func turnSaveButtonToDone() {
+        self.btnSave.bezelColor = Colors.Green
+        self.btnSave.image = Icons.saveEdit
+    }
+    
+    func turnSaveButtonToAlert() {
+        self.btnSave.bezelColor = Colors.Red
+        self.btnSave.image = Icons.pause
+    }
+    
+    func notifyManuallyChangedTree() {
+        print("======= manually changed tree =========")
+        self.turnSaveButtonToEditing()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -205,28 +226,50 @@ class ExportConfigurationViewController: NSViewController {
         
         self.treeViewController = CheckableTreeViewControllerWrapper(self.treeEvents, checkable: true, dataLoader: {
             return self.loadEvents(selectedOwners: self.repositoryTableController.getCheckedItems(column: "id"))
-        }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
-            self.logger.log(.info, "tree node check: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
-            if let vc = self.treeViewController {
-//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
-                if nodeType == "PeopleGroup" {
-                    if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let _ = _groupNodeCellView {
-                        for member in groupNodeData.getChildren() {
-                            vc.setTreeNodeDataCheckState(id: member.getId(), state: newValue)
-                            if let (nodeData, _nodeCellView) = vc.getCheckableNode(id: member.getId()), let nodeCellView = _nodeCellView {
-//                                print("need to cascade check \(nodeData.getText())")
-                                nodeCellView.checkbox.state = newValue ? .on : .off
-                                nodeData.setCheckState(state: newValue)
-                            }
-                        }
-                    }
-                }
-//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
-                vc.refresh()
-            }
+        }, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in // MARK: ON CHECK TREE NODE
+            self.checkTreeNode(oldValue: oldValue, newValue: newValue, nodeType: nodeType, nodeId: nodeId)
+            self.notifyManuallyChangedTree()
         })
         
         self.logger.log(.trace, "view did load")
+    }
+    
+    func uncheckTreeNodes() {
+        if let vc = self.treeViewController {
+            for id in vc.getCheckableNodeIds() {
+                let part = id.components(separatedBy: "|")
+                let nodeType = part.count == 2 ? "group" : "member"
+                self.checkTreeNode(oldValue: false, newValue: false, nodeType: nodeType, nodeId: id)
+            }
+        }
+    }
+    
+    func checkTreeNode(oldValue:Bool, newValue:Bool, nodeType:String, nodeId:String) {
+        self.logger.log(.info, "tree node check: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+        print("tree node check: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
+        if let vc = self.treeViewController {
+//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+            if nodeType == "PeopleGroup" || nodeType == "group" {
+                if let (groupNodeData, _groupNodeCellView) = vc.getCheckableNode(id: nodeId), let _ = _groupNodeCellView {
+                    for member in groupNodeData.getChildren() {
+                        vc.setTreeNodeDataCheckState(id: member.getId(), state: newValue)
+                        if let (nodeData, _nodeCellView) = vc.getCheckableNode(id: member.getId()), let nodeCellView = _nodeCellView {
+//                                print("need to cascade check \(nodeData.getText())")
+                            nodeCellView.checkbox.state = newValue ? .on : .off
+                            nodeData.setCheckState(state: newValue)
+                            
+                            print("tree node check: Item - \(member.getId()) - changed from \(oldValue) to \(newValue)")
+                        }
+                    }
+                    _groupNodeCellView?.checkbox.state = newValue ? .on : .off
+                    groupNodeData.setCheckState(state: newValue)
+                    vc.setTreeNodeDataCheckState(id: nodeId, state: newValue)
+                }
+                
+            }
+//                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
+            vc.refresh()
+        }
     }
     
     private func loadEvents(selectedOwners:[String] = []) -> [CoreMember] {
@@ -357,8 +400,8 @@ class ExportConfigurationViewController: NSViewController {
         self.btnExport.isEnabled = state
         self.btnCopySQLToClipboard.isEnabled = state
         
-        self.chkRepository.isEnabled = state
-        self.chkEventCategories.isEnabled = state
+//        self.chkRepository.isEnabled = state
+//        self.chkEventCategories.isEnabled = state
         
         if state {
             self.repositoryTableController.enableCheckboxes()
@@ -440,7 +483,7 @@ class ExportConfigurationViewController: NSViewController {
         self.setSubFolderStrategy(profile.subFolder)
         self.setFilenameDuplicatedStrategy(profile.duplicateStrategy)
         
-        self.chkRepository.state = profile.specifyRepository ? .on : .off
+//        self.chkRepository.state = profile.specifyRepository ? .on : .off
         let repos = profile.repositoryPath
         if repos.hasPrefix("include:") {
             self.toggleGroup_Repository.selected = "include"
@@ -462,18 +505,20 @@ class ExportConfigurationViewController: NSViewController {
         }
         
         let specifyEventCategory = profile.specifyEventCategory ?? false
-        self.chkEventCategories.state = specifyEventCategory ? .on : .off
+//        self.chkEventCategories.state = specifyEventCategory ? .on : .off
         let eventCategories = profile.eventCategories ?? ""
         if eventCategories.hasPrefix("include:") {
             self.toggleGroup_EventCategory.selected = "include"
             let value = eventCategories.replacingFirstOccurrence(of: "include:", with: "")
             self.logger.log(.trace, "eventCategory: \(value)")
 //            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+//            self.treeViewController?.setCheckedItems(ids: <#T##[String]#>)
         }else if eventCategories.hasPrefix("exclude:") {
             self.toggleGroup_EventCategory.selected = "exclude"
             let value = eventCategories.replacingFirstOccurrence(of: "exclude:", with: "")
             self.logger.log(.trace, "eventCategory: \(value)")
 //            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            //            self.treeViewController?.setCheckedItems(ids: <#T##[String]#>)
         }
         if !specifyEventCategory {
 //            self.eventCategoriesTableController.disableCheckboxes()
@@ -483,12 +528,26 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_EventCategory.enable()
         }
         
+        self.loadProfileEvents(profile: profile)
+        
+    }
+    
+    func loadProfileEvents(profile:ExportProfile) {
+        self.treeViewController?.uncheckItems()
+        
+        let events = ExportDao.default.loadProfileEvents(profileId: profile.id)
+        for event in events {
+            self.checkTreeNode(oldValue: false, newValue: true, nodeType: event.eventNodeType, nodeId: event.eventId)
+        }
+        
     }
     
     @IBAction func onCleanClicked(_ sender: NSButton) {
         self.cleanFields()
         self.repositoryTableController.uncheckAll()
 //        self.eventCategoriesTableController.uncheckAll()
+        self.uncheckTreeNodes()
+        self.turnSaveButtonToEditing()
     }
     
     
@@ -509,14 +568,23 @@ class ExportConfigurationViewController: NSViewController {
         var repos = ""
         var family = ""
         
-        if self.chkRepository.state == .on {
-            let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
-            if checked != "" {
-                if self.chkIncludeRepository.state == .on {
-                    repos = "include:\(checked)"
-                }else if self.chkExcludeRepository.state == .on {
-                    repos = "exclude:\(checked)"
-                }
+//        if self.chkRepository.state == .on {
+//            let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
+//            if checked != "" {
+//                if self.chkIncludeRepository.state == .on {
+//                    repos = "include:\(checked)"
+//                }else if self.chkExcludeRepository.state == .on {
+//                    repos = "exclude:\(checked)"
+//                }
+//            }
+//        }
+        
+        let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
+        if checked != "" {
+            if self.chkIncludeRepository.state == .on {
+                repos = "include:\(checked)"
+            }else if self.chkExcludeRepository.state == .on {
+                repos = "exclude:\(checked)"
             }
         }
         
@@ -536,7 +604,7 @@ class ExportConfigurationViewController: NSViewController {
         profile.targetVolume = targetVolume
         profile.directory = path
         profile.duplicateStrategy = fileDuplicated
-        profile.specifyRepository = self.chkRepository.state == .on
+//        profile.specifyRepository = self.chkRepository.state == .on
         profile.specifyFamily = false
         profile.repositoryPath = repos
         profile.family = ""
@@ -546,7 +614,7 @@ class ExportConfigurationViewController: NSViewController {
         profile.fileNaming = fileNaming
         profile.subFolder = subfolder
         profile.eventCategories = eventCategories
-        profile.specifyEventCategory = self.chkEventCategories.state == .on
+//        profile.specifyEventCategory = self.chkEventCategories.state == .on
         
         return profile
     }
@@ -572,6 +640,23 @@ class ExportConfigurationViewController: NSViewController {
                                                                  eventCategories: form.eventCategories ?? "",
                                                                  specifyEventCategory: form.specifyEventCategory ?? false
                                                                 )
+        
+        if let treeViewController = self.treeViewController {
+            for checkedEventItem in treeViewController.getCheckedItems() {
+                let part = checkedEventItem.getId().components(separatedBy: "|")
+                let eventOwner = part[0]
+                let eventName = part[part.count-1]
+                let eventNodeType = part.count == 2 ? "group" : "member"
+                print("save profile id: \(profile.id) -- event owner: \(eventOwner) -- type: \(eventNodeType) -- event id:\(checkedEventItem.getId())")
+                let status = ExportDao.default.saveProfileEvent(profileId: profile.id, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: checkedEventItem.getId(), eventName: eventName, exclude: false)
+                if status != .OK {
+                    self.logger.log(.error, status)
+                    self.logger.log(.error, "Unable to save event for export profile id=\(self.editingId)")
+                    self.turnSaveButtonToAlert()
+                    return
+                }
+            }
+        }
         if !self.isNewRecord {
             let status = ExportDao.default.updateExportProfile(id: self.editingId,
                                                                name: form.name,
@@ -592,8 +677,9 @@ class ExportConfigurationViewController: NSViewController {
                                                             )
             
             if status != .OK {
-                self.logger.log(status)
-                self.logger.log(.trace, "Unable to update export profile id=\(self.editingId)")
+                self.logger.log(.error, status)
+                self.logger.log(.error, "Unable to update export profile id=\(self.editingId)")
+                self.turnSaveButtonToAlert()
                 return
             }else{
                 profile = form
@@ -608,6 +694,7 @@ class ExportConfigurationViewController: NSViewController {
         }else{
             self.addProfileItem(profile: profile)
         }
+        self.turnSaveButtonToDone()
     }
     
     // MARK: - STACK ITEMS
@@ -619,14 +706,15 @@ class ExportConfigurationViewController: NSViewController {
         let viewController = storyboard.instantiateController(withIdentifier: "ExportProfile") as! ExportProfileViewController
         
         viewController.initView(profile: profile,
-                                onEdit: {
+                                onEdit: { // MARK: ON EDIT PROFILE
                                     self.cleanFields()
             if let persisted_profile = ExportDao.default.getExportProfile(id: profile.id) {
                 self.fillFields(profile: persisted_profile)
             }else{
                 self.fillFields(profile: profile)
             }
-        }, onDelete: {
+            self.turnSaveButtonToDone()
+        }, onDelete: { // MARK: ON DELETE PROFILE
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
                 self.logger.log(.trace, "proceed delete")
                 let state = ExportDao.default.deleteExportProfile(id: profile.id)
@@ -879,16 +967,16 @@ class ExportConfigurationViewController: NSViewController {
     
     func toggleBox(state: Bool,
                    uncheckAll:Bool,
-                   checkBox:NSButton,
+                   checkBox:NSButton?,
                    toggleGroup:ToggleGroup,
                    tableController:DictionaryTableViewController) {
         if state == true {
-            checkBox.state = .on
+            checkBox?.state = .on
             toggleGroup.enable()
             tableController.table.isEnabled = true
             tableController.enableCheckboxes()
         }else{
-            checkBox.state = .off
+            checkBox?.state = .off
             toggleGroup.disable()
             tableController.table.isEnabled = false
             tableController.disableCheckboxes()
@@ -902,7 +990,7 @@ class ExportConfigurationViewController: NSViewController {
     func toggleRepository(_ state:Bool, uncheckAll:Bool = false) {
         self.toggleBox(state: state,
                        uncheckAll: uncheckAll,
-                       checkBox: self.chkRepository,
+                       checkBox: nil,
                        toggleGroup: self.toggleGroup_Repository,
                        tableController: self.repositoryTableController)
     }

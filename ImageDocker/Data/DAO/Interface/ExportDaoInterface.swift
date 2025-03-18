@@ -88,4 +88,12 @@ protocol ExportDaoInterface {
     func deleteExportLog(imageId:String, profileId:String) -> ExecuteState
     
     func getTargetVolumes() -> [String]
+    
+    func deleteProfileEvents(profileId:String) -> ExecuteState
+    
+    func saveProfileEvent(profileId:String, eventOwner:String, eventNodeType:String, eventId:String, eventName:String, exclude:Bool) -> ExecuteState
+    
+    func saveProfileEvents(profileId:String, selectedEventNodes:[TreeNodeData], exclude:Bool, owner:String) -> ExecuteState
+    
+    func loadProfileEvents(profileId:String) -> [ExportProfileEvent]
 }

@@ -19,6 +19,7 @@ struct Colors {
     static let MidGray = NSColor(named: "MidGray")!
     
     static let Red = NSColor(hex: "FF0000")
-    static let Green = NSColor(hex: "00FF00")
+    static let Green = NSColor.systemGreen
+    static let Yellow = NSColor.systemOrange
     static let White = NSColor(hex: "999999")
 }

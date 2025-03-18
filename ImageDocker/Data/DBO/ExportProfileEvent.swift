@@ -10,7 +10,7 @@ import Foundation
 import PostgresModelFactory
 
 public final class ExportProfileEvent : Codable {
-    var id: String = ""
+    var id: Int = 0      // <- the row id
     var profileId: String = ""
     var eventId: String = ""
     var eventName: String = ""
@@ -33,10 +33,6 @@ extension ExportProfileEvent : DatabaseRecord {
     
     public func primaryKeys() -> [String] {
         return ["id"]
-    }
-    
-    public func autofillColumns() -> [String] {
-        return []
     }
     
     

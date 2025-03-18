@@ -170,4 +170,20 @@ class ExportDao {
     func getTargetVolumes() -> [String] {
         return self.impl.getTargetVolumes()
     }
+    
+    func deleteProfileEvents(profileId:String) -> ExecuteState {
+        return self.impl.deleteProfileEvents(profileId: profileId)
+    }
+    
+    func saveProfileEvent(profileId:String, eventOwner:String, eventNodeType:String, eventId:String, eventName:String, exclude:Bool) -> ExecuteState {
+        return self.impl.saveProfileEvent(profileId: profileId, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: eventId, eventName: eventName, exclude: exclude)
+    }
+    
+    func saveProfileEvents(profileId:String, selectedEventNodes:[TreeNodeData], exclude:Bool, owner:String) -> ExecuteState {
+        return self.impl.saveProfileEvents(profileId: profileId, selectedEventNodes: selectedEventNodes, exclude: exclude, owner: owner)
+    }
+    
+    func loadProfileEvents(profileId:String) -> [ExportProfileEvent] {
+        return self.impl.loadProfileEvents(profileId: profileId)
+    }
 }

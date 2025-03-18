@@ -220,6 +220,10 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         return self.checkableItems[id]
     }
     
+    public func getCheckableNodeIds() -> [String] {
+        return self.checkableItems.keys.sorted()
+    }
+    
     func removeAllCheckableNodes() {
         self.checkableItems.removeAll()
     }

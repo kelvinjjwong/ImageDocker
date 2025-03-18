@@ -442,6 +442,8 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
         return .OK
     }
     
+    // MARK: Logging
+    
     func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -500,6 +502,8 @@ delete from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(prof
         return .OK
     }
     
+    // MARK: target volumes
+    
     func getTargetVolumes() -> [String] {
         var result:[String] = []
         
@@ -522,5 +526,77 @@ delete from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(prof
             self.logger.log(.error, error)
         }
         return result
+    }
+    
+    // MARK: - Profile Events
+    
+    func deleteProfileEvents(profileId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+delete from "ExportProfileEvent" where "profileId"='\(profileId)'
+""")
+            
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+    }
+    
+    func saveProfileEvent(profileId:String, eventOwner:String, eventNodeType:String, eventId:String, eventName:String, exclude:Bool) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+delete from "ExportProfileEvent" where "profileId"='\(profileId)' and "eventId"='\(eventId)'
+""")
+            let pe = ExportProfileEvent()
+            pe.profileId = profileId
+            pe.exclude = exclude
+            pe.eventId = eventId
+            pe.eventName = eventName
+            pe.eventNodeType = eventNodeType
+            pe.eventOwner = eventOwner
+            
+            try pe.save(db)
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+    }
+    
+    func saveProfileEvents(profileId:String, selectedEventNodes:[TreeNodeData], exclude:Bool, owner:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+delete from "ExportProfileEvent" where "profileId"='\(profileId)'
+""")
+            for node in selectedEventNodes {
+                let pe = ExportProfileEvent()
+                pe.profileId = profileId
+                pe.exclude = exclude
+                pe.eventId = node.getId()
+                pe.eventName = node.getText()
+                pe.eventNodeType = node.expandable() ? "group" : "event"
+                pe.eventOwner = owner
+                
+                try pe.save(db)
+            }
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+    }
+    
+    func loadProfileEvents(profileId:String) -> [ExportProfileEvent] {
+        let db = PostgresConnection.database()
+        do {
+            return try ExportProfileEvent.fetchAll(db, parameters: ["profileId":profileId])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
 }
