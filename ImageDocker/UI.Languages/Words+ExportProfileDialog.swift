@@ -11,6 +11,11 @@ import Foundation
 extension Words {
     
     
+    static let export_button_on_main_window = Localize (
+        eng: "Export",
+        chs: "导出照片"
+    )
+    
     static let export_auto_profile = Localize (
         eng: "Auto Profile - %s",
         chs: "新的配置 %s"

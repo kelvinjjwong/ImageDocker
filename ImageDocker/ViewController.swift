@@ -35,7 +35,7 @@ class ViewController: NSViewController {
     // MARK: TOP BAR
     @IBOutlet weak var btnAlertMessage: NSButton!
     
-    @IBOutlet weak var btnExport: NSPopUpButton!
+    @IBOutlet weak var btnExport: NSButton!
 //    @IBOutlet weak var btnFaces: NSPopUpButton!
     @IBOutlet weak var btnTasks: NSButton!
     @IBOutlet weak var btnMemories: NSButton!
@@ -557,6 +557,7 @@ class ViewController: NSViewController {
     internal func setupUIDisplays() {
         self.topToolbarPanelView.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnTasks.title = Words.tasks.fill(arguments: 0, 0)
+        self.btnExport.title = Words.export_button_on_main_window.word()
         self.btnNotification.title = Words.notifications.fill(arguments: "0")
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
@@ -789,6 +790,10 @@ class ViewController: NSViewController {
     
     @IBAction func onCollectionFilterClicked(_ sender: NSButton) {
         self.popoverCollectionFilter()
+    }
+    
+    @IBAction func onExportClicked(_ sender: NSButton) {
+        self.exportMenuConfigAction()
     }
     
     
