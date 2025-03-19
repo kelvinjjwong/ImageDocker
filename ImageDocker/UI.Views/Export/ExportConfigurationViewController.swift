@@ -506,13 +506,13 @@ class ExportConfigurationViewController: NSViewController {
             self.logger.log(.trace, "repo: \(value)")
             self.repositoryTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }
-        if !profile.specifyRepository {
-            self.repositoryTableController.disableCheckboxes()
-            self.toggleGroup_Repository.disable()
-        }else{
+//        if !profile.specifyRepository {
+//            self.repositoryTableController.disableCheckboxes()
+//            self.toggleGroup_Repository.disable()
+//        }else{
             self.repositoryTableController.enableCheckboxes()
             self.toggleGroup_Repository.enable()
-        }
+//        }
         
         let specifyEventCategory = profile.specifyEventCategory ?? false
 //        self.chkEventCategories.state = specifyEventCategory ? .on : .off
