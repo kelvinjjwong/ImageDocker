@@ -411,6 +411,8 @@ class ExportConfigurationViewController: NSViewController {
 //            self.toggleGroup_Family.enable()
 //            self.toggleGroup_EventCategory.enable()
             
+            self.treeViewController?.enable()
+            
         }else{
             self.repositoryTableController.disableCheckboxes()
 //            self.eventCategoriesTableController.disableCheckboxes()
@@ -418,6 +420,8 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Repository.disable()
 //            self.toggleGroup_Family.disable()
 //            self.toggleGroup_EventCategory.disable()
+            
+            self.treeViewController?.disable()
         }
         
         self.chkPatchGeolocation.isEnabled = state
@@ -427,16 +431,22 @@ class ExportConfigurationViewController: NSViewController {
         self.chkOriginFilename.isEnabled = state
         self.chkDateTimeFilename.isEnabled = state
         self.chkDateTimeBriefFilename.isEnabled = state
+        self.chkImageIdFilename.isEnabled = state
         
         self.chkNoSubFolder.isEnabled = state
         self.chkEventSubFolder.isEnabled = state
         self.chkDateEventSubFolder.isEnabled = state
         self.chkExportDateTimeSubFolder.isEnabled = state
+        self.chkDateSubFolder.isEnabled = state
         
         self.chkOverwriteDuplicate.isEnabled = state
         self.chkDeviceModelSuffix.isEnabled = state
         self.chkNumberSuffix.isEnabled = state
         self.chkDeviceNameSuffix.isEnabled = state
+        
+        self.chkApplePhotos.isEnabled = state
+        self.chkPlex.isEnabled = state
+        self.chkCustomizedStyle.isEnabled = state
         
         for vc in self.profileStackItems.values {
             vc.toggleButtons(state: state)

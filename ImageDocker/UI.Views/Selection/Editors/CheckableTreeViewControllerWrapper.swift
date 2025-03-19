@@ -76,6 +76,20 @@ public class CheckableTreeViewControllerWrapper : NSViewController {
         // Do view setup here.
     }
     
+    public func enable() {
+        self.treeView.isEnabled = true
+        for (_, vc) in self.checkableItems.values {
+            vc?.checkbox.isEnabled = true
+        }
+    }
+    
+    public func disable() {
+        self.treeView.isEnabled = false
+        for (_, vc) in self.checkableItems.values {
+            vc?.checkbox.isEnabled = false
+        }
+    }
+    
     public func reloadNodes() {
         self.logger.log(.trace, "tree view reload nodes")
         let checkedIds = self.getCheckedItems().map { $0.getId() }
