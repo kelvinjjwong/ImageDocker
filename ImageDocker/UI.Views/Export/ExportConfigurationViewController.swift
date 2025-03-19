@@ -408,16 +408,16 @@ class ExportConfigurationViewController: NSViewController {
 //            self.eventCategoriesTableController.enableCheckboxes()
             
             self.toggleGroup_Repository.enable()
-            self.toggleGroup_Family.enable()
-            self.toggleGroup_EventCategory.enable()
+//            self.toggleGroup_Family.enable()
+//            self.toggleGroup_EventCategory.enable()
             
         }else{
             self.repositoryTableController.disableCheckboxes()
 //            self.eventCategoriesTableController.disableCheckboxes()
             
             self.toggleGroup_Repository.disable()
-            self.toggleGroup_Family.disable()
-            self.toggleGroup_EventCategory.disable()
+//            self.toggleGroup_Family.disable()
+//            self.toggleGroup_EventCategory.disable()
         }
         
         self.chkPatchGeolocation.isEnabled = state
@@ -782,13 +782,16 @@ class ExportConfigurationViewController: NSViewController {
     private func getRehearsalAmount() -> Int? {
         var amount:Int? = nil
         if let selection = self.lstRehearsalAmount.titleOfSelectedItem {
-            let number = selection.components(separatedBy: " ")[1]
-            if number == "10" {
-                amount = 10
-            }else if number == "100" {
-                amount = 100
-            }else if number == "500" {
-                amount = 500
+            let part = selection.components(separatedBy: " ")
+            if part.count > 1 {
+                let number = selection.components(separatedBy: " ")[1]
+                if number == "10" {
+                    amount = 10
+                }else if number == "100" {
+                    amount = 100
+                }else if number == "500" {
+                    amount = 500
+                }
             }
         }
         return amount

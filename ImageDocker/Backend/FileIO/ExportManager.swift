@@ -132,82 +132,138 @@ class ExportManager {
         }
         
         let triggerTime = Date()
-        
-        
-        //self.logger.log(.trace, "exporting")
-        TaskManager.exporting = true
-        self.logger.log(.trace, "  ")
-        self.logger.log(.trace, "!! ExportManager start working at \(Date())")
-        
-        self.startTask(profileId: profile.id)
-        
-        self.logger.log(.trace, "EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
-        
-        let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
-        
-        var total:Int = totalImagesInDb
-        let pageSizeMax = 100
-        var pageSize:Int = totalImagesInDb
-        var pageCount:Int = 1
-        
-        var lastPageImages = 0
-        if let limit = limit {
-            total = min(totalImagesInDb, limit)
-            pageSize = min(pageSizeMax, limit)
-            pageCount = total / pageSize
-            if (pageCount * pageSize) < total {
-                lastPageImages = total - (pageCount * pageSize)
-                pageCount += 1
-            }
-        }
-        
-        var i:Int = 0
         var failed:Int = 0
-        for pageNumber in 1...pageCount {
+        var terminated = false
+        
+        
+        let _ = TaskletManager.default.createAndStartTask(type: "Export\(rehearsal ? " Exercise" : "")", name: "\(profile.name)", total: 2
+                                                          , exec: { task in
             
-            guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
+            //self.logger.log(.trace, "exporting")
+            TaskManager.exporting = true
+            self.logger.log(.trace, "  ")
+            self.logger.log(.trace, "!! ExportManager start working at \(Date())")
             
-            self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
+            self.startTask(profileId: profile.id)
             
-            let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
+            self.logger.log(.trace, "EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
             
-            if images.count > 0 {
-                var imagesToExport = pageSize
-                if pageNumber == pageCount && lastPageImages > 0 {
-                    // last page
-                    imagesToExport = lastPageImages
+            TaskletManager.default.updateProgress(id: task.id, message: "Loading images ...", increase: false)
+            
+            let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
+            
+            var total:Int = totalImagesInDb
+            
+            TaskletManager.default.setTotal(id: task.id, total: total)
+            
+            TaskletManager.default.updateProgress(id: task.id, message: "Loading images (total \(total)) ...", increase: false)
+            
+            let pageSizeMax = 100
+            var pageSize:Int = totalImagesInDb
+            var pageCount:Int = 1
+            
+            var lastPageImages = 0
+            if let limit = limit {
+                total = min(totalImagesInDb, limit)
+                pageSize = min(pageSizeMax, limit)
+                pageCount = total / pageSize
+                if (pageCount * pageSize) < total {
+                    lastPageImages = total - (pageCount * pageSize)
+                    pageCount += 1
+                }
+            }
+            
+            var i:Int = 0
+            for pageNumber in 1...pageCount {
+                
+//                guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
+                if TaskletManager.default.isTaskStopped(id: task.id) == true {
+                    terminated = true
+                    return
                 }
                 
-                for n in 1...imagesToExport {
-
-                    guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
-                    
-                    i += 1
-                    
-                    self.printMessage("Exporting image ( \(i) / \(total) ) ...")
-                    
-                    let image = images[n-1]
-                    
-                    let exportOK = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
-                    
-                    if !exportOK {
-                        failed += 1
+                self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
+                
+                let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
+                
+                if images.count > 0 {
+                    var imagesToExport = pageSize
+                    if pageNumber == pageCount && lastPageImages > 0 {
+                        // last page
+                        imagesToExport = lastPageImages
                     }
                     
+                    let events = ExportDao.default.loadProfileEvents(profileId: profile.id)
+                    
+                    for n in 1...imagesToExport {
+                        
+//                        guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
+                        
+                        
+                        if TaskletManager.default.isTaskStopped(id: task.id) == true {
+                            terminated = true
+                            return
+                        }
+                        
+                        i += 1
+                        
+                        self.printMessage("Exporting image ( \(i) / \(total) ) ...")
+                        
+                        let image = images[n-1]
+                        
+                        if self.shouldExportFile(profile: profile, image: image, events: events) {
+                            let exportOK = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
+                            
+                            if !exportOK {
+                                failed += 1
+                            }
+                        }
+                        
+                        
+                        TaskletManager.default.updateProgress(id: task.id, message: "Exported image (\(i)/\(task.total))", increase: true)
+                        
+                    }
                 }
-            }
+                
+            } // end of while loop
             
-        } // end of while loop
+        }, stop: {task in
+            
+        })
         self.printMessage("Export DONE: \(profile.name)")
         
         TaskManager.exporting = false
         
-        return (true, "COMPLETED with \(failed) error.")
+        return (true, "\(terminated ? "STOPPED" : "COMPLETED") with \(failed) error.")
+    }
+    
+    // MARK: - EXPORT Rules Filter
+    
+    func shouldExportFile(profile:ExportProfile, image:Image, events:[ExportProfileEvent]) -> Bool {
+        var pass = false
+        if image.event == nil {
+            pass = true
+        }else{
+            if let ev = image.event {
+                if ev == "" {
+                    pass = true
+                }else{
+                    for event in events {
+                        if event.eventName == ev {
+                            pass = true
+                        }
+                    }
+                }
+            }
+        }
+        self.logger.log(.info, "[Export][Filter][\(pass ? "Proceed" : "Blocked")][profileId:\(profile.id)][imageId:\(image.id ?? "")]")
+        return pass
     }
     
     // MARK: - EXPORT SINGLE FILE
     
     private func exportFile(profile:ExportProfile, image:Image, triggerTime:Date, rehearsal:Bool = false) -> Bool {
+        self.logger.log(.info, "[Export]\(rehearsal ? "[Exercise]" : "[Process]")[profileId:\(profile.id)][imageId:\(image.id ?? "")]")
         // invalid date
         if image.photoTakenYear == 0 {
             return false
@@ -237,13 +293,13 @@ class ExportManager {
         let (basePath, subfolder) = Naming.Export.buildExportSubFolder(image: image, profile: profile, triggerTime: triggerTime)
         let targetFilename = Naming.Export.buildExportFilename(image: image, profile: profile, subfolder: subfolder)
         
-        let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
+        let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder.removeLastStash())
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
         self.logger.log(.trace, "[\(imagePath)] Will copy file to [\(fullTargetFilePath)]")
         
         if rehearsal {
-            self.logger.log(.trace, "[\(imagePath)] Rehearsal not really copy file.")
+            self.logger.log(.info, "[Export][Exercise][profileId:\(profile.id)][imageId:\(image.id ?? "")][from:\(imagePath)][to:\(fullTargetFilePath)][source:\(imagePath.isFileExists() ? "exist" : "not_exist")]")
             return true
         }
         

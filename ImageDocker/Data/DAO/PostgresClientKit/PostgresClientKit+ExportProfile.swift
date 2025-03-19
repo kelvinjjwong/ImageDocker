@@ -57,7 +57,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
             specifyFamily: specifyFamily,
             family: family,
             eventCategories: eventCategories,
-            specifyEventCategory: specifyEventCategory
+            specifyEventCategory: specifyEventCategory,
+            repositoryId: 0
         )
         do {
             if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {

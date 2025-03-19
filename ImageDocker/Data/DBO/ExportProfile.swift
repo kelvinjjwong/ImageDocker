@@ -34,6 +34,7 @@ public final class ExportProfile : Codable {
     var eventCategories: String? = ""
     var specifyEventCategory: Bool? = false
     var style:String = ""
+    var repositoryId: Int = 0
     
     public init() {
         
@@ -60,7 +61,7 @@ public final class ExportProfile : Codable {
                 specifyFamily:Bool,
                 family:String,
                 eventCategories:String,
-                specifyEventCategory:Bool) {
+                specifyEventCategory:Bool, repositoryId:Int) {
         self.id = id
         self.name = name
         self.targetVolume = targetVolume
@@ -83,6 +84,7 @@ public final class ExportProfile : Codable {
         self.family = family
         self.eventCategories = eventCategories
         self.specifyEventCategory = specifyEventCategory
+        self.repositoryId = repositoryId
     }
 }
 

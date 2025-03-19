@@ -685,6 +685,8 @@ struct NamingForExporting {
         return filename
     }
     
+    // MARK: - Export Rule: Filename Duplicated
+    
     func buildExportFilenameWhenDuplicated(image:Image, profile:ExportProfile, basePath:String, filename:String) -> String {
         var changedFilename = filename
         if profile.duplicateStrategy == "OVERWRITE" {
@@ -723,9 +725,14 @@ struct NamingForExporting {
         return fileExt
     }
     
+    // MARK: - Export Rule: Filename
+    
     func buildExportFilename(image:Image, profile:ExportProfile, subfolder:String) -> String {
         
-        if profile.fileNaming == "ORIGIN" {
+        if profile.fileNaming == "IMAGEID" {
+            return "\(image.id ?? image.filename)\(self.getExtName(filename: image.filename))"
+            
+        }else if profile.fileNaming == "ORIGIN" {
             return image.filename
             
         }else if profile.fileNaming == "DATETIME" {
@@ -782,6 +789,8 @@ struct NamingForExporting {
         }
     }
     
+    // MARK: - Export Rule: SubFolder
+    
     func buildExportSubFolder(image:Image, profile:ExportProfile, triggerTime:Date) -> (String, String){
         let exportToPath = "\(profile.targetVolume)\(profile.directory)"
         
@@ -822,6 +831,23 @@ struct NamingForExporting {
                 }
             }
             subfolder = "\(datepart)\(eventpart)"
+            
+            let (_, createdSubfolder) = self.createDirectoryIfNotExist(basePath: exportToPath, subfolder: subfolder)
+            return (exportToPath, createdSubfolder)
+            
+        }else if profile.subFolder == "DATE" {
+            
+            var subfolder = ""
+            var datepart = ""
+            if let _ = image.photoTakenDate {
+                let year = "\(image.photoTakenYear ?? 0)"
+                let month = image.photoTakenMonth! < 10 ? "0\(image.photoTakenMonth ?? 0)" : "\(image.photoTakenMonth ?? 0)"
+                let day = image.photoTakenDay! < 10 ? "0\(image.photoTakenDay ?? 0)" : "\(image.photoTakenDay ?? 0)"
+                datepart = "\(year)-\(month)-\(day)"
+            }else{
+                datepart = "NODATE"
+            }
+            subfolder = "\(datepart)"
             
             let (_, createdSubfolder) = self.createDirectoryIfNotExist(basePath: exportToPath, subfolder: subfolder)
             return (exportToPath, createdSubfolder)
