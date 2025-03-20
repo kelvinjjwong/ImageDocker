@@ -41,6 +41,12 @@ class DeviceDao {
         return self.impl.saveDevice(device: device)
     }
     
+    // MARK: - UPDATE META INFO of device
+    
+    func updateMetaInfo(deviceId:String, metaId:String, value:String) -> ExecuteState {
+        return self.impl.updateMetaInfo(deviceId: deviceId, metaId: metaId, value: value)
+    }
+    
     // MARK: - FILES ON DEVICE
     
     func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile? {

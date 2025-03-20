@@ -35,6 +35,17 @@ extension String {
         }
         return []
     }
+    
+    func toJSON() -> JSON {
+        if let data = self.data(using: .utf8) {
+            do {
+                return try JSON(data: data)
+            }catch{
+                print(error)
+            }
+        }
+        return []
+    }
 }
 
 extension Array {
@@ -95,6 +106,16 @@ extension String {
             str = with + str
         }
         return str
+    }
+    
+    var isNumber: Bool {
+        let allowedCharacters = CharacterSet(charactersIn: ".").union(CharacterSet.decimalDigits)
+        return !isEmpty && rangeOfCharacter(from: allowedCharacters.inverted) == nil
+    }
+    
+    var isSignedNumber: Bool {
+        let allowedCharacters = CharacterSet(charactersIn: "+-.").union(CharacterSet.decimalDigits)
+        return !isEmpty && rangeOfCharacter(from: allowedCharacters.inverted) == nil
     }
     
     var numberValue: NSNumber? {
@@ -380,6 +401,32 @@ extension String {
          }
      }
  }
+
+struct DictionaryHelper {
+    
+    public static func updateValue(value:String, forColumn:String, whichId:String, in items:[[String:String]]) -> [[String:String]] {
+        var _items:[[String:String]] = []
+        for item in items {
+            if (item["id"] ?? "") != whichId {
+                _items.append(item)
+            }else{
+                var _item = item
+                _item.updateValue(value, forKey: forColumn)
+                _items.append(_item)
+            }
+        }
+        return _items
+    }
+    
+    public static func getValue(forColumn:String, whichId:String, in items:[[String:String]]) -> String? {
+        for item in items {
+            if (item["id"] ?? "") == whichId {
+                return item[forColumn]
+            }
+        }
+        return nil
+    }
+}
 
 // MARK: URL
 

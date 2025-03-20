@@ -80,6 +80,11 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBOutlet weak var lblCaptionFolder: NSTextField!
     
+    
+    @IBOutlet weak var tblDeviceInfo: NSTableView!
+    
+    var deviceInfoTableController : DictionaryTableViewController!
+    
     private var accumulator:Accumulator? = nil
     private var working = false
     private var forceStop = false
@@ -131,6 +136,15 @@ class RepositoryDetailViewController: NSViewController {
         
         self.txtDetail.isEditable = false
         self.txtDetail.isHidden = true
+        
+        self.deviceInfoTableController = DictionaryTableViewController(self.tblDeviceInfo)
+        self.deviceInfoTableController.editableColumns = ["value"]
+        
+        self.deviceInfoTableController.onValueChanged = { id, column, originValue, newValue in
+            if let repository = self.repository, repository.deviceId != "" {
+                let _ = DeviceDao.default.updateMetaInfo(deviceId: repository.deviceId, metaId: id, value: newValue)
+            }
+        }
     }
     
     var repoSpace:[String:String] = [:]
@@ -242,7 +256,27 @@ class RepositoryDetailViewController: NSViewController {
                 var isAndroid = false
                 if repository.deviceId != "" {
                     if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                        
+                        var deviceInfo:[[String:String]] = []
+                        DispatchQueue.main.async {
+                            self.deviceInfoTableController.load(deviceInfo)
+                        }
+                        
                         isAndroid = ( (device.type ?? "") == "Android")
+                        
+                        deviceInfo.append(["id":"fixed_type", "datatype":"text", "name":"类型", "value" : device.type ?? ""])
+                        deviceInfo.append(["id":"fixed_manufacture", "datatype":"text", "name":"厂家", "value" : device.manufacture ?? ""])
+                        deviceInfo.append(["id":"fixed_marketName", "datatype":"text", "name":"名称", "value" : device.marketName ?? ""])
+                        deviceInfo.append(["id":"fixed_model", "datatype":"text", "name":"型号", "value" : device.model ?? ""])
+                        let deviceInfoMeta = (device.metaInfo ?? "{}").toJSON()
+                        deviceInfo.append(["id":"ImageWidth", "datatype":"int", "name":"照片宽度", "value" : "\(deviceInfoMeta["ImageWidth"].stringValue)"])
+                        deviceInfo.append(["id":"ImageHeight", "datatype":"int", "name":"照片高度", "value" : "\(deviceInfoMeta["ImageHeight"].stringValue)"])
+                        deviceInfo.append(["id":"ScreenWidth", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenWidth"].stringValue)"])
+                        deviceInfo.append(["id":"ScreenHeight", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenHeight"].stringValue)"])
+                        
+                        DispatchQueue.main.async {
+                            self.deviceInfoTableController.load(deviceInfo)
+                        }
                         
                         self.phoneDevice = PhoneDevice(type: isAndroid ? .Android : .iPhone,
                                                       deviceId: repository.deviceId,

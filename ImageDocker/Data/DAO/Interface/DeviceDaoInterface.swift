@@ -21,6 +21,8 @@ protocol DeviceDaoInterface {
     
     func saveDevice(device:ImageDevice) -> ExecuteState
     
+    func updateMetaInfo(deviceId:String, metaId:String, value:String) -> ExecuteState
+    
     // MARK: - FILES ON DEVICE
     
     func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile?

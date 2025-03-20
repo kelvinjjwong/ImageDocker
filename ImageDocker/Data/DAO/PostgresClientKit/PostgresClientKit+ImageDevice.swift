@@ -79,6 +79,20 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         return .OK
     }
     
+    func updateMetaInfo(deviceId:String, metaId:String, value:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+update "ImageDevice" set "metaInfo" = jsonb_set(coalesce("metaInfo", '{}'), '{\(metaId)}', '\(value)') where "deviceId"='\(deviceId)'
+"""
+            )
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
     func getImportedFile(deviceId: String, file: PhoneFile) -> ImageDeviceFile? {
         let db = PostgresConnection.database()
         let key = "\(deviceId):\(file.path)"

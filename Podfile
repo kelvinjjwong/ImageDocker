@@ -8,7 +8,7 @@ target 'ImageDocker' do
 
   # Pods for ImageDocker
   pod 'LoggerFactory', '1.1.3'
-  pod 'PostgresModelFactory', '~>1.0.13'
+  pod 'PostgresModelFactory', '~>1.0.14'
   pod 'CryptoSwift', '1.4.0'
   pod 'DiskUtilInfoReader', '1.0.1'
   pod 'SharedDeviceLib', '1.0.3'

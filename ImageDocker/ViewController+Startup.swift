@@ -137,12 +137,14 @@ extension ViewController {
             
             
             if self.splashController.decideQuit {
+                print("user decide quit")
                 self.splashController.showQuit(countdown: 5, disableButton: true) {
                     self.doQuit(withoutBackupDB: true)
                 }
             }
             
             if !dbConnected {
+                print("db not connected")
                 self.splashController.showQuit(countdown: 5, disableButton: true) {
                     self.doQuit(withoutBackupDB: true)
                 }

@@ -21,6 +21,7 @@ public final class ImageDevice : Codable {
     var marketName:String?
     var repositoryPath:String? // FIXME: demise
     var homePath:String? // FIXME: demise
+    var metaInfo:String?
     // FIXME: add field - repositoryId
     
     public init() {

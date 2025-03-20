@@ -18,7 +18,9 @@ class DictionaryTableViewController: NSObject {
     var onClick:(([String:String]) -> Void)? = nil
     var onCheck:((String, Bool) -> Void)? = nil
     var onAction:((String) -> Void)? = nil
+    var onValueChanged:((String, String, String, String) -> Void)? = nil // id, column, origin value, new value
     var actionIcon:NSImage? = nil
+    var editableColumns:[String] = []
     
     // MARK: CONTROLS
     
@@ -181,7 +183,7 @@ class DictionaryTableViewController: NSObject {
 
 // MARK: TableView delegate functions
 
-extension DictionaryTableViewController: NSTableViewDelegate {
+extension DictionaryTableViewController: NSTableViewDelegate, NSTextFieldDelegate {
     
     @objc @IBAction func onActionClicked(sender:NSButton) {
         let id = sender.identifier?.rawValue.replacingFirstOccurrence(of: "action_", with: "") ?? ""
@@ -234,6 +236,10 @@ extension DictionaryTableViewController: NSTableViewDelegate {
 //        }
     }
     
+    @objc func textFieldDidChange(_ textField: NSTextField) {
+
+    }
+    
     // return view for requested column.
     func tableView(_ tableView: NSTableView,
                    viewFor tableColumn: NSTableColumn?,
@@ -243,6 +249,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
         }
         let item = self.items[row]
         var value = ""
+        var columnKey = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
             var isAction = false
@@ -255,6 +262,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 }else{
                     for key in item.keys {
                         if id == NSUserInterfaceItemIdentifier(key) {
+                            columnKey = key
                             value = item[key] ?? ""
                             //self.logger.log(.trace, "LOOP RESULT: \(key), \(value)")
                             break
@@ -297,6 +305,9 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                     if let icon = self.actionIcon {
                         button.image = icon
                         button.imagePosition = .imageOnly
+                        button.setWidth(40)
+                        button.isBordered = false
+                        button.alignment = .center
                     }else{
                         button.title = "X"
                         button.imagePosition = .noImage
@@ -306,6 +317,12 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 }else{
                     colView.textField?.stringValue = value;
                     colView.textField?.lineBreakMode = .byClipping
+                    if columnKey != "" && self.editableColumns.contains(columnKey) && !(item["id"] ?? "").hasPrefix("fixed_") {
+                        colView.textField?.isEditable = true
+                    }
+                    colView.textField?.identifier = NSUserInterfaceItemIdentifier("id_\(item["id"] ?? UUID().uuidString)_column_\(columnKey)_datatype_\(item["datatype"] ?? "")")
+                    colView.textField?.delegate = self
+                    
                     if row == tableView.selectedRow {
                         lastSelectedRow = row
                         //                    colView.textField?.textColor = NSColor.yellow
@@ -332,6 +349,31 @@ extension DictionaryTableViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         lastSelectedRow = row
         return true
+    }
+    
+    // MARK: - NSTextFieldDelegate -
+
+    public func controlTextDidEndEditing(_ obj: Notification) {
+        // check the identifier to be sure you have the correct textfield if more are used
+        if let textField = obj.object as? NSTextField {
+            let identifier = textField.identifier?.rawValue ?? ""
+            let part = identifier.components(separatedBy: "_")
+            let id = part[1]
+            let column = part[3]
+            let datatype = part[5]
+            let originValue = DictionaryHelper.getValue(forColumn: column, whichId: id, in: self.items) ?? ""
+            let newValue = textField.stringValue
+            // changable value
+            if ["int", "integer", "float", "double", "decimal"].contains(datatype.lowercased()){
+                if !newValue.isNumber {
+                    textField.stringValue = originValue
+                    return
+                }
+            }
+            self.items = DictionaryHelper.updateValue(value: newValue, forColumn: column, whichId: id, in: self.items)
+            
+            self.onValueChanged?(id, column, originValue, newValue)
+        }
     }
 }
 

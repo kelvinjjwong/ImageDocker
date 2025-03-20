@@ -736,6 +736,16 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v63") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add("tags", .jsonb)
+            })
+            
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add("metaInfo", .jsonb)
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

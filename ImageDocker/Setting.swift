@@ -10,6 +10,8 @@ import Foundation
 import LoggerFactory
 import PostgresModelFactory
 
+fileprivate var logger = LoggerFactory.get(category: "Setting")
+
 struct Setting {
     
     static let UI = UserInterfaceSetting()
@@ -55,6 +57,7 @@ class LoggingSetting {
         if !url.path.isDirectoryExists() {
             let (created, error) = url.path.mkdirs()
             if !created {
+                logger.log(.error, "ERROR: Unable to create logging directory - \(error)")
                 print("ERROR: Unable to create logging directory - \(error)")
             }
         }
@@ -153,6 +156,7 @@ struct DatabaseSetting {
         do{
             return try jsonDecoder.decode([DatabaseProfile].self, from: jsonString.data(using: .utf8)!)
         }catch{
+            logger.log(.error, "[databaseProfilesFromJSON] \(error)")
             print(error)
             return []
         }
@@ -164,7 +168,6 @@ struct DatabaseSetting {
             public init() {}
         }
         do {
-            print(profile.toJSON())
             if let version = try Version.fetchOne(Database(profile: profile), sql: """
 SELECT max(NULLIF(regexp_replace(ver, '\\D','','g'), '')::int) AS ver from version_migrations
 """) {
