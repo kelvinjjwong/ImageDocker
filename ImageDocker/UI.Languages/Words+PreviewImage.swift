@@ -52,6 +52,11 @@ extension Words {
         chs: "放大展示"
     )
     
+    static let previewShowDuplicates = Localize(
+        eng: "Show Duplicates",
+        chs: "显示标记为重复的照片"
+    )
+    
     static let previewEditableVersion = Localize(
         eng: "Preview editable version",
         chs: "展示可修改版本"

@@ -21,6 +21,9 @@ extension ImageFile {
     /// - Tag: ImageFile.transformDomainToMetaInfo()
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
+            let tagx = (photoFile.tagx ?? "").removeFirstBracket().removeLastBracket()
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Tags", value: tagx))
+            
 //            self.logger.log(.trace, "meta -> repo -> \(photoFile.repositoryPath)")
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "ImageId", value: photoFile.id))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "OriginMD5", value: photoFile.originalMD5))

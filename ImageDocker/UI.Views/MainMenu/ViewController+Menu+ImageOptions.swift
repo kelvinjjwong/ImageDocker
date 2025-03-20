@@ -71,6 +71,8 @@ extension ViewController {
         self.btnImageOptions.selectItem(at: 0)
         
         if let imageFile = self.img {
+            CachePrefetch.default.refresh()
+            
             let url = imageFile.url
             logger.log("preview menu - rescan image exif - \(url)")
             if let image = imageFile.imageData {

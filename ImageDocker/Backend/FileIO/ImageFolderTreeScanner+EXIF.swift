@@ -25,6 +25,8 @@ extension ImageFolderTreeScanner {
         
         self.logger.log(.trace, "continue load exif")
         
+        CachePrefetch.default.refresh()
+        
         // progress indicate 3 - (RepositoryDetailViewController - Accumulator(target: 2)
 //        if indicator != nil {
 //            DispatchQueue.main.async {

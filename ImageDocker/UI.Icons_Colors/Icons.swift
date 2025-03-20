@@ -37,7 +37,11 @@ struct Icons {
     static let moreHorizontal:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
     static let play:NSImage = NSImage(imageLiteralResourceName: "play")
     static let pause:NSImage = NSImage(imageLiteralResourceName: "pause")
-
+    
+    static let screenshot:NSImage = NSImage(imageLiteralResourceName: "select")
+    static let wechat:NSImage = NSImage(imageLiteralResourceName: "wechat")
+    static let qq:NSImage = NSImage(imageLiteralResourceName: "qq")
+    static let ps:NSImage = NSImage(imageLiteralResourceName: "ps")
 
     static let unknownFace:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
     static let face:NSImage = NSImage(imageLiteralResourceName: "face")

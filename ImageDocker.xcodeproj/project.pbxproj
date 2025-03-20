@@ -142,6 +142,8 @@
 		8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194B2422570A002BAAAE /* DeviceDaoInterface.swift */; };
 		8E74194E24225719002BAAAE /* FaceDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194D24225719002BAAAE /* FaceDaoInterface.swift */; };
 		8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194F24225728002BAAAE /* ExportDaoInterface.swift */; };
+		8E78CEA22D8C0B0A005566A4 /* Words+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E78CEA12D8C0B05005566A4 /* Words+Tag.swift */; };
+		8E78CEA42D8C1FBF005566A4 /* CachePrefetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E78CEA32D8C1FB6005566A4 /* CachePrefetch.swift */; };
 		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
 		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
 		8E7D4F832D1DD52900EC77F8 /* DSFSecureTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */; };
@@ -542,6 +544,8 @@
 		8E74194B2422570A002BAAAE /* DeviceDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDaoInterface.swift; sourceTree = "<group>"; };
 		8E74194D24225719002BAAAE /* FaceDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDaoInterface.swift; sourceTree = "<group>"; };
 		8E74194F24225728002BAAAE /* ExportDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDaoInterface.swift; sourceTree = "<group>"; };
+		8E78CEA12D8C0B05005566A4 /* Words+Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tag.swift"; sourceTree = "<group>"; };
+		8E78CEA32D8C1FB6005566A4 /* CachePrefetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePrefetch.swift; sourceTree = "<group>"; };
 		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
 		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSFSecureTextField.swift; sourceTree = "<group>"; };
@@ -935,6 +939,7 @@
 				8EB986AC20B223550075B081 /* Backend */,
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
+				8E78CEA32D8C1FB6005566A4 /* CachePrefetch.swift */,
 				8EEF072A22626FE7000520B7 /* ViewController.swift */,
 				8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */,
 				8EB271802340E578003BF3AF /* ViewController+Window.swift */,
@@ -1054,6 +1059,7 @@
 		8E481479277CB0AF0097493E /* UI.Languages */ = {
 			isa = PBXGroup;
 			children = (
+				8E78CEA12D8C0B05005566A4 /* Words+Tag.swift */,
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
 				8E1E3AC02CAAFAAD00D2A34E /* Words+AlertDialog.swift */,
@@ -1974,6 +1980,7 @@
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E4DECE823B38A7B00F5538C /* Image.swift in Sources */,
+				8E78CEA42D8C1FBF005566A4 /* CachePrefetch.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EECD8F22ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift in Sources */,
 				8ED8333F27B7EA5800B31319 /* ExternalAPIController.swift in Sources */,
@@ -2132,6 +2139,7 @@
 				8EECD8EE2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift in Sources */,
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
+				8E78CEA22D8C0B0A005566A4 /* Words+Tag.swift in Sources */,
 				5CA18B4629EB23EE00C5502E /* ViewController+NotificationMessage.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,

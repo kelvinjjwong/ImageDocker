@@ -138,9 +138,9 @@ protocol ImageRecordDaoInterface {
     
     // MARK: TAGGING
     
-    func tagImage(id:String, key:String, value:String) -> ExecuteState
+    func tagImage(imageId:String, tag:String) -> ExecuteState
     
-    func untagImage(id:String, key:String, value:String) -> ExecuteState 
+    func untagImage(imageId:String, tag:String) -> ExecuteState 
 }
 
 protocol ImageSearchDaoInterface {

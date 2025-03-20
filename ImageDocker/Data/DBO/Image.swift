@@ -127,6 +127,7 @@ public final class Image : Codable {
     var deviceId:String = ""
     var deviceFileId:String = ""
     var tags:String? = nil
+    var tagx:String? = nil
     
     public init() {
         

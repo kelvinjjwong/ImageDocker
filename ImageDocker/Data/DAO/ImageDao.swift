@@ -286,12 +286,12 @@ public final class ImageRecordDao {
     
     // MARK: TAGGING
     
-    func tagImage(id:String, key:String, value:String) -> ExecuteState {
-        return self.impl.tagImage(id: id, key: key, value: value)
+    func tagImage(imageId:String, tag:String) -> ExecuteState {
+        return self.impl.tagImage(imageId: imageId, tag: tag)
     }
     
-    func untagImage(id:String, key:String, value:String) -> ExecuteState {
-        return self.impl.untagImage(id: id, key: key, value: value)
+    func untagImage(imageId:String, tag:String) -> ExecuteState {
+        return self.impl.untagImage(imageId: imageId, tag: tag)
     }
 }
 

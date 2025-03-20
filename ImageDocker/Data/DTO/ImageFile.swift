@@ -188,6 +188,7 @@ class ImageFile {
     // READ FROM DATABASE
     /// - Tag: ImageFile.init(image)
     init (image:Image, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, forceReloadExif:Bool = false) {
+        self.logger.log(.info, "[ImageFile.init] id:\(image.id)")
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -353,9 +354,8 @@ class ImageFile {
             }
         }
         
-        if let repository = _repository {
-            self.tagging(image: image, repository: repository, device: device)
-        }
+        
+        self.tagging(image: image)
 //            if self.imageData?.cameraMaker == nil {
 //                autoreleasepool { () -> Void in
 //                    self.loadMetaInfoFromOSX()
@@ -506,34 +506,98 @@ class ImageFile {
     
     // MARK: - Tagging
     
-    func tagging(image:Image, repository:ImageRepository, device:ImageDevice?) {
-        if let device = device, let json = device.metaInfo?.toJSON() {
-            if json["ScreenWidth"].exists() && !json["SceenWidth"].isEmpty
-                && json["ScreenHeight"].exists() && !json["ScreenHeight"].isEmpty {
-                
+    func tagging() {
+        if let image = self.imageData {
+            self.tagging(image: image)
+        }
+    }
+    
+    func tagging(image:Image) {
+        self.logger.log(.info, "[ImageFile.tagging] id:\(image.id)")
+        self.tagScreenCapture(image: image)
+        self.tagSourceFromFilename(image: image)
+//        self.tagCameraPicture(image: image)
+    }
+    
+    func tagCameraPicture(image:Image) {
+        if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_camera_picture.word()) {
+            return
+        }
+        var cameras:[(Int, Int)] = []
+        let metaInfos = CachePrefetch.default.getMetaInfoOfDevices()
+        for json in metaInfos {
+            if json["ImageWidth"].exists()
+                && json["ImageHeight"].exists() {
+                cameras.append((json["ImageWidth"].intValue, json["ImageHeight"].intValue))
             }
-            print(image.id, image.imageWidth, image.imageHeight, json["ScreenWidth"], json["ScreenHeight"])
-        }else{
-            print(image.id, image.imageWidth, image.imageHeight)
+        }
+        self.logger.log(.info, "[tagging] found screens: \(cameras.count)")
+        if let imageId = image.id {
+            let imageWidth = image.imageWidth ?? 0
+            let imageHeight = image.imageHeight ?? 0
+            self.logger.log(.info, "[tagging] image size: \(imageWidth), \(imageHeight)")
+            for (cameraWidth, cameraHeight) in cameras {
+                self.logger.log(.info, "[tagging] screen size: \(cameraWidth), \(cameraHeight)")
+                if (cameraWidth == imageWidth && imageHeight == cameraHeight) || (cameraHeight == imageWidth && imageHeight == cameraWidth) {
+                    print("Tag image with \(Words.tag_image_is_screen_shot)")
+                    let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_screen_shot.word())
+                }
+            }
+        }
+    }
+    
+    func tagSourceFromFilename(image:Image) {
+        if let imageId = image.id {
+            let source = Naming.Source.recognize(filename: image.filename)
+            if source == "WeChat" {
+                if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_wechat_image.word()) {
+                    return
+                }
+                let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_wechat_image.word())
+            }else if source == "QQ" {
+                if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_qq_image.word()) {
+                    return
+                }
+                let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_qq_image.word())
+            }else if source == "ScreenShot" {
+                if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_screen_shot.word()) {
+                    return
+                }
+                let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_screen_shot.word())
+            }else if source == "PhoneApp" {
+                if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_app_edited_image.word()) {
+                    return
+                }
+                let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_app_edited_image.word())
+            }
+            // TODO: update tag to self.imageData.tagx field
         }
     }
     
     func tagScreenCapture(image:Image) {
+        if let tagged = image.tagx, tagged.contains(find: Words.tag_image_is_screen_shot.word()) {
+            return
+        }
         var screens:[(Int, Int)] = []
-        let devices = DeviceDao.default.getDevices()
-        for device in devices {
-            if let json = device.metaInfo?.toJSON() {
-                if json["ScreenWidth"].exists() && !json["SceenWidth"].isEmpty
-                    && json["ScreenHeight"].exists() && !json["ScreenHeight"].isEmpty {
-                    screens.append((json["ScreenWidth"].intValue, json["SceenWidth"].intValue))
-                }
+        let metaInfos = CachePrefetch.default.getMetaInfoOfDevices()
+        for json in metaInfos {
+            if json["ScreenWidth"].exists()
+                && json["ScreenHeight"].exists() {
+                screens.append((json["ScreenWidth"].intValue, json["ScreenHeight"].intValue))
             }
         }
-        let imageWidth = image.imageWidth ?? 0
-        let imageHeight = image.imageHeight ?? 0
-        for (width, height) in screens {
-            if (width == imageWidth && imageHeight == height) || (height == imageWidth && imageHeight == width) {
-                
+        self.logger.log(.info, "[tagging] found screens: \(screens.count)")
+        if let imageId = image.id {
+            let imageWidth = image.imageWidth ?? 0
+            let imageHeight = image.imageHeight ?? 0
+            self.logger.log(.info, "[tagging] image size: \(imageWidth), \(imageHeight)")
+            for (screenWidth, screenHeight) in screens {
+                self.logger.log(.info, "[tagging] screen size: \(screenWidth), \(screenHeight)")
+                if (screenWidth == imageWidth && imageHeight == screenHeight) || (screenHeight == imageWidth && imageHeight == screenWidth) {
+                    print("Tag image with \(Words.tag_image_is_screen_shot)")
+                    let _ = ImageRecordDao.default.tagImage(imageId: imageId, tag: Words.tag_image_is_screen_shot.word())
+                    // TODO: update tag to self.imageData.tagx field
+                }
             }
         }
     }

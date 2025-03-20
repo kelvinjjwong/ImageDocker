@@ -173,6 +173,22 @@ extension String {
         return self
     }
     
+    
+    
+    func removeLastBracket() -> String {
+        if self.hasSuffix("}") {
+            return self.substring(from: 0, to: -1)
+        }
+        return self
+    }
+    
+    func removeFirstBracket() -> String {
+        if self.hasPrefix("{") {
+            return self.replacingFirstOccurrence(of: "{", with: "")
+        }
+        return self
+    }
+    
     func removeLastStash() -> String {
         if self.hasSuffix("/") {
             return self.substring(from: 0, to: -1)

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target">
             <connections>
-                <outlet property="btnCaution" destination="Id9-mY-ETc" id="hln-Sc-T6m"/>
                 <outlet property="btnLook" destination="AeO-Uo-9h3" id="WII-Tf-ah3"/>
                 <outlet property="btnMenu" destination="HcE-Zh-rv4" id="45u-yk-0A7"/>
                 <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
                 <outlet property="colorLine" destination="vlF-03-icb" id="xtz-vN-L9y"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
+                <outlet property="imgSourceTag" destination="Rcw-pq-XWC" id="4QW-3V-hGi"/>
                 <outlet property="lblPlace" destination="9qX-pa-ugK" id="k8B-pG-7sE"/>
                 <outlet property="moreMenu" destination="tEK-js-g3a" id="tGL-gk-7ef"/>
                 <outlet property="textField" destination="HhR-2S-1Qc" id="qmv-BS-MjW"/>
@@ -44,7 +43,7 @@
                         <action selector="onCheckBoxClicked:" target="-2" id="u6A-qM-mub"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
                     <rect key="frame" x="18" y="8" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="PTF-RK-Eoj"/>
@@ -55,7 +54,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="18" y="23" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="I4k-G6-XJA"/>
@@ -80,29 +79,19 @@
                         <action selector="onButtonLookClicked:" target="-2" id="NGR-h8-uc2"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Id9-mY-ETc">
-                    <rect key="frame" x="463" y="25" width="12" height="12"/>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="copy" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="SdX-tV-EEy">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="12" id="bI2-9s-J5J"/>
-                        <constraint firstAttribute="width" constant="12" id="c5p-fG-JSk"/>
-                    </constraints>
-                    <connections>
-                        <action selector="onDuplicatesClicked:" target="-2" id="03e-IQ-x24"/>
-                    </connections>
-                </button>
                 <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HcE-Zh-rv4">
                     <rect key="frame" x="-10" y="3" width="30" height="19"/>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="x4F-Td-KzV">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="message"/>
                         <menu key="menu" autoenablesItems="NO" id="tEK-js-g3a">
                             <items>
                                 <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
                                 <menuItem title="Reveal in Finder" id="Fee-pt-Seh"/>
+                                <menuItem isSeparatorItem="YES" id="Nsf-0Y-ikw"/>
+                                <menuItem title="Show Duplicates" id="t5w-TT-piW">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
                                 <menuItem isSeparatorItem="YES" id="Lfr-qp-zvR"/>
                                 <menuItem title="Preview (editable version)" id="zFL-FL-qGO">
                                     <modifierMask key="keyEquivalentModifierMask"/>
@@ -128,8 +117,8 @@
                         <action selector="onPopUpButtonClicked:" target="-2" id="7ck-ss-Dqs"/>
                     </connections>
                 </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
-                    <rect key="frame" x="37" y="2" width="408" height="2"/>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
+                    <rect key="frame" x="37" y="2" width="37" height="2"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="2" id="HJw-BM-gQj"/>
                     </constraints>
@@ -139,29 +128,36 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rcw-pq-XWC">
+                    <rect key="frame" x="458" y="23" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="8UK-ey-Z9V"/>
+                        <constraint firstAttribute="width" constant="20" id="ifX-v2-kJm"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="select" id="Tnk-Sc-kyF"/>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9qX-pa-ugK" secondAttribute="bottom" constant="8" id="2MH-Yx-k6X"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="2z6-mz-65p"/>
                 <constraint firstItem="vlF-03-icb" firstAttribute="leading" secondItem="AeO-Uo-9h3" secondAttribute="trailing" constant="20" id="9Dc-iW-WC1"/>
-                <constraint firstAttribute="bottom" secondItem="Id9-mY-ETc" secondAttribute="bottom" constant="25" id="CMj-4p-jod"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Cac-fe-lhi"/>
                 <constraint firstAttribute="bottom" secondItem="HcE-Zh-rv4" secondAttribute="bottom" constant="3" id="DKB-A6-8a3"/>
                 <constraint firstAttribute="trailing" secondItem="FSe-ep-RM0" secondAttribute="trailing" id="E7f-E0-rXP"/>
+                <constraint firstAttribute="trailing" secondItem="Rcw-pq-XWC" secondAttribute="trailing" constant="2" id="FbW-wS-NJ6"/>
                 <constraint firstAttribute="trailing" secondItem="Onb-PG-8r4" secondAttribute="trailing" id="GEN-fF-l14"/>
                 <constraint firstAttribute="bottom" secondItem="Onb-PG-8r4" secondAttribute="bottom" constant="5" id="GkW-Ug-dZE"/>
                 <constraint firstAttribute="bottom" secondItem="AeO-Uo-9h3" secondAttribute="bottom" constant="21" id="M5U-Cp-61s"/>
                 <constraint firstItem="HcE-Zh-rv4" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="-5" id="MbH-Xd-Wgq"/>
+                <constraint firstAttribute="bottom" secondItem="Rcw-pq-XWC" secondAttribute="bottom" constant="23" id="Odx-4R-Nvh"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="top" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="Xx6-IA-axd"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" constant="20" id="eus-uP-aKn"/>
                 <constraint firstAttribute="trailing" secondItem="9qX-pa-ugK" secondAttribute="trailing" constant="20" id="o9W-j5-xVp"/>
-                <constraint firstAttribute="trailing" secondItem="Id9-mY-ETc" secondAttribute="trailing" constant="5" id="oh0-yJ-iw8"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="AeO-Uo-9h3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="tzO-OO-1Ne"/>
                 <constraint firstAttribute="bottom" secondItem="vlF-03-icb" secondAttribute="bottom" constant="2" id="vY0-rD-7nk"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="y4F-IE-8V6"/>
-                <constraint firstItem="Id9-mY-ETc" firstAttribute="leading" secondItem="vlF-03-icb" secondAttribute="trailing" constant="20" id="yKT-ad-au9"/>
             </constraints>
             <point key="canvasLocation" x="139" y="114"/>
         </customView>
@@ -169,7 +165,7 @@
     </objects>
     <resources>
         <image name="NSStopProgressTemplate" width="17" height="16"/>
-        <image name="copy" width="16" height="16"/>
         <image name="more_horizontal" width="16" height="4"/>
+        <image name="select" width="16" height="16"/>
     </resources>
 </document>

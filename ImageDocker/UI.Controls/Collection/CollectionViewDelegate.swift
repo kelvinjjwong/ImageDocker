@@ -291,6 +291,8 @@ protocol CollectionViewItemShowDuplicatesDelegate {
 
 extension ViewController : CollectionViewItemShowDuplicatesDelegate {
     func onCollectionViewItemShowDuplicate(_ duplicatesKey: String) {
+        CachePrefetch.default.refresh()
+        
         if let paths = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
             self.selectionViewController.collectionViewController.imagesLoader.clean()
             for path in paths {

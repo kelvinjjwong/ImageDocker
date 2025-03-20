@@ -104,6 +104,7 @@ class PeopleFace {
     }
     
     fileprivate func loadSourceImageFile() -> ImageFile? {
+        CachePrefetch.default.refresh()
         if let sourceImage = ImageRecordDao.default.getImage(id: self.data.imageId) {
             return ImageFile(image: sourceImage)
         }

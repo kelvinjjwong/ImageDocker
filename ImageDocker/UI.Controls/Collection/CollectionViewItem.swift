@@ -17,10 +17,11 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var checkBox: NSButton!
     @IBOutlet weak var lblPlace: NSTextField!
     @IBOutlet weak var btnLook: NSButton!
-    @IBOutlet weak var btnCaution: NSButton!
+//    @IBOutlet weak var btnCaution: NSButton!
     @IBOutlet weak var btnMenu: NSPopUpButton!
     @IBOutlet weak var moreMenu: NSMenu!
     @IBOutlet weak var colorLine: NSTextField!
+    @IBOutlet weak var imgSourceTag: NSImageView!
     
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
@@ -60,13 +61,14 @@ class CollectionViewItem: NSCollectionViewItem {
         didSet {
             guard isViewLoaded else { return }
             if let imageFile = imageFile {
+                imageFile.tagging()
                 self.renderControls(imageFile)
             } else {
                 imageView?.image = nil
                 textField?.stringValue = ""
                 lblPlace.stringValue = ""
                 checkBox.state = NSButton.StateValue.off
-                btnCaution.isHidden = true
+//                btnCaution.isHidden = true
             }
         }
     }
@@ -77,7 +79,7 @@ class CollectionViewItem: NSCollectionViewItem {
     
     func hideControls() {
         self.btnLook.isHidden = true
-        self.btnCaution.isHidden = true
+//        self.btnCaution.isHidden = true
         self.checkBox.isHidden = true
         self.btnMenu.isHidden = true
         self.isControlsHidden = true
@@ -91,10 +93,11 @@ class CollectionViewItem: NSCollectionViewItem {
         view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
 
         self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
-        self.btnCaution.isHidden = true
+//        self.btnCaution.isHidden = true
     }
     
     func reloadFromDatabase(){
+        CachePrefetch.default.refresh()
         if let oldImage = self.imageFile?.imageData, let imageId = oldImage.id  {
             if let image = ImageRecordDao.default.getImage(id: imageId) {
                 self.imageFile = ImageFile(image: image)
@@ -143,6 +146,26 @@ class CollectionViewItem: NSCollectionViewItem {
             }else{
                 lblPlace.stringValue = imageFile.place
             }
+            
+            self.imgSourceTag.isHidden = true
+            let tags = (image.tagx ?? "").removeLastBracket().removeFirstBracket().components(separatedBy: ",")
+            if tags.contains(Words.tag_image_is_screen_shot.word()) {
+                self.imgSourceTag.isHidden = false
+                self.imgSourceTag.image = Icons.screenshot
+                self.imgSourceTag.toolTip = Words.tag_image_is_screen_shot.word()
+            }else if tags.contains(Words.tag_image_is_wechat_image.word()) {
+                self.imgSourceTag.isHidden = false
+                self.imgSourceTag.image = Icons.wechat
+                self.imgSourceTag.toolTip = Words.tag_image_is_wechat_image.word()
+            }else if tags.contains(Words.tag_image_is_qq_image.word()) {
+                self.imgSourceTag.isHidden = false
+                self.imgSourceTag.image = Icons.qq
+                self.imgSourceTag.toolTip = Words.tag_image_is_qq_image.word()
+            }else if tags.contains(Words.tag_image_is_app_edited_image.word()) {
+                self.imgSourceTag.isHidden = false
+                self.imgSourceTag.image = Icons.ps
+                self.imgSourceTag.toolTip = Words.tag_image_is_app_edited_image.word()
+            }
         }else{
             lblPlace.stringValue = imageFile.place
         }
@@ -156,10 +179,10 @@ class CollectionViewItem: NSCollectionViewItem {
 //            self.btnLook.toolTip = "Visible"
         }
         
-        if !self.isControlsHidden {
-            btnCaution.isHidden = !imageFile.hasDuplicates
-        }
-        btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
+//        if !self.isControlsHidden {
+//            btnCaution.isHidden = !imageFile.hasDuplicates
+//        }
+//        btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
         checkBox.state = imageFile.isChecked ? .on : .off // should base on ImageFile.checked state
         
@@ -216,10 +239,11 @@ class CollectionViewItem: NSCollectionViewItem {
     
     func setupMenu() {
         self.moreMenu.item(at: 1)?.title = Words.library_tree_reveal_in_finder.word()
-        self.moreMenu.item(at: 3)?.title = Words.previewEditableVersion.word()
-        self.moreMenu.item(at: 4)?.title = Words.previewBackupVersion.word()
-        self.moreMenu.item(at: 5)?.title = Words.largeView.word()
-        self.moreMenu.item(at: 7)?.title = Words.replaceImageWithBackupVersion.word()
+        self.moreMenu.item(at: 3)?.title = Words.previewShowDuplicates.word()
+        self.moreMenu.item(at: 5)?.title = Words.previewEditableVersion.word()
+        self.moreMenu.item(at: 6)?.title = Words.previewBackupVersion.word()
+        self.moreMenu.item(at: 7)?.title = Words.largeView.word()
+        self.moreMenu.item(at: 9)?.title = Words.replaceImageWithBackupVersion.word()
     }
     
     @IBAction func onPopUpButtonClicked(_ sender: NSPopUpButton) {
@@ -229,15 +253,17 @@ class CollectionViewItem: NSCollectionViewItem {
         if i == 1 {
             self.revealInFinder()
         }else if i == 3 {
-            self.previewEditableVersion()
-        }else if i == 4 {
-            self.previewBackupVersion()
+            if let imageFile = self.imageFile {
+                if self.showDuplicatesDelegate != nil {
+                    self.showDuplicatesDelegate?.onCollectionViewItemShowDuplicate(imageFile.duplicatesKey)
+                }
+            }
         }else if i == 5 {
-            self.quicklook()
+            self.previewEditableVersion()
+        }else if i == 6 {
+            self.previewBackupVersion()
         }else if i == 7 {
-//            self.findFaces()
-        }else if i == 8 {
-//            self.recognizeFaces()
+            self.quicklook()
         }else if i == 9 {
             self.restoreBackupImage()
         }

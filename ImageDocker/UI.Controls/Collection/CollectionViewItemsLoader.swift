@@ -389,6 +389,7 @@ class CollectionViewItemsLoader : NSObject {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
+        CachePrefetch.default.refresh()
         
         self.logger.log(.debug, "Loading duplicate photos from db - START")
         // FIXME: narrow the range of searching duplicate photos

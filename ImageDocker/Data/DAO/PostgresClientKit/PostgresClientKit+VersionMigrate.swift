@@ -746,6 +746,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v64") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add("tagx", .text_array)
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

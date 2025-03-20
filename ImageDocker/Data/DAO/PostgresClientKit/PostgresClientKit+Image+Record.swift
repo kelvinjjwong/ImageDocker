@@ -568,11 +568,11 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     // MARK: TAGGING
     
-    func tagImage(id:String, key:String, value:String) -> ExecuteState {
+    func tagImage(imageId:String, tag:String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
-update "Image" set "tags" = jsonb_set(coalesce("tags", '{}'), '{\(metaId)}', '\(value)') where "deviceId"='\(deviceId)'
+update "Image" set "tagx" = ARRAY(SELECT DISTINCT UNNEST("tagx" || '{\(tag)}')) where "id" = '\(imageId)'
 """
             )
         }catch{
@@ -582,8 +582,18 @@ update "Image" set "tags" = jsonb_set(coalesce("tags", '{}'), '{\(metaId)}', '\(
         return .OK
     }
     
-    func untagImage(id:String, key:String, value:String) -> ExecuteState {
-        
+    func untagImage(imageId:String, tag:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+update "Image" set "tagx" = ARRAY(SELECT DISTINCT UNNEST(array_remove("tagx",'\(tag)'))) where "id" = '\(imageId)'
+"""
+            )
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+        return .OK
     }
 
 }
