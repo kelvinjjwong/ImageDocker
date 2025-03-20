@@ -565,5 +565,25 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         }
         return .OK
     }
+    
+    // MARK: TAGGING
+    
+    func tagImage(id:String, key:String, value:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+update "Image" set "tags" = jsonb_set(coalesce("tags", '{}'), '{\(metaId)}', '\(value)') where "deviceId"='\(deviceId)'
+"""
+            )
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func untagImage(id:String, key:String, value:String) -> ExecuteState {
+        
+    }
 
 }

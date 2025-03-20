@@ -133,6 +133,14 @@ protocol ImageRecordDaoInterface {
     func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState
     
     func hideUnsupportedRecords() -> ExecuteState
+    
+    
+    
+    // MARK: TAGGING
+    
+    func tagImage(id:String, key:String, value:String) -> ExecuteState
+    
+    func untagImage(id:String, key:String, value:String) -> ExecuteState 
 }
 
 protocol ImageSearchDaoInterface {

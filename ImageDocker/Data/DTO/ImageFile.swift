@@ -191,8 +191,12 @@ class ImageFile {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
+        var _repository:ImageRepository? = nil
+        var device:ImageDevice? = nil
+        
         self.repositoryId = image.repositoryId
         if let repository = RepositoryDao.default.getRepository(id: self.repositoryId ?? 0) { // FIXME: cache this
+            _repository = repository
             self.repositoryVolume = repository.repositoryVolume
             self.rawVolume = repository.storageVolume
             self.repositoryPath = repository.repositoryPath
@@ -204,6 +208,12 @@ class ImageFile {
             self.url = URL(fileURLWithPath: imagePath)
             
             self.logger.log(.trace, "Loaded ImageFile url: \(self.url)")
+            
+            if repository.deviceId != "" {
+                if let _device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                    device = _device
+                }
+            }
         }else{
             self.logger.log(.error, "Unable to load ImageRepository for Image.id:\(image.id) with repositoryId:\(image.repositoryId), subPath:\(image.subPath)")
             self.url = URL(fileURLWithPath: image.path)
@@ -342,7 +352,10 @@ class ImageFile {
                 self.logger.timecost("[ImageFile.init from database][forceReloadExif] time cost", fromDate: startTime_loadMetaInfo)
             }
         }
-            
+        
+        if let repository = _repository {
+            self.tagging(image: image, repository: repository, device: device)
+        }
 //            if self.imageData?.cameraMaker == nil {
 //                autoreleasepool { () -> Void in
 //                    self.loadMetaInfoFromOSX()
@@ -491,7 +504,39 @@ class ImageFile {
         
     }
     
+    // MARK: - Tagging
     
+    func tagging(image:Image, repository:ImageRepository, device:ImageDevice?) {
+        if let device = device, let json = device.metaInfo?.toJSON() {
+            if json["ScreenWidth"].exists() && !json["SceenWidth"].isEmpty
+                && json["ScreenHeight"].exists() && !json["ScreenHeight"].isEmpty {
+                
+            }
+            print(image.id, image.imageWidth, image.imageHeight, json["ScreenWidth"], json["ScreenHeight"])
+        }else{
+            print(image.id, image.imageWidth, image.imageHeight)
+        }
+    }
+    
+    func tagScreenCapture(image:Image) {
+        var screens:[(Int, Int)] = []
+        let devices = DeviceDao.default.getDevices()
+        for device in devices {
+            if let json = device.metaInfo?.toJSON() {
+                if json["ScreenWidth"].exists() && !json["SceenWidth"].isEmpty
+                    && json["ScreenHeight"].exists() && !json["ScreenHeight"].isEmpty {
+                    screens.append((json["ScreenWidth"].intValue, json["SceenWidth"].intValue))
+                }
+            }
+        }
+        let imageWidth = image.imageWidth ?? 0
+        let imageHeight = image.imageHeight ?? 0
+        for (width, height) in screens {
+            if (width == imageWidth && imageHeight == height) || (height == imageWidth && imageHeight == width) {
+                
+            }
+        }
+    }
     
 }
 

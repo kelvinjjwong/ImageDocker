@@ -284,6 +284,15 @@ public final class ImageRecordDao {
         return self.impl.hideUnsupportedRecords()
     }
     
+    // MARK: TAGGING
+    
+    func tagImage(id:String, key:String, value:String) -> ExecuteState {
+        return self.impl.tagImage(id: id, key: key, value: value)
+    }
+    
+    func untagImage(id:String, key:String, value:String) -> ExecuteState {
+        return self.impl.untagImage(id: id, key: key, value: value)
+    }
 }
 
 // MARK: -
