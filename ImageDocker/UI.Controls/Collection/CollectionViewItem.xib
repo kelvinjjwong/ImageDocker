@@ -118,7 +118,7 @@
                     </connections>
                 </popUpButton>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
-                    <rect key="frame" x="37" y="2" width="37" height="2"/>
+                    <rect key="frame" x="37" y="2" width="405" height="2"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="2" id="HJw-BM-gQj"/>
                     </constraints>
@@ -150,6 +150,7 @@
                 <constraint firstAttribute="bottom" secondItem="AeO-Uo-9h3" secondAttribute="bottom" constant="21" id="M5U-Cp-61s"/>
                 <constraint firstItem="HcE-Zh-rv4" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="-5" id="MbH-Xd-Wgq"/>
                 <constraint firstAttribute="bottom" secondItem="Rcw-pq-XWC" secondAttribute="bottom" constant="23" id="Odx-4R-Nvh"/>
+                <constraint firstAttribute="trailing" secondItem="vlF-03-icb" secondAttribute="trailing" constant="40" id="UHB-3o-NUi"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="top" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="Xx6-IA-axd"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" constant="20" id="eus-uP-aKn"/>

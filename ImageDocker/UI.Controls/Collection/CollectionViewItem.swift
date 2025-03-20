@@ -69,6 +69,7 @@ class CollectionViewItem: NSCollectionViewItem {
                 lblPlace.stringValue = ""
                 checkBox.state = NSButton.StateValue.off
 //                btnCaution.isHidden = true
+                self.disableMenu(at: 3)
             }
         }
     }
@@ -94,6 +95,7 @@ class CollectionViewItem: NSCollectionViewItem {
 
         self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
 //        self.btnCaution.isHidden = true
+        self.disableMenu(at: 3)
     }
     
     func reloadFromDatabase(){
@@ -182,6 +184,11 @@ class CollectionViewItem: NSCollectionViewItem {
 //        if !self.isControlsHidden {
 //            btnCaution.isHidden = !imageFile.hasDuplicates
 //        }
+        if imageFile.hasDuplicates {
+            self.enableMenu(at: 3)
+        }else{
+            self.disableMenu(at: 3)
+        }
 //        btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
         checkBox.state = imageFile.isChecked ? .on : .off // should base on ImageFile.checked state
@@ -244,6 +251,16 @@ class CollectionViewItem: NSCollectionViewItem {
         self.moreMenu.item(at: 6)?.title = Words.previewBackupVersion.word()
         self.moreMenu.item(at: 7)?.title = Words.largeView.word()
         self.moreMenu.item(at: 9)?.title = Words.replaceImageWithBackupVersion.word()
+        
+        self.disableMenu(at: 3)
+    }
+    
+    func enableMenu(at index:Int) {
+        self.moreMenu.item(at: index)?.isEnabled = true
+    }
+    
+    func disableMenu(at index:Int) {
+        self.moreMenu.item(at: index)?.isEnabled = false
     }
     
     @IBAction func onPopUpButtonClicked(_ sender: NSPopUpButton) {
