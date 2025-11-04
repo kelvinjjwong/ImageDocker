@@ -12,6 +12,7 @@ extension ViewController {
     
     internal func startSchedules() {
         self.logger.log(.info, "Starting schedules ...")
+        print("Starting schedules ...")
         
         self.centralNotificationFadeOutTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             if let lastCentralNotificationTime = self.lastCentralNotificationTime {

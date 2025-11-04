@@ -752,6 +752,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v65") { db in
+            try db.alter(table: "ImageDevice", body: { t in
+                t.change("homePath").null().defaults(to: "")
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

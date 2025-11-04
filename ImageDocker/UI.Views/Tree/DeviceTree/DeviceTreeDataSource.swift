@@ -57,11 +57,12 @@ class DeviceTreeDataSource : TreeDataSource {
         if self.registered_iphone_id_names.isEmpty {
             
             let registeredDevices = DeviceDao.default.getDevices(type: "iPhone")
+            print("registeredDevices: \(registeredDevices)")
             for registeredDevice in registeredDevices {
                 if let id = registeredDevice.deviceId {
                     
                     do {
-                        self.logger.log(.trace, "[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
+                        self.logger.log(.debug, "[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
                         self.registered_iphone_id_names[id] = ""
                         self.registered_iphone_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
@@ -85,6 +86,7 @@ class DeviceTreeDataSource : TreeDataSource {
         self.volumesConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             DispatchQueue.global().async {
                 self.logger.log(.info, "volumesConnectivityTimer is running")
+                print("volumesConnectivityTimer is running")
                 let registeredVolumes = PreferencesController.getSavedRepositoryVolumes()
                 let mountedVolumes = LocalDirectory.bridge.mountpoints()
                 
@@ -141,6 +143,7 @@ class DeviceTreeDataSource : TreeDataSource {
         self.androidConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
                 DispatchQueue.global().async {
                     self.logger.log(.info, "androidConnectivityTimer is running")
+                    print("androidConnectivityTimer is running")
                     self.loadRegisteredDevices()
 
                     let connectedDeviceIds:[String] = DeviceBridge.Android().devices()
@@ -201,10 +204,13 @@ class DeviceTreeDataSource : TreeDataSource {
         self.iphoneConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
                 DispatchQueue.global().async {
                     self.logger.log(.info, "iphoneConnectivityTimer is running")
+                    print("iphoneConnectivityTimer is running")
                     self.loadRegisteredDevices()
                     
                     let connectedDeviceIds:[String] = DeviceBridge.IPHONE().devices()
-//                    self.logger.log(.trace, "connected android phones: \(connectedDeviceIds)")
+                    self.logger.log(.debug, "connected iphone phones: \(connectedDeviceIds)")
+                    print("connected iphone phones: \(connectedDeviceIds)")
+                    print("registered_iphone_id_names: \(self.registered_iphone_id_names)")
                     for deviceId in self.registered_iphone_id_names.keys {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
@@ -253,6 +259,7 @@ class DeviceTreeDataSource : TreeDataSource {
                             }
                         }
                     }
+                    print("Connected devices: \(DeviceBridge.connectivity)")
                 }
                 
             })

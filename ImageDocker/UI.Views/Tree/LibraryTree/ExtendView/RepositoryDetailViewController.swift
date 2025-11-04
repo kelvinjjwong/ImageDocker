@@ -283,6 +283,7 @@ class RepositoryDetailViewController: NSViewController {
                         var connectedDeviceIds:[String] = []
                         if isAndroid {
                             connectedDeviceIds = DeviceBridge.Android().devices()
+                            self.logger.log(.debug, "Connected Android devices: \(connectedDeviceIds)")
                         }else{
                             var connectIOS = true
                             if Setting.localEnvironment.iosDeviceMountPoint() == "" {
@@ -293,8 +294,10 @@ class RepositoryDetailViewController: NSViewController {
                                 connectIOS = false
                                 MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_ifuse_not_installed.word())
                             }
+                            self.logger.log(.debug, "Connected IOS devices: \(connectIOS)")
                             if connectIOS {
                                 connectedDeviceIds = DeviceBridge.IPHONE().devices()
+                                self.logger.log(.debug, "Connected IOS devices: \(connectedDeviceIds)")
                             }
                         }
                         if !connectedDeviceIds.contains(repository.deviceId) {
@@ -323,6 +326,62 @@ class RepositoryDetailViewController: NSViewController {
                         DispatchQueue.main.async {
                             MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: "Cannot find device id for this repository")
                         }
+                    }
+                }else{
+                    // no device was connected to repository
+                    self.logger.log(.info, "Found no device was connected to repository id:\(repository.id)")
+                    self.logger.log(.info, "Connected devices: \(DeviceBridge.connectivity)")
+                    
+                    var connectedDeviceIds:[String] = []
+                    if isAndroid {
+                        connectedDeviceIds = DeviceBridge.Android().devices()
+                        self.logger.log(.debug, "Connected Android devices: \(connectedDeviceIds)")
+                    }else{
+                        var connectIOS = true
+                        if Setting.localEnvironment.iosDeviceMountPoint() == "" {
+                            connectIOS = false
+                            MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_setup_mountpoint_for_ios.word())
+                        }
+                        if !DeviceBridge.IPHONE().validCommands() {
+                            connectIOS = false
+                            MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_ifuse_not_installed.word())
+                        }
+                        self.logger.log(.debug, "Connected IOS devices: \(connectIOS)")
+                        if connectIOS {
+                            connectedDeviceIds = DeviceBridge.IPHONE().devices()
+                            self.logger.log(.debug, "Connected IOS devices: \(connectedDeviceIds)")
+                            
+                            if connectedDeviceIds.count > 0 {
+                                for connectedDeviceid in connectedDeviceIds {
+                                    if let connectedIphoneDevice = DeviceBridge.IPHONE().device() {
+                                        self.logger.log(.debug, "Connected IOS device: \(connectedIphoneDevice)")
+                                        
+                                        if let iphoneDevice = DeviceDao.default.getDevice(deviceId: connectedIphoneDevice.deviceId) {
+                                            iphoneDevice.type = "iPhone"
+                                            iphoneDevice.manufacture = connectedIphoneDevice.manufacture
+                                            iphoneDevice.model = connectedIphoneDevice.model
+                                            iphoneDevice.name = connectedIphoneDevice.name
+                                            let _state = DeviceDao.default.saveDevice(device: iphoneDevice)
+                                            if _state == .ERROR {
+                                                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageDeviceDaoPostgresCK", name: "updateImageDevice", message: "ERROR")
+                                            }
+                                            
+                                        }else{
+                                            let iPhoneDevice = ImageDevice.new(deviceId: connectedIphoneDevice.deviceId,
+                                                                               type: "iPhone",
+                                                                               manufacture: connectedIphoneDevice.manufacture,
+                                                                               model: connectedIphoneDevice.model)
+                                            iPhoneDevice.name = connectedIphoneDevice.name
+                                            let _state = DeviceDao.default.saveDevice(device: iPhoneDevice)
+                                            if _state == .ERROR {
+                                                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageDeviceDaoPostgresCK", name: "createImageDevice", message: "ERROR")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 

@@ -206,12 +206,14 @@ class DeviceCopyViewController: NSViewController {
             self.deviceConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block:{_ in
                 DispatchQueue.global().async {
                     if DeviceBridge.isConnected(deviceId: device.deviceId) {
+                        self.logger.log(.debug, "Device \(device.deviceId) is connected, enable buttons")
                         DispatchQueue.main.async {
                             self.btnCopy.isEnabled = true
                             self.btnLoad.isEnabled = true
                             self.btnDeepLoad.isEnabled = true
                         }
                     }else{
+                        self.logger.log(.debug, "Device \(device.deviceId) is NOT connected, disabled buttons")
                         DispatchQueue.main.async {
                             self.btnCopy.isEnabled = false
                             self.btnLoad.isEnabled = false
@@ -268,6 +270,8 @@ class DeviceCopyViewController: NSViewController {
                     self.emptyFileLists(paths: paths)
                     self.sourcePathTableDelegate.paths = paths
                     self.tblSourcePath.reloadData()
+                    
+                    self.enableButtons()
                 }else{
                     self.btnMount.title = Words.device_mount.word()
                     self.emptyFileLists(paths: paths)
@@ -562,6 +566,7 @@ class DeviceCopyViewController: NSViewController {
                     self.sourcePathTableDelegate.paths = paths
                     self.tblSourcePath.reloadData()
                     
+                    self.enableButtons()
                 }else{
 //                    self.logger.log(.trace, "UNABLE TO MOUNT IPHONE")
                 }
