@@ -14,7 +14,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     
     
-    let logger = LoggerFactory.get(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
+    let logger = LoggerFactory.get(category: "DB", subCategory: "RepositoryDaoPostgresCK")
     
     // MARK: IMAGE REPOSITORY CRUD
     

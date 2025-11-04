@@ -386,8 +386,8 @@ class ViewController: NSViewController {
     
     func checkMissingVolumes() -> ([String], [String]) {
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
-        self.logger.log(.trace, "[STARTUP] volumes_lasttime: \(volumes_lasttime)")
-        self.logger.log(.trace, "[STARTUP] volumes_connected: \(volumes_connected)")
+        self.logger.log(.info, "[STARTUP] volumes_lasttime: \(volumes_lasttime)")
+        self.logger.log(.info, "[STARTUP] volumes_connected: \(volumes_connected)")
         if volumes_missing.count > 0 {
             self.logger.log(.error, "[STARTUP] volumes_missing: \(volumes_missing)")
             self.logger.log(.warning, "[STARTUP] decide NOT to Quit")
@@ -396,7 +396,7 @@ class ViewController: NSViewController {
 //            return
         }else {
             PreferencesController.saveRepositoryVolumes(volumes_connected)
-            self.logger.log(.trace, "[STARTUP] saved volumes_connected: \(volumes_connected)")
+            self.logger.log(.info, "[STARTUP] saved volumes_connected: \(volumes_connected)")
         }
         return (volumes_connected, volumes_missing)
     }
@@ -482,8 +482,10 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        AppDelegate.setupLogger()
         
 //        whereIsDock()
+        self.logger.log(.info, "Starting main view...")
         
         self.logger.log(.trace, "before splash - frame \(self.view.bounds)")
         

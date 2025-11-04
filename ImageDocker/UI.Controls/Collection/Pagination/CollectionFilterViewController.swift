@@ -83,7 +83,7 @@ class CollectionFilter {
 
 class CollectionFilterViewController: NSViewController {
     
-    let logger = LoggerFactory.get(category: "Collection", subCategory: "Filter", includeTypes: [.trace, .debug])
+    let logger = LoggerFactory.get(category: "Collection", subCategory: "Filter", types: [.trace, .debug])
     
     @IBOutlet weak var boxSource: NSBox!
     @IBOutlet weak var boxEvent: NSBox!

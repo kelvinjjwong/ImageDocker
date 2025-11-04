@@ -84,6 +84,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         self.volumesConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             DispatchQueue.global().async {
+                self.logger.log(.info, "volumesConnectivityTimer is running")
                 let registeredVolumes = PreferencesController.getSavedRepositoryVolumes()
                 let mountedVolumes = LocalDirectory.bridge.mountpoints()
                 
@@ -139,6 +140,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         self.androidConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
                 DispatchQueue.global().async {
+                    self.logger.log(.info, "androidConnectivityTimer is running")
                     self.loadRegisteredDevices()
 
                     let connectedDeviceIds:[String] = DeviceBridge.Android().devices()
@@ -198,6 +200,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         self.iphoneConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
                 DispatchQueue.global().async {
+                    self.logger.log(.info, "iphoneConnectivityTimer is running")
                     self.loadRegisteredDevices()
                     
                     let connectedDeviceIds:[String] = DeviceBridge.IPHONE().devices()

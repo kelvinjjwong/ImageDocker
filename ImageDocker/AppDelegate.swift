@@ -18,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     var terminateWithoutBackupDB = false
     
-    let logger = LoggerFactory.get(category: "AppDelegate")
+    static let logger = LoggerFactory.get(category: "AppDelegate")
     
     func setupMainMenu() {
         self.mainMenu.item(at: 0)?.title = Words.mainmenu_about.word()
@@ -38,13 +38,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         autoreleasepool { () -> Void in
             let proc = Process()
             proc.launchPath = "/usr/bin/open"
-            proc.arguments = [URL(fileURLWithPath: AppDelegate.current.logFilePath()).appendingPathComponent(defaultLoggingFilename()).path()]
+            proc.arguments = [URL(fileURLWithPath: AppDelegate.logFilePath()).appendingPathComponent(AppDelegate.defaultLoggingFilename()).path()]
             proc.launch()
         }
     }
     
     @objc func open_log_folder(_ menuItem:NSMenuItem) {
-        let url = URL(fileURLWithPath: AppDelegate.current.logFilePath())
+        let url = URL(fileURLWithPath: AppDelegate.logFilePath())
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
@@ -55,9 +55,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 //        }
     }
     
-    fileprivate var _defaultLoggingFilename = ""
+    static fileprivate var _defaultLoggingFilename = ""
     
-    func defaultLoggingFilename() -> String {
+    static func defaultLoggingFilename() -> String {
         if self._defaultLoggingFilename != "" {
             return self._defaultLoggingFilename
         }else{
@@ -69,30 +69,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
-    fileprivate var _logFilePath = ""
+    static fileprivate var _logFilePath = ""
     fileprivate var _toolsPath = ""
     
-    func logFilePath() -> String {
+    static func logFilePath() -> String {
         if self._logFilePath == "" {
-            self._logFilePath = self.applicationDocumentsDirectory.appending(component: "log").appending(component: self.defaultLoggingFilename()).path
+            self._logFilePath = Self.applicationDocumentsDirectory.appending(component: "log").appending(component: self.defaultLoggingFilename()).path
         }
         return self._logFilePath
     }
     
     func toolsPath() -> String{
         if self._toolsPath == "" {
-            self._toolsPath = self.applicationDocumentsDirectory.appending(component: "tools").path
+            self._toolsPath = AppDelegate.applicationDocumentsDirectory.appending(component: "tools").path
         }
         return self._toolsPath
+    }
+    
+    static func setupLogger() {
+        print("Setup LoggerFactory ...")
+        LoggerFactory.append(logWriter: ConsoleLogger())
+        LoggerFactory.append(logWriter: FileLogger(pathOfFolder: self.logFilePath()))
+        LoggerFactory.enable([.info, .error, .warning, .debug])
+//        LoggerFactory.enable(category: "DB", types: [.info, .error, .warning, .trace])
+        self.logger.log(.info, "Testing logger ...")
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        
         NSUserNotificationCenter.default.delegate = self
-        LoggerFactory.append(logWriter: ConsoleLogger())
-        LoggerFactory.append(logWriter: FileLogger(pathOfFolder: self.logFilePath()))
-        LoggerFactory.enable([.info, .error, .warning, .debug])
-        LoggerFactory.enable(category: "DB", types: [.info, .error, .warning, .trace])
         self.setupMainMenu()
     }
 
@@ -144,7 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         return NSApp.delegate as! AppDelegate
     }
     
-    lazy var applicationDocumentsDirectory: Foundation.URL = {
+    static var applicationDocumentsDirectory: Foundation.URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.apple.toolsQA.CocoaApp_CD" in the user's Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let appSupportURL = urls[urls.count - 1]
@@ -153,7 +159,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if !url.path.isDirectoryExists() {
             let (created, error) = url.path.mkdirs(logger: logger)
             if !created {
-                self.logger.log(.error, "Unable to create application directory - \(error)")
+                AppDelegate.logger.log(.error, "Unable to create application directory - \(error)")
             }
         }
         

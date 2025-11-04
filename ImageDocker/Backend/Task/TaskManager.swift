@@ -11,7 +11,7 @@ import LoggerFactory
 
 class TaskManager {
     
-    static let logger = LoggerFactory.get(category: "TaskManager", includeTypes: [.debug])
+    static let logger = LoggerFactory.get(category: "TaskManager", types: [.debug])
     
     static var loadingImagesCollection = false
     static var scanningFileSystem = false
@@ -94,7 +94,7 @@ struct TasksStatus {
 
 class Tasklet {
     
-    let logger = LoggerFactory.get(category: "Tasklet", includeTypes: [.debug])
+    let logger = LoggerFactory.get(category: "Tasklet", types: [.debug])
     
     var type = "task"
     var id = ""
@@ -239,7 +239,7 @@ class TaskletManager {
     
     static let NOTIFICATION_KEY_TASKCOUNT = "Task_Count"
     
-    let logger = LoggerFactory.get(category: "TaskletManager", includeTypes: [.debug])
+    let logger = LoggerFactory.get(category: "TaskletManager", types: [.debug])
     
     static let `default` = TaskletManager()
     
@@ -821,7 +821,7 @@ class TaskletManager {
 
 class FakeTaskletManager {
     
-    let logger = LoggerFactory.get(category: "FakeTaskletManager", includeTypes: [])
+    let logger = LoggerFactory.get(category: "FakeTaskletManager")
     
     static let `default` = FakeTaskletManager()
     

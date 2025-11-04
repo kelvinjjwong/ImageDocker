@@ -13,7 +13,7 @@ import SharedDeviceLib
 
 class DeviceDaoPostgresCK : DeviceDaoInterface {
     
-    let logger = LoggerFactory.get(category: "DeviceDao", subCategory: "Postgres", includeTypes: [])
+    let logger = LoggerFactory.get(category: "DeviceDao", subCategory: "Postgres")
     
     func getDevices() -> [ImageDevice] {
         let db = PostgresConnection.database()

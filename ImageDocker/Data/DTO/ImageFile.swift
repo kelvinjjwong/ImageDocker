@@ -17,7 +17,7 @@ import LoggerFactory
 
 class ImageFile {
     
-    let logger = LoggerFactory.get(category: "ImageFile", includeTypes: [])
+    let logger = LoggerFactory.get(category: "ImageFile")
     
     // MARK: - URL
   

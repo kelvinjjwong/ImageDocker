@@ -11,7 +11,7 @@ import LoggerFactory
 
 class TreeViewController : StackBodyViewController {
     
-    let logger = LoggerFactory.get(category: "TreeViewController", includeTypes: [])
+    let logger = LoggerFactory.get(category: "TreeViewController")
     
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!

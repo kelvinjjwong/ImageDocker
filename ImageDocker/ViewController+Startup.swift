@@ -14,6 +14,8 @@ extension ViewController {
     
     
     internal func doStartWork() {
+        self.logger.log(.info, "Starting app...")
+        print("Starting app...")
         self.startingUp = true
         
         self.txtSearch.isEnabled = false

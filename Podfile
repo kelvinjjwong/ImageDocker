@@ -7,13 +7,13 @@ target 'ImageDocker' do
   use_frameworks!
 
   # Pods for ImageDocker
-  pod 'LoggerFactory', '1.1.3'
-  pod 'PostgresModelFactory', '~>1.0.19'
+  pod 'LoggerFactory', '1.2.0'
+  pod 'PostgresModelFactory', '~>1.0.20'
   pod 'CryptoSwift', '1.4.0'
   pod 'DiskUtilInfoReader', '1.0.1'
   pod 'SharedDeviceLib', '1.0.3'
-  pod 'AndroidDeviceReader', '1.0.1'
-  pod 'IPhoneDeviceReader', '1.0.4'
+  pod 'AndroidDeviceReader', '1.0.3'
+  pod 'IPhoneDeviceReader', '1.0.6'
   pod 'nonamecat-swift-commons', '1.0.2'
   pod 'SwiftyGifMac', '5.4.5'
 end

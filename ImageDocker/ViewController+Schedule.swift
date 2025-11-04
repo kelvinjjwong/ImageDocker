@@ -11,6 +11,8 @@ import Cocoa
 extension ViewController {
     
     internal func startSchedules() {
+        self.logger.log(.info, "Starting schedules ...")
+        
         self.centralNotificationFadeOutTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             if let lastCentralNotificationTime = self.lastCentralNotificationTime {
                 let diffSeconds = Date().timeIntervalSinceReferenceDate - lastCentralNotificationTime.timeIntervalSinceReferenceDate

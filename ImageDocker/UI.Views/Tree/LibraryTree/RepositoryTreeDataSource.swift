@@ -11,7 +11,7 @@ import LoggerFactory
 
 class RepositoryTreeDataSource : TreeDataSource {
     
-    let logger = LoggerFactory.get(category: "RepositoryTreeDataSource", includeTypes: [])
+    let logger = LoggerFactory.get(category: "RepositoryTreeDataSource", types: [])
     
     func containsNode(id:String, in nodes:[TreeCollection]) -> Bool {
         return self.findNode(id: id, in: nodes) != nil

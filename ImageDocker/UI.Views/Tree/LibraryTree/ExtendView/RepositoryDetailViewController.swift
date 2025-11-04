@@ -12,7 +12,7 @@ import SharedDeviceLib
 
 class RepositoryDetailViewController: NSViewController {
     
-    let logger = LoggerFactory.get(category: "TreeExpand", subCategory: "RepositoryDetailViewController", includeTypes: [])
+    let logger = LoggerFactory.get(category: "TreeExpand", subCategory: "RepositoryDetailViewController")
     
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnReScanFolders: NSButton!
@@ -258,9 +258,6 @@ class RepositoryDetailViewController: NSViewController {
                     if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
                         
                         var deviceInfo:[[String:String]] = []
-                        DispatchQueue.main.async {
-                            self.deviceInfoTableController.load(deviceInfo)
-                        }
                         
                         isAndroid = ( (device.type ?? "") == "Android")
                         
@@ -274,9 +271,8 @@ class RepositoryDetailViewController: NSViewController {
                         deviceInfo.append(["id":"ScreenWidth", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenWidth"].stringValue)"])
                         deviceInfo.append(["id":"ScreenHeight", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenHeight"].stringValue)"])
                         
-                        DispatchQueue.main.async {
-                            self.deviceInfoTableController.load(deviceInfo)
-                        }
+                        
+                        self.logger.log(.info, "Connected devices: \(DeviceBridge.connectivity)")
                         
                         self.phoneDevice = PhoneDevice(type: isAndroid ? .Android : .iPhone,
                                                       deviceId: repository.deviceId,
@@ -311,6 +307,16 @@ class RepositoryDetailViewController: NSViewController {
                                     MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_no_ios_connected.word())
                                 }
                             }
+                        }
+
+                        if let device_status = DeviceBridge.connectivity[device.deviceId ?? ""] {
+                            deviceInfo.append(["id":"Connected", "datatype":"text", "value": (device_status == true ? "已连接" : "未连接")])
+                        }else{
+                            deviceInfo.append(["id":"Connected", "datatype":"text", "value": ("未连接")])
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.deviceInfoTableController.load(deviceInfo)
                         }
                         
                     }else{
@@ -602,6 +608,8 @@ class RepositoryDetailViewController: NSViewController {
                     
                     // MARK: - loop folder directory
                     
+                    self.logger.log(.debug, "Scanning: \(URL(fileURLWithPath: "\(volume)\(path)"))")
+                    
                     let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
                     let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
                     if let directoryEnumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: "\(volume)\(path)"),
@@ -644,7 +652,16 @@ class RepositoryDetailViewController: NSViewController {
                                 
                                 // MARK: define subPath
                                 
-                                let (_, subPath) = urlPath.getVolumeFromThisPath(repositoryPath: imageRepository.repositoryPath)
+                                self.logger.log(.debug, "Found urlPath: \(urlPath)")
+                                self.logger.log(.debug, "Reusing repository: id=\(imageRepository.id), volume=\(imageRepository.repositoryVolume), repositoryPath=\(imageRepository.repositoryPath)")
+                                self.logger.log(.debug, "Real physcial volume path: \(imageRepository.repositoryVolume.getPathOfSoftlink() )")
+                                
+                                let repositoryBasePath = "\(imageRepository.repositoryVolume.getPathOfSoftlink().0)\(imageRepository.repositoryPath.withFirstStash())"
+                                
+                                self.logger.log(.debug, "Repository base path: \(repositoryBasePath)")
+                                
+                                let subPath = urlPath.replacingFirstOccurrence(of: repositoryBasePath, with: "").removeFirstStash().removeLastStash()
+                                
                                 self.logger.log(.debug, "Found subPath: \(subPath)")
                                 
                                 DispatchQueue.main.async {
@@ -656,13 +673,13 @@ class RepositoryDetailViewController: NSViewController {
                                     let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
                                     if let isDirectory = resourceValues[URLResourceKey.isDirectoryKey] as? NSNumber {
                                         if isDirectory.boolValue {
-                                            self.logger.log(.trace, "Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a folder")
+                                            self.logger.log(.debug, "Importing subPath [\(subPath)] into repository id [\(self._repositoryId)], it is a folder")
                                             
                                             // find parent container of current container
                                             let folderName = subPath.lastPartOfUrl()
                                             
                                             let parentSubPath = subPath.parentPath()
-                                            self.logger.log(.trace, "Folder subPath [\(subPath)]'s parentSubPath is [\(parentSubPath)] in repository id \(self._repositoryId)")
+                                            self.logger.log(.debug, "Folder subPath [\(subPath)]'s parentSubPath is [\(parentSubPath)] in repository id \(self._repositoryId)")
                                             
                                             // MARK: define parentId
                                             
@@ -670,10 +687,13 @@ class RepositoryDetailViewController: NSViewController {
                                             if let parentContainer = RepositoryDao.default.findContainer(repositoryId: self._repositoryId, subPath: parentSubPath) {
                                                 parentId = parentContainer.id
                                             }
+                                            self.logger.log(.debug, "Folder subPath [\(subPath)]'s parentSubPath is [\(parentSubPath)] in repository id \(self._repositoryId), its container.id is \(parentId)")
+
                                             
                                             // ensure parentId != 0
-                                            if parentId == 0 {
+                                            if parentId == 0 { // FIXME: maybe top level folder
                                                 self.logger.log(.error, "Cannot find matching parent ImageContainer with parentSubPath [\(parentSubPath)] in repository id [\(self._repositoryId)], ignore import this folder [\(subPath)]")
+                                                fatalError("check above SQL with parameter")
                                                 break
                                             }
                                             
@@ -681,7 +701,7 @@ class RepositoryDetailViewController: NSViewController {
                                             self.logger.log(.info, "Check if exist ImageContainer with subPath [\(subPath)] in repository id [\(self._repositoryId)]")
                                             if let existingContainerInDB = RepositoryDao.default.findContainer(repositoryId: self._repositoryId, subPath: subPath) {
                                                 
-                                                self.logger.log(.info, "Exist ImageContainer with subPath [\(subPath)] in repository id [\(self._repositoryId)]")
+                                                self.logger.log(.info, "Exist ImageContainer with subPath [\(subPath)] in repository id [\(self._repositoryId)], its container.id is \(existingContainerInDB.id)")
                                                 
                                                 // update repositoryId if repositoryId=0
                                                 if existingContainerInDB.repositoryId == 0 {

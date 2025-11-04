@@ -1539,7 +1539,7 @@ class ExportConfigurationViewController: NSViewController {
     
     
     @IBAction func onLogFileClicked(_ sender: NSButton) {
-        let url = URL(fileURLWithPath: AppDelegate.current.logFilePath())
+        let url = URL(fileURLWithPath: AppDelegate.logFilePath())
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     

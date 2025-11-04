@@ -11,7 +11,7 @@ import LoggerFactory
 
 class MomentsTreeDataSource : TreeDataSource {
     
-    let logger = LoggerFactory.get(category: "Tree", subCategory: "Moments", includeTypes: [.trace])
+    let logger = LoggerFactory.get(category: "Tree", subCategory: "Moments", types: [.trace])
     
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)

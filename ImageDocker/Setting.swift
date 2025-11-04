@@ -102,7 +102,7 @@ struct DatabaseSetting {
     
     // MARK: SQLITE
     
-    let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
+    let predefinedLocalDBFilePath = AppDelegate.applicationDocumentsDirectory.path
     
     func databasePath() -> String {
         let defaults = UserDefaults.standard
@@ -191,7 +191,7 @@ struct SQLiteDatabaseSetting {
     
     // MARK: SQLITE
     
-    let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
+    let predefinedLocalDBFilePath = AppDelegate.applicationDocumentsDirectory.path
     
     func databasePath() -> String {
         let defaults = UserDefaults.standard
