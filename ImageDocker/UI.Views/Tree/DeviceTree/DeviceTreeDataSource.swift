@@ -23,6 +23,7 @@ class DeviceTreeDataSource : TreeDataSource {
     
     var deviceConnectivityStatus:[String:Bool] = [:]
     
+    var ipAddressDetectTimer:Timer?
     var volumesConnectivityTimer:Timer?
     var androidConnectivityTimer:Timer?
     var iphoneConnectivityTimer:Timer?
@@ -32,10 +33,10 @@ class DeviceTreeDataSource : TreeDataSource {
         
         self.isLoading = true
         
-        if self.registered_android_id_names.isEmpty {
+//        if self.registered_android_id_names.isEmpty {
             
-            let registeredDevices = DeviceDao.default.getDevices(type: "Android")
-            for registeredDevice in registeredDevices {
+            let registeredDevices_Android = DeviceDao.default.getDevices(type: "Android")
+            for registeredDevice in registeredDevices_Android {
                 if let id = registeredDevice.deviceId {
                     
                     do {
@@ -53,12 +54,12 @@ class DeviceTreeDataSource : TreeDataSource {
                     }
                 }
             }
-        }
-        if self.registered_iphone_id_names.isEmpty {
+//        }
+//        if self.registered_iphone_id_names.isEmpty {
             
-            let registeredDevices = DeviceDao.default.getDevices(type: "iPhone")
-            print("registeredDevices: \(registeredDevices)")
-            for registeredDevice in registeredDevices {
+            let registeredDevices_iPhone = DeviceDao.default.getDevices(type: "iPhone")
+            print("registeredDevices: \(registeredDevices_iPhone)")
+            for registeredDevice in registeredDevices_iPhone {
                 if let id = registeredDevice.deviceId {
                     
                     do {
@@ -76,12 +77,24 @@ class DeviceTreeDataSource : TreeDataSource {
                     }
                 }
             }
-        }
+//        }
         self.isLoading = false
     }
     
     func startConnectivityTest() {
 //        self.logger.log(.trace, "start connectivity test timer")
+        
+        self.ipAddressDetectTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: {_ in
+            DispatchQueue.global().async {
+                print("ipAddressDetectTimer is running")
+                IPLocation.getIP { ip in
+                    IPLocation.getDNS(ip: ip) { dns in
+                        print("ip address: \(dns)")
+                        NotificationCenter.default.post(name: MessageType.IP_ADDRESS_NOTIFICATION, object: dns)
+                    }
+                }
+            }
+        })
         
         self.volumesConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             DispatchQueue.global().async {
@@ -164,8 +177,18 @@ class DeviceTreeDataSource : TreeDataSource {
                                         name: "Android",
                                         message: Words.notification_which_volume_connected.fill(arguments: represent)
                                     )
+                                    NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
+                                }else{
+                                    NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "Android \(deviceId)")
                                 }
                                 DeviceBridge.connectivity[deviceId] = true
+                            }else{
+//                                if let represent = self.registered_android_id_names[deviceId] {
+//                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
+//                                }else{
+//                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: "Android \(deviceId)")
+//                                }
+                                
                             }
 
                         }else{
@@ -184,6 +207,7 @@ class DeviceTreeDataSource : TreeDataSource {
                                         )
                                         
                                         DeviceBridge.connectivity[deviceId] = true
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
                                     }else{
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_missing.word(),
@@ -192,6 +216,13 @@ class DeviceTreeDataSource : TreeDataSource {
                                         )
                                         
                                         DeviceBridge.connectivity[deviceId] = false
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
+                                    }
+                                }else{
+                                    if connectivityStatus {
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "Android \(deviceId)")
+                                    }else{
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: "Android \(deviceId)")
                                     }
                                 }
                             }
@@ -228,8 +259,19 @@ class DeviceTreeDataSource : TreeDataSource {
                                         name: "iPhone",
                                         message: Words.notification_which_volume_connected.fill(arguments: represent)
                                     )
+                                    
+                                    NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
+                                }else{
+                                    NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "iPhone \(deviceId)")
                                 }
                                 DeviceBridge.connectivity[deviceId] = true
+                            }else{
+//                                if let represent = self.registered_iphone_id_names[deviceId] {
+//                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
+//                                }else{
+//                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: "iPhone \(deviceId)")
+//                                }
+                                
                             }
 
                         }else{
@@ -247,6 +289,7 @@ class DeviceTreeDataSource : TreeDataSource {
                                             message: Words.notification_which_volume_connected.fill(arguments: represent)
                                         )
                                         DeviceBridge.connectivity[deviceId] = true
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
                                     }else{
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_missing.word(),
@@ -254,6 +297,13 @@ class DeviceTreeDataSource : TreeDataSource {
                                             message: Words.notification_which_volume_missing.fill(arguments: represent)
                                         )
                                         DeviceBridge.connectivity[deviceId] = false
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
+                                    }
+                                }else{
+                                    if connectivityStatus {
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "iPhone \(deviceId)")
+                                    }else{
+                                        NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: "iPhone \(deviceId)")
                                     }
                                 }
                             }

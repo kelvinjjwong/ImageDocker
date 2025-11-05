@@ -33,7 +33,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var topToolbarPanelView: NSView!
     
     // MARK: TOP BAR
+    
+    @IBOutlet weak var btnConnectedDevice: NSButton!
     @IBOutlet weak var btnAlertMessage: NSButton!
+    @IBOutlet weak var btnIPAddress: NSButton!
     
     @IBOutlet weak var btnExport: NSButton!
 //    @IBOutlet weak var btnFaces: NSPopUpButton!
@@ -489,9 +492,7 @@ class ViewController: NSViewController {
         
         self.logger.log(.trace, "before splash - frame \(self.view.bounds)")
         
-        NotificationCenter.default.addObserver(self, selector: #selector(changeTasksCount(notification:)), name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(changeNotificationMessagesCount(notification:)), name: NSNotification.Name(rawValue: NotificationMessageManager.NOTIFICATION_KEY_MESSAGECOUNT), object: nil)
+        self.initNotificationObservers()
         
         self.imagesLoader = CollectionViewItemsLoader()
         
@@ -510,6 +511,47 @@ class ViewController: NSViewController {
         
         self.btnImageOptions.isEnabled = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
+    }
+    
+    func initNotificationObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showDeviceConnect(notification:)), name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showDeviceDisconnect(notification:)), name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showIPAddress(notification:)), name: MessageType.IP_ADDRESS_NOTIFICATION, object: nil)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeTasksCount(notification:)), name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeNotificationMessagesCount(notification:)), name: NSNotification.Name(rawValue: NotificationMessageManager.NOTIFICATION_KEY_MESSAGECOUNT), object: nil)
+    }
+    
+    // event handlers
+    @objc func showDeviceConnect(notification:Notification){
+        if let msg = (notification.object as? String) {
+            DispatchQueue.main.async {
+                self.btnConnectedDevice.title = "已连接设备: \(msg)"
+                self.btnConnectedDevice.contentTintColor = NSColor.systemGreen
+            }
+        }
+    }
+    @objc func showDeviceDisconnect(notification:Notification){
+        if let msg = (notification.object as? String) {
+            DispatchQueue.main.async {
+                self.btnConnectedDevice.title = "已断开设备: \(msg)"
+                self.btnConnectedDevice.contentTintColor = NSColor.systemRed
+            }
+        }
+    }
+    @objc func showIPAddress(notification:Notification){
+        if let msg = (notification.object as? String) {
+            DispatchQueue.main.async {
+                self.btnIPAddress.title = "IP: \(msg)"
+                if msg.contains(find: "China") {
+                    self.btnIPAddress.contentTintColor = NSColor.systemGreen
+                }else{
+                    self.btnIPAddress.contentTintColor = NSColor.systemRed
+                }
+            }
+        }
     }
     
     @objc func changeTasksCount(notification:Notification) {

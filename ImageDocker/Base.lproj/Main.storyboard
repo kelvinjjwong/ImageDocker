@@ -165,7 +165,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="693" height="138"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BFr-1B-qMw">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BFr-1B-qMw">
                                                                 <rect key="frame" x="20" y="94" width="570" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="570" id="w0N-7U-8Oj"/>
@@ -176,7 +176,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-WF-zoy">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-WF-zoy">
                                                                 <rect key="frame" x="18" y="117" width="175" height="16"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Android Debug Bridge (adb)" id="uDk-sa-eve">
                                                                     <font key="font" metaFont="system"/>
@@ -197,7 +197,7 @@
                                                                     <action selector="onLocateAdbClicked:" target="Cb1-tO-IZ5" id="yjT-ai-L3R"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H5e-Vd-V29">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H5e-Vd-V29">
                                                                 <rect key="frame" x="18" y="70" width="577" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="573" id="G0I-es-1jl"/>
@@ -234,7 +234,7 @@
                                                                     <action selector="onAdbDownloadClicked:" target="Cb1-tO-IZ5" id="iKR-Et-mPo"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gzy-cs-vlb">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gzy-cs-vlb">
                                                                 <rect key="frame" x="18" y="15" width="466" height="40"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="462" id="ESW-aX-cEg"/>
@@ -276,7 +276,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                         <rect key="frame" x="0.0" y="0.0" width="693" height="368"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9E9-ED-tlP">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9E9-ED-tlP">
                                                                 <rect key="frame" x="18" y="276" width="138" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="134" id="8Cb-Sx-4Yi"/>
@@ -287,7 +287,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cm6-C8-DeR">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cm6-C8-DeR">
                                                                 <rect key="frame" x="164" y="266" width="428" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="zdM-va-ygL"/>
@@ -308,7 +308,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <action selector="onLocateIfuseClicked:" target="Cb1-tO-IZ5" id="Ev6-1u-xmX"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3P0-sK-bCp">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3P0-sK-bCp">
                                                                 <rect key="frame" x="18" y="332" width="138" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="134" id="Scm-Z5-QCJ"/>
@@ -319,7 +319,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qkV-BE-Pmv">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qkV-BE-Pmv">
                                                                 <rect key="frame" x="164" y="324" width="428" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="zOO-7w-Eph"/>
@@ -330,7 +330,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gr4-nh-oJ7">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gr4-nh-oJ7">
                                                                 <rect key="frame" x="18" y="220" width="139" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="135" id="TNW-PT-6RE"/>
@@ -341,7 +341,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Bi-bh-lHJ">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Bi-bh-lHJ">
                                                                 <rect key="frame" x="18" y="164" width="139" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="135" id="8TP-0X-CoK"/>
@@ -352,7 +352,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MSQ-DN-wUC">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MSQ-DN-wUC">
                                                                 <rect key="frame" x="165" y="206" width="428" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="ZQ0-kH-ovs"/>
@@ -363,7 +363,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kan-Ci-YW8">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kan-Ci-YW8">
                                                                 <rect key="frame" x="163" y="146" width="428" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="js1-5Z-5XV"/>
@@ -384,7 +384,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <action selector="onLocateIdeviceIdClicked:" target="Cb1-tO-IZ5" id="iXC-Ed-25S"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lhs-oC-UmE">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lhs-oC-UmE">
                                                                 <rect key="frame" x="162" y="240" width="433" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="KeM-eQ-mqc">
                                                                     <font key="font" metaFont="system"/>
@@ -392,7 +392,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9F3-hf-SZd">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9F3-hf-SZd">
                                                                 <rect key="frame" x="162" y="180" width="433" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="YC0-kH-y0h">
                                                                     <font key="font" metaFont="system"/>
@@ -400,7 +400,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5X4-wH-IYF">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5X4-wH-IYF">
                                                                 <rect key="frame" x="162" y="120" width="433" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="plv-xo-Gog">
                                                                     <font key="font" metaFont="system"/>
@@ -408,7 +408,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SXB-hR-iDh">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SXB-hR-iDh">
                                                                 <rect key="frame" x="162" y="300" width="433" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="wpO-W4-hN6">
                                                                     <font key="font" metaFont="system"/>
@@ -436,7 +436,7 @@ https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</strin
                                                                     <action selector="onLocateIdeviceInfoClicked:" target="Cb1-tO-IZ5" id="Qai-8G-1p0"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-3U-VrS">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-3U-VrS">
                                                                 <rect key="frame" x="163" y="12" width="510" height="112"/>
                                                                 <textFieldCell key="cell" selectable="YES" id="H3Q-pt-W1K">
                                                                     <font key="font" metaFont="system"/>
@@ -524,7 +524,7 @@ brew install gromgit/fuse/ifuse-mac
                                                         <rect key="frame" x="0.0" y="0.0" width="700" height="212"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ls-A7-SyM">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ls-A7-SyM">
                                                                 <rect key="frame" x="18" y="176" width="44" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="40" id="tGP-1S-9Rk"/>
@@ -535,7 +535,7 @@ brew install gromgit/fuse/ifuse-mac
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0yL-fh-0id">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0yL-fh-0id">
                                                                 <rect key="frame" x="70" y="173" width="520" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="520" id="Pee-lk-8Bm"/>
@@ -559,7 +559,7 @@ brew install gromgit/fuse/ifuse-mac
                                                                     <action selector="onBrowseExifToolClicked:" target="Cb1-tO-IZ5" id="i2f-yj-8ah"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8l0-Sn-81C">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8l0-Sn-81C">
                                                                 <rect key="frame" x="18" y="26" width="656" height="60"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="60" id="0Te-N5-hMJ"/>
@@ -573,7 +573,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5eV-2e-mto">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5eV-2e-mto">
                                                                 <rect key="frame" x="18" y="111" width="664" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="660" id="Hk8-U6-rEx"/>
@@ -584,7 +584,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sQh-bN-spZ">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sQh-bN-spZ">
                                                                 <rect key="frame" x="68" y="142" width="388" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="384" id="aws-yd-Xqm"/>
@@ -745,7 +745,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="692" height="170"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T31-q0-sOB">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T31-q0-sOB">
                                                                 <rect key="frame" x="18" y="133" width="59" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Baidu AK" id="JMz-Eq-Brh">
@@ -754,7 +754,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TM0-E2-wSd">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TM0-E2-wSd">
                                                                 <rect key="frame" x="18" y="96" width="59" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Baidu SK" id="8wL-uf-rCV">
@@ -763,7 +763,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Za6-3w-Qao">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Za6-3w-Qao">
                                                                 <rect key="frame" x="95" y="128" width="350" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Cax-rX-KBm">
@@ -772,7 +772,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5af-1H-2qs">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5af-1H-2qs">
                                                                 <rect key="frame" x="95" y="86" width="350" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="g83-np-3aV">
@@ -781,7 +781,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CMW-We-d2H">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CMW-We-d2H">
                                                                 <rect key="frame" x="20" y="45" width="640" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="You need to register account for getting the keys above: " id="Dpm-lo-hMZ">
@@ -811,7 +811,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="692" height="163"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3oC-o6-fkp">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3oC-o6-fkp">
                                                                 <rect key="frame" x="12" y="120" width="97" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Google API Key" id="Yvb-De-m7Y">
@@ -820,7 +820,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kBG-lw-q0h">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kBG-lw-q0h">
                                                                 <rect key="frame" x="127" y="115" width="350" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="03a-h9-tMJ">
@@ -829,7 +829,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l31-Vx-kcO">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l31-Vx-kcO">
                                                                 <rect key="frame" x="14" y="56" width="656" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="You need to register account for getting the keys above: " id="4N3-lu-CZV">
@@ -944,7 +944,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="380" height="294"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TCu-bL-3mq">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TCu-bL-3mq">
                                                                 <rect key="frame" x="18" y="259" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="bUY-Gi-LED"/>
@@ -955,7 +955,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YLE-Sz-5yY">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YLE-Sz-5yY">
                                                                 <rect key="frame" x="8" y="201" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="RlZ-8g-AAZ"/>
@@ -966,7 +966,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dhj-Yv-QUl">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dhj-Yv-QUl">
                                                                 <rect key="frame" x="188" y="201" width="69" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="65" id="w5D-Dn-LNW"/>
@@ -977,7 +977,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9KC-L0-4HL">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9KC-L0-4HL">
                                                                 <rect key="frame" x="8" y="171" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="q0v-ZY-Pvp"/>
@@ -988,7 +988,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RY2-Si-Jev">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RY2-Si-Jev">
                                                                 <rect key="frame" x="188" y="169" width="69" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="65" id="TXb-hz-CT9"/>
@@ -999,7 +999,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kkp-S2-phZ">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kkp-S2-phZ">
                                                                 <rect key="frame" x="8" y="135" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="sdj-Tr-M2Q"/>
@@ -1010,7 +1010,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d1l-D2-Rfg">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d1l-D2-Rfg">
                                                                 <rect key="frame" x="188" y="135" width="69" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="65" id="5Cc-IJ-N77"/>
@@ -1021,7 +1021,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VbU-38-g9f">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VbU-38-g9f">
                                                                 <rect key="frame" x="8" y="103" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="kBx-dA-aJG"/>
@@ -1032,7 +1032,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cst-uQ-cRs">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cst-uQ-cRs">
                                                                 <rect key="frame" x="85" y="195" width="100" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="VaC-OE-S6t"/>
@@ -1043,7 +1043,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NSF-H6-ZOW">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NSF-H6-ZOW">
                                                                 <rect key="frame" x="262" y="195" width="100" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="gme-ra-SsB"/>
@@ -1054,7 +1054,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kac-E0-ywC">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kac-E0-ywC">
                                                                 <rect key="frame" x="262" y="157" width="100" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="cFH-TB-Ivc"/>
@@ -1065,7 +1065,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hdf-G8-qnw">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hdf-G8-qnw">
                                                                 <rect key="frame" x="85" y="123" width="100" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="7mm-ly-eH7"/>
@@ -1119,7 +1119,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ijB-hL-GWs">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ijB-hL-GWs">
                                                                 <rect key="frame" x="171" y="95" width="87" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="83" id="NZf-98-j26"/>
@@ -1165,7 +1165,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onClearDatabaseProfileClicked:" target="ld1-y7-yeS" id="seU-bT-Evu"/>
                                                                 </connections>
                                                             </button>
-                                                            <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fSs-3T-uLM" customClass="DSFSecureTextField" customModule="ImageDocker" customModuleProvider="target">
+                                                            <secureTextField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fSs-3T-uLM" customClass="DSFSecureTextField" customModule="ImageDocker" customModuleProvider="target">
                                                                 <rect key="frame" x="263" y="126" width="100" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Brl-qq-Bpp"/>
@@ -1185,7 +1185,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="allowPasswordInPlainText" value="YES"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </secureTextField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Rh-Si-7Wb">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Rh-Si-7Wb">
                                                                 <rect key="frame" x="85" y="157" width="100" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="cfV-Yp-3eY"/>
@@ -1196,7 +1196,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VAU-tf-zIN">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VAU-tf-zIN">
                                                                 <rect key="frame" x="8" y="77" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="Aaf-aO-Pzr"/>
@@ -1207,7 +1207,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LsI-Lf-LCJ">
+                                                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LsI-Lf-LCJ">
                                                                 <rect key="frame" x="85" y="60" width="70" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="17l-gJ-wl4"/>
@@ -1230,7 +1230,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     </objectValues>
                                                                 </comboBoxCell>
                                                             </comboBox>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hRM-uk-Hcf">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hRM-uk-Hcf">
                                                                 <rect key="frame" x="153" y="66" width="36" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="32" id="8IZ-Nd-wj9"/>
@@ -1337,7 +1337,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <action selector="onNewDatabaseProfileClicked:" target="ld1-y7-yeS" id="6KH-f3-sG1"/>
                                                     </connections>
                                                 </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tJo-tO-ZyN">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tJo-tO-ZyN">
                                                     <rect key="frame" x="120" y="600" width="504" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="500" id="ENR-Za-1K1"/>
@@ -1375,7 +1375,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </constraints>
                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="6SW-j4-yee"/>
                                                             </imageView>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idj-Gj-Vk6">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idj-Gj-Vk6">
                                                                 <rect key="frame" x="1" y="43" width="74" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="dJY-V4-4Ob"/>
@@ -1386,7 +1386,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dA-Kx-Wkb">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dA-Kx-Wkb">
                                                                 <rect key="frame" x="1" y="23" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="hyC-V6-WZN"/>
@@ -1403,7 +1403,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <rect key="frame" x="0.0" y="0.0" width="223" height="96"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JbY-oT-iAf">
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JbY-oT-iAf">
                                                                             <rect key="frame" x="8" y="51" width="194" height="25"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="190" id="4Xm-nc-3Ih"/>
@@ -1415,7 +1415,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Iim-u2-WDi">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Iim-u2-WDi">
                                                                             <rect key="frame" x="8" y="35" width="194" height="16"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="190" id="HUJ-Zy-9gc"/>
@@ -1426,7 +1426,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X2V-Fe-Yyx">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X2V-Fe-Yyx">
                                                                             <rect key="frame" x="8" y="11" width="194" height="16"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="190" id="XuU-hc-VBU"/>
@@ -1470,7 +1470,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 </constraints>
                                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="NVs-7M-LIy"/>
                                                             </imageView>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6YA-7W-Uv7">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6YA-7W-Uv7">
                                                                 <rect key="frame" x="1" y="43" width="74" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="qUP-gk-xyo"/>
@@ -1481,7 +1481,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hD3-0I-Vn9">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hD3-0I-Vn9">
                                                                 <rect key="frame" x="1" y="23" width="74" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="70" id="1JT-FX-d8Z"/>
@@ -1498,7 +1498,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <rect key="frame" x="0.0" y="0.0" width="223" height="96"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Ge2-DT-2dn">
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Ge2-DT-2dn">
                                                                             <rect key="frame" x="8" y="51" width="194" height="25"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="25" id="j4I-HY-8T4"/>
@@ -1510,7 +1510,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="COH-vF-Dt0">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="COH-vF-Dt0">
                                                                             <rect key="frame" x="8" y="35" width="194" height="16"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="190" id="JTP-j2-vw8"/>
@@ -1521,7 +1521,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qda-SQ-c3v">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qda-SQ-c3v">
                                                                             <rect key="frame" x="8" y="11" width="194" height="16"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="190" id="aGc-od-vNW"/>
@@ -1557,7 +1557,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="709" height="421"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gpg-i7-Ko0">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gpg-i7-Ko0">
                                                                 <rect key="frame" x="100" y="387" width="99" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="备份档案" id="nFs-Le-8Fo">
@@ -1611,7 +1611,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <rect key="frame" x="11" y="1" width="130" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
-                                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="281-GE-GdZ">
+                                                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="281-GE-GdZ">
                                                                                                     <rect key="frame" x="0.0" y="25" width="130" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="Lxl-J3-J5Q">
@@ -1643,7 +1643,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <rect key="frame" x="144" y="1" width="161.5" height="42"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
-                                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-T4-zG5">
+                                                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-T4-zG5">
                                                                                                     <rect key="frame" x="0.0" y="25" width="161.5" height="17"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="YcX-ar-chC">
@@ -1677,7 +1677,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTo-Vp-N6L">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTo-Vp-N6L">
                                                                 <rect key="frame" x="10" y="11" width="72" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Location:" id="eBe-KT-ADl">
@@ -1686,7 +1686,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-M1-Omx">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-M1-Omx">
                                                                 <rect key="frame" x="88" y="10" width="539" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="SWy-6B-uLw">
@@ -1732,7 +1732,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33T-wC-Oxh">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33T-wC-Oxh">
                                                                 <rect key="frame" x="10" y="45" width="323" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="zQe-g3-g6y">
@@ -1741,7 +1741,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cyi-ws-5zG">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cyi-ws-5zG">
                                                                 <rect key="frame" x="468" y="387" width="54" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="数据库" id="fBs-Vj-i8h">
@@ -1754,7 +1754,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <rect key="frame" x="337" y="43" width="5" height="348"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             </box>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtT-5e-4Ak">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtT-5e-4Ak">
                                                                 <rect key="frame" x="567" y="398" width="39" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="作为:" id="zk4-mP-fNY">
@@ -1830,7 +1830,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <action selector="onCloneLocalToRemoteClicked:" target="ld1-y7-yeS" id="nEI-iK-zm7"/>
                                                     </connections>
                                                 </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b9c-UB-bNk">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b9c-UB-bNk">
                                                     <rect key="frame" x="19" y="599" width="707" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="CO5-Xl-3MN">
@@ -1872,7 +1872,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onCheckInstallPostgresInApp:" target="ld1-y7-yeS" id="ogi-PK-cYH"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aqb-xW-cQS">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aqb-xW-cQS">
                                                                 <rect key="frame" x="20" y="171" width="660" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="3dX-on-viR">
                                                                     <font key="font" metaFont="system"/>
@@ -1880,7 +1880,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T4M-gX-5pc">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T4M-gX-5pc">
                                                                 <rect key="frame" x="18" y="207" width="331" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="327" id="A4H-m3-HZI"/>
@@ -1924,7 +1924,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <constraint firstAttribute="width" constant="172" id="SHm-IC-SJd"/>
                                                                 </constraints>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E8C-IJ-hS4">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E8C-IJ-hS4">
                                                                 <rect key="frame" x="20" y="56" width="660" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="Ffj-Xv-b6K">
                                                                     <font key="font" metaFont="system"/>
@@ -2089,7 +2089,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bwo-eW-DeK">
-                                        <rect key="frame" x="1736" y="17" width="100" height="23"/>
+                                        <rect key="frame" x="1736" y="21" width="100" height="23"/>
                                         <popUpButtonCell key="cell" type="recessed" title="More Ops" bezelStyle="recessed" imagePosition="leading" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="JwR-85-znV" id="1fj-Hz-wRV">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="systemBold" size="12"/>
@@ -2165,7 +2165,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <action selector="onTogglePreviewInnerPanel:" target="XfG-lQ-9wD" id="pho-lS-zSE"/>
                                         </connections>
                                     </button>
-                                    <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2rl-sF-lP2">
+                                    <tokenField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2rl-sF-lP2">
                                         <rect key="frame" x="362" y="17" width="950" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="950" id="BF8-q3-VsA"/>
@@ -2254,25 +2254,51 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <action selector="onExportClicked:" target="XfG-lQ-9wD" id="VeW-7x-Luf"/>
                                         </connections>
                                     </button>
+                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="CDe-yC-75Z">
+                                        <rect key="frame" x="5" y="-2" width="600" height="15"/>
+                                        <buttonCell key="cell" type="roundRect" title="已连接设备:" bezelStyle="roundedRect" alignment="left" imageScaling="proportionallyDown" inset="2" id="s8A-jx-QUa">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="cellTitle"/>
+                                        </buttonCell>
+                                        <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="600" id="kS8-AN-Ylx"/>
+                                        </constraints>
+                                    </button>
+                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="pLz-Uk-mH5">
+                                        <rect key="frame" x="1593" y="0.0" width="300" height="15"/>
+                                        <buttonCell key="cell" type="roundRect" title="IP: 123.123.123.123 CN" bezelStyle="roundedRect" alignment="right" imageScaling="proportionallyDown" inset="2" id="Exu-dg-LJa">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="cellTitle"/>
+                                        </buttonCell>
+                                        <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="gTu-mV-vQJ"/>
+                                        </constraints>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="0rZ-ZR-afb"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="5" id="3xL-e8-wwM"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="4IP-Tf-ie0"/>
+                                    <constraint firstAttribute="bottom" secondItem="CDe-yC-75Z" secondAttribute="bottom" constant="-2" id="4qJ-Xy-Zh6"/>
                                     <constraint firstItem="MGB-Ps-tLI" firstAttribute="leading" secondItem="2rl-sF-lP2" secondAttribute="trailing" constant="8" symbolic="YES" id="5IR-Kb-b6c"/>
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="8PV-2V-37g"/>
                                     <constraint firstAttribute="trailing" secondItem="qW9-CO-kS6" secondAttribute="trailing" constant="2" id="Alr-Y6-XVi"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="365" id="Aya-AU-vCP"/>
+                                    <constraint firstAttribute="trailing" secondItem="pLz-Uk-mH5" secondAttribute="trailing" constant="5" id="B3H-mC-OEZ"/>
                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="MGB-Ps-tLI" secondAttribute="trailing" constant="5" id="B6d-Q1-M6r"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="5" id="DPL-cO-Vsq"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="I4z-MF-74z"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="K5o-tc-nMl"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="top" secondItem="2rl-sF-lP2" secondAttribute="bottom" constant="4" id="KEJ-O5-BXv"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="WWL-Q9-QJm"/>
+                                    <constraint firstItem="CDe-yC-75Z" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="5" id="Z00-Hb-jOS"/>
                                     <constraint firstItem="qW9-CO-kS6" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="2" id="ana-KT-iiV"/>
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="leading" secondItem="qGQ-TO-rn5" secondAttribute="trailing" constant="27" id="fWv-bM-ru3"/>
                                     <constraint firstItem="KRY-Rw-Fgz" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="k7W-kO-Ubc"/>
-                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="l7J-fy-SVL"/>
+                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="6" id="l7J-fy-SVL"/>
+                                    <constraint firstAttribute="bottom" secondItem="pLz-Uk-mH5" secondAttribute="bottom" id="o8q-kb-DlM"/>
                                     <constraint firstItem="MGB-Ps-tLI" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="pPB-Pa-OGA"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="KRY-Rw-Fgz" secondAttribute="trailing" constant="15" id="pqo-9g-8ul"/>
                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="ptV-qy-aEz"/>
@@ -2297,11 +2323,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <subviews>
                                                             <customView fixedFrame="YES" id="CKk-CL-9gu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="0.0" height="671"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             </customView>
-                                                            <customView misplaced="YES" id="m9M-hY-L99">
+                                                            <customView id="m9M-hY-L99">
                                                                 <rect key="frame" x="1" y="0.0" width="451" height="671"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
                                                                     <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZW-eM-F1C">
                                                                         <rect key="frame" x="0.0" y="35" width="451" height="636"/>
@@ -2380,7 +2406,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <action selector="onToggleRightPanel:" target="XfG-lQ-9wD" id="LqF-uW-2oX"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
                                                                                 <rect key="frame" x="38" y="10" width="204" height="17"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="17" id="cbB-lt-2rd"/>
@@ -2425,7 +2451,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <action selector="onPreviousPageCollectionClicked:" target="XfG-lQ-9wD" id="nxS-Ec-42Q"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
                                                                                         <rect key="frame" x="-183" y="9" width="44" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="QU5-Rs-auk"/>
@@ -2476,7 +2502,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <constraint firstAttribute="width" constant="45" id="ZG6-tV-TnV"/>
                                                                                         </constraints>
                                                                                     </popUpButton>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OcT-m6-Zwk">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OcT-m6-Zwk">
                                                                                         <rect key="frame" x="-55" y="8" width="29" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="25" id="29i-dj-iIk"/>
@@ -2501,7 +2527,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KSX-ze-NbD">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KSX-ze-NbD">
                                                                                         <rect key="frame" x="-397" y="8" width="54" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="50" id="fSu-gG-Zh3"/>
@@ -2532,7 +2558,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <constraint firstAttribute="width" constant="25" id="3c7-5c-vFx"/>
                                                                                         </constraints>
                                                                                     </button>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8qW-nP-5yA">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8qW-nP-5yA">
                                                                                         <rect key="frame" x="-318" y="8" width="39" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="35" id="dvP-Sq-hdD"/>
@@ -2657,9 +2683,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnCollapseLeft" destination="VUz-d7-oP2" id="cZ1-az-BJR"/>
                         <outlet property="btnCollapseRight" destination="gcd-el-CBK" id="0cL-gL-Nxv"/>
                         <outlet property="btnCombineDuplicates" destination="Gkw-tO-uG9" id="p8M-jW-YwA"/>
+                        <outlet property="btnConnectedDevice" destination="CDe-yC-75Z" id="bel-Ht-px3"/>
                         <outlet property="btnExport" destination="KRY-Rw-Fgz" id="R6i-Vt-quP"/>
                         <outlet property="btnFilter" destination="MGB-Ps-tLI" id="tZb-uq-Ggj"/>
                         <outlet property="btnFirstPageCollection" destination="goW-dm-Y0v" id="bxv-Nd-YLq"/>
+                        <outlet property="btnIPAddress" destination="pLz-Uk-mH5" id="fAo-s9-vdZ"/>
                         <outlet property="btnImageOptions" destination="Bwo-eW-DeK" id="1up-ml-dUH"/>
                         <outlet property="btnLastPageCollection" destination="KwM-6o-UdW" id="hnl-EF-sj8"/>
                         <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
@@ -2721,7 +2749,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <rect key="frame" x="10" y="33" width="744" height="562"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="roF-Y6-XSq">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="roF-Y6-XSq">
                                                     <rect key="frame" x="28" y="527" width="153" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="User interface language:" id="tz0-Je-Hun">
@@ -2759,7 +2787,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="681" height="75"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYh-3u-eXN">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYh-3u-eXN">
                                                                 <rect key="frame" x="18" y="39" width="131" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Directory of log files:" id="gPf-W1-URr">
@@ -2768,7 +2796,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISa-bN-mVu">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISa-bN-mVu">
                                                                 <rect key="frame" x="162" y="36" width="307" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="B2T-jj-fDS">
@@ -2832,7 +2860,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="294.5" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4U-GU-xoS">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4U-GU-xoS">
                                                                                         <rect key="frame" x="0.0" y="4" width="294.5" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="2fH-jX-TQi">
@@ -2864,7 +2892,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="329.5" y="0.0" width="20" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pwV-2I-maW">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pwV-2I-maW">
                                                                                         <rect key="frame" x="0.0" y="4" width="24" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Wbw-rG-URa">
@@ -2896,7 +2924,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="366.5" y="0.0" width="307.5" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vy7-dW-RYe">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vy7-dW-RYe">
                                                                                         <rect key="frame" x="0.0" y="1" width="311.5" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="26f-22-mcZ">
@@ -2929,7 +2957,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
                                                 </scrollView>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PzB-WW-J28">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PzB-WW-J28">
                                                     <rect key="frame" x="35" y="263" width="597" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="4nY-LT-LZC">
@@ -2949,7 +2977,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <action selector="onAddLocalMountPointClicked:" target="UOy-CF-cGN" id="bqM-VH-BMf"/>
                                                     </connections>
                                                 </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qdu-tG-GON">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qdu-tG-GON">
                                                     <rect key="frame" x="45" y="292" width="335" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="By default, below paths will be shown as mount points." id="qU3-Ew-GaY">
@@ -2965,7 +2993,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="681" height="102"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Jl-lX-pl4">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Jl-lX-pl4">
                                                                 <rect key="frame" x="18" y="55" width="136" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Directory of tools:" id="F0T-A8-44E">
@@ -2974,7 +3002,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XtO-gi-tLn">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XtO-gi-tLn">
                                                                 <rect key="frame" x="160" y="52" width="311" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="gQK-wP-uxX">
@@ -3023,7 +3051,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="699" height="113"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDP-8P-qEj">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDP-8P-qEj">
                                                                 <rect key="frame" x="18" y="8" width="659" height="41"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" selectable="YES" title="If you do not want to upload image(s) back to their original location of original phone, images would be uploaded to this path." id="oiJ-o7-e4x">
@@ -3032,7 +3060,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d2m-gP-3Vb">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d2m-gP-3Vb">
                                                                 <rect key="frame" x="225" y="71" width="413" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bPo-5b-n8g">
@@ -3041,7 +3069,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tk4-9a-fy4">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tk4-9a-fy4">
                                                                 <rect key="frame" x="18" y="73" width="200" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Default Path for Image Upload" id="aqe-6W-BT9">
@@ -3076,7 +3104,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onMemorySliderClicked:" target="UOy-CF-cGN" id="hsr-rD-6aa"/>
                                                                 </connections>
                                                             </slider>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vhm-wG-2fJ">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vhm-wG-2fJ">
                                                                 <rect key="frame" x="20" y="20" width="639" height="37"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" selectable="YES" id="2QJ-No-35H">
@@ -3086,7 +3114,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MKU-CI-l5p">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MKU-CI-l5p">
                                                                 <rect key="frame" x="25" y="140" width="94" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="wEf-xo-vVF">
@@ -3095,7 +3123,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4a-Zz-phj">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4a-Zz-phj">
                                                                 <rect key="frame" x="584" y="140" width="59" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="r9J-uE-kuA">
@@ -3104,7 +3132,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCj-jl-yXE">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCj-jl-yXE">
                                                                 <rect key="frame" x="299" y="140" width="55" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="FJP-Xe-o9r">
@@ -3113,7 +3141,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cby-mt-lNm">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cby-mt-lNm">
                                                                 <rect key="frame" x="143" y="77" width="366" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="cXg-dv-G9w">
@@ -3122,7 +3150,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yQ0-ej-WKv">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yQ0-ej-WKv">
                                                                 <rect key="frame" x="170" y="140" width="37" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="5TE-w5-drd">
@@ -3131,7 +3159,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lw1-9W-HTq">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lw1-9W-HTq">
                                                                 <rect key="frame" x="451" y="140" width="48" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="TvI-hO-SyE">
@@ -3150,7 +3178,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="683" height="84"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qbl-6o-qIU">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qbl-6o-qIU">
                                                                 <rect key="frame" x="18" y="35" width="210" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="When amount of items larger than" id="de7-uA-Skk">
@@ -3177,7 +3205,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     </menu>
                                                                 </popUpButtonCell>
                                                             </popUpButton>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iGI-Rr-Cbh">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iGI-Rr-Cbh">
                                                                 <rect key="frame" x="331" y="35" width="261" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title=", items will be paginated in collection view." id="WjS-WF-5Bl">
@@ -3609,10 +3637,10 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="47" y="1" width="43" height="17"/>
+                                                            <rect key="frame" x="46.5" y="1" width="0.0" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
                                                                     <rect key="frame" x="0.0" y="1" width="78" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="AO3-Oz-ers">
                                                                         <font key="font" metaFont="system"/>
@@ -3648,7 +3676,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                             <rect key="frame" x="1" y="1" width="0.0" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TIM-9B-x94">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TIM-9B-x94">
                                                                     <rect key="frame" x="0.0" y="1" width="4" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="aEP-MD-gbt">
                                                                         <font key="font" metaFont="system"/>
@@ -3684,7 +3712,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                             <rect key="frame" x="128" y="1" width="125" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
                                                                     <rect key="frame" x="0.0" y="1" width="125" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="bcs-Y7-Fot">
                                                                         <font key="font" metaFont="system"/>
@@ -3720,7 +3748,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                             <rect key="frame" x="256" y="1" width="1078" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
                                                                     <rect key="frame" x="0.0" y="1" width="1078" height="16"/>
                                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Table View Cell" id="Iiv-9x-zvf">
                                                                         <font key="font" metaFont="system"/>
@@ -3856,7 +3884,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <action selector="onApiSwitchClicked:" target="OWc-Xo-gp7" id="JVF-4Q-fei"/>
                                 </connections>
                             </segmentedControl>
-                            <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBn-6s-Peh">
+                            <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBn-6s-Peh">
                                 <rect key="frame" x="165" y="396" width="280" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="XqR-tS-fAT"/>
@@ -3885,7 +3913,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <action selector="onCopyLocationClicked:" target="OWc-Xo-gp7" id="GWf-i5-PjG"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tYa-XN-daY">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tYa-XN-daY">
                                 <rect key="frame" x="-2" y="371" width="579" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="W0d-hs-sUR"/>
@@ -3922,7 +3950,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <action selector="onReplaceLocationClicked:" target="OWc-Xo-gp7" id="BW9-RV-0mV"/>
                                 </connections>
                             </button>
-                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-xv-Itc">
+                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-xv-Itc">
                                 <rect key="frame" x="147" y="-2" width="325" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="yX8-CR-zbt"/>
@@ -4096,7 +4124,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pbk-DW-RJE">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pbk-DW-RJE">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Bze-hB-ZTX">
@@ -4128,7 +4156,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="112.5" y="0.0" width="437" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jdq-LT-MUs">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jdq-LT-MUs">
                                                                                         <rect key="frame" x="0.0" y="4" width="437" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="vBy-O8-sGN">
@@ -4207,7 +4235,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kac-LF-cKY">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kac-LF-cKY">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="wUL-rV-beA">
@@ -4239,7 +4267,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="113" y="0.0" width="439" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqs-CK-UhS">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqs-CK-UhS">
                                                                                         <rect key="frame" x="0.0" y="4" width="439" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="oVb-5r-X37">
@@ -4273,7 +4301,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nAa-Se-vcN">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nAa-Se-vcN">
                                                     <rect key="frame" x="85" y="307" width="476" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Zax-zk-hdf">
                                                         <font key="font" metaFont="system"/>
@@ -4281,7 +4309,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="nKH-Vw-T6n">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="nKH-Vw-T6n">
                                                     <rect key="frame" x="85" y="50" width="476" height="240"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="240" id="pvJ-N1-ohb"/>
@@ -4292,7 +4320,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWr-sj-GW4">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWr-sj-GW4">
                                                     <rect key="frame" x="78" y="24" width="485" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="RqD-Pa-5jl">
                                                         <font key="font" metaFont="system"/>
@@ -4462,7 +4490,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ckQ-Un-a7K">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ckQ-Un-a7K">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="lzn-gL-1SK">
@@ -4494,7 +4522,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="112.5" y="0.0" width="401" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LUf-Xv-2xu">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LUf-Xv-2xu">
                                                                                         <rect key="frame" x="0.0" y="4" width="401" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="NDS-pv-oTx">
@@ -4592,7 +4620,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="bottomLeft" imageScaling="proportionallyDown" image="NSActionTemplate" id="ivQ-iv-tpH"/>
                                                                                     </imageView>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ODM-RC-nAF">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ODM-RC-nAF">
                                                                                         <rect key="frame" x="41" y="1" width="84" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="p72-CR-peB"/>
@@ -4651,7 +4679,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <outlet property="textField" destination="ODM-RC-nAF" id="yQp-Xf-FnL"/>
                                                                                 </connections>
                                                                             </tableCellView>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="3SK-i9-oaw">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="3SK-i9-oaw">
                                                                                 <rect key="frame" x="18" y="17" width="395" height="16"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="DSj-lA-LrE">
@@ -4704,7 +4732,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eF2-t2-pyH">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eF2-t2-pyH">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="SWN-iL-ifI">
@@ -4736,7 +4764,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="113" y="0.0" width="439" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WdO-tP-GTi">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WdO-tP-GTi">
                                                                                         <rect key="frame" x="0.0" y="4" width="439" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="8NB-yp-sBH">
@@ -4786,7 +4814,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                 <progressIndicator maxValue="100" doubleValue="50" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="3u1-jY-0EH">
                                                     <rect key="frame" x="75" y="4" width="486" height="20"/>
                                                 </progressIndicator>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DVk-uM-Xup">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DVk-uM-Xup">
                                                     <rect key="frame" x="78" y="24" width="485" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="iIl-uY-8YD">
                                                         <font key="font" metaFont="system"/>
@@ -4825,7 +4853,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <rect key="frame" x="0.0" y="0.0" width="577" height="102"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ykB-SU-Krt">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ykB-SU-Krt">
                                                                 <rect key="frame" x="120" y="64" width="60" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="56" id="itL-lB-utg"/>
@@ -4836,7 +4864,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8b-Ke-HQm">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8b-Ke-HQm">
                                                                 <rect key="frame" x="186" y="64" width="303" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="ZKx-mg-oaj">
                                                                     <font key="font" metaFont="system"/>
@@ -4844,7 +4872,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9zE-Ms-3Wa">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9zE-Ms-3Wa">
                                                                 <rect key="frame" x="120" y="38" width="60" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="56" id="C0A-mi-1Vf"/>
@@ -4855,7 +4883,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v9y-on-U1L">
+                                                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v9y-on-U1L">
                                                                 <rect key="frame" x="185" y="32" width="134" height="23"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="130" id="lH8-jo-e9D"/>
@@ -4914,7 +4942,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <rect key="frame" x="11" y="1" width="35" height="24"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
-                                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G1G-fD-xqt">
+                                                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G1G-fD-xqt">
                                                                                                     <rect key="frame" x="0.0" y="4" width="35" height="16"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="0l1-4S-r7X">
@@ -4946,7 +4974,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <rect key="frame" x="49" y="1" width="44" height="24"/>
                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                             <subviews>
-                                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pgG-Aq-fr1">
+                                                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pgG-Aq-fr1">
                                                                                                     <rect key="frame" x="0.0" y="4" width="44" height="16"/>
                                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Pmn-pK-zKb">
@@ -5047,7 +5075,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="58" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gsi-y3-UDa">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gsi-y3-UDa">
                                                                                         <rect key="frame" x="0.0" y="4" width="58" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="IJy-DG-f2B">
@@ -5079,7 +5107,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="93" y="0.0" width="310" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3w-KK-gFb">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3w-KK-gFb">
                                                                                         <rect key="frame" x="0.0" y="4" width="310" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="1QL-iU-PeX">
@@ -5111,7 +5139,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="420" y="0.0" width="117" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcj-t2-JvI">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcj-t2-JvI">
                                                                                         <rect key="frame" x="0.0" y="1" width="117" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="15c-89-4wc">
@@ -5145,7 +5173,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
                                                 </scrollView>
-                                                <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Etn-dT-dwu">
+                                                <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Etn-dT-dwu">
                                                     <rect key="frame" x="1" y="283" width="490" height="22"/>
                                                     <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="VNZ-OL-3hV">
                                                         <font key="font" metaFont="system"/>
@@ -5293,7 +5321,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lo4-NA-lxV">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lo4-NA-lxV">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="5e8-ga-OH0">
@@ -5325,7 +5353,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="112.5" y="0.0" width="437" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6IJ-ir-7TV">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6IJ-ir-7TV">
                                                                                         <rect key="frame" x="0.0" y="4" width="437" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="lfp-mv-DQH">
@@ -5422,7 +5450,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="bottomLeft" imageScaling="proportionallyDown" image="NSActionTemplate" id="gYf-JS-GjP"/>
                                                                                     </imageView>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="4Uc-8j-u7q">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="4Uc-8j-u7q">
                                                                                         <rect key="frame" x="41" y="1" width="84" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="Eww-nf-kzP"/>
@@ -5496,7 +5524,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RtF-Iq-Cf2">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RtF-Iq-Cf2">
                                                     <rect key="frame" x="78" y="24" width="485" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="7C8-y3-Kat">
                                                         <font key="font" metaFont="system"/>
@@ -5546,7 +5574,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="18" y="0.0" width="78" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z4p-Yp-a8B">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z4p-Yp-a8B">
                                                                                         <rect key="frame" x="0.0" y="4" width="78" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="uV4-CM-lds">
@@ -5578,7 +5606,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 <rect key="frame" x="113" y="0.0" width="439" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i2f-VM-HhL">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i2f-VM-HhL">
                                                                                         <rect key="frame" x="0.0" y="4" width="439" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="m7H-td-uuV">
@@ -5686,7 +5714,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="bottomLeft" imageScaling="proportionallyDown" image="NSActionTemplate" id="QqN-8A-MGh"/>
                                                                                     </imageView>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="UM7-3T-hkH">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="UM7-3T-hkH">
                                                                                         <rect key="frame" x="41" y="1" width="84" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="MV2-pw-s0A"/>
@@ -5811,7 +5839,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="ayz-DR-d46"/>
                                 </constraints>
                             </containerView>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ptd-Ew-fxV">
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ptd-Ew-fxV">
                                 <rect key="frame" x="63" y="0.0" width="449" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Bx8-Ld-9CP"/>

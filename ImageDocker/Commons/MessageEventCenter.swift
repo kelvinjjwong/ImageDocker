@@ -10,6 +10,9 @@ import Foundation
 
 struct MessageType {
     static let GLOBAL_NOTIFICATION = NSNotification.Name(rawValue: "GLOBAL_NOTIFICATION")
+    static let DEVICE_CONNECT_NOTIFICATION = NSNotification.Name(rawValue: "DEVICE_CONNECT_NOTIFICATION")
+    static let DEVICE_DISCONNECT_NOTIFICATION = NSNotification.Name(rawValue: "DEVICE_DISCONNECT_NOTIFICATION")
+    static let IP_ADDRESS_NOTIFICATION = NSNotification.Name(rawValue: "IP_ADDRESS_NOTIFICATION")
 }
 
 class MessageEventCenter {
