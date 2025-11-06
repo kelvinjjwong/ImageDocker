@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Synchronization
 import LoggerFactory
 import SharedDeviceLib
 
@@ -18,10 +19,10 @@ class DeviceTreeDataSource : TreeDataSource {
     
     var isLoading = false
     
-    var registered_android_id_names:[String:String] = [:]
-    var registered_iphone_id_names:[String:String] = [:]
+    let registered_android_id_names = Mutex([String:String]())
+    let registered_iphone_id_names = Mutex([String:String]())
     
-    var deviceConnectivityStatus:[String:Bool] = [:]
+    let deviceConnectivityStatus = Mutex([String:Bool]())
     
     var ipAddressDetectTimer:Timer?
     var volumesConnectivityTimer:Timer?
@@ -41,14 +42,16 @@ class DeviceTreeDataSource : TreeDataSource {
                     
                     do {
                         self.logger.log(.trace, "[DEVICE][Android] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
-                        self.registered_android_id_names[id] = ""
-                        self.registered_android_id_names[id] = PhoneDevice.represent(
-                            deviceId: id,
-                            name: registeredDevice.name ?? "",
-                            manufacture: registeredDevice.manufacture ?? "",
-                            model: registeredDevice.marketName ?? registeredDevice.model ?? "",
-                            type: .Android
-                        )
+                        self.registered_android_id_names.withLock {
+                            $0[id] = ""
+                            $0[id] = PhoneDevice.represent(
+                                deviceId: id,
+                                name: registeredDevice.name ?? "",
+                                manufacture: registeredDevice.manufacture ?? "",
+                                model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                                type: .Android
+                            )
+                        }
                     }catch{
                         self.logger.log(.error, error)
                     }
@@ -64,14 +67,16 @@ class DeviceTreeDataSource : TreeDataSource {
                     
                     do {
                         self.logger.log(.debug, "[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
-                        self.registered_iphone_id_names[id] = ""
-                        self.registered_iphone_id_names[id] = PhoneDevice.represent(
-                            deviceId: id,
-                            name: registeredDevice.name ?? "",
-                            manufacture: registeredDevice.manufacture ?? "",
-                            model: registeredDevice.marketName ?? registeredDevice.model ?? "",
-                            type: .iPhone
-                        )
+                        self.registered_iphone_id_names.withLock{
+                            $0[id] = ""
+                            $0[id] = PhoneDevice.represent(
+                                deviceId: id,
+                                name: registeredDevice.name ?? "",
+                                manufacture: registeredDevice.manufacture ?? "",
+                                model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                                type: .iPhone
+                            )
+                        }
                     }catch{
                         self.logger.log(.error, error)
                     }
@@ -113,16 +118,25 @@ class DeviceTreeDataSource : TreeDataSource {
                     let connectivityStatus = mountedVolumes.contains(registeredVolume)
                     
                     // initial
-                    if self.deviceConnectivityStatus[registeredVolume] == nil {
-
-                        self.deviceConnectivityStatus[registeredVolume] = connectivityStatus
+                    let isRegisteredVolumn = self.deviceConnectivityStatus.withLock{
+                        return $0[registeredVolume]
+                    }
+                    if isRegisteredVolumn == nil {
+                        
+                        self.deviceConnectivityStatus.withLock{
+                            $0[registeredVolume] = connectivityStatus
+                        }
 
                     }else{
                         // status change listener
-                        
-                        if let oldStatus = self.deviceConnectivityStatus[registeredVolume], oldStatus != connectivityStatus {
+                        let existDeviceId = self.deviceConnectivityStatus.withLock{
+                            return $0[registeredVolume]
+                        }
+                        if let oldStatus = existDeviceId, oldStatus != connectivityStatus {
                             
-                            self.deviceConnectivityStatus[registeredVolume] = connectivityStatus
+                            self.deviceConnectivityStatus.withLock{
+                                $0[registeredVolume] = connectivityStatus
+                            }
                             
                             if connectivityStatus {
                                 volumes_change_to_be_connected.append(registeredVolume)
@@ -161,17 +175,28 @@ class DeviceTreeDataSource : TreeDataSource {
 
                     let connectedDeviceIds:[String] = DeviceBridge.Android().devices()
 //                    self.logger.log(.trace, "connected android phones: \(connectedDeviceIds)")
-                    for deviceId in self.registered_android_id_names.keys {
+                    let deviceIds = self.registered_android_id_names.withLock{ dictionary in
+                        return dictionary.keys
+                    }
+                    for deviceId in deviceIds {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
-
+                        
                         // initial
-                        if self.deviceConnectivityStatus[deviceId] == nil {
+                        let existDeviceId = self.deviceConnectivityStatus.withLock{
+                            return $0[deviceId]
+                        }
+                        if existDeviceId == nil {
 
-                            self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                            self.deviceConnectivityStatus.withLock{
+                                $0[deviceId] = connectivityStatus
+                            }
                             
                             if connectivityStatus {
-                                if let represent = self.registered_android_id_names[deviceId] {
+                                let represent = self.registered_android_id_names.withLock{
+                                    return $0[deviceId]
+                                }
+                                if let represent = represent {
                                     MessageEventCenter.default.showMessage(
                                         type: Words.notification_volume_connected.word(),
                                         name: "Android",
@@ -181,7 +206,9 @@ class DeviceTreeDataSource : TreeDataSource {
                                 }else{
                                     NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "Android \(deviceId)")
                                 }
-                                DeviceBridge.connectivity[deviceId] = true
+                                DeviceBridge.connectivity.withLock{
+                                    $0[deviceId] = true
+                                }
                             }else{
 //                                if let represent = self.registered_android_id_names[deviceId] {
 //                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
@@ -193,12 +220,20 @@ class DeviceTreeDataSource : TreeDataSource {
 
                         }else{
                             // status change listener
+                            let existDeviceId = self.deviceConnectivityStatus.withLock{
+                                return $0[deviceId]
+                            }
 
-                            if let oldStatus = self.deviceConnectivityStatus[deviceId], oldStatus != connectivityStatus {
+                            if let oldStatus = existDeviceId, oldStatus != connectivityStatus {
                                 
-                                self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                                self.deviceConnectivityStatus.withLock{
+                                    $0[deviceId] = connectivityStatus
+                                }
 
-                                if let represent = self.registered_android_id_names[deviceId] {
+                                let represent = self.registered_android_id_names.withLock{
+                                    return $0[deviceId]
+                                }
+                                if let represent = represent {
                                     if connectivityStatus {
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_connected.word(),
@@ -206,7 +241,9 @@ class DeviceTreeDataSource : TreeDataSource {
                                             message: Words.notification_which_volume_connected.fill(arguments: represent)
                                         )
                                         
-                                        DeviceBridge.connectivity[deviceId] = true
+                                        DeviceBridge.connectivity.withLock{
+                                            $0[deviceId] = true
+                                        }
                                         NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
                                     }else{
                                         MessageEventCenter.default.showMessage(
@@ -215,7 +252,9 @@ class DeviceTreeDataSource : TreeDataSource {
                                             message: Words.notification_which_volume_missing.fill(arguments: represent)
                                         )
                                         
-                                        DeviceBridge.connectivity[deviceId] = false
+                                        DeviceBridge.connectivity.withLock{
+                                            $0[deviceId] = false
+                                        }
                                         NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
                                     }
                                 }else{
@@ -241,19 +280,33 @@ class DeviceTreeDataSource : TreeDataSource {
                     let connectedDeviceIds:[String] = DeviceBridge.IPHONE().devices()
                     self.logger.log(.debug, "connected iphone phones: \(connectedDeviceIds)")
                     print("connected iphone phones: \(connectedDeviceIds)")
-                    print("registered_iphone_id_names: \(self.registered_iphone_id_names)")
-                    for deviceId in self.registered_iphone_id_names.keys {
+                    let devices = self.registered_iphone_id_names.withLock{ dictionary in
+                        return dictionary
+                    }
+                    print("registered_iphone_id_names: \(devices)")
+                    let deviceIds = self.registered_iphone_id_names.withLock{ dictionary in
+                        return dictionary.keys
+                    }
+                    for deviceId in deviceIds {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
 //                        self.logger.log(.trace, connectivityStatus)
 
                         // initial
-                        if self.deviceConnectivityStatus[deviceId] == nil {
+                        let existDeviceId = self.deviceConnectivityStatus.withLock{
+                            return $0[deviceId]
+                        }
+                        if existDeviceId == nil {
 
-                            self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                            self.deviceConnectivityStatus.withLock{
+                                $0[deviceId] = connectivityStatus
+                            }
                             
                             if connectivityStatus {
-                                if let represent = self.registered_iphone_id_names[deviceId] {
+                                let represent = self.registered_iphone_id_names.withLock{
+                                    return $0[deviceId]
+                                }
+                                if let represent = represent {
                                     MessageEventCenter.default.showMessage(
                                         type: Words.notification_volume_connected.word(),
                                         name: "iPhone",
@@ -264,7 +317,9 @@ class DeviceTreeDataSource : TreeDataSource {
                                 }else{
                                     NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: "iPhone \(deviceId)")
                                 }
-                                DeviceBridge.connectivity[deviceId] = true
+                                DeviceBridge.connectivity.withLock{
+                                    $0[deviceId] = true
+                                }
                             }else{
 //                                if let represent = self.registered_iphone_id_names[deviceId] {
 //                                    NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
@@ -276,19 +331,29 @@ class DeviceTreeDataSource : TreeDataSource {
 
                         }else{
                             // status change listener
-
-                            if let oldStatus = self.deviceConnectivityStatus[deviceId], oldStatus != connectivityStatus {
+                            let existDeviceId = self.deviceConnectivityStatus.withLock{
+                                return $0[deviceId]
+                            }
+                            if let oldStatus = existDeviceId, oldStatus != connectivityStatus {
                                 
-                                self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                                self.deviceConnectivityStatus.withLock{
+                                    $0[deviceId] = connectivityStatus
+                                }
 
-                                if let represent = self.registered_iphone_id_names[deviceId] {
+                                let represent = self.registered_iphone_id_names.withLock{
+                                    return $0[deviceId]
+                                }
+                                if let represent = represent {
                                     if connectivityStatus {
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_connected.word(),
                                             name: "iPhone",
                                             message: Words.notification_which_volume_connected.fill(arguments: represent)
                                         )
-                                        DeviceBridge.connectivity[deviceId] = true
+                                        
+                                        DeviceBridge.connectivity.withLock{
+                                            $0[deviceId] = true
+                                        }
                                         NotificationCenter.default.post(name: MessageType.DEVICE_CONNECT_NOTIFICATION, object: represent)
                                     }else{
                                         MessageEventCenter.default.showMessage(
@@ -296,7 +361,10 @@ class DeviceTreeDataSource : TreeDataSource {
                                             name: "iPhone",
                                             message: Words.notification_which_volume_missing.fill(arguments: represent)
                                         )
-                                        DeviceBridge.connectivity[deviceId] = false
+                                        
+                                        DeviceBridge.connectivity.withLock{
+                                            $0[deviceId] = false
+                                        }
                                         NotificationCenter.default.post(name: MessageType.DEVICE_DISCONNECT_NOTIFICATION, object: represent)
                                     }
                                 }else{
@@ -309,7 +377,10 @@ class DeviceTreeDataSource : TreeDataSource {
                             }
                         }
                     }
-                    print("Connected devices: \(DeviceBridge.connectivity)")
+                    let devices_ = DeviceBridge.connectivity.withLock{ dictionary in
+                        return dictionary
+                    }
+                    print("Connected devices: \(devices_)")
                 }
                 
             })

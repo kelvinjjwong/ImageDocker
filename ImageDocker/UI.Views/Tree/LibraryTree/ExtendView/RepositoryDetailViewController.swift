@@ -271,8 +271,10 @@ class RepositoryDetailViewController: NSViewController {
                         deviceInfo.append(["id":"ScreenWidth", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenWidth"].stringValue)"])
                         deviceInfo.append(["id":"ScreenHeight", "datatype":"int", "name":"画面宽度", "value" : "\(deviceInfoMeta["ScreenHeight"].stringValue)"])
                         
-                        
-                        self.logger.log(.info, "Connected devices: \(DeviceBridge.connectivity)")
+                        let connectedDevices = DeviceBridge.connectivity.withLock{ dictionary in
+                            return dictionary
+                        }
+                        self.logger.log(.info, "Connected devices: \(connectedDevices)")
                         
                         self.phoneDevice = PhoneDevice(type: isAndroid ? .Android : .iPhone,
                                                       deviceId: repository.deviceId,
@@ -312,7 +314,10 @@ class RepositoryDetailViewController: NSViewController {
                             }
                         }
 
-                        if let device_status = DeviceBridge.connectivity[device.deviceId ?? ""] {
+                        let device_status = DeviceBridge.connectivity.withLock{
+                            return $0[device.deviceId ?? ""]
+                        }
+                        if let device_status = device_status {
                             deviceInfo.append(["id":"Connected", "datatype":"text", "value": (device_status == true ? "已连接" : "未连接")])
                         }else{
                             deviceInfo.append(["id":"Connected", "datatype":"text", "value": ("未连接")])
@@ -330,7 +335,10 @@ class RepositoryDetailViewController: NSViewController {
                 }else{
                     // no device was connected to repository
                     self.logger.log(.info, "Found no device was connected to repository id:\(repository.id)")
-                    self.logger.log(.info, "Connected devices: \(DeviceBridge.connectivity)")
+                    let connectedDevices = DeviceBridge.connectivity.withLock{ dictionary in
+                        return dictionary
+                    }
+                    self.logger.log(.info, "Connected devices: \(connectedDevices)")
                     
                     var connectedDeviceIds:[String] = []
                     if isAndroid {

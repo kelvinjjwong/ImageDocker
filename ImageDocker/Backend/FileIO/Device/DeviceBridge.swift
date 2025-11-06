@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Synchronization
 import SharedDeviceLib
 import AndroidDeviceReader
 import IPhoneDeviceReader
@@ -21,7 +22,7 @@ public class DeviceBridge {
     static let _android = AndroidDeviceReader.Android(path: "/Users/kelvinwong/Develop/mac/adb")
     static let _iphone = IPhoneDeviceReader.IPHONE(path: "/opt/homebrew/bin")
     
-    public static var connectivity:[String:Bool] = [:]
+    public static let connectivity = Mutex([String:Bool]())
     
     public static func Android() -> Android {
         return _android
@@ -32,7 +33,10 @@ public class DeviceBridge {
     }
     
     public static func isConnected(deviceId:String) -> Bool {
-        if let state = connectivity[deviceId] {
+        let state = connectivity.withLock{
+            return $0[deviceId]
+        }
+        if let state = state {
             return state
         }else{
             return false
