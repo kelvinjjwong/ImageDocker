@@ -531,6 +531,12 @@ class ViewController: NSViewController {
                 self.btnConnectedDevice.title = "已连接设备: \(msg)"
                 self.btnConnectedDevice.contentTintColor = NSColor.systemGreen
             }
+            if msg.contains(find: "iPhone") {
+                let mountpoint = Setting.localEnvironment.iosDeviceMountPoint()
+                if !DeviceBridge.IPHONE().mounted(path: mountpoint) {
+                    let _ = DeviceBridge.IPHONE().mount(path: mountpoint)
+                }
+            }
         }
     }
     @objc func showDeviceDisconnect(notification:Notification){
@@ -538,6 +544,12 @@ class ViewController: NSViewController {
             DispatchQueue.main.async {
                 self.btnConnectedDevice.title = "已断开设备: \(msg)"
                 self.btnConnectedDevice.contentTintColor = NSColor.systemRed
+            }
+            if msg.contains(find: "iPhone") {
+                let mountpoint = Setting.localEnvironment.iosDeviceMountPoint()
+                if DeviceBridge.IPHONE().mounted(path: mountpoint) {
+                    DeviceBridge.IPHONE().unmountFuse()
+                }
             }
         }
     }
