@@ -843,7 +843,7 @@ struct NamingForExporting {
                 let year = "\(image.photoTakenYear ?? 0)"
                 let month = image.photoTakenMonth! < 10 ? "0\(image.photoTakenMonth ?? 0)" : "\(image.photoTakenMonth ?? 0)"
                 let day = image.photoTakenDay! < 10 ? "0\(image.photoTakenDay ?? 0)" : "\(image.photoTakenDay ?? 0)"
-                datepart = "\(year)-\(month)-\(day)"
+                datepart = "\(year)/\(year)-\(month)-\(day)"
             }else{
                 datepart = "NODATE"
             }

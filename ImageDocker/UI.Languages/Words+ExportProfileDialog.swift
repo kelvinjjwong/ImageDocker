@@ -193,8 +193,8 @@ extension Words {
     )
     
     static let export_profile_sub_folder_year_month_day = Localize (
-        eng: "YEAR / MONTH / DAY",
-        chs: "年 / 月 / 日 /"
+        eng: "YEAR / YEAR-MONTH-DAY /",
+        chs: "年 / 年-月-日 /"
     )
     
     static let export_profile_sub_folder_event = Localize (
@@ -260,13 +260,13 @@ extension Words {
     )
     
     static let export_profile_rehearsal_n_images = Localize (
-        eng: "Rehearsal %s images",
-        chs: "演练 %s 张照片"
+        eng: "Export %s images",
+        chs: "导出 %s 张照片"
     )
     
     static let export_profile_rehearsal_all_images = Localize (
         eng: "ALL images",
-        chs: "演练所有包含的照片"
+        chs: "导出所有包含的照片"
     )
     
     static let export_profile_item = Localize (

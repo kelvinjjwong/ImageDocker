@@ -24,6 +24,10 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var boxFilenameDuplicated: NSBox!
     @IBOutlet weak var boxSubFolder: NSBox!
     
+    @IBOutlet weak var lblExportProfileName: NSTextField!
+    @IBOutlet weak var optEditMode: NSSegmentedControl!
+    
+    
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtDirectory: NSTextField!
     
@@ -189,6 +193,10 @@ class ExportConfigurationViewController: NSViewController {
         self.txtDirectory.stringValue = "/photos.export/"
         
         self.loadStackItems()
+        
+        self.lblExportProfileName.stringValue = "未保存"
+        self.optEditMode.selectedSegment = 1
+        self.toggleButtons(editState: true, actionState: true)
     }
     
     private var volumesListController : TextListViewPopupController!
@@ -202,7 +210,7 @@ class ExportConfigurationViewController: NSViewController {
     
     func turnSaveButtonToEditing() {
         self.btnSave.bezelColor = Colors.Yellow
-        self.btnSave.image = Icons.pause
+        self.btnSave.image = Icons.saveEdit
     }
     
     func turnSaveButtonToDone() {
@@ -212,7 +220,7 @@ class ExportConfigurationViewController: NSViewController {
     
     func turnSaveButtonToAlert() {
         self.btnSave.bezelColor = Colors.Red
-        self.btnSave.image = Icons.pause
+        self.btnSave.image = Icons.saveEdit
     }
     
     func notifyManuallyChangedTree() {
@@ -394,25 +402,26 @@ class ExportConfigurationViewController: NSViewController {
 //        })
     }
     
-    private func toggleButtons(state: Bool) {
-        self.txtName.isEditable = state
-        self.ddlTargetVolume.isEditable = state
-        self.ddlTargetVolume.isSelectable = state
-        self.txtDirectory.isEditable = state
+    private func toggleButtons(editState: Bool, actionState: Bool) {
+        self.txtName.isEditable = editState
+        self.ddlTargetVolume.isEditable = editState
+        self.ddlTargetVolume.isSelectable = editState
+        self.txtDirectory.isEditable = editState
         
-        self.btnSave.isEnabled = state
-        self.btnAssign.isEnabled = state
-        self.btnClean.isEnabled = state
-        self.btnCalculate.isEnabled = state
-        self.btnRehearsal.isEnabled = state
+        self.btnSave.isEnabled = editState
+        self.btnAssign.isEnabled = editState
+        self.btnClean.isEnabled = editState
         
-        self.btnExport.isEnabled = state
-        self.btnCopySQLToClipboard.isEnabled = state
+        self.btnCalculate.isEnabled = actionState
+        self.btnRehearsal.isEnabled = actionState
+        
+        self.btnExport.isEnabled = actionState
+        self.btnCopySQLToClipboard.isEnabled = actionState
         
 //        self.chkRepository.isEnabled = state
 //        self.chkEventCategories.isEnabled = state
         
-        if state {
+        if editState {
             self.repositoryTableController.enableCheckboxes()
 //            self.eventCategoriesTableController.enableCheckboxes()
             
@@ -433,32 +442,32 @@ class ExportConfigurationViewController: NSViewController {
             self.treeViewController?.disable()
         }
         
-        self.chkPatchGeolocation.isEnabled = state
-        self.chkPatchDateTime.isEnabled = state
-        self.chkPatchImageDescription.isEnabled = state
+        self.chkPatchGeolocation.isEnabled = editState
+        self.chkPatchDateTime.isEnabled = editState
+        self.chkPatchImageDescription.isEnabled = editState
         
-        self.chkOriginFilename.isEnabled = state
-        self.chkDateTimeFilename.isEnabled = state
-        self.chkDateTimeBriefFilename.isEnabled = state
-        self.chkImageIdFilename.isEnabled = state
+        self.chkOriginFilename.isEnabled = editState
+        self.chkDateTimeFilename.isEnabled = editState
+        self.chkDateTimeBriefFilename.isEnabled = editState
+        self.chkImageIdFilename.isEnabled = editState
         
-        self.chkNoSubFolder.isEnabled = state
-        self.chkEventSubFolder.isEnabled = state
-        self.chkDateEventSubFolder.isEnabled = state
-        self.chkExportDateTimeSubFolder.isEnabled = state
-        self.chkDateSubFolder.isEnabled = state
+        self.chkNoSubFolder.isEnabled = editState
+        self.chkEventSubFolder.isEnabled = editState
+        self.chkDateEventSubFolder.isEnabled = editState
+        self.chkExportDateTimeSubFolder.isEnabled = editState
+        self.chkDateSubFolder.isEnabled = editState
         
-        self.chkOverwriteDuplicate.isEnabled = state
-        self.chkDeviceModelSuffix.isEnabled = state
-        self.chkNumberSuffix.isEnabled = state
-        self.chkDeviceNameSuffix.isEnabled = state
+        self.chkOverwriteDuplicate.isEnabled = editState
+        self.chkDeviceModelSuffix.isEnabled = editState
+        self.chkNumberSuffix.isEnabled = editState
+        self.chkDeviceNameSuffix.isEnabled = editState
         
-        self.chkApplePhotos.isEnabled = state
-        self.chkPlex.isEnabled = state
-        self.chkCustomizedStyle.isEnabled = state
+        self.chkApplePhotos.isEnabled = editState
+        self.chkPlex.isEnabled = editState
+        self.chkCustomizedStyle.isEnabled = editState
         
         for vc in self.profileStackItems.values {
-            vc.toggleButtons(state: state)
+            vc.toggleButtons(state: actionState)
         }
     }
     
@@ -490,6 +499,7 @@ class ExportConfigurationViewController: NSViewController {
         self.btnExport.isEnabled = true
         
         self.editingId = profile.id
+        self.lblExportProfileName.stringValue = profile.name
         self.txtName.stringValue = profile.name
         
         self.volumesListController.select(profile.targetVolume)
@@ -554,6 +564,8 @@ class ExportConfigurationViewController: NSViewController {
         self.photoTakenYearsTableController.enableCheckboxes()
         self.photoTakenYearsTableController.uncheckAll()
         
+        self.optEditMode.selectedSegment = 0
+        self.toggleButtons(editState: false, actionState: true)
     }
     
     func loadProfileEvents(profile:ExportProfile) {
@@ -644,6 +656,15 @@ class ExportConfigurationViewController: NSViewController {
         
         return profile
     }
+    
+    @IBAction func onEditModeClicked(_ sender: NSSegmentedControl) {
+        if sender.selectedSegment == 0 {
+            self.toggleButtons(editState: false, actionState: true)
+        }else{
+            self.toggleButtons(editState: true, actionState: true)
+        }
+    }
+    
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
         
@@ -835,7 +856,7 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onExportClicked(_ sender: NSButton) {
         // real export with file i/o and amount limitation
-        self.toggleButtons(state: false)
+        self.toggleButtons(editState: false, actionState: false)
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
@@ -844,7 +865,7 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount, years: years)
             DispatchQueue.main.async {
-                self.toggleButtons(state: true)
+                self.toggleButtons(editState: true, actionState: true)
                 
                 if state == true {
                     self.lblCalculate.stringValue = message
@@ -859,7 +880,7 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onRehearsalClicked(_ sender: NSButton) {
         // rehearsal export (query from db, no file i/o)
-        self.toggleButtons(state: false)
+        self.toggleButtons(editState: false, actionState: false)
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
@@ -868,7 +889,7 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount, years: years)
             DispatchQueue.main.async {
-                self.toggleButtons(state: true)
+                self.toggleButtons(editState: true, actionState: true)
                 
                 if state == true {
                     self.lblCalculate.stringValue = message
