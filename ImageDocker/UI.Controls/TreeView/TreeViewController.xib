@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -56,7 +56,7 @@
                                                         </constraints>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="left" imageScaling="proportionallyDown" id="55z-kh-Jxt"/>
                                                     </imageView>
-                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-W0-esc">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-W0-esc">
                                                         <rect key="frame" x="23" y="0.0" width="186" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Name" id="pKZ-er-AYK">
                                                             <font key="font" usesAppearanceFont="YES"/>
@@ -64,7 +64,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q98-DG-6hz">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q98-DG-6hz">
                                                         <rect key="frame" x="212" y="-3" width="60" height="15"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="8pk-OX-yiF"/>
@@ -77,14 +77,14 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Ub-tA-dHh">
-                                                        <rect key="frame" x="277" y="-6" width="26" height="19"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="26" id="K3M-Sg-faC"/>
-                                                        </constraints>
+                                                        <rect key="frame" x="277" y="-7" width="26" height="24"/>
                                                         <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="more_horizontal" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KHm-fl-QM1">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="systemBold" size="12"/>
                                                         </buttonCell>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="26" id="K3M-Sg-faC"/>
+                                                        </constraints>
                                                         <connections>
                                                             <action selector="onClicked:" target="Uaa-QD-Nvu" id="PVM-ux-YZh"/>
                                                         </connections>
@@ -92,7 +92,7 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="ItF-W0-esc" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="1" id="SZP-pb-8VC"/>
-                                                    <constraint firstItem="4Ub-tA-dHh" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="4" id="ffr-Rp-1Ab"/>
+                                                    <constraint firstItem="4Ub-tA-dHh" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" id="ffr-Rp-1Ab"/>
                                                     <constraint firstAttribute="bottom" secondItem="B3w-4o-dHr" secondAttribute="bottom" constant="2" id="fjH-Dr-KI5"/>
                                                     <constraint firstAttribute="trailing" secondItem="4Ub-tA-dHh" secondAttribute="trailing" id="h50-6X-e3v"/>
                                                     <constraint firstItem="ItF-W0-esc" firstAttribute="leading" secondItem="B3w-4o-dHr" secondAttribute="trailing" constant="6" id="lKG-bb-XXw"/>
