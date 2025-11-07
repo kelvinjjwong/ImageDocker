@@ -131,7 +131,7 @@ class RepositoryDetailViewController: NSViewController {
         self.btnDetailOfEditableStorage.title = Words.library_tree_detail.word()
         self.btnDetailOfBackupStorage.title = Words.library_tree_detail.word()
         self.btnDetailOfFacesStorage.title = Words.library_tree_detail.word()
-        self.btnGotoPath.title = Words.library_tree_reveal_in_finder.word()
+//        self.btnGotoPath.title = Words.library_tree_reveal_in_finder.word()
         
         
         self.txtDetail.isEditable = false
