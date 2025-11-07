@@ -183,13 +183,13 @@
                                 </constraints>
                             </box>
                             <box title="Action" translatesAutoresizingMaskIntoConstraints="NO" id="zmD-59-qTc">
-                                <rect key="frame" x="520" y="288" width="510" height="300"/>
+                                <rect key="frame" x="520" y="8" width="510" height="580"/>
                                 <view key="contentView" id="N6N-lc-FUd">
-                                    <rect key="frame" x="0.0" y="0.0" width="510" height="288"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="510" height="568"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aRg-nu-KNC">
-                                            <rect key="frame" x="100" y="26" width="66" height="24"/>
+                                            <rect key="frame" x="100" y="146" width="66" height="24"/>
                                             <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PNe-yQ-ET0">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -203,7 +203,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="379-yu-9KB">
-                                            <rect key="frame" x="10" y="244" width="130" height="24"/>
+                                            <rect key="frame" x="10" y="524" width="130" height="24"/>
                                             <buttonCell key="cell" type="push" title="Calculate Images" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xKF-Px-abE">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -216,7 +216,7 @@
                                             </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DV0-my-FgX">
-                                            <rect key="frame" x="176" y="25" width="160" height="24"/>
+                                            <rect key="frame" x="176" y="145" width="160" height="24"/>
                                             <popUpButtonCell key="cell" type="push" title="10 images" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="W7V-RU-0J4" id="l4B-dw-EvG">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -236,7 +236,7 @@
                                             </constraints>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jIu-gh-Rz0">
-                                            <rect key="frame" x="410" y="244" width="80" height="24"/>
+                                            <rect key="frame" x="410" y="524" width="80" height="24"/>
                                             <buttonCell key="cell" type="push" title="SQL" bezelStyle="rounded" image="copy2" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LFJ-kO-xNn">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -249,7 +249,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hre-Ie-vnv">
-                                            <rect key="frame" x="430" y="205" width="60" height="24"/>
+                                            <rect key="frame" x="430" y="485" width="60" height="24"/>
                                             <buttonCell key="cell" type="push" title="Log" bezelStyle="rounded" image="checklist" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="piy-J4-mzO">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -263,7 +263,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CRY-eq-UaW">
-                                            <rect key="frame" x="344" y="26" width="86" height="24"/>
+                                            <rect key="frame" x="344" y="146" width="86" height="24"/>
                                             <buttonCell key="cell" type="push" title="Rehearsal" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MVZ-Gm-waG">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -277,13 +277,13 @@
                                             </connections>
                                         </button>
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJN-IN-9jg">
-                                            <rect key="frame" x="10" y="61" width="480" height="140"/>
+                                            <rect key="frame" x="10" y="181" width="480" height="300"/>
                                             <clipView key="contentView" id="Mbp-zc-fxH">
-                                                <rect key="frame" x="1" y="1" width="478" height="138"/>
+                                                <rect key="frame" x="1" y="1" width="478" height="298"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="Wiz-GC-aMT">
-                                                        <rect key="frame" x="0.0" y="0.0" width="478" height="138"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="478" height="298"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -358,7 +358,7 @@
                                                 </subviews>
                                             </clipView>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="140" id="l19-bD-EH9"/>
+                                                <constraint firstAttribute="height" constant="300" id="l19-bD-EH9"/>
                                             </constraints>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="NWr-lY-BrK">
                                                 <rect key="frame" x="1" y="119" width="223" height="15"/>
@@ -370,7 +370,7 @@
                                             </scroller>
                                         </scrollView>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wC2-0l-112">
-                                            <rect key="frame" x="8" y="209" width="414" height="16"/>
+                                            <rect key="frame" x="8" y="489" width="414" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" id="PRx-cL-Mf2">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -402,7 +402,7 @@
                                 </view>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="510" id="LlY-Xw-tyH"/>
-                                    <constraint firstAttribute="height" constant="300" id="u1s-zN-5Yt"/>
+                                    <constraint firstAttribute="height" constant="580" id="u1s-zN-5Yt"/>
                                 </constraints>
                             </box>
                             <box title="Owner" translatesAutoresizingMaskIntoConstraints="NO" id="cek-yR-RP2">
