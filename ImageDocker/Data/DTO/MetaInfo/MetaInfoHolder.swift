@@ -8,6 +8,7 @@
 
 import Foundation
 import ImageIO
+import Synchronization
 
 
 // CFString to (NS)*String casts
@@ -51,7 +52,7 @@ let CameraOrientation = kCGImagePropertyOrientation as String
 
 class MetaInfoHolder: MetaInfoStoreDelegate {
     
-    var metaInfo:[MetaInfo] = [MetaInfo]()
+    let metaInfo = Mutex([MetaInfo]())
     
     func setMetaInfo(_ info:MetaInfo?){
         guard info != nil && info?.value != nil else {return}
@@ -63,7 +64,10 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
         let info = info!
         if info.value == nil || info.value == "" || info.value == "null" {return}
         var exists:Int = 0
-        for exist:MetaInfo in self.metaInfo {
+        let array = self.metaInfo.withLock{
+            return $0
+        }
+        for exist:MetaInfo in array {
             if exist.category == info.category && exist.subCategory == info.subCategory && exist.title == info.title {
                 if ifNotExists == false {
                     exist.value = info.value
@@ -72,7 +76,9 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
             }
         }
         if exists == 0 {
-            self.metaInfo.append(info)
+            self.metaInfo.withLock{
+                $0.append(info)
+            }
         }
     }
     
@@ -81,7 +87,10 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
     }
     
     func getMeta(category:String, subCategory:String = "", title:String) -> String? {
-        for meta in metaInfo {
+        let array = self.metaInfo.withLock{
+            return $0
+        }
+        for meta in array {
             if meta.category == category && meta.subCategory == subCategory && meta.title == title {
                 return meta.value
             }
@@ -90,15 +99,21 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
     }
     
     func getInfos() -> [MetaInfo] {
-        return self.metaInfo
+        return self.metaInfo.withLock{
+            return $0
+        }
     }
     
     func clearInfos() {
-        self.metaInfo.removeAll()
+        self.metaInfo.withLock{
+            $0.removeAll()
+        }
     }
     
     func sort(by categorySequence:[String]) {
-        let originalArray = self.metaInfo
+        let originalArray = self.metaInfo.withLock{
+            return $0
+        }
         
         var arrays = [String : [MetaInfo]]()
         
@@ -121,7 +136,9 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
             }
         }
         
-        self.metaInfo = sortedArray
+        self.metaInfo.withLock{
+            $0 = sortedArray
+        } 
         
     }
 }
