@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,13 +17,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="210"/>
                                 <subviews>
                                     <box title="Profile" translatesAutoresizingMaskIntoConstraints="NO" id="jk0-rC-KNB">
-                                        <rect key="frame" x="17" y="6" width="966" height="194"/>
+                                        <rect key="frame" x="20" y="10" width="960" height="190"/>
                                         <view key="contentView" id="R09-Ip-7Qp">
-                                            <rect key="frame" x="4" y="5" width="958" height="174"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="960" height="178"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bif-6D-76m">
-                                                    <rect key="frame" x="113" y="148" width="354" height="16"/>
+                                                    <rect key="frame" x="113" y="152" width="354" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="350" id="aDT-sO-vOs"/>
                                                     </constraints>
@@ -34,7 +34,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6h8-fE-QW8">
-                                                    <rect key="frame" x="862" y="8" width="93" height="32"/>
+                                                    <rect key="frame" x="871" y="15" width="79" height="24"/>
                                                     <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" image="NSStopProgressTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cxN-qQ-mJ5">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -48,7 +48,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d8c-wf-fJj">
-                                                    <rect key="frame" x="860" y="140" width="97" height="32"/>
+                                                    <rect key="frame" x="869" y="147" width="83" height="24"/>
                                                     <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" image="download" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qES-xI-MY0">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -62,7 +62,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tTh-3Q-595">
-                                                    <rect key="frame" x="8" y="148" width="94" height="16"/>
+                                                    <rect key="frame" x="8" y="152" width="94" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="90" id="hl9-EX-xCQ"/>
                                                     </constraints>
@@ -84,7 +84,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wgg-8y-d3c">
-                                                    <rect key="frame" x="8" y="124" width="94" height="16"/>
+                                                    <rect key="frame" x="8" y="128" width="94" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="90" id="6y1-v4-e3C"/>
                                                     </constraints>
@@ -95,7 +95,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mrg-K2-W0j">
-                                                    <rect key="frame" x="8" y="100" width="94" height="16"/>
+                                                    <rect key="frame" x="8" y="104" width="94" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="90" id="LT3-4A-03l"/>
                                                     </constraints>
@@ -117,7 +117,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h79-Ue-9R8">
-                                                    <rect key="frame" x="115" y="75" width="493" height="16"/>
+                                                    <rect key="frame" x="115" y="79" width="493" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="nax-Yc-MF2">
                                                         <font key="font" metaFont="system"/>

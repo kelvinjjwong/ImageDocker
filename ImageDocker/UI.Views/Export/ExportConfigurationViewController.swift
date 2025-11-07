@@ -40,9 +40,14 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkExcludeRepository: NSButton!
     @IBOutlet weak var tblRepository: NSTableView!
     
+    @IBOutlet weak var tblPhotoTakenYears: NSTableView!
+    
+    
     var repositoryTableController : DictionaryTableViewController!
     
     var eventCategoriesTableController : DictionaryTableViewController!
+    
+    var photoTakenYearsTableController : DictionaryTableViewController!
     
     @IBOutlet weak var chkApplePhotos: NSButton!
     @IBOutlet weak var chkPlex: NSButton!
@@ -181,7 +186,7 @@ class ExportConfigurationViewController: NSViewController {
         let date = dateFormatter.string(from: Date())
         self.txtName.stringValue = Words.export_auto_profile.fill(arguments: "\(date)")
         self.ddlTargetVolume.selectItem(at: 0)
-        self.txtDirectory.stringValue = "/Images.export/"
+        self.txtDirectory.stringValue = "/photos.export/"
         
         self.loadStackItems()
     }
@@ -378,6 +383,10 @@ class ExportConfigurationViewController: NSViewController {
     private func reloadTables() {
         self.refreshMountedVolumes(append: Setting.localEnvironment.localDiskMountPoints())
         
+        self.photoTakenYearsTableController.load(self.loadPhotoTakenYears(), afterLoaded: {
+            
+        })
+        
         self.repositoryTableController.load(self.loadRepositoryOwners(), afterLoaded: {
         })
         
@@ -541,6 +550,9 @@ class ExportConfigurationViewController: NSViewController {
         self.setStyle(profile.style)
         
         self.loadProfileEvents(profile: profile)
+        
+        self.photoTakenYearsTableController.enableCheckboxes()
+        self.photoTakenYearsTableController.uncheckAll()
         
     }
     
@@ -827,9 +839,10 @@ class ExportConfigurationViewController: NSViewController {
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
+        let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
         DispatchQueue.global().async {
-            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount)
+            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount, years: years)
             DispatchQueue.main.async {
                 self.toggleButtons(state: true)
                 
@@ -850,9 +863,10 @@ class ExportConfigurationViewController: NSViewController {
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
+        let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
         DispatchQueue.global().async {
-            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount)
+            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount, years: years)
             DispatchQueue.main.async {
                 self.toggleButtons(state: true)
                 
@@ -873,7 +887,8 @@ class ExportConfigurationViewController: NSViewController {
             let pf = self.fillProfileFromForm(profile: ExportProfile())
             profile = pf
         }
-        let sql = ExportDao.default.getSQLForImageExport(profile: profile)
+        let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
+        let sql = ExportDao.default.getSQLForImageExport(profile: profile, years: years)
 //        self.logger.log(sql)
         self.lblCalculate.stringValue = "Copied SQL to clipboard."
         let pasteboard = NSPasteboard.general
@@ -890,10 +905,11 @@ class ExportConfigurationViewController: NSViewController {
             let pf = self.fillProfileFromForm(profile: ExportProfile())
             profile = pf
         }
+        let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
         DispatchQueue.global().async {
-            let count = ExportDao.default.countImagesForExport(profile: profile)
-            let exported = ExportDao.default.countExportedImages(profile: profile)
+            let count = ExportDao.default.countImagesForExport(profile: profile, years: years)
+            let exported = ExportDao.default.countExportedImages(profile: profile, years: years)
             DispatchQueue.main.async {
                 self.lblCalculate.stringValue = "Profile affects \(count) images. Exported \(exported) images."
             }
@@ -902,6 +918,21 @@ class ExportConfigurationViewController: NSViewController {
     
     
     // MARK: - TOGGLE GROUP - DATA LOADER
+    
+    func loadPhotoTakenYears() -> [[String:String]] {
+        var list:[[String:String]] = []
+        let years = ImageSearchDao.default.getYears()
+        for year in years {
+            if year > 1970 {
+                var item:[String:String] = [:]
+                item["check"] = "false"
+                item["name"] = "\(year)"
+                item["id"] = "\(year)"
+                list.append(item)
+            }
+        }
+        return list
+    }
     
     func loadRepositoryOwners() -> [[String:String]] {
         var list:[[String:String]] = []
@@ -968,6 +999,8 @@ class ExportConfigurationViewController: NSViewController {
         ], keysOrderred: ["include", "exclude"], defaultValue: "include")
         
 //        self.toggleGroup_EventCategory.selected = "include"
+        
+        self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears)
         
         self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
         self.repositoryTableController.onCheck = { id, state in

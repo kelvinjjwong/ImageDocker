@@ -294,10 +294,19 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         return SQL
     }
     
-    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
+    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?, years:[String] = []) -> String {
         
         let repoFilterSQL = self.generateImageQuerySQLPart(tableAlias: "r", tableColumn: "owner", profileSetting: profile.repositoryPath)
         let eventFilterSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
+        
+        var yearCondition = """
+                    i."photoTakenYear" > 0
+            """
+        if years.count > 0 {
+            yearCondition = """
+            i."photoTakenYear" in (\(years.joined(separator: ",")))
+            """
+        }
         
         let eventCategories = profile.eventCategories ?? ""
         var eventCategoryFilterSQL = ""
@@ -343,7 +352,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         left join "ImageRepository" r on i."repositoryId" = r."id"
         \(eventCategoryJoinSQL)
         where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
-        and i."photoTakenYear" > 0
+        and \(yearCondition)
         \(repoFilterSQL)
         \(eventCategoryFilterSQL)
         \(orderSQL)
@@ -356,14 +365,14 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         return sql
     }
     
-    func getSQLForImageExport(profile:ExportProfile) -> String {
-        return self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: nil, pageNumber: nil)
+    func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String {
+        return self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: nil, pageNumber: nil, years: years)
     }
     
-    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> [Image] {
+    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?, years:[String]) -> [Image] {
         let db = PostgresConnection.database()
         
-        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: pageSize, pageNumber: pageNumber)
+        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: pageSize, pageNumber: pageNumber, years: years)
         do {
             return try Image.fetchAll(db, sql: sql)
         }catch{
@@ -372,10 +381,10 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         }
     }
     
-    func countImagesForExport(profile:ExportProfile) -> Int {
+    func countImagesForExport(profile:ExportProfile, years:[String]) -> Int {
         let db = PostgresConnection.database()
         
-        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, pageSize: nil, pageNumber: nil)
+        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, pageSize: nil, pageNumber: nil, years: years)
         do {
             return try db.count(sql: sql)
         }catch{
@@ -417,11 +426,26 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
     
     // MARK: - EXPORT RECORD LOG
     
-    func countExportedImages(profile:ExportProfile) -> Int {
+    func countExportedImages(profile:ExportProfile, years:[String]) -> Int {
         let db = PostgresConnection.database()
         
+        var yearCondition = """
+                    i."photoTakenYear" > 0
+            """
+        if years.count > 0 {
+            yearCondition = """
+            i."photoTakenYear" in (\(years.joined(separator: ",")))
+            """
+        }
+        
         let sql = """
-select count(1) from "ExportLog" where "profileId"='\(profile.id)'
+select count(1) from "ExportLog" e
+left join "Image" i on e."imageId" = i."id"
+where e."profileId"='\(profile.id)'
+and i."hidden" = 'f'
+and i."hiddenByRepository" = 'f'
+and i."hiddenByContainer" = 'f'
+and \(yearCondition)
 """
         do {
             return try db.count(sql: sql)
@@ -438,6 +462,19 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
             try db.execute(sql: """
             UPDATE "Image" set "originalMD5" = $1 WHERE path=$2
             """, parameterValues: [md5, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageOriginalMD5(id: String, md5: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "originalMD5" = $1 WHERE "id"=$2
+            """, parameterValues: [md5, id])
         }catch{
             return .ERROR
         }

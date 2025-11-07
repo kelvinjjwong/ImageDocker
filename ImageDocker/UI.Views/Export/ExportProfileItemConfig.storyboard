@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,11 +19,11 @@
                                     <box misplaced="YES" title="Profile" translatesAutoresizingMaskIntoConstraints="NO" id="Vfq-GX-RU6">
                                         <rect key="frame" x="17" y="6" width="380" height="104"/>
                                         <view key="contentView" id="dN5-lK-Igm">
-                                            <rect key="frame" x="4" y="5" width="372" height="84"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="380" height="92"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ym9-Zs-iaJ">
-                                                    <rect key="frame" x="68" y="58" width="252" height="16"/>
+                                                    <rect key="frame" x="68" y="62" width="254" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="B5b-ew-fVG">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -31,12 +31,12 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OEr-7d-Yo7">
-                                                    <rect key="frame" x="321" y="-7" width="44" height="32"/>
-                                                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="edit" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0cB-kl-o6L">
+                                                    <rect key="frame" x="330" y="0.0" width="30" height="20"/>
+                                                    <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarPlayTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0cB-kl-o6L">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
-                                                    <color key="bezelColor" name="systemTealColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="bezelColor" red="0.11691682031665018" green="0.52216643688725484" blue="0.21822922445930135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="6h0-bB-0Ae"/>
                                                         <constraint firstAttribute="height" constant="20" id="WVh-Eq-3B7"/>
@@ -47,7 +47,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ORd-H4-6VM">
-                                                    <rect key="frame" x="8" y="58" width="54" height="16"/>
+                                                    <rect key="frame" x="8" y="62" width="54" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="b13-cr-p7y"/>
                                                     </constraints>
@@ -58,7 +58,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jse-dE-Im2">
-                                                    <rect key="frame" x="68" y="31" width="282" height="16"/>
+                                                    <rect key="frame" x="68" y="35" width="284" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="hSz-Ec-DfM">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -66,7 +66,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7pR-ow-Z5H">
-                                                    <rect key="frame" x="8" y="32" width="54" height="16"/>
+                                                    <rect key="frame" x="8" y="36" width="54" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="XOp-uI-QPK"/>
                                                     </constraints>
@@ -77,7 +77,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4EB-Z0-wdm">
-                                                    <rect key="frame" x="321" y="57" width="44" height="32"/>
+                                                    <rect key="frame" x="330" y="68" width="30" height="20"/>
                                                     <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSStopProgressTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lW4-c8-G1X">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -93,7 +93,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aIm-vX-SmL">
-                                                    <rect key="frame" x="8" y="6" width="54" height="16"/>
+                                                    <rect key="frame" x="8" y="10" width="54" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="Dlv-Mz-rVL"/>
                                                     </constraints>
@@ -104,7 +104,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="amT-gZ-5oS">
-                                                    <rect key="frame" x="68" y="-2" width="25" height="25"/>
+                                                    <rect key="frame" x="68" y="2" width="25" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="B0D-uZ-rvX"/>
                                                         <constraint firstAttribute="height" constant="25" id="gpd-jp-4RA"/>
@@ -112,7 +112,7 @@
                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="LbO-m8-jo0"/>
                                                 </imageView>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-zA-zVi">
-                                                    <rect key="frame" x="111" y="4" width="99" height="16"/>
+                                                    <rect key="frame" x="111" y="8" width="99" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="95" id="KNr-3X-7Hi"/>
                                                     </constraints>
@@ -189,6 +189,6 @@
     </scenes>
     <resources>
         <image name="NSStopProgressTemplate" width="17" height="16"/>
-        <image name="edit" width="16" height="15"/>
+        <image name="NSTouchBarPlayTemplate" width="15" height="17"/>
     </resources>
 </document>

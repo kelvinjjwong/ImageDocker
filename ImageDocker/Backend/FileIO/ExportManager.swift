@@ -123,7 +123,7 @@ class ExportManager {
         return (true, "")
     }
     
-    func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil) -> (Bool, String) {
+    func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil, years:[String] = []) -> (Bool, String) {
         guard self.nonStop(profileId: profile.id) && !TaskManager.exporting else {return (false, "PREVENTED")}
         
         let (dirReady, msg) = self.createDirectory(profile: profile)
@@ -150,7 +150,7 @@ class ExportManager {
             
             TaskletManager.default.updateProgress(id: task.id, message: "Loading images ...", increase: false)
             
-            let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
+            let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile, years: years)
             
             var total:Int = totalImagesInDb
             
@@ -184,7 +184,7 @@ class ExportManager {
                 
                 self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
                 
-                let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
+                let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber, years: years)
                 
                 if images.count > 0 {
                     var imagesToExport = pageSize

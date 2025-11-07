@@ -67,19 +67,21 @@ protocol ExportDaoInterface {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> [Image]
+    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?, years:[String]) -> [Image]
     
-    func countImagesForExport(profile:ExportProfile) -> Int
+    func countImagesForExport(profile:ExportProfile, years:[String]) -> Int
     
     func getExportedImages(profileId:String) -> [(String, String, String)]
     
-    func getSQLForImageExport(profile:ExportProfile) -> String
+    func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String
     
     // MARK: - EXPORT RECORD LOG
     
-    func countExportedImages(profile:ExportProfile) -> Int
+    func countExportedImages(profile:ExportProfile, years:[String]) -> Int
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
+    
+    func storeImageOriginalMD5(id:String, md5:String) -> ExecuteState
     
     func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState
     

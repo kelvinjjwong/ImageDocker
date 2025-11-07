@@ -130,30 +130,34 @@ class ExportDao {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getImagesForExport(profile:ExportProfile, pageSize:Int? = nil, pageNumber:Int? = nil) -> [Image] {
-        return self.impl.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
+    func getImagesForExport(profile:ExportProfile, pageSize:Int? = nil, pageNumber:Int? = nil, years:[String]) -> [Image] {
+        return self.impl.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber, years: years)
     }
     
-    func countImagesForExport(profile:ExportProfile) -> Int {
-        return self.impl.countImagesForExport(profile: profile)
+    func countImagesForExport(profile:ExportProfile, years:[String]) -> Int {
+        return self.impl.countImagesForExport(profile: profile, years: years)
     }
     
     func getExportedImages(profileId:String) -> [(String, String, String)] {
         return self.impl.getExportedImages(profileId: profileId)
     }
     
-    func getSQLForImageExport(profile:ExportProfile) -> String {
-        return self.impl.getSQLForImageExport(profile: profile)
+    func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String {
+        return self.impl.getSQLForImageExport(profile: profile, years: years)
     }
     
     // MARK: - EXPORT RECORD LOG
     
-    func countExportedImages(profile:ExportProfile) -> Int {
-        return self.impl.countExportedImages(profile: profile)
+    func countExportedImages(profile:ExportProfile, years:[String]) -> Int {
+        return self.impl.countExportedImages(profile: profile, years: years)
     }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {
         return self.impl.storeImageOriginalMD5(path: path, md5: md5)
+    }
+    
+    func storeImageOriginalMD5(id:String, md5:String) -> ExecuteState {
+        return self.impl.storeImageOriginalMD5(id: id, md5: md5)
     }
     
     func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState {
