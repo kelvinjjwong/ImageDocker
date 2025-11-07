@@ -6,6 +6,7 @@
 //  Copyright © 2025 nonamecat. All rights reserved.
 //
 import Foundation
+import Synchronization
 import LoggerFactory
 
 public final class CachePrefetch {
@@ -19,10 +20,13 @@ public final class CachePrefetch {
         let _ = self.getMetaInfoOfDevices(reload: true)
     }
     
-    fileprivate var _devicesMetaInfo:[JSON] = []
+    fileprivate let _devicesMetaInfo = Mutex([JSON]())
     
     public func getMetaInfoOfDevices(reload:Bool = false) -> [JSON] {
-        if reload || self._devicesMetaInfo == [] {
+        let array = self._devicesMetaInfo.withLock{
+            return $0
+        }
+        if reload || array == [] {
             var devicesMetaInfo:[JSON] = []
             let devices = DeviceDao.default.getDevices()
             for device in devices {
@@ -32,9 +36,13 @@ public final class CachePrefetch {
                     devicesMetaInfo.append(json)
                 }
             }
-            self._devicesMetaInfo = devicesMetaInfo
+            self._devicesMetaInfo.withLock{
+                $0 = devicesMetaInfo
+            }
         }
-        return self._devicesMetaInfo
+        return self._devicesMetaInfo.withLock{
+            return $0
+        }
     }
     
 }
