@@ -1808,6 +1808,17 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <action selector="onNewBackupArchiveClicked:" target="ld1-y7-yeS" id="3xv-5R-lfU"/>
                                                                 </connections>
                                                             </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y6y-et-7OT">
+                                                                <rect key="frame" x="682" y="392.5" width="23" height="30.5"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="NSRefreshTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="nvv-Yo-AjZ">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                                                    <font key="font" metaFont="systemBold" size="12"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onReloadDatabaseProfilesClicked:" target="ld1-y7-yeS" id="yGB-fR-VVe"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>

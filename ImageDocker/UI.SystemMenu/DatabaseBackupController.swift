@@ -854,6 +854,21 @@ final class DatabaseBackupController: NSViewController {
         }
     }
     
+    // MARK: SOURCE/TARGET DATABASE PROFILE SCROLL LIST
+    
+    @IBAction func onReloadDatabaseProfilesClicked(_ sender: NSButton) {
+        self.removeAllBackupDatabaseProfiles()
+        self.loadBackupDatabaseProfiles()
+    }
+    
+    
+    func removeAllBackupDatabaseProfiles() {
+        for (_, viewController) in self.bkDatabaseProfileFlowListItems {
+            self.bkDatabaseProfilesStackView.removeView(viewController.view)
+        }
+        self.bkDatabaseProfileFlowListItems.removeAll()
+    }
+    
     func loadBackupDatabaseProfiles() {
         let json = Setting.database.databaseJson()
         print(json)
@@ -974,6 +989,8 @@ final class DatabaseBackupController: NSViewController {
         }
         self.changeBackupNowButtonState()
     }
+    
+    // MARK: BACKUP ARCHIVE TABLE
     
     @IBAction func onNewBackupArchiveClicked(_ sender: NSButton) {
         let profile = DatabaseProfile()
