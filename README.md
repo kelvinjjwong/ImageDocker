@@ -2,9 +2,9 @@
 
 A desktop application help organize pictures and videos between cameras/mobile devices and Plex Media Server.
 
-Built with ![swift](https://img.shields.io/badge/Swift-5-blue) ![xcode](https://img.shields.io/badge/Xcode-15.0-blue) ![CocoaPods](https://img.shields.io/badge/CocoaPods-1.13.0-blue)
+Built with ![swift](https://img.shields.io/badge/Swift-6-blue) ![xcode](https://img.shields.io/badge/Xcode-26.0-blue) ![CocoaPods](https://img.shields.io/badge/CocoaPods-1.16.2-blue)
 
-Tested for  ![Platform](https://img.shields.io/badge/macOS-13%20Ventura-ff7711.svg) ![Platform](https://img.shields.io/badge/macOS-14%20Sonoma-ff7711.svg)
+Tested for  ![Platform](https://img.shields.io/badge/macOS-26%20Tahoe-ff7711.svg)
 
 Require    ![python](https://img.shields.io/badge/Python-3.7+-blue) for face detection (need user install)
 
