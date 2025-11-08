@@ -8,6 +8,13 @@
 
 import Cocoa
 
+public enum ExportProfileStatus {
+    case none
+    case in_progress
+    case completed
+    case failed
+}
+
 class ExportProfileViewController : NSViewController {
     
     @IBOutlet weak var lblName: NSTextField!
@@ -22,6 +29,9 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblStyle: NSTextField!
     @IBOutlet weak var imgStyle: NSImageView!
     @IBOutlet weak var lblStyleName: NSTextField!
+    
+    @IBOutlet weak var imgStatus: NSImageView!
+    
     
     
     var onEdit: (() -> Void)? = nil
@@ -83,6 +93,18 @@ class ExportProfileViewController : NSViewController {
     func updateView(profile:ExportProfile){
         self.profile = profile
         self.refreshFields()
+    }
+    
+    func updateStatus(_ state:ExportProfileStatus) {
+        if state == .none {
+            self.imgStatus.image = nil
+        }else if state == .completed {
+            Icons.show_gif(name: "success", view: self.imgStatus, loopCount: 1)
+        }else if state == .in_progress {
+            Icons.show_gif(name: "loading_colorful", view: self.imgStatus)
+        }else if state == .failed {
+            Icons.show_gif(name: "failure", view: self.imgStatus, loopCount: 1)
+        }
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {

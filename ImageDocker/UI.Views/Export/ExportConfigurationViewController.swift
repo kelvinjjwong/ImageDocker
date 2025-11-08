@@ -873,6 +873,10 @@ class ExportConfigurationViewController: NSViewController {
         let amount = self.getRehearsalAmount()
         let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
+        if let vc = self.profileStackItems[profile.id] {
+            vc.updateStatus(.in_progress)
+        }
+        
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount, years: years)
             DispatchQueue.main.async {
@@ -880,8 +884,16 @@ class ExportConfigurationViewController: NSViewController {
                 
                 if state == true {
                     self.lblCalculate.stringValue = message
+                    
+                    if let vc = self.profileStackItems[profile.id] {
+                        vc.updateStatus(.completed)
+                    }
                 }else{
                     self.lblCalculate.stringValue = "ERROR: \(message)"
+                    
+                    if let vc = self.profileStackItems[profile.id] {
+                        vc.updateStatus(.failed)
+                    }
                 }
             }
         }
@@ -897,6 +909,10 @@ class ExportConfigurationViewController: NSViewController {
         let amount = self.getRehearsalAmount()
         let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
+        if let vc = self.profileStackItems[profile.id] {
+            vc.updateStatus(.in_progress)
+        }
+        
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount, years: years)
             DispatchQueue.main.async {
@@ -904,8 +920,16 @@ class ExportConfigurationViewController: NSViewController {
                 
                 if state == true {
                     self.lblCalculate.stringValue = message
+                    
+                    if let vc = self.profileStackItems[profile.id] {
+                        vc.updateStatus(.completed)
+                    }
                 }else{
                     self.lblCalculate.stringValue = "ERROR: \(message)"
+                    
+                    if let vc = self.profileStackItems[profile.id] {
+                        vc.updateStatus(.failed)
+                    }
                 }
             }
         }
