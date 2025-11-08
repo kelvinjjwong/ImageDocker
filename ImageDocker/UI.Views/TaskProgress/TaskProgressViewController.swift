@@ -127,7 +127,8 @@ class TaskProgressViewController: NSViewController {
                     self.lock.lock()
                     defer { self.lock.unlock() }
                     viewController.lblMessage.stringValue = Words.restarting.word()
-                }            }
+                }
+            }
         }
     }
     
@@ -161,9 +162,10 @@ class TaskProgressViewController: NSViewController {
     func updateMessage(task:Tasklet) {
         if let viewController = self.tasksView[task.id] {
             DispatchQueue.main.async {
-                self.lock.lock()
-                defer { self.lock.unlock() }
-                viewController.lblMessage.stringValue = task.message
+//                self.lock.lock()
+//                defer { self.lock.unlock() }
+//                viewController.lblMessage.stringValue = task.message
+                viewController.updateTaskInfo(task: task)
             }
         }
     }
@@ -176,23 +178,25 @@ class TaskProgressViewController: NSViewController {
 //        self.logger.log(.trace, "====== ui updating task: \(task.name) - \(task.state)")
         
         if let viewController = self.tasksView[task.id] {
-            
-            self.lock.lock()
-            defer { self.lock.unlock() }
-            viewController.lblMessage.stringValue = task.message
-            viewController.box.title = "\(task.type): \(task.name) - \(task.state)"
+            DispatchQueue.main.async {
+                viewController.updateTaskInfo(task: task)
+            }
             
 
             if task.state == "COMPLETED" {
                 if viewController.progress.doubleValue != viewController.progress.maxValue {
-                    viewController.progress.increment(by: 1)
+                    DispatchQueue.main.async {
+                        viewController.increaseProgress(by: 1)
+                    }
                 }
                 if !task.isFixedDelayJob {
                     self.updatePanelForCompletedTask(task: task, viewController: viewController)
                 }
             }else if task.state == "IN_PROGRESS" {
                 if task.total > 0 {
-                    viewController.progress.increment(by: 1)
+                    DispatchQueue.main.async {
+                        viewController.increaseProgress(by: 1)
+                    }
                 }
             }
         }
@@ -227,9 +231,9 @@ class TaskProgressViewController: NSViewController {
     
     func setProgressValue(task:Tasklet, progressValue:Int) {
         if let viewController = self.tasksView[task.id] {
-            self.lock.lock()
-            defer { self.lock.unlock() }
-            viewController.progress.doubleValue = Double(progressValue)
+            DispatchQueue.main.async {
+                viewController.setProgressValue(progressValue)
+            }
         }
     }
     

@@ -241,7 +241,7 @@ class ExportManager {
     
     func shouldExportFile(profile:ExportProfile, image:Image, events:[ExportProfileEvent]) -> Bool {
         var pass = false
-        if image.event == nil {
+        if image.event == nil || events.isEmpty {
             pass = true
         }else{
             if let ev = image.event {

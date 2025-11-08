@@ -414,9 +414,11 @@ class ExportConfigurationViewController: NSViewController {
         
         self.btnCalculate.isEnabled = actionState
         self.btnRehearsal.isEnabled = actionState
-        
+        self.lstRehearsalAmount.isEnabled = actionState
         self.btnExport.isEnabled = actionState
         self.btnCopySQLToClipboard.isEnabled = actionState
+        self.tblPhotoTakenYears.isEnabled = actionState
+        self.optEditMode.isEnabled = actionState
         
 //        self.chkRepository.isEnabled = state
 //        self.chkEventCategories.isEnabled = state
@@ -437,6 +439,7 @@ class ExportConfigurationViewController: NSViewController {
             
             self.treeViewController?.enable()
             
+            self.optEditMode.selectedSegment = 1
         }else{
             self.repositoryTableController.disableCheckboxes()
 //            self.eventCategoriesTableController.disableCheckboxes()
@@ -446,6 +449,8 @@ class ExportConfigurationViewController: NSViewController {
 //            self.toggleGroup_EventCategory.disable()
             
             self.treeViewController?.disable()
+            
+            self.optEditMode.selectedSegment = 0
         }
         
         self.chkPatchGeolocation.isEnabled = editState
@@ -871,7 +876,7 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount, years: years)
             DispatchQueue.main.async {
-                self.toggleButtons(editState: true, actionState: true)
+                self.toggleButtons(editState: false, actionState: true)
                 
                 if state == true {
                     self.lblCalculate.stringValue = message
@@ -895,7 +900,7 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount, years: years)
             DispatchQueue.main.async {
-                self.toggleButtons(editState: true, actionState: true)
+                self.toggleButtons(editState: false, actionState: true)
                 
                 if state == true {
                     self.lblCalculate.stringValue = message

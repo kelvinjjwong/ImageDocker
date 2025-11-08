@@ -31,6 +31,19 @@ class ProgressViewController : NSViewController {
     var onComplete: (() -> Void)? = nil
     var isNoTask = false
     
+    func updateTaskInfo(task:Tasklet) {
+        self.lblMessage.stringValue = task.message
+        self.box.title = "\(task.type): \(task.name) - \(task.state)"
+    }
+    
+    func increaseProgress(by value:Double) {
+        self.progress.increment(by: value)
+    }
+    
+    func setProgressValue(_ value:Int) {
+        self.progress.doubleValue = Double(value)
+    }
+    
     func noTask() {
         self.id = Words.progress_no_task.word()
         self.message = Words.progress_no_task_running.word()

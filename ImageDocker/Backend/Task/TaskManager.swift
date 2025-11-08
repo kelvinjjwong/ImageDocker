@@ -457,9 +457,7 @@ class TaskletManager {
                 //self.logger.log(.trace, "=== onTaskChanged - \(task.taskid) - \(task.state)")
                 //self.logger.log(.trace, "viewManager is nil ? \(viewManager == nil)")
                 if let view = viewManager {
-                    DispatchQueue.main.async {
-                        view.updateTask(task: task)
-                    }
+                    view.updateTask(task: task)
                 }
                 break
             }

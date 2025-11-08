@@ -52,13 +52,13 @@ class DictionaryTableViewController: NSObject {
     
     func disableCheckboxes() {
         for (_, checkbox) in checkboxes {
-            checkbox.isEnabled = false
+            checkbox.isEnabled = false // FIXME: some invisible checkboxes not disabled
         }
     }
     
     func enableCheckboxes() {
         for (_, checkbox) in checkboxes {
-            checkbox.isEnabled = true
+            checkbox.isEnabled = true // FIXME: some invisible checkboxes not enabled
         }
     }
     
