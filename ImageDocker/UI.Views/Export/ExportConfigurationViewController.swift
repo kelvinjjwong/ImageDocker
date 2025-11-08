@@ -421,6 +421,12 @@ class ExportConfigurationViewController: NSViewController {
 //        self.chkRepository.isEnabled = state
 //        self.chkEventCategories.isEnabled = state
         
+        if actionState {
+            self.photoTakenYearsTableController.enableCheckboxes()
+        }else{
+            self.photoTakenYearsTableController.disableCheckboxes()
+        }
+        
         if editState {
             self.repositoryTableController.enableCheckboxes()
 //            self.eventCategoriesTableController.enableCheckboxes()
