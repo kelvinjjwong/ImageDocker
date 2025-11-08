@@ -676,84 +676,114 @@ class ExportConfigurationViewController: NSViewController {
         }
     }
     
+    // MARK: SAVE PROFILE
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
         
-        let form = self.fillProfileFromForm(profile: ExportProfile())
+        self.toggleButtons(editState: false, actionState: false)
         
-        var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
-                                                                 name: form.name,
-                                                                 targetVolume: form.targetVolume,
-                                                                 directory: form.directory,
-                                                                 repositoryPath: form.repositoryPath,
-                                                                 specifyRepository: form.specifyRepository,
-                                                                 duplicateStrategy: form.duplicateStrategy,
-                                                                 fileNaming: form.fileNaming,
-                                                                 subFolder: form.subFolder,
-                                                                 patchImageDescription: form.patchImageDescription,
-                                                                 patchDateTime: form.patchDateTime,
-                                                                 patchGeolocation: form.patchGeolocation,
-                                                                 specifyFamily: form.specifyFamily,
-                                                                 family: form.family,
-                                                                 eventCategories: form.eventCategories ?? "",
-                                                                 specifyEventCategory: form.specifyEventCategory ?? false
-                                                                )
-        
-        if let treeViewController = self.treeViewController {
-            for checkedEventItem in treeViewController.getCheckedItems() {
-                let part = checkedEventItem.getId().components(separatedBy: "|")
-                let eventOwner = part[0]
-                let eventName = part[part.count-1]
-                let eventNodeType = part.count == 2 ? "group" : "member"
-                print("save profile id: \(profile.id) -- event owner: \(eventOwner) -- type: \(eventNodeType) -- event id:\(checkedEventItem.getId())")
-                let status = ExportDao.default.saveProfileEvent(profileId: profile.id, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: checkedEventItem.getId(), eventName: eventName, exclude: false)
-                if status != .OK {
-                    self.logger.log(.error, status)
-                    self.logger.log(.error, "Unable to save event for export profile id=\(self.editingId)")
-                    self.turnSaveButtonToAlert()
-                    return
+        DispatchQueue.global().async {
+            
+            let form = self.fillProfileFromForm(profile: ExportProfile())
+            
+            var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
+                                                                     name: form.name,
+                                                                     targetVolume: form.targetVolume,
+                                                                     directory: form.directory,
+                                                                     repositoryPath: form.repositoryPath,
+                                                                     specifyRepository: form.specifyRepository,
+                                                                     duplicateStrategy: form.duplicateStrategy,
+                                                                     fileNaming: form.fileNaming,
+                                                                     subFolder: form.subFolder,
+                                                                     patchImageDescription: form.patchImageDescription,
+                                                                     patchDateTime: form.patchDateTime,
+                                                                     patchGeolocation: form.patchGeolocation,
+                                                                     specifyFamily: form.specifyFamily,
+                                                                     family: form.family,
+                                                                     eventCategories: form.eventCategories ?? "",
+                                                                     specifyEventCategory: form.specifyEventCategory ?? false
+                                                                    )
+            
+            let status_del_events = ExportDao.default.deleteProfileEvents(profileId: profile.id)
+            if status_del_events != .OK {
+                self.logger.log(.error, status_del_events)
+                self.logger.log(.error, "Unable to delete all event for export profile id=\(self.editingId)")
+                print("Unable to delete all event for export profile id=\(self.editingId)")
+            }
+            if let treeViewController = self.treeViewController {
+                for checkedEventItem in treeViewController.getCheckedItems() {
+                    let part = checkedEventItem.getId().components(separatedBy: "|")
+                    let eventOwner = part[0]
+                    let eventName = part[part.count-1]
+                    let eventNodeType = part.count == 2 ? "group" : "member"
+                    print("save profile id: \(profile.id) -- event owner: \(eventOwner) -- type: \(eventNodeType) -- event id:\(checkedEventItem.getId())")
+                    let status = ExportDao.default.saveProfileEvent(profileId: profile.id, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: checkedEventItem.getId(), eventName: eventName, exclude: false)
+                    if status != .OK {
+                        self.logger.log(.error, status)
+                        self.logger.log(.error, "Unable to save event for export profile id=\(self.editingId)")
+                        
+                        DispatchQueue.main.async {
+                            self.turnSaveButtonToAlert()
+                            
+                            self.toggleButtons(editState: true, actionState: true)
+                        }
+                        return
+                    }
                 }
             }
-        }
-        if !self.isNewRecord {
-            let status = ExportDao.default.updateExportProfile(id: self.editingId,
-                                                               name: form.name,
-                                                               targetVolume: form.targetVolume,
-                                                               directory: form.directory,
-                                                               duplicateStrategy: form.duplicateStrategy,
-                                                               specifyRepository: form.specifyRepository,
-                                                               specifyFamily: form.specifyFamily,
-                                                               repositoryPath: form.repositoryPath,
-                                                               family: form.family,
-                                                               patchImageDescription: form.patchImageDescription,
-                                                               patchDateTime: form.patchDateTime,
-                                                               patchGeolocation: form.patchGeolocation,
-                                                               fileNaming: form.fileNaming,
-                                                               subFolder: form.subFolder,
-                                                               eventCategories: form.eventCategories ?? "",
-                                                               specifyEventCategory: form.specifyEventCategory ?? false,
-                                                               style: form.style
-                                                            )
-            
-            if status != .OK {
-                self.logger.log(.error, status)
-                self.logger.log(.error, "Unable to update export profile id=\(self.editingId)")
-                self.turnSaveButtonToAlert()
-                return
-            }else{
-                profile = form
-                profile.id = self.editingId
+            if !self.isNewRecord {
+                let status = ExportDao.default.updateExportProfile(id: self.editingId,
+                                                                   name: form.name,
+                                                                   targetVolume: form.targetVolume,
+                                                                   directory: form.directory,
+                                                                   duplicateStrategy: form.duplicateStrategy,
+                                                                   specifyRepository: form.specifyRepository,
+                                                                   specifyFamily: form.specifyFamily,
+                                                                   repositoryPath: form.repositoryPath,
+                                                                   family: form.family,
+                                                                   patchImageDescription: form.patchImageDescription,
+                                                                   patchDateTime: form.patchDateTime,
+                                                                   patchGeolocation: form.patchGeolocation,
+                                                                   fileNaming: form.fileNaming,
+                                                                   subFolder: form.subFolder,
+                                                                   eventCategories: form.eventCategories ?? "",
+                                                                   specifyEventCategory: form.specifyEventCategory ?? false,
+                                                                   style: form.style
+                                                                )
+                
+                if status != .OK {
+                    self.logger.log(.error, status)
+                    self.logger.log(.error, "Unable to update export profile id=\(self.editingId)")
+                    print("Unable to update export profile id=\(self.editingId)")
+                    
+                    DispatchQueue.main.async {
+                        self.turnSaveButtonToAlert()
+                        
+                        self.toggleButtons(editState: true, actionState: true)
+                    }
+                    return
+                }else{
+                    profile = form
+                    profile.id = self.editingId
+                }
             }
+            
+            self.logger.log(.trace, "profile id \(profile.id)")
+            
+            DispatchQueue.main.async {
+                if let vc = self.profileStackItems[profile.id] {
+                    self.logger.log(.trace, "going to update view \(profile.id)")
+                    vc.updateView(profile: profile)
+                }else{
+                    self.addProfileItem(profile: profile)
+                }
+                self.turnSaveButtonToDone()
+                
+                self.toggleButtons(editState: true, actionState: true)
+                
+            }
+            
         }
-        
-        self.logger.log(.trace, "profile id \(profile.id)")
-        if let vc = self.profileStackItems[profile.id] {
-            self.logger.log(.trace, "going to update view \(profile.id)")
-            vc.updateView(profile: profile)
-        }else{
-            self.addProfileItem(profile: profile)
-        }
-        self.turnSaveButtonToDone()
     }
     
     // MARK: - STACK ITEMS - ADD PROFILE
