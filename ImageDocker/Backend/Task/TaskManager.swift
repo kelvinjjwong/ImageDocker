@@ -441,7 +441,9 @@ class TaskletManager {
             task.changeListener(selector: #selector(self.onTaskChanged))
             tasks.append(task)
             if let view = self.viewManager {
-                let _ = view.addTask(task: task)
+                DispatchQueue.main.async {
+                    let _ = view.addTask(task: task)
+                }
             }
             return task
         }

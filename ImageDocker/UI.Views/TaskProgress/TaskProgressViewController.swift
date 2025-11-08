@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import os
 import LoggerFactory
 
 class TaskProgressViewController: NSViewController {
@@ -17,6 +18,8 @@ class TaskProgressViewController: NSViewController {
     @IBOutlet weak var btnStopAll: NSButton!
     @IBOutlet weak var btnRemoveAll: NSButton!
     @IBOutlet weak var btnRemoveCompleted: NSButton!
+    
+    private let lock = OSAllocatedUnfairLock()
     
     init() {
         super.init(nibName: "TaskProgressViewController", bundle: nil)
@@ -121,6 +124,8 @@ class TaskProgressViewController: NSViewController {
                 viewController.progress.doubleValue = 0
                 
                 if !TaskletManager.default.isSingleMode() {
+                    self.lock.lock()
+                    defer { self.lock.unlock() }
                     viewController.lblMessage.stringValue = Words.restarting.word()
                 }            }
         }
@@ -156,6 +161,8 @@ class TaskProgressViewController: NSViewController {
     func updateMessage(task:Tasklet) {
         if let viewController = self.tasksView[task.id] {
             DispatchQueue.main.async {
+                self.lock.lock()
+                defer { self.lock.unlock() }
                 viewController.lblMessage.stringValue = task.message
             }
         }
@@ -170,6 +177,8 @@ class TaskProgressViewController: NSViewController {
         
         if let viewController = self.tasksView[task.id] {
             
+            self.lock.lock()
+            defer { self.lock.unlock() }
             viewController.lblMessage.stringValue = task.message
             viewController.box.title = "\(task.type): \(task.name) - \(task.state)"
             
@@ -218,6 +227,8 @@ class TaskProgressViewController: NSViewController {
     
     func setProgressValue(task:Tasklet, progressValue:Int) {
         if let viewController = self.tasksView[task.id] {
+            self.lock.lock()
+            defer { self.lock.unlock() }
             viewController.progress.doubleValue = Double(progressValue)
         }
     }
