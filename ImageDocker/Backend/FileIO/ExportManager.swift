@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Synchronization
 import LoggerFactory
 
 class ExportManager {
@@ -17,7 +18,7 @@ class ExportManager {
     
     //var working:Bool = false
     var suppressed:Bool = false
-    var tasks:[String:Bool] = [:]
+    let tasks = Mutex([String:Bool]())
     var messageBox:NSTextField? = nil
     
     // MARK: - PROCESS HANDLING
@@ -37,28 +38,49 @@ class ExportManager {
         self.stopAllTasks()
     }
     
+    func isTaskStopping(profileId:String) -> Bool {
+        return !self.tasks.withLock{
+            return $0[profileId] ?? true
+        }
+    }
+    
     @objc func stopTask(profileId:String) {
-        self.tasks[profileId] = false
-        self.printMessage("Task \(profileId) stopped.")
+        self.tasks.withLock{
+            $0[profileId] = false
+        }
+        self.printMessage("正在中止 ...")
     }
     
     private func stopAllTasks() {
-        for (key, _) in self.tasks {
+        let tasks_ = self.tasks.withLock{
+            return $0
+        }
+        for (key, _) in tasks_ {
             self.stopTask(profileId: key)
         }
-        self.printMessage("All tasks stopped.")
+        self.printMessage("正在中止所有任务 ...")
     }
     
     private func startTask(profileId:String) {
-        self.tasks[profileId] = true
+        self.tasks.withLock{
+            $0[profileId] = true
+        }
+    }
+    
+    private func removeTask(profileId:String) {
+        self.tasks.withLock{
+            $0.removeValue(forKey: profileId)
+        }
     }
     
     /**
      If suppressed from outside, stop immediately
      */
     fileprivate func nonStop(profileId:String) -> Bool {
-        
-        if let state = self.tasks[profileId] {
+        let state = self.tasks.withLock{
+            return $0[profileId]
+        }
+        if let state = state {
             if state == false {
                 return false
             }
@@ -178,7 +200,7 @@ class ExportManager {
             for pageNumber in 1...pageCount {
                 
 //                guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
-                if TaskletManager.default.isTaskStopped(id: task.id) == true {
+                if TaskletManager.default.isTaskStopped(id: task.id) == true || self.isTaskStopping(profileId: profile.id){
                     terminated = true
                     
                     // TODO: remove ad-hoc logger
@@ -206,7 +228,7 @@ class ExportManager {
 //                        guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
                         
                         
-                        if TaskletManager.default.isTaskStopped(id: task.id) == true {
+                        if TaskletManager.default.isTaskStopped(id: task.id) == true || self.isTaskStopping(profileId: profile.id) {
                             terminated = true
                             
                             // TODO: remove ad-hoc logger
@@ -245,11 +267,12 @@ class ExportManager {
             
         }, stop: {task in
             
-            // TODO: remove ad-hoc logger
         })
-        self.printMessage("Export DONE: \(profile.name)")
+        self.printMessage("已完成: \(profile.name)")
         
         TaskManager.exporting = false
+        
+        self.removeTask(profileId: profile.id)
         
         // TODO: remove ad-hoc logger
         
@@ -409,7 +432,7 @@ class ExportManager {
     func housekeepFilesNotInExportLog(profile:ExportProfile) {
         self.logger.log(.trace, "EXPORT: HOUSE KEEP")
         
-        self.printMessage("Checking invalid exported files ...")
+        self.printMessage("正在检查不正常的已导出记录 ...")
         
         let exportedFileInfos = ExportDao.default.getExportedImages(profileId: profile.id)
         
@@ -453,7 +476,7 @@ class ExportManager {
         
         self.logger.log(.trace, "Useless exported file count: \(uselessFiles.count)")
         
-        self.printMessage("Found invalid exported files: \(uselessFiles.count)")
+        self.printMessage("发现不正常的已导出记录: \(uselessFiles.count) 项")
         
         // delete useless exported files
         if uselessFiles.count > 0 {
@@ -465,7 +488,7 @@ class ExportManager {
                 guard self.nonStop(profileId: profile.id) else {return}
                 
                 i += 1
-                self.printMessage("Deleting invalid exported file ... ( \(i) / \(total) )")
+                self.printMessage("正在删除不正常的已导出记录 ... ( \(i) / \(total) )")
                 
                 self.logger.log(.trace, "deleting invalid exported file \(uselessFile)")
                 
@@ -478,7 +501,7 @@ class ExportManager {
             }
         }
         
-        self.printMessage("Checking empty exported folders ...")
+        self.printMessage("正在检查空白的已导出文件夹 ...")
         
         for folder in allExportedDirectories {
             guard self.nonStop(profileId: profile.id) else {return}

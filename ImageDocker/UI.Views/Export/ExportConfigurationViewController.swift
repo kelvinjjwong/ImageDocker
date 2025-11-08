@@ -82,6 +82,7 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBOutlet weak var btnCalculate: NSButton!
     @IBOutlet weak var lstRehearsalAmount: NSPopUpButton!
+    @IBOutlet weak var imgActionStatus: NSImageView!
     
     @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var lblCalculate: NSTextField!
@@ -89,6 +90,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var btnRehearsal: NSButton!
     @IBOutlet weak var btnExport: NSButton!
     
+    @IBOutlet weak var btnStop: NSButton!
     @IBOutlet weak var btnLogFile: NSButton!
     
     
@@ -179,7 +181,9 @@ class ExportConfigurationViewController: NSViewController {
         self.lstRehearsalAmount.item(at: 0)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "10")
         self.lstRehearsalAmount.item(at: 1)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "100")
         self.lstRehearsalAmount.item(at: 2)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "500")
-        self.lstRehearsalAmount.item(at: 3)?.title = Words.export_profile_rehearsal_all_images.word()
+        self.lstRehearsalAmount.item(at: 3)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "1000")
+        self.lstRehearsalAmount.item(at: 4)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "2000")
+        self.lstRehearsalAmount.item(at: 5)?.title = Words.export_profile_rehearsal_all_images.word()
         
         self.reloadTables()
         self.cleanFields()
@@ -419,6 +423,8 @@ class ExportConfigurationViewController: NSViewController {
         self.btnCopySQLToClipboard.isEnabled = actionState
         self.tblPhotoTakenYears.isEnabled = actionState
         self.optEditMode.isEnabled = actionState
+        
+        self.btnStop.isHidden = actionState
         
 //        self.chkRepository.isEnabled = state
 //        self.chkEventCategories.isEnabled = state
@@ -884,6 +890,10 @@ class ExportConfigurationViewController: NSViewController {
                     amount = 100
                 }else if number == "500" {
                     amount = 500
+                }else if number == "1000" {
+                    amount = 1000
+                }else if number == "2000" {
+                    amount = 2000
                 }
             }
         }
@@ -905,6 +915,11 @@ class ExportConfigurationViewController: NSViewController {
     // MARK: - EXPORT
     
     // TODO: stop export -- TaskletManager.stopTask
+    @IBAction func onStopClicked(_ sender: NSButton) {
+        let profile = self.getProfile()
+        ExportManager.default.stopTask(profileId: profile.id)
+    }
+    
     
     @IBAction func onExportClicked(_ sender: NSButton) {
         // real export with file i/o and amount limitation
@@ -914,6 +929,7 @@ class ExportConfigurationViewController: NSViewController {
         let amount = self.getRehearsalAmount()
         let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
+        Icons.show_gif(name: "loading_fade", view: self.imgActionStatus)
         if let vc = self.profileStackItems[profile.id] {
             vc.updateStatus(.in_progress)
         }
@@ -929,12 +945,14 @@ class ExportConfigurationViewController: NSViewController {
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.completed)
                     }
+                    Icons.show_gif(name: "success", view: self.imgActionStatus, loopCount: 1)
                 }else{
                     self.lblCalculate.stringValue = "错误: \(message)"
                     
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.failed)
                     }
+                    Icons.show_gif(name: "failure", view: self.imgActionStatus, loopCount: 1)
                 }
             }
         }
@@ -950,6 +968,7 @@ class ExportConfigurationViewController: NSViewController {
         let amount = self.getRehearsalAmount()
         let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
+        Icons.show_gif(name: "loading_fade", view: self.imgActionStatus)
         if let vc = self.profileStackItems[profile.id] {
             vc.updateStatus(.in_progress)
         }
@@ -965,12 +984,14 @@ class ExportConfigurationViewController: NSViewController {
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.completed)
                     }
+                    Icons.show_gif(name: "success", view: self.imgActionStatus, loopCount: 1)
                 }else{
                     self.lblCalculate.stringValue = "错误: \(message)"
                     
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.failed)
                     }
+                    Icons.show_gif(name: "failure", view: self.imgActionStatus, loopCount: 1)
                 }
             }
         }

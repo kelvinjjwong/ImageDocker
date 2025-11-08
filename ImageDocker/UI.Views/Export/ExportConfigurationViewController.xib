@@ -27,6 +27,7 @@
                 <outlet property="btnLogFile" destination="Hre-Ie-vnv" id="EBo-w3-fDM"/>
                 <outlet property="btnRehearsal" destination="CRY-eq-UaW" id="pJZ-Je-605"/>
                 <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
+                <outlet property="btnStop" destination="cSk-Si-TWy" id="mUh-jq-QsU"/>
                 <outlet property="chkApplePhotos" destination="exV-eR-hSc" id="m9q-13-6Qc"/>
                 <outlet property="chkCustomizedStyle" destination="ETG-pc-SpR" id="x3Q-jC-ZhN"/>
                 <outlet property="chkDateEventSubFolder" destination="X3B-lY-Z62" id="Mct-iW-aS9"/>
@@ -51,6 +52,7 @@
                 <outlet property="chkPatchImageDescription" destination="e7j-or-OMl" id="XG5-FT-L3E"/>
                 <outlet property="chkPlex" destination="CGW-lg-BlM" id="zFc-18-rdm"/>
                 <outlet property="ddlTargetVolume" destination="6LH-DJ-JWk" id="d6c-sC-4hS"/>
+                <outlet property="imgActionStatus" destination="Jyo-0R-xs6" id="5Um-7F-E37"/>
                 <outlet property="lblCalculate" destination="wC2-0l-112" id="ePe-b3-Vea"/>
                 <outlet property="lblExportProfileName" destination="y6Z-Kg-fSZ" id="Zla-2F-aL1"/>
                 <outlet property="lblProfileName" destination="Jyr-h1-K6M" id="o00-Qy-Z3z"/>
@@ -202,6 +204,14 @@
                                                 <action selector="onExportClicked:" target="-2" id="qTI-kp-8xa"/>
                                             </connections>
                                         </button>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wC2-0l-112">
+                                            <rect key="frame" x="8" y="489" width="384" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" id="PRx-cL-Mf2">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="379-yu-9KB">
                                             <rect key="frame" x="10" y="524" width="130" height="24"/>
                                             <buttonCell key="cell" type="push" title="Calculate Images" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xKF-Px-abE">
@@ -225,6 +235,12 @@
                                                         <menuItem title="10 images" state="on" id="W7V-RU-0J4"/>
                                                         <menuItem title="100 images" id="xem-Zx-qaQ"/>
                                                         <menuItem title="500 images" id="F4X-w5-zia"/>
+                                                        <menuItem title="1000 images" id="EOB-i1-b2G">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="2000 images" id="UnM-th-e52">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                         <menuItem title="ALL images" id="9av-LY-pUY">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
@@ -246,20 +262,6 @@
                                             </constraints>
                                             <connections>
                                                 <action selector="onCopySQLClicked:" target="-2" id="jeF-U9-O3c"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hre-Ie-vnv">
-                                            <rect key="frame" x="430" y="485" width="60" height="24"/>
-                                            <buttonCell key="cell" type="push" title="Log" bezelStyle="rounded" image="checklist" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="piy-J4-mzO">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <color key="bezelColor" name="systemPurpleColor" catalog="System" colorSpace="catalog"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="60" id="21N-G7-TVM"/>
-                                            </constraints>
-                                            <connections>
-                                                <action selector="onLogFileClicked:" target="-2" id="E2U-5W-12B"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CRY-eq-UaW">
@@ -369,32 +371,63 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
-                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wC2-0l-112">
-                                            <rect key="frame" x="8" y="489" width="414" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" id="PRx-cL-Mf2">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cSk-Si-TWy">
+                                            <rect key="frame" x="225" y="113" width="60" height="24"/>
+                                            <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QfN-Ua-RhJ">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
+                                            </buttonCell>
+                                            <color key="bezelColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="60" id="Tce-ni-I6C"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="onStopClicked:" target="-2" id="oCy-Pj-WCR"/>
+                                            </connections>
+                                        </button>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jyo-0R-xs6">
+                                            <rect key="frame" x="410" y="484" width="80" height="37"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="80" id="0cT-03-6iB"/>
+                                                <constraint firstAttribute="height" constant="37" id="amL-2n-4p5"/>
+                                            </constraints>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="aMa-66-E5F"/>
+                                        </imageView>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hre-Ie-vnv">
+                                            <rect key="frame" x="225" y="10" width="60" height="24"/>
+                                            <buttonCell key="cell" type="push" title="Log" bezelStyle="rounded" image="checklist" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="piy-J4-mzO">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <color key="bezelColor" name="systemPurpleColor" catalog="System" colorSpace="catalog"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="60" id="21N-G7-TVM"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="onLogFileClicked:" target="-2" id="E2U-5W-12B"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="LJN-IN-9jg" firstAttribute="top" secondItem="wC2-0l-112" secondAttribute="bottom" constant="8" symbolic="YES" id="4dk-XE-T7k"/>
                                         <constraint firstAttribute="trailing" secondItem="LJN-IN-9jg" secondAttribute="trailing" constant="20" symbolic="YES" id="6Ab-QL-0AO"/>
                                         <constraint firstItem="LJN-IN-9jg" firstAttribute="leading" secondItem="N6N-lc-FUd" secondAttribute="leading" constant="10" id="6g8-MM-Cyt"/>
+                                        <constraint firstAttribute="trailing" secondItem="wC2-0l-112" secondAttribute="trailing" constant="120" id="9VI-tY-gmJ"/>
                                         <constraint firstAttribute="trailing" secondItem="CRY-eq-UaW" secondAttribute="trailing" constant="80" id="Bs4-rt-v4E"/>
                                         <constraint firstItem="379-yu-9KB" firstAttribute="top" secondItem="N6N-lc-FUd" secondAttribute="top" constant="20" symbolic="YES" id="Eec-fo-2Z1"/>
-                                        <constraint firstItem="LJN-IN-9jg" firstAttribute="top" secondItem="Hre-Ie-vnv" secondAttribute="bottom" constant="4" id="GmH-D5-5eZ"/>
-                                        <constraint firstItem="wC2-0l-112" firstAttribute="leading" secondItem="N6N-lc-FUd" secondAttribute="leading" constant="10" id="HY9-9p-ORx"/>
-                                        <constraint firstAttribute="trailing" secondItem="Hre-Ie-vnv" secondAttribute="trailing" constant="20" id="OGc-yL-oiz"/>
+                                        <constraint firstAttribute="trailing" secondItem="Jyo-0R-xs6" secondAttribute="trailing" constant="20" symbolic="YES" id="OEW-P4-J8Q"/>
+                                        <constraint firstItem="cSk-Si-TWy" firstAttribute="top" secondItem="DV0-my-FgX" secondAttribute="bottom" constant="8" symbolic="YES" id="Ogc-I8-MzM"/>
                                         <constraint firstItem="CRY-eq-UaW" firstAttribute="leading" secondItem="DV0-my-FgX" secondAttribute="trailing" constant="8" symbolic="YES" id="Q8E-RD-1Pa"/>
                                         <constraint firstItem="aRg-nu-KNC" firstAttribute="leading" secondItem="N6N-lc-FUd" secondAttribute="leading" constant="100" id="TDF-SY-SXY"/>
-                                        <constraint firstItem="Hre-Ie-vnv" firstAttribute="leading" secondItem="wC2-0l-112" secondAttribute="trailing" constant="10" id="Td0-yr-UnU"/>
+                                        <constraint firstItem="Jyo-0R-xs6" firstAttribute="top" secondItem="jIu-gh-Rz0" secondAttribute="bottom" constant="3" id="UTS-tP-zph"/>
                                         <constraint firstItem="379-yu-9KB" firstAttribute="leading" secondItem="N6N-lc-FUd" secondAttribute="leading" constant="10" id="VU7-Rt-l59"/>
-                                        <constraint firstItem="Hre-Ie-vnv" firstAttribute="top" secondItem="jIu-gh-Rz0" secondAttribute="bottom" constant="15" id="VmS-t5-Gfx"/>
+                                        <constraint firstItem="Hre-Ie-vnv" firstAttribute="centerX" secondItem="N6N-lc-FUd" secondAttribute="centerX" id="YAo-0Y-4W6"/>
                                         <constraint firstItem="wC2-0l-112" firstAttribute="top" secondItem="N6N-lc-FUd" secondAttribute="top" constant="63" id="e6l-Vd-U66"/>
                                         <constraint firstItem="aRg-nu-KNC" firstAttribute="top" secondItem="LJN-IN-9jg" secondAttribute="bottom" constant="11" id="icK-DT-pci"/>
+                                        <constraint firstAttribute="bottom" secondItem="Hre-Ie-vnv" secondAttribute="bottom" constant="10" id="j69-m6-7Y1"/>
                                         <constraint firstAttribute="trailing" secondItem="jIu-gh-Rz0" secondAttribute="trailing" constant="20" id="jfn-V7-GIp"/>
                                         <constraint firstItem="CRY-eq-UaW" firstAttribute="top" secondItem="LJN-IN-9jg" secondAttribute="bottom" constant="11" id="kR2-4i-0fS"/>
+                                        <constraint firstItem="cSk-Si-TWy" firstAttribute="centerX" secondItem="N6N-lc-FUd" secondAttribute="centerX" id="ueV-IH-rzJ"/>
                                         <constraint firstItem="jIu-gh-Rz0" firstAttribute="top" secondItem="N6N-lc-FUd" secondAttribute="top" constant="20" symbolic="YES" id="v6K-nF-LOS"/>
                                         <constraint firstItem="DV0-my-FgX" firstAttribute="top" secondItem="LJN-IN-9jg" secondAttribute="bottom" constant="12" id="z1G-3p-s6R"/>
                                         <constraint firstItem="wC2-0l-112" firstAttribute="leading" secondItem="N6N-lc-FUd" secondAttribute="leading" constant="10" id="zzG-Uz-1il"/>
