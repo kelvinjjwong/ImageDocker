@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Synchronization
 import LoggerFactory
 
 class TaskManager {
@@ -252,7 +253,7 @@ class TaskletManager {
     
     var tasks:[Tasklet] = []
     
-    var tasksStartStopState:[String:Bool] = [:]
+    let tasksStartStopState = Mutex([String:Bool]())
     
     // MARK: - QUEUE for SINGLE MODE
     
@@ -284,7 +285,10 @@ class TaskletManager {
                     if let task = self.getPeakTaskFromQueue() {
                         if task.state == "READY" {
                             var shouldTrigger = false
-                            if let state = self.tasksStartStopState[task.id] {
+                            let state = self.tasksStartStopState.withLock{
+                                return $0[task.id]
+                            }
+                            if let state = state {
                                 if state == false {
                                     shouldTrigger = true
                                 }
@@ -293,7 +297,9 @@ class TaskletManager {
                             }
                             
                             if shouldTrigger {
-                                self.tasksStartStopState[task.id] = true
+                                self.tasksStartStopState.withLock{
+                                    $0[task.id] = true
+                                }
                                 if task.isFixedDelayJob {
                                     if task.timesOfRun > 0 {
                                         let now = Int(Date().timeIntervalSince1970)
@@ -329,7 +335,9 @@ class TaskletManager {
                                 task.state = "READY"
                                 task.progress = 0
                                 task.message = "Waiting for next run ..."
-                                self.tasksStartStopState[task.id] = false
+                                self.tasksStartStopState.withLock{
+                                    $0[task.id] = false
+                                }
                                 if let view = self.viewManager {
                                     view.updateMessage(task: task)
                                 }
@@ -363,7 +371,10 @@ class TaskletManager {
         self.logger.log(.trace, "Queued tasks: \(self.queue.list.count)")
         for task in self.queue.list {
             if task.isFixedDelayJob {
-                self.logger.log(.trace, "\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(String(describing: self.tasksStartStopState[task.id]))")
+                let state = self.tasksStartStopState.withLock{
+                    return $0[task.id]
+                }
+                self.logger.log(.trace, "\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(String(describing: state))")
             }else{
                 self.logger.log(.trace, "\(task.name) - \(task.state)")
             }
@@ -468,7 +479,10 @@ class TaskletManager {
     
     func isTaskStopped(type:String, name:String) -> Bool {
         if let task = self.getTask(type: type, name: name) {
-            if let state = self.tasksStartStopState[task.id] {
+            let state = self.tasksStartStopState.withLock{
+                return $0[task.id]
+            }
+            if let state = state {
                 return !state
             }
         }
@@ -477,7 +491,10 @@ class TaskletManager {
     
     func isTaskStopped(id:String) -> Bool {
         if id == "" { return false }
-        if let state = self.tasksStartStopState[id] {
+        let state = self.tasksStartStopState.withLock{
+            return $0[id]
+        }
+        if let state = state {
             return !state
         }
         return true
@@ -497,7 +514,9 @@ class TaskletManager {
     
     private func stopTask(task:Tasklet, fromUI:Bool) {
         task.state = "STOPPED"
-        self.tasksStartStopState[task.id] = false
+        self.tasksStartStopState.withLock{
+            $0[task.id] = false
+        }
         task.stopExecution()
         if !fromUI {
             if let view = self.viewManager {
@@ -525,7 +544,9 @@ class TaskletManager {
         self.tasks.removeAll { (obj) -> Bool in
             return task.id == obj.id
         }
-        self.tasksStartStopState.removeValue(forKey: task.id)
+        self.tasksStartStopState.withLock{
+            $0.removeValue(forKey: task.id)
+        }
         
         if let view = self.viewManager {
             view.removeTask(task: task)
@@ -592,10 +613,14 @@ class TaskletManager {
             task.state = "COMPLETED"
 
             if self.isSingleMode() {
-                self.tasksStartStopState[task.id] = false
+                self.tasksStartStopState.withLock{
+                    $0[task.id] = false
+                }
             }else{
                 if !task.isFixedDelayJob {
-                    self.tasksStartStopState[task.id] = false
+                    self.tasksStartStopState.withLock{
+                        $0[task.id] = false
+                    }
                 }
             }
 
@@ -619,10 +644,14 @@ class TaskletManager {
             if task.progress == task.total {
                 task.state = "COMPLETED"
                 if self.isSingleMode() {
-                    self.tasksStartStopState[task.id] = false
+                    self.tasksStartStopState.withLock{
+                        $0[task.id] = false
+                    }
                 }else{
                     if !task.isFixedDelayJob {
-                        self.tasksStartStopState[task.id] = false
+                        self.tasksStartStopState.withLock{
+                            $0[task.id] = false
+                        }
                     }
                 }
                 self.updateTasksCountInMainWindow()
@@ -657,7 +686,9 @@ class TaskletManager {
     private func startExecution(task:Tasklet) {
         task.state = "IN_PROGRESS"
         task.progress = 0
-        self.tasksStartStopState[task.id] = true
+        self.tasksStartStopState.withLock{
+            $0[task.id] = true
+        }
         task.startExecution()
     }
     
@@ -697,7 +728,9 @@ class TaskletManager {
     private func startFixedDelayExecution(task:Tasklet) {
         task.state = "READY"
         task.progress = 0
-        self.tasksStartStopState[task.id] = true
+        self.tasksStartStopState.withLock{
+            $0[task.id] = true
+        }
         task.startFixedDelayExecution(intervalInSecond: task.fixedDelayInterval) // TODO : in single mode, before each run, check if no other task is running
     }
     

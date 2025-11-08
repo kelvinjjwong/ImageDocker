@@ -100,6 +100,9 @@ struct Icons {
             view.clear()
         }
     }
+    static func hide_gif(view:NSImageView) {
+        view.clear()
+    }
     
     static func databaseIcon(engine:String) -> NSImage {
         switch(engine.lowercased()) {

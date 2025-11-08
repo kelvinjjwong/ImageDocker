@@ -435,7 +435,7 @@ class ExportConfigurationViewController: NSViewController {
             
             self.toggleGroup_Repository.enable()
 //            self.toggleGroup_Family.enable()
-//            self.toggleGroup_EventCategory.enable()
+            self.toggleGroup_EventCategory.enable()
             
             self.treeViewController?.enable()
             
@@ -446,7 +446,7 @@ class ExportConfigurationViewController: NSViewController {
             
             self.toggleGroup_Repository.disable()
 //            self.toggleGroup_Family.disable()
-//            self.toggleGroup_EventCategory.disable()
+            self.toggleGroup_EventCategory.disable()
             
             self.treeViewController?.disable()
             
@@ -560,13 +560,6 @@ class ExportConfigurationViewController: NSViewController {
 //            self.eventCategoriesTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             //            self.treeViewController?.setCheckedItems(ids: <#T##[String]#>)
         }
-        if !specifyEventCategory {
-//            self.eventCategoriesTableController.disableCheckboxes()
-            self.toggleGroup_EventCategory.disable()
-        }else{
-//            self.eventCategoriesTableController.enableCheckboxes()
-            self.toggleGroup_EventCategory.enable()
-        }
         
         self.setStyle(profile.style)
         
@@ -582,10 +575,15 @@ class ExportConfigurationViewController: NSViewController {
     func loadProfileEvents(profile:ExportProfile) {
         self.treeViewController?.uncheckItems()
         
+        var isExclude = false
         let events = ExportDao.default.loadProfileEvents(profileId: profile.id)
         for event in events {
+            isExclude = event.exclude
             self.checkTreeNode(oldValue: false, newValue: true, nodeType: event.eventNodeType, nodeId: event.eventId)
         }
+        self.toggleGroup_EventCategory.selected = isExclude ? "exclude" : "include"
+//        self.chkIncludeEventCategories.state = isExclude ? .off : .on
+//        self.chkExcludeEventCategories.state = isExclude ? .on : .off
         
     }
     
@@ -682,9 +680,9 @@ class ExportConfigurationViewController: NSViewController {
         
         self.toggleButtons(editState: false, actionState: false)
         
+        let form = self.fillProfileFromForm(profile: ExportProfile())
+        
         DispatchQueue.global().async {
-            
-            let form = self.fillProfileFromForm(profile: ExportProfile())
             
             var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
                                                                      name: form.name,
@@ -704,6 +702,8 @@ class ExportConfigurationViewController: NSViewController {
                                                                      specifyEventCategory: form.specifyEventCategory ?? false
                                                                     )
             
+            // handle selected events
+            
             let status_del_events = ExportDao.default.deleteProfileEvents(profileId: profile.id)
             if status_del_events != .OK {
                 self.logger.log(.error, status_del_events)
@@ -711,13 +711,16 @@ class ExportConfigurationViewController: NSViewController {
                 print("Unable to delete all event for export profile id=\(self.editingId)")
             }
             if let treeViewController = self.treeViewController {
+                
+                let isExclude = self.toggleGroup_EventCategory.selected == "exclude"
+                
                 for checkedEventItem in treeViewController.getCheckedItems() {
                     let part = checkedEventItem.getId().components(separatedBy: "|")
                     let eventOwner = part[0]
                     let eventName = part[part.count-1]
                     let eventNodeType = part.count == 2 ? "group" : "member"
                     print("save profile id: \(profile.id) -- event owner: \(eventOwner) -- type: \(eventNodeType) -- event id:\(checkedEventItem.getId())")
-                    let status = ExportDao.default.saveProfileEvent(profileId: profile.id, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: checkedEventItem.getId(), eventName: eventName, exclude: false)
+                    let status = ExportDao.default.saveProfileEvent(profileId: profile.id, eventOwner: eventOwner, eventNodeType: eventNodeType, eventId: checkedEventItem.getId(), eventName: eventName, exclude: isExclude)
                     if status != .OK {
                         self.logger.log(.error, status)
                         self.logger.log(.error, "Unable to save event for export profile id=\(self.editingId)")
@@ -802,6 +805,12 @@ class ExportConfigurationViewController: NSViewController {
             }else{
                 self.fillFields(profile: profile)
             }
+            
+            for (_, vc) in self.profileStackItems {
+                vc.updateStatus(.none)
+            }
+            viewController.updateStatus(.editing)
+            
             self.turnSaveButtonToDone()
         }, onDelete: { // MARK: ON DELETE PROFILE
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
@@ -895,6 +904,8 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - EXPORT
     
+    // TODO: stop export -- TaskletManager.stopTask
+    
     @IBAction func onExportClicked(_ sender: NSButton) {
         // real export with file i/o and amount limitation
         self.toggleButtons(editState: false, actionState: false)
@@ -919,7 +930,7 @@ class ExportConfigurationViewController: NSViewController {
                         vc.updateStatus(.completed)
                     }
                 }else{
-                    self.lblCalculate.stringValue = "ERROR: \(message)"
+                    self.lblCalculate.stringValue = "错误: \(message)"
                     
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.failed)
@@ -955,7 +966,7 @@ class ExportConfigurationViewController: NSViewController {
                         vc.updateStatus(.completed)
                     }
                 }else{
-                    self.lblCalculate.stringValue = "ERROR: \(message)"
+                    self.lblCalculate.stringValue = "错误: \(message)"
                     
                     if let vc = self.profileStackItems[profile.id] {
                         vc.updateStatus(.failed)
@@ -983,7 +994,7 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     @IBAction func onCalculateClicked(_ sender: NSButton) {
-        self.lblCalculate.stringValue = "Calculating affected images ..."
+        self.lblCalculate.stringValue = "正在计算受影响的照片 ..."
         var profile:ExportProfile
         if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
             profile = pf
@@ -997,7 +1008,7 @@ class ExportConfigurationViewController: NSViewController {
             let count = ExportDao.default.countImagesForExport(profile: profile, years: years)
             let exported = ExportDao.default.countExportedImages(profile: profile, years: years)
             DispatchQueue.main.async {
-                self.lblCalculate.stringValue = "Profile affects \(count) images. Exported \(exported) images."
+                self.lblCalculate.stringValue = "预案影响 \(count) 张照片. 已记录 \(exported) 张照片曾被导出过."
             }
         }
     }
@@ -1084,7 +1095,7 @@ class ExportConfigurationViewController: NSViewController {
             "exclude" : self.chkExcludeEventCategories
         ], keysOrderred: ["include", "exclude"], defaultValue: "include")
         
-//        self.toggleGroup_EventCategory.selected = "include"
+        self.toggleGroup_EventCategory.selected = "include"
         
         self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears)
         

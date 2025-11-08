@@ -13,6 +13,7 @@ public enum ExportProfileStatus {
     case in_progress
     case completed
     case failed
+    case editing
 }
 
 class ExportProfileViewController : NSViewController {
@@ -97,13 +98,27 @@ class ExportProfileViewController : NSViewController {
     
     func updateStatus(_ state:ExportProfileStatus) {
         if state == .none {
-            self.imgStatus.image = nil
+            Icons.hide_gif(view: self.imgStatus)
         }else if state == .completed {
             Icons.show_gif(name: "success", view: self.imgStatus, loopCount: 1)
+            DispatchQueue.global().async{
+                sleep(5)
+                DispatchQueue.main.async{
+                    Icons.show_gif(name: "loading_hand", view: self.imgStatus)
+                }
+            }
         }else if state == .in_progress {
             Icons.show_gif(name: "loading_colorful", view: self.imgStatus)
         }else if state == .failed {
             Icons.show_gif(name: "failure", view: self.imgStatus, loopCount: 1)
+            DispatchQueue.global().async{
+                sleep(5)
+                DispatchQueue.main.async{
+                    Icons.show_gif(name: "loading_hand", view: self.imgStatus)
+                }
+            }
+        }else if state == .editing {
+            Icons.show_gif(name: "loading_hand", view: self.imgStatus)
         }
     }
     

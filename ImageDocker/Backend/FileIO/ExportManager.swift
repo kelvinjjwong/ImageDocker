@@ -135,6 +135,7 @@ class ExportManager {
         var failed:Int = 0
         var terminated = false
         
+        // TODO: append ad-hoc logger
         
         let _ = TaskletManager.default.createAndStartTask(type: "Export\(rehearsal ? " Exercise" : "")", name: "\(profile.name)", total: 2
                                                           , exec: { task in
@@ -148,7 +149,7 @@ class ExportManager {
             
             self.logger.log(.trace, "EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
             
-            TaskletManager.default.updateProgress(id: task.id, message: "Loading images ...", increase: false)
+            TaskletManager.default.updateProgress(id: task.id, message: "正在搜索并载入照片 ...", increase: false)
             
             let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile, years: years)
             
@@ -156,7 +157,7 @@ class ExportManager {
             
             TaskletManager.default.setTotal(id: task.id, total: total)
             
-            TaskletManager.default.updateProgress(id: task.id, message: "Loading images (total \(total)) ...", increase: false)
+            TaskletManager.default.updateProgress(id: task.id, message: "准备\(rehearsal ? "演练" : "")导出照片 (合计 \(total) 张照片) ...", increase: false)
             
             let pageSizeMax = 100
             var pageSize:Int = totalImagesInDb
@@ -179,10 +180,15 @@ class ExportManager {
 //                guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
                 if TaskletManager.default.isTaskStopped(id: task.id) == true {
                     terminated = true
+                    
+                    // TODO: remove ad-hoc logger
+                    
                     return
                 }
                 
-                self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
+                // TODO: delete "exported in the past" but "hidden now" images
+                
+                self.printMessage("正在搜索并载入照片 第 \(pageNumber) / \(pageCount) 批次...")
                 
                 let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber, years: years)
                 
@@ -202,16 +208,24 @@ class ExportManager {
                         
                         if TaskletManager.default.isTaskStopped(id: task.id) == true {
                             terminated = true
+                            
+                            // TODO: remove ad-hoc logger
+                            
                             return
                         }
                         
                         i += 1
                         
-                        self.printMessage("Exporting image ( \(i) / \(total) ) ...")
+                        self.printMessage("正在\(rehearsal ? "演练" : "")导出照片 (已导出 \(i) / 目标总共 \(total) 张) ...")
                         
                         let image = images[n-1]
                         
+                        // apply filter rules
+                        
                         if self.shouldExportFile(profile: profile, image: image, events: events) {
+                            
+                            // export
+                            
                             let exportOK = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
                             
                             if !exportOK {
@@ -220,21 +234,26 @@ class ExportManager {
                         }
                         
                         
-                        TaskletManager.default.updateProgress(id: task.id, message: "Exported image (\(i)/\(task.total))", increase: true)
+                        TaskletManager.default.updateProgress(id: task.id, message: "完成\(rehearsal ? "演练" : "")导出照片 (\(i)/\(task.total))", increase: true)
                         
                     }
+                    
+                    // TODO: remove ad-hoc logger
                 }
                 
             } // end of while loop
             
         }, stop: {task in
             
+            // TODO: remove ad-hoc logger
         })
         self.printMessage("Export DONE: \(profile.name)")
         
         TaskManager.exporting = false
         
-        return (true, "\(terminated ? "STOPPED" : "COMPLETED") with \(failed) error.")
+        // TODO: remove ad-hoc logger
+        
+        return (true, "\(terminated ? "已中止" : "已完成")\(rehearsal ? "演练" : "")导出。\(failed > 0 ? "发现 \(failed) 项错误" : "")")
     }
     
     // MARK: - EXPORT Rules Filter
@@ -249,8 +268,9 @@ class ExportManager {
                     pass = true
                 }else{
                     for event in events {
+                        // handle included / excluded event
                         if event.eventName == ev {
-                            pass = true
+                            pass = !event.exclude
                         }
                     }
                 }
@@ -308,6 +328,9 @@ class ExportManager {
         var copied = false
         var errorMessage = ""
         autoreleasepool { () -> Void in
+            
+            // handle (delete) exported target file in the past // TODO: follow file-exist rule
+            
             if let imageId = image.id {
                 let (exportedSubfolder, exportedFilename) = ExportDao.default.getExportedFilename(imageId: imageId, profileId: profile.id)
                 if let exportedSubfolder = exportedSubfolder, let exportedFilename = exportedFilename {
@@ -323,6 +346,9 @@ class ExportManager {
                     }
                 }
             }
+            
+            // handle (delete) existing target file // TODO: follow file-exist rule
+            
             if FileManager.default.fileExists(atPath: "\(fullTargetFilePath.path)") {
                 self.logger.log(.trace, "[\(imagePath)] Destination file exists, try delete: \(fullTargetFilePath.path)")
                 do {
@@ -332,6 +358,9 @@ class ExportManager {
                     self.logger.log(.error, error)
                 }
             }
+            
+            // copy file physically
+            
             do {
                 self.logger.log(.trace, "[\(imagePath)] Copying file to [\(fullTargetFilePath.path)]")
                 try FileManager.default.copyItem(atPath: imagePath, toPath: "\(fullTargetFilePath.path)")
@@ -365,11 +394,12 @@ class ExportManager {
             self.logger.log(.trace, "[\(imagePath)] Copy file to [\(fullTargetFilePath.path)] DONE.")
             
             let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? imagePath, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
-            // TODO handle db interrupt error
+            // TODO: handle db interrupt error
+            
             return true
         }else{
             let _ = ExportDao.default.storeImageExportFail(imageId: image.id ?? imagePath, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, failMessage: errorMessage)
-            // TODO handle db interrupt error
+            // TODO: handle db interrupt error
             
             return false
         }
