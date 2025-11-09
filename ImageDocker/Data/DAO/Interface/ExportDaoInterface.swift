@@ -73,9 +73,13 @@ protocol ExportDaoInterface {
     
     func getExportedImages(profileId:String) -> [(String, String, String)]
     
+    func getExportedImages(profileId:String, years:[String]) -> [(String, String, String, Date)]
+    
     func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String
     
-    func getExportedImagesButNowHidden(profileId:String) -> [(String, String, String)] 
+    func getExportedImagesButNowHidden(profileId:String) -> [(String, String, String)]
+    
+    func getLatestExportTime(profileId:String, years:[String]) -> Date?
     
     // MARK: - EXPORT RECORD LOG
     

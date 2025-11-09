@@ -454,6 +454,67 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
         
     }
     
+    func getExportedImages(profileId:String, years:[String]) -> [(String, String, String, Date)] {
+        
+        let sql = """
+select e."imageId", e."subfolder", e."filename", e."lastExportTime" from "ExportLog" e
+left join "Image" i on e."imageId" = i."id"
+where e."profileId" = '\(profileId)' 
+and e."shouldDelete" = 'f' 
+and i."photoTakenYear" in (\(years.joined(separator: ",")))
+order by e."lastExportTime"
+"""
+        final class TempRecord : DatabaseRecord {
+            var imageId:String = ""
+            var subfolder:String? = nil
+            var filename:String? = nil
+            var lastExportTime:Date? = nil
+            public init() {}
+        }
+        
+        var array:[(String, String, String, Date)] = []
+        
+        let db = PostgresConnection.database()
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for record in records {
+            let imageId = record.imageId
+            let subfolder = record.subfolder ?? ""
+            let filename = record.filename ?? ""
+            let lastExportTime = record.lastExportTime ?? Date(timeIntervalSince1970: 0)
+            array.append((imageId, subfolder, filename, lastExportTime))
+        }
+        return array
+        
+    }
+    
+    func getLatestExportTime(profileId:String, years:[String]) -> Date? {
+        let db = PostgresConnection.database()
+        let sql = """
+        select max(e."lastExportTime") as "latestExportTime" from "ExportLog" e
+        left join "Image" i on e."imageId" = i."id"
+        where e."profileId" = '\(profileId)' 
+        and e."shouldDelete" = 'f' 
+        and i."photoTakenYear" in (\(years.joined(separator: ",")))
+        and i.hidden='f' and i."hiddenByContainer"='f' and i."hiddenByRepository"='f'
+        """
+        final class TempRecord : DatabaseRecord {
+            var latestExportTime:Date? = nil
+            public init() {}
+        }
+        do {
+            var record = try TempRecord.fetchOne(db, sql: sql)
+            return record?.latestExportTime
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
+    }
+    
     // MARK: - EXPORT RECORD LOG
     
     func deleteExportLogNotRelateToImageId(profileId:String) -> ExecuteState  {

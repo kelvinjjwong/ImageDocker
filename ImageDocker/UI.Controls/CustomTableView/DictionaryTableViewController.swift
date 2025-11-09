@@ -46,6 +46,16 @@ class DictionaryTableViewController: NSObject {
         }
     }
     
+    func getItems() -> [[String:String]] {
+        return self.items
+    }
+    
+    func replaceItem(index:Int, newItem:[String:String]) {
+        self.items.remove(at: index)
+        self.items.insert(newItem, at: index)
+        self.table.reloadData()
+    }
+    
     func clean(){
         self.load([[String:String]]())
     }

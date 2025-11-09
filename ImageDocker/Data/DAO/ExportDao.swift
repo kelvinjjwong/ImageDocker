@@ -142,6 +142,14 @@ class ExportDao {
         return self.impl.getExportedImages(profileId: profileId)
     }
     
+    func getExportedImages(profileId:String, years:[String]) -> [(String, String, String, Date)] {
+        return self.impl.getExportedImages(profileId: profileId, years: years)
+    }
+    
+    func getLatestExportTime(profileId:String, years:[String]) -> Date? {
+        return self.impl.getLatestExportTime(profileId: profileId, years: years)
+    }
+    
     func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String {
         return self.impl.getSQLForImageExport(profile: profile, years: years)
     }

@@ -1025,11 +1025,16 @@ class ExportConfigurationViewController: NSViewController {
         }
         let years = self.photoTakenYearsTableController.getCheckedItems(column: "name")
         
+        Icons.show_gif(name: "loading_hand", view: self.imgActionStatus)
         DispatchQueue.global().async {
             let count = ExportDao.default.countImagesForExport(profile: profile, years: years)
             let exported = ExportDao.default.countExportedImages(profile: profile, years: years)
             DispatchQueue.main.async {
                 self.lblCalculate.stringValue = "预案影响 \(count) 张照片. 已记录 \(exported) 张照片曾被导出过."
+            }
+            self.statisticByPhotoTakenYears(profile: profile)
+            DispatchQueue.main.async {
+                Icons.hide_gif(view: self.imgActionStatus)
             }
         }
     }
@@ -1050,6 +1055,56 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         return list
+    }
+    
+    func statisticByPhotoTakenYears(profile:ExportProfile) {
+        let rows = self.loadPhotoTakenYears()
+        var index = 0
+        for row in rows {
+            let year = row["name"] ?? "0"
+            
+            self.statisticByPhotoTakenYears(profile: profile, controller: self.photoTakenYearsTableController, _row: row, year: year, index: index)
+            index += 1
+        }
+    }
+    
+    func statisticByPhotoTakenYears(profile:ExportProfile, controller:DictionaryTableViewController, _row:[String: String], year:String, index:Int) {
+        let rows = controller.getItems()
+        var row = _row
+        let year = row["name"] ?? "0"
+        if year == "0" {
+            return
+        }
+        let countShouldExport = ExportDao.default.countImagesForExport(profile: profile, years: [year])
+        let countExported = ExportDao.default.countExportedImages(profile: profile, years: [year])
+        let exportedImages = ExportDao.default.getExportedImages(profileId: profile.id, years: [year])
+        let latestExportTime = ExportDao.default.getLatestExportTime(profileId: profile.id, years: [year])
+        // TODO: get lastMofifiedTime of image record
+        var countExportedExistPhysically = 0
+        for exportedImage in exportedImages {
+            let _ = exportedImage.0
+            let subfolder = exportedImage.1
+            let filename = exportedImage.2
+            let _ = exportedImage.3
+            
+            let path = URL(fileURLWithPath: "\(profile.targetVolume)\(profile.directory)").appendingPathComponent(subfolder).appendingPathComponent(filename)
+            
+            if FileManager.default.fileExists(atPath: path.path) {
+                countExportedExistPhysically += 1
+            }
+        }
+        row["countShouldExport"] = "\(countShouldExport)"
+        row["countExported"] = "\(countExported)"
+        row["countExportedExistPhysically"] = "\(countExportedExistPhysically)"
+        
+        if let latestExportTime = latestExportTime {
+            row["latestExportTime"] = "\(latestExportTime)"
+        }else{
+            row["latestExportTime"] = ""
+        }
+        DispatchQueue.main.async {
+            controller.replaceItem(index: index, newItem: row)
+        }
     }
     
     func loadRepositoryOwners() -> [[String:String]] {
