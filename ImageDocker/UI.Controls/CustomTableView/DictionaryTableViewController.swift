@@ -28,8 +28,11 @@ class DictionaryTableViewController: NSObject {
     
     // MARK: INIT
     
-    init(_ table:NSTableView) {
+    var rowStyle:((String, NSTableCellView,[String:String]) -> Void)? = nil
+    
+    init(_ table:NSTableView, rowStyle:((String, NSTableCellView,[String:String]) -> Void)? = nil) {
         self.table = table
+        self.rowStyle = rowStyle
     }
     
     func load(_ items:[[String:String]], afterLoaded:(() -> Void)? = nil) {
@@ -331,6 +334,11 @@ extension DictionaryTableViewController: NSTableViewDelegate, NSTextFieldDelegat
                         colView.textField?.isEditable = true
                     }
                     colView.textField?.identifier = NSUserInterfaceItemIdentifier("id_\(item["id"] ?? UUID().uuidString)_column_\(columnKey)_datatype_\(item["datatype"] ?? "")")
+                    
+                    if let rowStyle = self.rowStyle {
+                        rowStyle(id.rawValue, colView, item)
+                    }
+                    
                     colView.textField?.delegate = self
                     
                     if row == tableView.selectedRow {

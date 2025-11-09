@@ -1097,8 +1097,12 @@ class ExportConfigurationViewController: NSViewController {
         row["countExported"] = "\(countExported)"
         row["countExportedExistPhysically"] = "\(countExportedExistPhysically)"
         
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full // Options: .full, .short, .abbreviated
+        formatter.dateTimeStyle = .named // Options: .named, .numeric
+        
         if let latestExportTime = latestExportTime {
-            row["latestExportTime"] = "\(latestExportTime)"
+            row["latestExportTime"] = "\(formatter.localizedString(for: latestExportTime, relativeTo: Date())) -- \(DateFormatter.localizedString(from: latestExportTime, dateStyle: .medium, timeStyle: .medium))"
         }else{
             row["latestExportTime"] = ""
         }
@@ -1173,7 +1177,26 @@ class ExportConfigurationViewController: NSViewController {
         
         self.toggleGroup_EventCategory.selected = "include"
         
-        self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears)
+        self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears, rowStyle: { columnId, cellView, item in
+            
+            cellView.textField?.textColor = NSColor.lightGray
+            
+            if columnId == "countShouldExport" {
+                cellView.textField?.alignment = .right
+            }
+            else if columnId == "countExported" {
+                if Int(item["countExported"] ?? "0") != Int(item["countShouldExport"] ?? "0") {
+                    cellView.textField?.textColor = NSColor.systemOrange
+                }
+                cellView.textField?.alignment = .right
+            }
+            else if columnId == "countExportedExistPhysically" {
+                if Int(item["countExportedExistPhysically"] ?? "0") != Int(item["countExported"] ?? "0") {
+                    cellView.textField?.textColor = NSColor.systemOrange
+                }
+                cellView.textField?.alignment = .right
+            }
+        })
         
         self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
         self.repositoryTableController.onCheck = { id, state in
