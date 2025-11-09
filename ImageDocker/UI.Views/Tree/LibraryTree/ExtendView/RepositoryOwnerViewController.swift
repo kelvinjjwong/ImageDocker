@@ -83,9 +83,11 @@ class RepositoryOwnerViewController: NSViewController {
                 }
                 
                 // task 1
+                TaskletManager.default.resetProgress(id: task.id)
                 TaskletManager.default.updateProgress(id: task.id, message: "正在扫描缺失标识的影像 ...", increase: false)
-                self.lblMessage.stringValue = "正在扫描缺失标识的影像 ..."
-                
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "正在扫描缺失标识的影像 ..."
+                }
                 let recordsWithNullId = ImageRecordDao.default.getImagesWithNullId(owner: self.owner)
                 
                 if recordsWithNullId.count > 0 {
@@ -131,9 +133,11 @@ class RepositoryOwnerViewController: NSViewController {
                 } // end of task 1
                 
                 // task 2
+                TaskletManager.default.resetProgress(id: task.id)
                 TaskletManager.default.updateProgress(id: task.id, message: "正在扫描缺失文件类型的影像 ...", increase: false)
-                self.lblMessage.stringValue = "正在扫描缺失文件类型的影像 ..."
-                
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "正在扫描缺失文件类型的影像 ..."
+                }
                 let recordsWithNullFileExt = ImageRecordDao.default.getImagesWithNullFileExt(owner: self.owner)
                 
                 if recordsWithNullFileExt.count > 0 {
@@ -178,9 +182,11 @@ class RepositoryOwnerViewController: NSViewController {
                 } // end of task 2
                 
                 // task 3
+                TaskletManager.default.resetProgress(id: task.id)
                 TaskletManager.default.updateProgress(id: task.id, message: "正在扫描缺失内容校验标记的影像 ...", increase: false)
-                self.lblMessage.stringValue = "正在扫描缺失内容校验标记的影像 ..."
-                
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "正在扫描缺失内容校验标记的影像 ..."
+                }
                 let recordsWithNullOriginalMD5 = ImageRecordDao.default.getImagesWithNullOriginalMD5(owner: self.owner)
                 
                 if recordsWithNullOriginalMD5.count > 0 {
@@ -241,9 +247,11 @@ class RepositoryOwnerViewController: NSViewController {
                 
                 
                 // task 4
+                TaskletManager.default.resetProgress(id: task.id)
                 TaskletManager.default.updateProgress(id: task.id, message: "正在扫描内容校验重复的影像 ...", increase: false)
-                self.lblMessage.stringValue = "正在扫描内容校验重复的影像 ..."
-                
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "正在扫描内容校验重复的影像 ..."
+                }
                 let duplicateOriginalMD5s = ImageRecordDao.default.getImageOriginalMD5HavingDuplicated(owner: self.owner)
                 
                 if duplicateOriginalMD5s.count > 0 {

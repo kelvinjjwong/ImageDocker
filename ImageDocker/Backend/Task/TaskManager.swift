@@ -594,6 +594,16 @@ class TaskletManager {
     
     // MARK: - UPDATE TASK PROGRESS
     
+    func resetProgress(id:String) {
+        if let task = self.getTask(id: id) {
+            task.state = "READY"
+            task.progress = 0
+            self.tasksStartStopState.withLock{
+                $0[task.id] = true
+            }
+        }
+    }
+    
     func updateProgress(type:String, name:String, message:String, increase:Bool = false) {
         if let task = self.getTask(type: type, name: name) {
             self.updateProgress(task: task, message: message, increase: increase)
