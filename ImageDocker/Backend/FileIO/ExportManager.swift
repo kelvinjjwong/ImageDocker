@@ -169,6 +169,14 @@ class ExportManager {
             
             self.startTask(profileId: profile.id)
             
+            TaskletManager.default.updateProgress(id: task.id, message: "正在清理已失效的已导出文件 ...", increase: false)
+            
+            self.deleteExportLogNotRelateToImageId(profile: profile)
+            
+            self.deletePhysicalFilesNotRelateToExportLog(profile: profile)
+            
+            self.deletePhysicalFilesAndExportedImagesNowHidden(profile: profile)
+            
             self.logger.log(.trace, "EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
             
             TaskletManager.default.updateProgress(id: task.id, message: "正在搜索并载入照片 ...", increase: false)
@@ -429,20 +437,30 @@ class ExportManager {
     }
     
     // MARK: - HOUSE KEEP
-    func housekeepFilesNotInExportLog(profile:ExportProfile) {
+    
+    func deleteExportLogNotRelateToImageId(profile:ExportProfile) {
+        self.printMessage("正在检查已失效的已导出文件 ...")
+        
+        let _ = ExportDao.default.deleteExportLogNotRelateToImageId(profileId: profile.id)
+        
+        self.printMessage("")
+    }
+    
+    
+    func deletePhysicalFilesNotRelateToExportLog(profile:ExportProfile) {
         self.logger.log(.trace, "EXPORT: HOUSE KEEP")
         
-        self.printMessage("正在检查不正常的已导出记录 ...")
+        self.printMessage("正在检查已失效的已导出文件 ...")
         
         let exportedFileInfos = ExportDao.default.getExportedImages(profileId: profile.id)
         
         var fileRecords:Set<String> = []
         for info in exportedFileInfos {
-            let path = URL(fileURLWithPath: profile.directory).appendingPathComponent(info.1).appendingPathComponent(info.2)
+            let path = URL(fileURLWithPath: "\(profile.targetVolume)\(profile.directory)").appendingPathComponent(info.1).appendingPathComponent(info.2)
             fileRecords.insert(path.path)
         }
         
-        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: profile.directory),
+        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: "\(profile.targetVolume)\(profile.directory)"),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                                             self.logger.log(.error, "directoryEnumerator error at \(url): ", error)
@@ -476,7 +494,7 @@ class ExportManager {
         
         self.logger.log(.trace, "Useless exported file count: \(uselessFiles.count)")
         
-        self.printMessage("发现不正常的已导出记录: \(uselessFiles.count) 项")
+        self.printMessage("发现已失效的已导出文件: \(uselessFiles.count) 项")
         
         // delete useless exported files
         if uselessFiles.count > 0 {
@@ -488,7 +506,7 @@ class ExportManager {
                 guard self.nonStop(profileId: profile.id) else {return}
                 
                 i += 1
-                self.printMessage("正在删除不正常的已导出记录 ... ( \(i) / \(total) )")
+                self.printMessage("正在删除已失效的已导出文件 ... ( \(i) / \(total) )")
                 
                 self.logger.log(.trace, "deleting invalid exported file \(uselessFile)")
                 
@@ -523,44 +541,46 @@ class ExportManager {
     
     
     // check if exported file record should not be exported to file system
-    func housekeepNewHiddenImages(profile:ExportProfile) {
-        let exportedImages = ExportDao.default.getExportedImages(profileId: profile.id)
-        for (imageId, subfolder, filename) in exportedImages {
-            var shouldDelete = false
-            var shouldDeleteFile = false
+    func deletePhysicalFilesAndExportedImagesNowHidden(profile:ExportProfile) {
+        self.printMessage("正在检查已决定不导出的已导出文件 ...")
+        
+        let exportedImagesButNowHidden = ExportDao.default.getExportedImagesButNowHidden(profileId: profile.id)
+        
+        self.printMessage("发现已决定不导出的已导出文件: \(exportedImagesButNowHidden.count) 项")
+        
+        // if suppressed from outside, stop immediately
+        guard self.nonStop(profileId: profile.id) else {return}
+        
+        if exportedImagesButNowHidden.count > 0 {
             
-            // check hidden
-            if let image = ImageRecordDao.default.getImage(id: imageId) {
-                if image.hidden || image.hiddenByContainer || image.hiddenByRepository {
-                    shouldDelete = true
-                    shouldDeleteFile = true
+            let total = exportedImagesButNowHidden.count
+            var i = 0
+            
+            for (imageId, subfolder, filename) in exportedImagesButNowHidden {
+                
+                // if suppressed from outside, stop immediately
+                guard self.nonStop(profileId: profile.id) else {return}
+                
+                i += 1
+                self.printMessage("正在删除已决定不导出的已导出文件 ... ( \(i) / \(total) )")
+                
+                if profile.targetVolume != "" && profile.directory != "" && subfolder != "" && filename != "" {
+                    
+                    let path = URL(fileURLWithPath: "\(profile.targetVolume)\(profile.directory)").appendingPathComponent(subfolder).appendingPathComponent(filename)
+                    
+                    if FileManager.default.fileExists(atPath: path.path) {
+                        
+                        do {
+                            try FileManager.default.removeItem(atPath: path.path)
+                        }catch {
+                            self.logger.log(.error, "Unable to delete invalid exported file \(path.path)")
+                            self.logger.log(.error, error)
+                        }
+                    }
                 }
-            }
-
-            let path = URL(fileURLWithPath: profile.directory).appendingPathComponent(subfolder).appendingPathComponent(filename)
-            // check not exist in file system
-            if !shouldDelete {
-                if !FileManager.default.fileExists(atPath: path.path) {
-                    shouldDelete = true
-                    shouldDeleteFile = false
-                }
-            }
-            
-            // TODO check not in criteria, should delete file and record
-            
-            // delete ExportLog record
-            if shouldDelete {
                 let _ = ExportDao.default.deleteExportLog(imageId: imageId, profileId: profile.id)
             }
-            
-            if shouldDeleteFile {
-                do {
-                    try FileManager.default.removeItem(atPath: path.path)
-                }catch {
-                    self.logger.log(.error, "Unable to delete invalid exported file \(path.path)")
-                    self.logger.log(.error, error)
-                }
-            }
+            self.printMessage("")
         }
     }
     

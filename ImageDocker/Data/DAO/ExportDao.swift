@@ -146,7 +146,15 @@ class ExportDao {
         return self.impl.getSQLForImageExport(profile: profile, years: years)
     }
     
+    func getExportedImagesButNowHidden(profileId:String) -> [(String, String, String)] { // imageId, subFolder, filename
+        return self.impl.getExportedImagesButNowHidden(profileId: profileId)
+    }
+    
     // MARK: - EXPORT RECORD LOG
+    
+    func deleteExportLogNotRelateToImageId(profileId:String) -> ExecuteState {
+        return self.impl.deleteExportLogNotRelateToImageId(profileId:profileId)
+    }
     
     func countExportedImages(profile:ExportProfile, years:[String]) -> Int {
         return self.impl.countExportedImages(profile: profile, years: years)

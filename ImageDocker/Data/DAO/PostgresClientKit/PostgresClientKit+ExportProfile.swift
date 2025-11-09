@@ -365,6 +365,36 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         return sql
     }
     
+    func getExportedImagesButNowHidden(profileId:String) -> [(String, String, String)]  {
+        final class TempRecord : DatabaseRecord {
+            var imageId:String? = nil
+            var subfolder:String? = nil
+            var filename:String? = nil
+            public init() {}
+        }
+        
+        let sql = """
+        select e."imageId", e."subfolder", e."filename" from "ExportLog" e
+        LEFT JOIN "Image" i on e."imageId" = i."id"
+         where e."profileId"='\(profileId)'
+        and i.hidden='t' and i."hiddenByContainer"='t' and i."hiddenByRepository"='t'
+        order by "subfolder","imageId"
+        """
+        
+        let db = PostgresConnection.database()
+        do {
+            var rtn:[(String, String, String)] = []
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for record in records {
+                rtn.append((record.imageId ?? "", record.subfolder ?? "", record.filename ?? ""))
+            }
+            return rtn
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
+    }
+    
     func getSQLForImageExport(profile:ExportProfile, years:[String]) -> String {
         return self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: nil, pageNumber: nil, years: years)
     }
@@ -425,6 +455,27 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
     }
     
     // MARK: - EXPORT RECORD LOG
+    
+    func deleteExportLogNotRelateToImageId(profileId:String) -> ExecuteState  {
+        let db = PostgresConnection.database()
+        
+        let sql = """
+        delete from "ExportLog" where "imageId" in
+        (
+        select e."imageId" from "ExportLog" e
+        LEFT JOIN "Image" i on e."imageId" = i."id"
+         where e."profileId"='\(profileId)'
+         and i."id" is NULL
+        )
+        """
+        do {
+            try db.execute(sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+        return .OK
+    }
     
     func countExportedImages(profile:ExportProfile, years:[String]) -> Int {
         let db = PostgresConnection.database()

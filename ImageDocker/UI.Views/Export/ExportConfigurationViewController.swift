@@ -914,7 +914,7 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - EXPORT
     
-    // TODO: stop export -- TaskletManager.stopTask
+    // top export
     @IBAction func onStopClicked(_ sender: NSButton) {
         let profile = self.getProfile()
         ExportManager.default.stopTask(profileId: profile.id)
