@@ -284,6 +284,7 @@ class ExportConfigurationViewController: NSViewController {
                 }
                 
             }
+            vc.setTreeNodeDataCheckState(id: nodeId, state: newValue)
 //                print(Words.selected_items.fill(arguments: "\(vc.getCheckedItems().count)"))
             vc.refresh()
         }
