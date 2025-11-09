@@ -1156,6 +1156,7 @@
 		8E4DECED23B38D1B00F5538C /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				8E646F582EC04C15006E0F2B /* Schema */,
 				8E4DECEC23B38C9F00F5538C /* DTO */,
 				8E4DECE123B3876700F5538C /* DAO */,
 				8EB986AE20B223BF0075B081 /* DBO */,
@@ -1187,6 +1188,14 @@
 				8E5D257F25A2013900D531A7 /* TokenField.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8E646F582EC04C15006E0F2B /* Schema */ = {
+			isa = PBXGroup;
+			children = (
+				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
+			);
+			path = Schema;
 			sourceTree = "<group>";
 		};
 		8E741942242251BA002BAAAE /* Interface */ = {
@@ -1234,7 +1243,6 @@
 				8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */,
 				8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */,
 				8EF92DF32460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift */,
-				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
 			);
 			path = PostgresClientKit;
 			sourceTree = "<group>";
