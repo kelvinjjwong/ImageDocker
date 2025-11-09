@@ -116,8 +116,9 @@ class Accumulator : NSObject {
                         self.lblMessage?.stringValue = "\(message) ( \(self.count) / \(self._target) )"
                     }
                 }
-                
-                self.indicator?.increment(by: 1)
+                self.indicator?.isHidden = false
+                self.indicator?.doubleValue = Double(self.count)
+//                self.indicator?.increment(by: 1)
             }
             
             if completed {

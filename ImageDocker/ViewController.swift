@@ -260,6 +260,8 @@ class ViewController: NSViewController {
     var repositoryDetailPopover:NSPopover?
     var repositoryDetailViewController:RepositoryDetailViewController!
     
+    var repositoryOwnerPopover:NSPopover?
+    var repositoryOwnerViewController:RepositoryOwnerViewController!
     
     var collectionPaginationPopover:NSPopover?
     var collectionPaginationViewController:CollectionPaginationViewController! // popover panel

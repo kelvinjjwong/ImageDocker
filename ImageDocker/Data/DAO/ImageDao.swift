@@ -76,6 +76,34 @@ public final class ImageRecordDao {
         return self.impl.findImage(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
     }
     
+    func getImagesWithNullId(owner:String) -> [(Int, String)] { // repositoryId, subpath
+        return self.impl.getImagesWithNullId(owner: owner)
+    }
+    
+    func getImagesWithNullFileExt(owner:String) -> [(String, String)] { // imageId, subpath
+        return self.impl.getImagesWithNullFileExt(owner: owner)
+    }
+    
+    func getImagesWithNullOriginalMD5(owner:String) -> [(String, Int, String, String, String, String, String)] { // imageId, repositoryId, repositoryVolume, repositoryPath, storageVolume, storagePath, subpath
+        return self.impl.getImagesWithNullOriginalMD5(owner: owner)
+    }
+    
+    func getImageOriginalMD5HavingDuplicated(owner:String) -> [String] { // originalMD5
+        return self.impl.getImageOriginalMD5HavingDuplicated(owner: owner)
+    }
+    
+    func getImageIds(originalMD5:String) -> [(String, Bool, String)] { // imageId, hidden, duplicatesKey
+        return self.impl.getImageIds(originalMD5: originalMD5)
+    }
+    
+    func hideImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState {
+        return self.impl.hideImageWithDuplicateKey(imageId: imageId, duplicatesKey: duplicatesKey)
+    }
+    
+    func showImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState {
+        return self.impl.showImageWithDuplicateKey(imageId: imageId, duplicatesKey: duplicatesKey)
+    }
+    
     // MARK: CRUD
     
     /// - caller:
@@ -187,6 +215,14 @@ public final class ImageRecordDao {
     
     func generateImageIdByRepositoryIdAndSubPath(repositoryId:Int, subPath:String) -> (ExecuteState, String) {
         return self.impl.generateImageIdByRepositoryIdAndSubPath(repositoryId: repositoryId, subPath: subPath)
+    }
+    
+    func updateImageFileExt(id:String, fileExt:String) -> ExecuteState {
+        return self.impl.updateImageFileExt(id: id, fileExt: fileExt)
+    }
+    
+    func updateImageOrginalMD5(id:String, md5:String) -> ExecuteState {
+        return self.impl.updateImageOrginalMD5(id: id, md5: md5)
     }
     
     func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState {

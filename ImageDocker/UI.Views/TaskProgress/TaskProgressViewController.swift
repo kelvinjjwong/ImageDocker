@@ -177,24 +177,20 @@ class TaskProgressViewController: NSViewController {
         
 //        self.logger.log(.trace, "====== ui updating task: \(task.name) - \(task.state)")
         
-        if let viewController = self.tasksView[task.id] {
-            DispatchQueue.main.async {
-                viewController.updateTaskInfo(task: task)
-            }
+        DispatchQueue.main.async {
             
-
-            if task.state == "COMPLETED" {
-                if viewController.progress.doubleValue != viewController.progress.maxValue {
-                    DispatchQueue.main.async {
+            if let viewController = self.tasksView[task.id] {
+                viewController.updateTaskInfo(task: task)
+                
+                if task.state == "COMPLETED" {
+                    if viewController.progress.doubleValue != viewController.progress.maxValue {
                         viewController.increaseProgress(by: 1)
                     }
-                }
-                if !task.isFixedDelayJob {
-                    self.updatePanelForCompletedTask(task: task, viewController: viewController)
-                }
-            }else if task.state == "IN_PROGRESS" {
-                if task.total > 0 {
-                    DispatchQueue.main.async {
+                    if !task.isFixedDelayJob {
+                        self.updatePanelForCompletedTask(task: task, viewController: viewController)
+                    }
+                }else if task.state == "IN_PROGRESS" {
+                    if task.total > 0 {
                         viewController.increaseProgress(by: 1)
                     }
                 }
@@ -206,7 +202,9 @@ class TaskProgressViewController: NSViewController {
     func setComplete(task:Tasklet) {
         if !task.isFixedDelayJob {
             if let viewController = self.tasksView[task.id] {
-                self.updatePanelForCompletedTask(task: task, viewController: viewController)
+                DispatchQueue.main.async {
+                    self.updatePanelForCompletedTask(task: task, viewController: viewController)
+                }
             }
         }
     }

@@ -62,6 +62,181 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         }
     }
     
+    func getImagesWithNullId(owner:String) -> [(Int, String)] { // repositoryId, subPath
+        let db = PostgresConnection.database()
+        let sql = """
+        select i."repositoryId",i."subPath" from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r."id"
+        where r."owner"='\(owner)' 
+        and i."id" is NULL
+        order by i."repositoryId",i."subPath"
+        """
+        final class TempRecord : DatabaseRecord {
+            var repositoryId: Int? = nil
+            var subPath: String? = nil
+            public init() {}
+        }
+        var result:[(Int, String)] = []
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for row in records {
+            result.append((row.repositoryId ?? 0, row.subPath ?? ""))
+        }
+        return result
+    }
+    
+    func getImagesWithNullFileExt(owner:String) -> [(String, String)] { // imageId, subpath
+        let db = PostgresConnection.database()
+        let sql = """
+        select i."id",i."subPath" from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r."id"
+        where r."owner"='\(owner)' 
+        and (i."fileExt" is NULL or i."fileExt" = '')
+        order by i."repositoryId",i."subPath"
+        """
+        final class TempRecord : DatabaseRecord {
+            var id: String? = nil
+            var subPath: String? = nil
+            public init() {}
+        }
+        var result:[(String, String)] = []
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for row in records {
+            result.append((row.id ?? "", row.subPath ?? ""))
+        }
+        return result
+        
+    }
+    
+    func getImagesWithNullOriginalMD5(owner:String) -> [(String, Int, String, String, String, String, String)] { // imageId, repositoryId, repositoryVolume, repositoryPath, storageVolume, storagePath, subpath
+        let db = PostgresConnection.database()
+        let sql = """
+        select i."id",i."repositoryId",r."repositoryVolume",r."repositoryPath",r."storageVolume",r."storagePath",i."subPath" from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r."id"
+        where r."owner"='\(owner)' 
+        and (i."originalMD5" is NULL or i."originalMD5" = '')
+        order by i."repositoryId",i."subPath"
+        """
+        final class TempRecord : DatabaseRecord {
+            var id: String? = nil
+            var repositoryId: Int? = nil
+            var repositoryVolume: String? = nil
+            var repositoryPath: String? = nil
+            var storageVolume: String? = nil
+            var storagePath: String? = nil
+            var subPath: String? = nil
+            public init() {}
+        }
+        var result:[(String, Int, String, String, String, String, String)] = []
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for row in records {
+            result.append((
+                row.id ?? "",
+                row.repositoryId ?? 0,
+                row.repositoryVolume ?? "",
+                row.repositoryPath ?? "",
+                row.storageVolume ?? "",
+                row.storagePath ?? "",
+                row.subPath ?? ""
+            ))
+        }
+        return result
+    }
+    
+    func getImageOriginalMD5HavingDuplicated(owner:String) -> [String] {
+        let db = PostgresConnection.database()
+        let sql = """
+        select "originalMD5" from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r."id"
+        where r."owner" = '\(owner)'
+        group by "originalMD5"
+        HAVING count("originalMD5")>1
+        """
+        final class TempRecord : DatabaseRecord {
+            var originalMD5: String? = nil
+            public init() {}
+        }
+        var result:[String] = []
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for row in records {
+            result.append(row.originalMD5 ?? "")
+        }
+        return result
+    }
+    
+    func getImageIds(originalMD5:String) -> [(String, Bool, String)] {
+        let db = PostgresConnection.database()
+        let sql = """
+        select "id",hidden,"duplicatesKey" from "Image"
+        where "originalMD5"='\(originalMD5)'
+        order by "repositoryId", "subPath"
+        """
+        final class TempRecord : DatabaseRecord {
+            var id: String? = nil
+            var hidden: Bool? = nil
+            var duplicatesKey: String? = nil
+            public init() {}
+        }
+        var result:[(String, Bool, String)] = []
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        for row in records {
+            result.append((row.id ?? "", row.hidden ?? false, row.duplicatesKey ?? ""))
+        }
+        return result
+    }
+    
+    func hideImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "duplicatesKey" = $1, hidden = 't' where "id" = $2
+            """, parameterValues: [duplicatesKey, imageId])
+        }catch{
+            self.logger.log(.error, "[hideImageWithDuplicateKey]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "hideImageWithDuplicateKey", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func showImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "duplicatesKey" = $1, hidden = 'f' where "id" = $2
+            """, parameterValues: [duplicatesKey, imageId])
+        }catch{
+            self.logger.log(.error, "[hideImageWithDuplicateKey]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "hideImageWithDuplicateKey", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
     // MARK: CRUD
     
     // FIXME: repositoryVolume and repositoryPath and path should be delete
@@ -219,6 +394,34 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return (.ERROR, "")
         }
         return (.OK, id)
+    }
+    
+    func updateImageFileExt(id:String, fileExt:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "fileExt" = $1 where "id" = $2
+            """, parameterValues: [fileExt, id])
+        }catch{
+            self.logger.log(.error, "[updateImageFileExt]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageFileExt", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func updateImageOrginalMD5(id:String, md5:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "originalMD5" = $1 where "id" = $2
+            """, parameterValues: [md5, id])
+        }catch{
+            self.logger.log(.error, "[updateImageOrginalMD5]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageOrginalMD5", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
     }
     
     func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState {

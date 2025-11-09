@@ -32,6 +32,16 @@ extension ViewController {
         }
         self.librariesViewPopover = myPopover
     }
+    
+    func openRepositoryOwnerView(owner:String, sender:NSButton) {
+        self.createRepositoryOwnerPopover()
+        self.repositoryOwnerViewController.initView(owner: owner, onClose: {
+            self.repositoryOwnerPopover?.close()
+        })
+        
+        let cellRect = sender.bounds
+        self.repositoryOwnerPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
+    }
 
     func openRepositoryDetail(repository:ImageRepository, sender:NSButton) {
         self.createRepositoryDetailPopover()
@@ -116,6 +126,25 @@ extension ViewController {
             myPopover!.behavior = NSPopover.Behavior.transient
         }
         self.collectionPaginationPopover = myPopover
+    }
+    
+    
+    func createRepositoryOwnerPopover(){
+        var myPopover = self.repositoryOwnerPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 280))
+            self.repositoryOwnerViewController = RepositoryOwnerViewController()
+            self.repositoryOwnerViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.repositoryOwnerViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.applicationDefined
+        }
+        self.repositoryOwnerPopover = myPopover
     }
     
     

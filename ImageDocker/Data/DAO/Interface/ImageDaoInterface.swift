@@ -42,6 +42,20 @@ protocol ImageRecordDaoInterface {
     /// - version: 2023.1.21
     func findImage(repositoryId:Int, subPath:String) -> Image?
     
+    func getImagesWithNullId(owner:String) -> [(Int, String)]
+    
+    func getImagesWithNullFileExt(owner:String) -> [(String, String)]
+    
+    func getImagesWithNullOriginalMD5(owner:String) -> [(String, Int, String, String, String, String, String)]
+    
+    func getImageOriginalMD5HavingDuplicated(owner:String) -> [String]
+    
+    func getImageIds(originalMD5:String) -> [(String, Bool, String)]
+    
+    func hideImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState
+    
+    func showImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState
+    
     // MARK: CRUD
     
     /// - parameter repositoryId: **mandatory** Integer id of ImageRepository.id
@@ -84,6 +98,10 @@ protocol ImageRecordDaoInterface {
     func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String)
     
     func generateImageIdByRepositoryIdAndSubPath(repositoryId:Int, subPath:String) -> (ExecuteState, String)
+    
+    func updateImageFileExt(id:String, fileExt:String) -> ExecuteState
+    
+    func updateImageOrginalMD5(id:String, md5:String) -> ExecuteState
     
     func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState
     

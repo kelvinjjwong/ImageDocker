@@ -221,7 +221,12 @@ extension ViewController {
         },
                                     moreActionOnNode: { collection, button in
 //                                        self.logger.log(.trace, "more on libs \(collection.path)")
-                                        if let repository = collection.relatedObject as? ImageRepository {
+                                        if let relatedObjectId = collection.relatedObjectId, relatedObjectId.hasPrefix("OWNER_") {
+                                            if let owner = collection.relatedObject as? String {
+                                                self.openRepositoryOwnerView(owner: owner, sender: button)
+                                            }
+                                        }
+                                        else if let repository = collection.relatedObject as? ImageRepository {
                                             self.openRepositoryDetail(repository: repository, sender: button)
                                         }
                                         else if let container = collection.relatedObject as? ImageContainer {

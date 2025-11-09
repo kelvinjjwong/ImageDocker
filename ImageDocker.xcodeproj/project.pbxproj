@@ -131,6 +131,8 @@
 		8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */; };
 		8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257D25A200FB00D531A7 /* URL+Image.swift */; };
 		8E5D258025A2013900D531A7 /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257F25A2013900D531A7 /* TokenField.swift */; };
+		8E646F5B2EC08560006E0F2B /* RepositoryOwnerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E646F5A2EC08560006E0F2B /* RepositoryOwnerViewController.xib */; };
+		8E646F5C2EC08560006E0F2B /* RepositoryOwnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E646F592EC08560006E0F2B /* RepositoryOwnerViewController.swift */; };
 		8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */; };
 		8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */; };
 		8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */; };
@@ -533,6 +535,8 @@
 		8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Rotate.swift"; sourceTree = "<group>"; };
 		8E5D257D25A200FB00D531A7 /* URL+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Image.swift"; sourceTree = "<group>"; };
 		8E5D257F25A2013900D531A7 /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
+		8E646F592EC08560006E0F2B /* RepositoryOwnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryOwnerViewController.swift; sourceTree = "<group>"; };
+		8E646F5A2EC08560006E0F2B /* RepositoryOwnerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepositoryOwnerViewController.xib; sourceTree = "<group>"; };
 		8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeHeaderMoreViewController.swift; sourceTree = "<group>"; };
 		8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MomentsTreeHeaderMoreViewController.xib; sourceTree = "<group>"; };
 		8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentsTree+ExtendView.swift"; sourceTree = "<group>"; };
@@ -1618,6 +1622,8 @@
 				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
 				8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */,
 				8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */,
+				8E646F592EC08560006E0F2B /* RepositoryOwnerViewController.swift */,
+				8E646F5A2EC08560006E0F2B /* RepositoryOwnerViewController.xib */,
 			);
 			path = ExtendView;
 			sourceTree = "<group>";
@@ -1864,6 +1870,7 @@
 				8EEAF7062CEF7B170007D3A9 /* open-box.gif in Resources */,
 				8EEAF7072CEF7B170007D3A9 /* running2.gif in Resources */,
 				8EEAF7082CEF7B170007D3A9 /* running.gif in Resources */,
+				8E646F5B2EC08560006E0F2B /* RepositoryOwnerViewController.xib in Resources */,
 				8EEAF7092CEF7B170007D3A9 /* forward.gif in Resources */,
 				8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
@@ -2164,6 +2171,7 @@
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */,
+				8E646F5C2EC08560006E0F2B /* RepositoryOwnerViewController.swift in Sources */,
 				8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */,
 				8EA4B7712D254B7600A9EA98 /* ExportProfileEvent.swift in Sources */,
 				8E0D3B322C870ECC0049807B /* ImageFamilyEditViewController.swift in Sources */,

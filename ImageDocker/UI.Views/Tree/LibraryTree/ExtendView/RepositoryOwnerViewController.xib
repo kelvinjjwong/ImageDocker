@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="RepositoryOwnerViewController" customModule="ImageDocker" customModuleProvider="target">
+            <connections>
+                <outlet property="btnClose" destination="03X-gd-b8f" id="Jpg-Gr-4UE"/>
+                <outlet property="btnScanDuplicate" destination="S2X-gf-3F7" id="TVQ-Wc-AGj"/>
+                <outlet property="indProgress" destination="jRv-YC-7Ci" id="7yQ-JP-49f"/>
+                <outlet property="lblMessage" destination="UKo-fQ-moh" id="GJh-cr-ula"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="640" height="206"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S2X-gf-3F7">
+                    <rect key="frame" x="20" y="162" width="141" height="24"/>
+                    <buttonCell key="cell" type="push" title="标记并发现重复影像" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u9K-i1-3Z2">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="141" id="5Ab-Iv-Myg"/>
+                    </constraints>
+                    <connections>
+                        <action selector="onScanDuplicateClicked:" target="-2" id="Rba-VT-Zcp"/>
+                    </connections>
+                </button>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UKo-fQ-moh">
+                    <rect key="frame" x="18" y="129" width="604" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="600" id="Cse-ZZ-qvv"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="D7a-wg-l6d">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <progressIndicator maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="jRv-YC-7Ci">
+                    <rect key="frame" x="20" y="101" width="600" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="600" id="xzV-X6-rXQ"/>
+                    </constraints>
+                </progressIndicator>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="03X-gd-b8f">
+                    <rect key="frame" x="295" y="20" width="50" height="24"/>
+                    <buttonCell key="cell" type="push" title="关闭" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4rX-jw-Moi">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="jjC-kE-e6a"/>
+                    </constraints>
+                    <connections>
+                        <action selector="onCloseClicked:" target="-2" id="wPk-7N-dht"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="jRv-YC-7Ci" firstAttribute="top" secondItem="UKo-fQ-moh" secondAttribute="bottom" constant="8" symbolic="YES" id="0XC-8a-jCa"/>
+                <constraint firstItem="UKo-fQ-moh" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="2sc-wP-Ivv"/>
+                <constraint firstAttribute="bottom" secondItem="03X-gd-b8f" secondAttribute="bottom" constant="20" id="F5F-HO-hMp"/>
+                <constraint firstAttribute="trailing" secondItem="UKo-fQ-moh" secondAttribute="trailing" constant="20" id="JCj-RH-XXN"/>
+                <constraint firstItem="S2X-gf-3F7" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" id="OSq-HX-hZ3"/>
+                <constraint firstItem="UKo-fQ-moh" firstAttribute="top" secondItem="S2X-gf-3F7" secondAttribute="bottom" constant="17" id="Qbc-ih-ECL"/>
+                <constraint firstItem="jRv-YC-7Ci" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="VKx-aL-qJD"/>
+                <constraint firstItem="S2X-gf-3F7" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="WOb-8P-OSf"/>
+                <constraint firstAttribute="trailing" secondItem="jRv-YC-7Ci" secondAttribute="trailing" constant="20" id="uq5-Jv-FSO"/>
+                <constraint firstItem="03X-gd-b8f" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="vJB-vh-GPw"/>
+            </constraints>
+            <point key="canvasLocation" x="198.5" y="121"/>
+        </customView>
+    </objects>
+</document>
