@@ -80,7 +80,7 @@ class RepositoryOwnerViewController: NSViewController {
                 if self.working == false {
                     DispatchQueue.main.async {
                         self.closingCountdown -= 1
-                        self.btnClose.title = "即将关闭 (\(self.closingCountdown)"
+                        self.btnClose.title = "即将关闭 (\(self.closingCountdown))"
                     }
                 }
             }
@@ -88,6 +88,7 @@ class RepositoryOwnerViewController: NSViewController {
     }
     
     @IBAction func onCloseClicked(_ sender: NSButton) {
+        self.closingDetectTimer?.invalidate()
         if self.onClose != nil {
             self.onClose!()
         }
