@@ -33,6 +33,8 @@ protocol RepositoryDaoInterface {
     
     func unlinkRepositoryToDevice(id:Int)
     
+    func updateRepositorySequenceOrder(id:Int, sequenceOrder:Int) -> ExecuteState
+    
     func deleteRepository(repositoryRoot:String) -> ExecuteState
     
     func deleteRepository(id:Int) -> ExecuteState

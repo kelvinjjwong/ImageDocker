@@ -137,6 +137,19 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }
     }
     
+    func updateRepositorySequenceOrder(id:Int, sequenceOrder:Int) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageRepository" set "sequenceOrder" = $1 where "id" = $2
+                """, parameterValues: [sequenceOrder, id])
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
     func deleteRepository(repositoryRoot: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
@@ -1209,7 +1222,7 @@ select distinct "owner" from "ImageRepository" order by "owner"
     func getRepositoryIdsByOwner(owner:String) -> [Int] {
         var result:[Int] = []
         let sql = """
-select "id" from "ImageRepository" where "owner"='\(owner)' order by "name"
+select "id" from "ImageRepository" where "owner"='\(owner)' order by "sequenceOrder" desc
 """
         final class TempRecord : DatabaseRecord {
             var id:Int = 0

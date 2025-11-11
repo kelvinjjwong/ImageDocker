@@ -28,11 +28,21 @@ class DictionaryTableViewController: NSObject {
     
     // MARK: INIT
     
-    var rowStyle:((String, NSTableCellView,[String:String]) -> Void)? = nil
+    fileprivate var rowStyle:((Int, Int, String, NSTableCellView,[String:String]) -> Void)? = nil
+    fileprivate var rowActions:[String:(String)->Void]? = nil
+    fileprivate var rowActionReferColumnId = ""
+    fileprivate var rowActionIcons:[String:String]? = nil
     
-    init(_ table:NSTableView, rowStyle:((String, NSTableCellView,[String:String]) -> Void)? = nil) {
+    init(_ table:NSTableView,
+         rowStyle:((Int, Int, String, NSTableCellView,[String:String]) -> Void)? = nil, // rowIndex, totalRow, columnId, cellView, item
+         rowActionReferColumnId:String = "",
+         rowActionIcons:[String:String]? = nil,
+         rowActions:[String:(String)->Void]? = nil) {
         self.table = table
         self.rowStyle = rowStyle
+        self.rowActions = rowActions
+        self.rowActionIcons = rowActionIcons
+        self.rowActionReferColumnId = rowActionReferColumnId
     }
     
     func load(_ items:[[String:String]], afterLoaded:(() -> Void)? = nil) {
@@ -191,6 +201,15 @@ class DictionaryTableViewController: NSObject {
         }
     }
     
+    @objc func onRowAction(sender:NSButton) {
+        let part = (sender.identifier?.rawValue ?? "_").components(separatedBy: "_")
+        let actionId = part[0]
+        let paramId = part[1]
+        if let rowActions = self.rowActions, let action = rowActions[actionId] {
+            action(paramId)
+        }
+    }
+    
 }
 
 
@@ -336,7 +355,7 @@ extension DictionaryTableViewController: NSTableViewDelegate, NSTextFieldDelegat
                     colView.textField?.identifier = NSUserInterfaceItemIdentifier("id_\(item["id"] ?? UUID().uuidString)_column_\(columnKey)_datatype_\(item["datatype"] ?? "")")
                     
                     if let rowStyle = self.rowStyle {
-                        rowStyle(id.rawValue, colView, item)
+                        rowStyle(row, self.items.count, id.rawValue, colView, item)
                     }
                     
                     colView.textField?.delegate = self
@@ -350,6 +369,32 @@ extension DictionaryTableViewController: NSTableViewDelegate, NSTextFieldDelegat
                     }
                 }
             }
+            
+            if let rowActions = rowActions, rowActions.count > 0 {
+                if let _ = rowActions[id.rawValue] {
+                    
+                    colView.subviews.removeAll()
+                    
+                    let buttonId = "\(id.rawValue)_\(item[self.rowActionReferColumnId] ?? "")"
+                    
+                    let button:NSButton = NSButton(frame: NSRect(x: 0, y: 0, width: 18, height: 18))
+                    button.setButtonType(NSButton.ButtonType.momentaryPushIn)
+                    button.action = #selector(DictionaryTableViewController.onRowAction(sender:))
+                    button.identifier = NSUserInterfaceItemIdentifier(buttonId)
+                    button.target = self
+                    button.title = ""
+                    if let rowActionIcons = self.rowActionIcons, let imageName = rowActionIcons[id.rawValue] {
+                        button.image = Icons.get(name: imageName)
+                    }
+                    
+                    colView.addSubview(button)
+                    
+                    if let rowStyle = self.rowStyle {
+                        rowStyle(row, self.items.count, id.rawValue, colView, item)
+                    }
+                }
+            }
+            
             return colView
         }
         return nil

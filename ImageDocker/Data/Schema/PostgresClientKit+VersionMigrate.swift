@@ -758,6 +758,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v66") { db in
+            try db.alter(table: "ImageRepository", body: { t in
+                t.add("sequenceOrder", .integer).defaults(to: 0)
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

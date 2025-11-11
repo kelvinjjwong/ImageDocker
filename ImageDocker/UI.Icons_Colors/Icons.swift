@@ -10,6 +10,10 @@ import Cocoa
 import SwiftyGifMac
 
 struct Icons {
+    static func get(name:String) -> NSImage {
+        return NSImage(imageLiteralResourceName: name)
+    }
+    
     static let node:NSImage = NSImage(imageLiteralResourceName: "photos")
     static let more:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
 

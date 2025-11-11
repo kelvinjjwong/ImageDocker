@@ -19,6 +19,7 @@ class RepositoryOwnerViewController: NSViewController {
     
     @IBOutlet weak var btnStop: NSButton!
     @IBOutlet weak var btnClose: NSButton!
+    @IBOutlet weak var tblRepository: NSTableView!
     
     private var owner = ""
     fileprivate var onClose: (() -> Void)?
@@ -31,6 +32,7 @@ class RepositoryOwnerViewController: NSViewController {
     private var idleSeconds = 180
     private var closingCountdown = 180
     
+    fileprivate var repositoryTableViewController:DictionaryTableViewController!
     
     var closingDetectTimer:Timer?
     
@@ -85,6 +87,133 @@ class RepositoryOwnerViewController: NSViewController {
                 }
             }
         })
+        
+        
+        
+        self.repositoryTableViewController = DictionaryTableViewController(self.tblRepository,
+            rowStyle: { rowIndex, totalRow, columnId, cellView, item in
+            if columnId == "upAction" {
+                if rowIndex == 0 {
+                    if cellView.subviews.count == 1 {
+                        if let button = cellView.subviews[0] as? NSButton {
+                            button.isHidden = true
+                        }
+                    }
+                }
+            }else if columnId == "downAction" {
+                if rowIndex == (totalRow-1) {
+                    if cellView.subviews.count == 1 {
+                        if let button = cellView.subviews[0] as? NSButton {
+                            button.isHidden = true
+                        }
+                    }
+                }
+            }
+        },
+                                                                           rowActionReferColumnId: "repositoryId",
+                                                                           rowActionIcons: [
+                                                                            "upAction" : "up",
+                                                                            "downAction" : "down"
+                                                                           ],
+            rowActions: [
+            "upAction" : { repositoryId in
+                print("\(repositoryId) go up")
+                var thisRecord:[String:String] = [:]
+                var upRecord:[String:String] = [:]
+                for i in 0..<self.repositoryTableViewController.items.count {
+                    let record = self.repositoryTableViewController.items[i]
+                    if (record["repositoryId"] ?? "") == repositoryId {
+                        thisRecord = record
+                        upRecord = self.repositoryTableViewController.items[i-1]
+                        break
+                    }
+                }
+                if let thisRepositoryId = Int(thisRecord["repositoryId"] ?? "0"),
+                    let upRepositoryId = Int(upRecord["repositoryId"] ?? "0"),
+                   let thisOrder = Int(thisRecord["order"] ?? "0"),
+                   let upOrder = Int(upRecord["order"] ?? "0")
+                {
+                    DispatchQueue.global().async {
+                        // update upOrder to thisRepositoryId
+                        let _ = RepositoryDao.default.updateRepositorySequenceOrder(id: thisRepositoryId, sequenceOrder: upOrder)
+                        
+                        // update thisOrder to upRepositoryId
+                        let _ = RepositoryDao.default.updateRepositorySequenceOrder(id: upRepositoryId, sequenceOrder: thisOrder)
+                        
+                        DispatchQueue.main.async {
+                            self.repositoryTableViewController.load(self.loadRepositories(), afterLoaded: {
+                            })
+                        }
+                    }
+                    
+                }
+            },
+            "downAction" : { repositoryId in
+                print("\(repositoryId) go down")
+                var thisRecord:[String:String] = [:]
+                var downRecord:[String:String] = [:]
+                for i in 0..<self.repositoryTableViewController.items.count {
+                    let record = self.repositoryTableViewController.items[i]
+                    if (record["repositoryId"] ?? "") == repositoryId {
+                        thisRecord = record
+                        downRecord = self.repositoryTableViewController.items[i+1]
+                        break
+                    }
+                }
+                if let thisRepositoryId = Int(thisRecord["repositoryId"] ?? "0"),
+                    let downRepositoryId = Int(downRecord["repositoryId"] ?? "0"),
+                   let thisOrder = Int(thisRecord["order"] ?? "0"),
+                   let downOrder = Int(downRecord["order"] ?? "0")
+                {
+                    DispatchQueue.global().async {
+                        // update downOrder to thisRepositoryId
+                        let _ = RepositoryDao.default.updateRepositorySequenceOrder(id: thisRepositoryId, sequenceOrder: downOrder)
+                        
+                        // update thisOrder to downRepositoryId
+                        let _ = RepositoryDao.default.updateRepositorySequenceOrder(id: downRepositoryId, sequenceOrder: thisOrder)
+                        
+                        DispatchQueue.main.async {
+                            self.repositoryTableViewController.load(self.loadRepositories(), afterLoaded: {
+                            })
+                        }
+                    }
+                }
+            }
+        ])
+        
+        self.repositoryTableViewController.load(self.loadRepositories(), afterLoaded: {
+        })
+        
+    }
+    
+    fileprivate func loadRepositories() -> [[String:String]] {
+        var list:[[String:String]] = []
+        let repositoryIds = RepositoryDao.default.getRepositoryIdsByOwner(owner: self.owner)
+        var z = repositoryIds.count
+        for repositoryId in repositoryIds {
+            if let repository = RepositoryDao.default.getRepository(id: repositoryId) {
+                var row:[String:String] = [:]
+                row["repositoryId"] = "\(repositoryId)"
+                row["repositoryName"] = repository.name
+                row["deviceId"] = repository.deviceId
+                if repository.deviceId != "" {
+                    if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                        row["deviceName"] = device.represent()
+                    }
+                }
+                row["order"] = "\(z)"
+                z -= 1
+                
+                if repository.sequenceOrder == 0 {
+                    // update z to repository.sequenceOrder
+                    print(">>> update order \(z) to repo \(repositoryId)")
+                    let _ = RepositoryDao.default.updateRepositorySequenceOrder(id: repositoryId, sequenceOrder: z)
+                }
+                
+                list.append(row)
+            }
+        }
+        return list
     }
     
     @IBAction func onCloseClicked(_ sender: NSButton) {

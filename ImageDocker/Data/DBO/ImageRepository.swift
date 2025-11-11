@@ -30,6 +30,7 @@ public final class ImageRepository: Codable {
     var folderAsBrief: Bool = false
     var briefFolderLevel: Int = 0
     var owner: String = ""
+    var sequenceOrder: Int = 0
     
     public init() {
         

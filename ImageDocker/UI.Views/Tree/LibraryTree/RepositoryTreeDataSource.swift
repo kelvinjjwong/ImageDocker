@@ -87,7 +87,7 @@ class RepositoryTreeDataSource : TreeDataSource {
             coreMembers[p.id] = p.shortName ?? p.name
         }
         
-        let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "owner, name", condition: condition)
+        let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "owner, \"sequenceOrder\" desc", condition: condition)
         self.logger.timecost("load repositories from database - DONE", fromDate: startTime)
         if containers.count == 0 {
 //            self.logger.log(.trace, ">>> no repository is loaded for tree")

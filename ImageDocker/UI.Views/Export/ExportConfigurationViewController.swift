@@ -1178,7 +1178,7 @@ class ExportConfigurationViewController: NSViewController {
         
         self.toggleGroup_EventCategory.selected = "include"
         
-        self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears, rowStyle: { columnId, cellView, item in
+        self.photoTakenYearsTableController = DictionaryTableViewController(self.tblPhotoTakenYears, rowStyle: { rowIndex, totalRow, columnId, cellView, item in
             
             cellView.textField?.textColor = NSColor.lightGray
             

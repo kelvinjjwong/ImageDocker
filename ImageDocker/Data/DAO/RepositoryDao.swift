@@ -107,6 +107,10 @@ class RepositoryDao {
         self.impl.unlinkRepositoryToDevice(id: id)
     }
     
+    func updateRepositorySequenceOrder(id:Int, sequenceOrder:Int) -> ExecuteState {
+        self.impl.updateRepositorySequenceOrder(id: id, sequenceOrder: sequenceOrder)
+    }
+    
     /// - caller:
     ///   - EditRepositoryViewController.onRemoveClicked()
     /// - version: legacy version
