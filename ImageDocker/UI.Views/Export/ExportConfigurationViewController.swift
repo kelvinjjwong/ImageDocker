@@ -199,8 +199,8 @@ class ExportConfigurationViewController: NSViewController {
         self.loadStackItems()
         
         self.lblExportProfileName.stringValue = "未保存"
-        self.optEditMode.selectedSegment = 1
         self.toggleButtons(editState: true, actionState: true)
+        self.optEditMode.selectedSegment = 2
     }
     
     private var volumesListController : TextListViewPopupController!
@@ -676,8 +676,13 @@ class ExportConfigurationViewController: NSViewController {
     @IBAction func onEditModeClicked(_ sender: NSSegmentedControl) {
         if sender.selectedSegment == 0 {
             self.toggleButtons(editState: false, actionState: true)
-        }else{
+        }else if sender.selectedSegment == 1{
             self.toggleButtons(editState: true, actionState: true)
+        }else if sender.selectedSegment == 2{
+            self.cleanFields()
+            self.lblExportProfileName.stringValue = "未保存"
+            self.toggleButtons(editState: true, actionState: true)
+            self.optEditMode.selectedSegment = 2
         }
     }
     
