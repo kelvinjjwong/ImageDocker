@@ -183,11 +183,18 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return result
     }
     
-    func getImageIds(originalMD5:String) -> [(String, Bool, String)] {
+    func getImageIds(originalMD5:String, checkDuplicatesKey:Bool) -> [(String, Bool, String)] {
         let db = PostgresConnection.database()
+        
+        var condition = ""
+        if checkDuplicatesKey {
+            condition = """
+                 and ("duplicatesKey" is null or "duplicatesKey" = '')
+        """
+        }
         let sql = """
         select "id",hidden,"duplicatesKey" from "Image"
-        where "originalMD5"='\(originalMD5)'
+        where "originalMD5"='\(originalMD5)' \(condition)
         order by "repositoryId", "subPath"
         """
         final class TempRecord : DatabaseRecord {

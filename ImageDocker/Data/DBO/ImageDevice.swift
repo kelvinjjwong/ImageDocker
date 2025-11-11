@@ -41,6 +41,10 @@ public final class ImageDevice : Codable {
         obj.model = model
         return obj
     }
+    
+    func represent() -> String {
+        return "\(self.manufacture ?? "") \((self.marketName ?? "") != "" ? (self.marketName ?? "") : (self.model ?? ""))".trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 //extension ImageDevice: FetchableRecord, MutablePersistableRecord, TableRecord {

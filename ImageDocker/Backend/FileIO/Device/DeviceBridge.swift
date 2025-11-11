@@ -19,8 +19,8 @@ public enum DeviceType {
 
 public class DeviceBridge {
     
-    static let _android = AndroidDeviceReader.Android(path: "/Users/kelvinwong/Develop/mac/adb")
-    static let _iphone = IPhoneDeviceReader.IPHONE(path: "/opt/homebrew/bin")
+    fileprivate static let _android = AndroidDeviceReader.Android(path: "/Users/kelvinwong/Develop/mac/adb") // TODO: assign to environment
+    fileprivate static let _iphone = IPhoneDeviceReader.IPHONE(path: "/opt/homebrew/bin")
     
     public static let connectivity = Mutex([String:Bool]())
     

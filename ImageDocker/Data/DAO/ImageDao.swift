@@ -92,8 +92,8 @@ public final class ImageRecordDao {
         return self.impl.getImageOriginalMD5HavingDuplicated(owner: owner)
     }
     
-    func getImageIds(originalMD5:String) -> [(String, Bool, String)] { // imageId, hidden, duplicatesKey
-        return self.impl.getImageIds(originalMD5: originalMD5)
+    func getImageIds(originalMD5:String, checkDuplicatesKey:Bool) -> [(String, Bool, String)] { // imageId, hidden, duplicatesKey
+        return self.impl.getImageIds(originalMD5: originalMD5, checkDuplicatesKey: checkDuplicatesKey)
     }
     
     func hideImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState {

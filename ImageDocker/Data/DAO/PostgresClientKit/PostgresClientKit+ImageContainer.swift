@@ -125,6 +125,18 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }
     }
     
+    func unlinkRepositoryToDevice(id:Int) {
+        if let imageRepository = self.getRepository(id: id) {
+            imageRepository.deviceId = ""
+            let db = PostgresConnection.database()
+            do {
+                try imageRepository.save(db)
+            }catch{
+                self.logger.log(.error, error)
+            }
+        }
+    }
+    
     func deleteRepository(repositoryRoot: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {

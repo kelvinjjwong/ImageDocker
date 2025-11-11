@@ -8,6 +8,7 @@
 
 import Cocoa
 import LoggerFactory
+import SharedDeviceLib
 
 class EditRepositoryViewController: NSViewController {
     
@@ -1727,7 +1728,13 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onLoadDevicesClicked()
     @IBAction func onLoadDevicesClicked(_ sender: NSButton) {
         self.createDevicesPopover()
-        self.devicesViewController.initView()
+        self.devicesViewController.initView { imageDevice in
+            if let deviceId = imageDevice.deviceId {
+                self.linkDeviceToRepository(deviceId: deviceId, imageDevice: imageDevice)
+                self.lblDeviceId.stringValue = deviceId
+                self.lblDeviceName.stringValue = imageDevice.represent()
+            }
+        }
         
         let cellRect = sender.bounds
         self.devicesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
@@ -1765,28 +1772,52 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onCleanDeviceClicked(_ sender: NSButton) {
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
-        self.linkDeviceToRepository(deviceId: "", deviceName: "")
+        
+        self.linkDeviceToRepository(deviceId: "")
+    }
+    
+    // current using
+    fileprivate func linkDeviceToRepository(deviceId:String, imageDevice:ImageDevice? = nil) {
+        if let repository = RepositoryDao.default.getRepository(id: self.originalRepositoryId) {
+            if deviceId == "" {
+                if repository.deviceId != "" {
+                    if let imageDevice = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                        imageDevice.name = ""
+                        let _ = DeviceDao.default.saveDevice(device: imageDevice)
+                    }
+                }
+                RepositoryDao.default.unlinkRepositoryToDevice(id: repository.id)
+                
+            }else{
+                if let imageDevice = imageDevice {
+                    imageDevice.name = repository.name
+                    let _ = DeviceDao.default.saveDevice(device: imageDevice)
+                }
+                RepositoryDao.default.linkRepositoryToDevice(id: repository.id, deviceId: deviceId)
+            }
+        }
     }
     
     /// - Tag: EditRepositoryViewController.linkDeviceToRepository()
-    fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
-        if let container = self.originalContainer { // FIXME: demise?
-            let repo = container
-            repo.deviceId = deviceId
-            let state = RepositoryDao.default.saveImageContainer(container: repo)
-            if state != .OK {
-                self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
-            }else{
-                self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId) - \(deviceName)]."
-            }
-        }
-        if originalRepositoryId > 0 {
-            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
-        }else{
-            self.logger.log(.error, "[linkDeviceToRepository] repository id is nil, unable to link repository with device \(deviceId) [\(deviceName)]")
-            self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
-        }
-    }
+    /// Deprecated
+//    fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
+//        if let container = self.originalContainer { // FIXME: demise?
+//            let repo = container
+//            repo.deviceId = deviceId
+//            let state = RepositoryDao.default.saveImageContainer(container: repo)
+//            if state != .OK {
+//                self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
+//            }else{
+//                self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId) - \(deviceName)]."
+//            }
+//        }
+//        if originalRepositoryId > 0 {
+//            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
+//        }else{
+//            self.logger.log(.error, "[linkDeviceToRepository] repository id is nil, unable to link repository with device \(deviceId) [\(deviceName)]")
+//            self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
+//        }
+//    }
     
     // MARK: - ACTION - SHOW/HIDE
     
@@ -2262,20 +2293,12 @@ extension EditRepositoryViewController : DeviceListDelegate {
             //self.logger.log(.trace, "in device id = \(deviceId)")
             //self.logger.log(.trace, "queried device id = \(device.deviceId)")
             self.lblDeviceId.stringValue = device.deviceId ?? ""
-            var name = device.name ?? ""
-            if name == "" {
-                var model = device.marketName ?? ""
-                if model == "" {
-                    model = device.model ?? ""
-                }
-                name = "\(device.manufacture ?? "") \(model)"
-            }
-            self.lblDeviceName.stringValue = name
+            self.lblDeviceName.stringValue = device.represent()
             
             self.logger.log(.trace, "update db? \(updateDB)")
             if updateDB {
                 self.logger.log(.trace, "linking repo with device \(device.deviceId ?? "")")
-                self.linkDeviceToRepository(deviceId: device.deviceId ?? "", deviceName: name)
+                self.linkDeviceToRepository(deviceId: device.deviceId ?? "", imageDevice: device)
             }
         }else{
             self.lblDeviceId.stringValue = ""

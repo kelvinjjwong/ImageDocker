@@ -57,6 +57,30 @@ class DeviceTreeDataSource : TreeDataSource {
                     }
                 }
             }
+        
+        if DeviceBridge.Android().isBridgeReady() {
+            let androidDeviceIds = DeviceBridge.Android().devices()
+            if androidDeviceIds.count > 0 {
+                for deviceId in androidDeviceIds {
+                    if let androidDevice = DeviceBridge.Android().device(id: deviceId) {
+                        let manufacture = androidDevice.manufacture
+                        let marketName = androidDevice.name
+                        let model = androidDevice.model
+                        
+                        self.registered_android_id_names.withLock {
+                            $0[deviceId] = ""
+                            $0[deviceId] = PhoneDevice.represent(
+                                deviceId: deviceId,
+                                name: marketName,
+                                manufacture: manufacture,
+                                model: model,
+                                type: .Android
+                            )
+                        }
+                    }
+                }
+            }
+        }
 //        }
 //        if self.registered_iphone_id_names.isEmpty {
             
@@ -82,6 +106,30 @@ class DeviceTreeDataSource : TreeDataSource {
                     }
                 }
             }
+        
+        if DeviceBridge.IPHONE().validCommands() {
+            let iphoneDeviceIds = DeviceBridge.IPHONE().devices()
+            if iphoneDeviceIds.count > 0 {
+                for deviceId in iphoneDeviceIds {
+                    if let iphoneDevice = DeviceBridge.IPHONE().device() {
+                        let manufacture = iphoneDevice.manufacture
+                        let model = iphoneDevice.model
+                        let marketName = iphoneDevice.name
+                        
+                        self.registered_iphone_id_names.withLock{
+                            $0[deviceId] = ""
+                            $0[deviceId] = PhoneDevice.represent(
+                                deviceId: deviceId,
+                                name: marketName,
+                                manufacture: manufacture,
+                                model: model,
+                                type: .iPhone
+                            )
+                        }
+                    }
+                }
+            }
+        }
 //        }
         self.isLoading = false
     }

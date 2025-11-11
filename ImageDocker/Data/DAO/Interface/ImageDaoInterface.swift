@@ -50,7 +50,7 @@ protocol ImageRecordDaoInterface {
     
     func getImageOriginalMD5HavingDuplicated(owner:String) -> [String]
     
-    func getImageIds(originalMD5:String) -> [(String, Bool, String)]
+    func getImageIds(originalMD5:String, checkDuplicatesKey:Bool) -> [(String, Bool, String)]
     
     func hideImageWithDuplicateKey(imageId:String, duplicatesKey:String) -> ExecuteState
     

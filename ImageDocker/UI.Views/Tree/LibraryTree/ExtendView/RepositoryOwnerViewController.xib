@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="btnClose" destination="03X-gd-b8f" id="Jpg-Gr-4UE"/>
                 <outlet property="btnScanDuplicate" destination="S2X-gf-3F7" id="TVQ-Wc-AGj"/>
+                <outlet property="btnStop" destination="Jur-W1-cwQ" id="b5g-55-Jaz"/>
                 <outlet property="indProgress" destination="jRv-YC-7Ci" id="7yQ-JP-49f"/>
                 <outlet property="lblMessage" destination="UKo-fQ-moh" id="GJh-cr-ula"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
@@ -51,16 +52,27 @@
                     </constraints>
                 </progressIndicator>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="03X-gd-b8f">
-                    <rect key="frame" x="295" y="20" width="50" height="24"/>
+                    <rect key="frame" x="245" y="20" width="150" height="24"/>
                     <buttonCell key="cell" type="push" title="关闭" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4rX-jw-Moi">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="jjC-kE-e6a"/>
+                        <constraint firstAttribute="width" constant="150" id="jjC-kE-e6a"/>
                     </constraints>
                     <connections>
                         <action selector="onCloseClicked:" target="-2" id="wPk-7N-dht"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jur-W1-cwQ">
+                    <rect key="frame" x="181" y="162" width="50" height="24"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="中止" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Snm-Qn-btR">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onStopClicked:" target="-2" id="7n8-O2-4dM"/>
                     </connections>
                 </button>
             </subviews>

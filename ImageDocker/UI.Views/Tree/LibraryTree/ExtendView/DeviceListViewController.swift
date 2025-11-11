@@ -8,6 +8,7 @@
 
 import Cocoa
 import LoggerFactory
+import SharedDeviceLib
 
 protocol DeviceListDelegate {
     func selectDevice(deviceId:String)
@@ -24,6 +25,8 @@ class DeviceListViewController: NSViewController {
     
     @IBOutlet weak var tblDevices: NSTableView!
     
+    fileprivate var onSelect:((ImageDevice) -> Void)?
+    
     // MARK: INIT
 
     override func viewDidLoad() {
@@ -32,9 +35,68 @@ class DeviceListViewController: NSViewController {
         self.tblDevices.dataSource = self
     }
     
-    func initView() {
+    func initView(onSelect:((ImageDevice) -> Void)? = nil) {
+        self.onSelect = onSelect
+        
         lastSelectedRow = nil
         self.devices = DeviceDao.default.getDevices()
+        
+        var androidDevices:[ImageDevice] = []
+        if DeviceBridge.Android().isBridgeReady() {
+            let androidDeviceIds = DeviceBridge.Android().devices()
+            if androidDeviceIds.count > 0 {
+                for deviceId in androidDeviceIds {
+                    if !self.devices.contains(where: { dev in
+                        return dev.deviceId == deviceId
+                    }){
+                        if let androidDevice = DeviceBridge.Android().device(id: deviceId) {
+                            let manufacture = androidDevice.manufacture
+                            let marketName = androidDevice.name
+                            let model = androidDevice.model
+                            
+                            let androidDevice = ImageDevice()
+                            androidDevice.type = "Android"
+                            androidDevice.manufacture = manufacture
+                            androidDevice.marketName = marketName
+                            androidDevice.model = model
+                            androidDevice.deviceId = deviceId
+                            
+                            androidDevices.append(androidDevice)
+                        }
+                    }
+                }
+            }
+        }
+        self.devices.append(contentsOf: androidDevices)
+        
+        var iphoneDevices:[ImageDevice] = []
+        if DeviceBridge.IPHONE().validCommands() {
+            let iphoneDeviceIds = DeviceBridge.IPHONE().devices()
+            if iphoneDeviceIds.count > 0 {
+                for deviceId in iphoneDeviceIds {
+                    if !self.devices.contains(where: { dev in
+                        return dev.deviceId == deviceId
+                    }){
+                        if let iphoneDevice = DeviceBridge.IPHONE().device() {
+                            let manufacture = iphoneDevice.manufacture
+                            let model = iphoneDevice.model
+                            let marketName = iphoneDevice.name
+                            
+                            let iphoneDevice = ImageDevice()
+                            iphoneDevice.type = "iPhone"
+                            iphoneDevice.manufacture = manufacture
+                            iphoneDevice.model = model
+                            iphoneDevice.marketName = marketName
+                            iphoneDevice.deviceId = deviceId
+                            
+                            iphoneDevices.append(iphoneDevice)
+                        }
+                    }
+                }
+            }
+        }
+        self.devices.append(contentsOf: iphoneDevices)
+        
         self.logger.log(devices.count)
         self.tblDevices.reloadData()
     }
@@ -44,12 +106,15 @@ class DeviceListViewController: NSViewController {
     var lastSelectedRow:Int? {
         didSet {
             if lastSelectedRow != nil && devices.count > 0 && lastSelectedRow! < devices.count {
-                if let selectedDeviceId = devices[lastSelectedRow!].deviceId {
+//                if let selectedDeviceId = devices[lastSelectedRow!].deviceId {
                     //self.logger.log(.trace, "selected device id \(selectedDeviceId)")
-                    if self.selectionDelegate != nil {
-                        self.selectionDelegate?.selectDevice(deviceId: selectedDeviceId)
-                    }
-                }
+//                    if self.selectionDelegate != nil {
+//                        self.selectionDelegate?.selectDevice(deviceId: selectedDeviceId)
+//                    }
+                    let device = devices[lastSelectedRow!]
+                    
+                    self.onSelect?(device)
+//                }
             }
         }
     }
@@ -75,12 +140,14 @@ extension DeviceListViewController: NSTableViewDelegate {
             switch id {
             case NSUserInterfaceItemIdentifier("name"):
                 value = info.name ?? ""
-            case NSUserInterfaceItemIdentifier("repository"):
-                value = info.repositoryPath ?? ""
-            case NSUserInterfaceItemIdentifier("home"):
-                value = info.homePath ?? ""
+            case NSUserInterfaceItemIdentifier("manufacture"):
+                value = info.manufacture ?? ""
+            case NSUserInterfaceItemIdentifier("model"):
+                value = info.model ?? ""
             case NSUserInterfaceItemIdentifier("deviceId"):
                 value = info.deviceId ?? ""
+            case NSUserInterfaceItemIdentifier("marketName"):
+                value = info.marketName ?? ""
                 
             default:
                 break

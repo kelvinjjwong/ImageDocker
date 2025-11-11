@@ -17,6 +17,7 @@ class RepositoryOwnerViewController: NSViewController {
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var indProgress: NSProgressIndicator!
     
+    @IBOutlet weak var btnStop: NSButton!
     @IBOutlet weak var btnClose: NSButton!
     
     private var owner = ""
@@ -25,6 +26,14 @@ class RepositoryOwnerViewController: NSViewController {
     private var accumulator:Accumulator? = nil
     private var working = false
     private var forceStop = false
+    private var workingTaskId = ""
+    
+    private var idleSeconds = 180
+    private var closingCountdown = 180
+    
+    
+    var closingDetectTimer:Timer?
+    
 
     // MARK: INIT VIEW
     
@@ -49,6 +58,33 @@ class RepositoryOwnerViewController: NSViewController {
         self.indProgress.doubleValue = 0
         self.indProgress.isHidden = true
         self.lblMessage.stringValue = ""
+        
+        self.working = false
+        self.closingCountdown = self.idleSeconds
+        self.workingTaskId = ""
+        
+        self.btnStop.isHidden = true
+        
+        self.closingDetectTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: {_ in
+            DispatchQueue.global().async {
+                print("closingDetectTimer is running")
+                
+                if self.closingCountdown == 0 {
+                    self.closingDetectTimer?.invalidate()
+                    DispatchQueue.main.async {
+                        self.onClose?()
+                    }
+                    return
+                }
+                
+                if self.working == false {
+                    DispatchQueue.main.async {
+                        self.closingCountdown -= 1
+                        self.btnClose.title = "即将关闭 (\(self.closingCountdown)"
+                    }
+                }
+            }
+        })
     }
     
     @IBAction func onCloseClicked(_ sender: NSButton) {
@@ -56,6 +92,14 @@ class RepositoryOwnerViewController: NSViewController {
             self.onClose!()
         }
     }
+    
+    @IBAction func onStopClicked(_ sender: NSButton) {
+        self.forceStop = true
+        if self.workingTaskId != "" {
+            TaskletManager.default.stopTask(id: self.workingTaskId)
+        }
+    }
+    
     
     
     // fill image.id,
@@ -65,8 +109,18 @@ class RepositoryOwnerViewController: NSViewController {
     @IBAction func onScanDuplicateClicked(_ sender: NSButton) {
         print("fill image.id, fill image.originalMD5, find duplicates")
         
+        self.working = true
+        self.btnClose.title = "关闭"
+        self.closingCountdown = self.idleSeconds
+        self.btnScanDuplicate.isEnabled = false
+        self.btnClose.isEnabled = false
+        self.btnStop.isHidden = false
+        self.workingTaskId = ""
+        
         let _ = TaskletManager.default.createAndStartTask(type: "Scan Duplicates", name: "\(self.owner)"
                                                           , exec: { task in
+            
+            self.workingTaskId = task.id
             
             TaskletManager.default.updateProgress(id: task.id, message: "Scanning duplicates ...", increase: false)
             
@@ -77,6 +131,12 @@ class RepositoryOwnerViewController: NSViewController {
                 if TaskletManager.default.isTaskStopped(id: task.id) == true {
                     DispatchQueue.main.async {
                         self.working = false
+                        self.btnClose.title = "即将关闭"
+                        self.closingCountdown = self.idleSeconds
+                        self.btnScanDuplicate.isEnabled = true
+                        self.btnClose.isEnabled = true
+                        self.btnStop.isHidden = true
+                        self.workingTaskId = ""
                         self.lblMessage.stringValue = "User stopped task: scan duplicates."
                     }
                     return
@@ -280,62 +340,65 @@ class RepositoryOwnerViewController: NSViewController {
                         z += 1
                         
                         // grouping
-                        let images = ImageRecordDao.default.getImageIds(originalMD5: originalMD5)
-                        
-                        var firstImageId = ""
-                        var imageIdNotHidden = ""
-                        var existingDuplicatesKey = ""
-                        var hiddenCount = 0
-                        for image in images {
-                            let imageId = image.0
-                            let hidden = image.1
-                            let duplicatesKey = image.2
+                        var images = ImageRecordDao.default.getImageIds(originalMD5: originalMD5, checkDuplicatesKey: true)
+                        if images.count > 0 {
+                            images = ImageRecordDao.default.getImageIds(originalMD5: originalMD5, checkDuplicatesKey: false)
                             
-                            if firstImageId == "" {
-                                firstImageId = imageId
-                            }
-                            
-                            if !hidden {
-                                imageIdNotHidden = imageId
-                            }else{
-                                hiddenCount += 1
-                            }
-                            
-                            if duplicatesKey != "" {
-                                existingDuplicatesKey = duplicatesKey
-                            }
-                        }
-                        if imageIdNotHidden == "" {
-                            imageIdNotHidden = firstImageId
-                        }
-                        
-                        if existingDuplicatesKey == "" {
-                            existingDuplicatesKey = "MD5_\(originalMD5)"
-                        }
-                        
-                        // proceed
-                        if hiddenCount == images.count {
-                            // hide all
+                            var firstImageId = ""
+                            var imageIdNotHidden = ""
+                            var existingDuplicatesKey = ""
+                            var hiddenCount = 0
                             for image in images {
                                 let imageId = image.0
                                 let hidden = image.1
                                 let duplicatesKey = image.2
                                 
-                                // update hide and duplicatesKey
-                                let _ = ImageRecordDao.default.hideImageWithDuplicateKey(imageId: imageId, duplicatesKey: existingDuplicatesKey)
-                            }
-                        }else{
-                            // update show firstImageId and duplicatesKey
-                            let _ = ImageRecordDao.default.showImageWithDuplicateKey(imageId: firstImageId, duplicatesKey: existingDuplicatesKey)
-                            
-                            for image in images {
-                                let imageId = image.0
-                                let hidden = image.1
-                                let duplicatesKey = image.2
+                                if firstImageId == "" {
+                                    firstImageId = imageId
+                                }
                                 
-                                if imageId != firstImageId {
+                                if !hidden {
+                                    imageIdNotHidden = imageId
+                                }else{
+                                    hiddenCount += 1
+                                }
+                                
+                                if duplicatesKey != "" {
+                                    existingDuplicatesKey = duplicatesKey
+                                }
+                            }
+                            if imageIdNotHidden == "" {
+                                imageIdNotHidden = firstImageId
+                            }
+                            
+                            if existingDuplicatesKey == "" {
+                                existingDuplicatesKey = "MD5_\(originalMD5)"
+                            }
+                            
+                            // proceed
+                            if hiddenCount == images.count {
+                                // hide all
+                                for image in images {
+                                    let imageId = image.0
+                                    let hidden = image.1
+                                    let duplicatesKey = image.2
+                                    
                                     // update hide and duplicatesKey
                                     let _ = ImageRecordDao.default.hideImageWithDuplicateKey(imageId: imageId, duplicatesKey: existingDuplicatesKey)
+                                }
+                            }else{
+                                // update show firstImageId and duplicatesKey
+                                let _ = ImageRecordDao.default.showImageWithDuplicateKey(imageId: firstImageId, duplicatesKey: existingDuplicatesKey)
+                                
+                                for image in images {
+                                    let imageId = image.0
+                                    let hidden = image.1
+                                    let duplicatesKey = image.2
+                                    
+                                    if imageId != firstImageId {
+                                        // update hide and duplicatesKey
+                                        let _ = ImageRecordDao.default.hideImageWithDuplicateKey(imageId: imageId, duplicatesKey: existingDuplicatesKey)
+                                    }
                                 }
                             }
                         }
@@ -351,6 +414,12 @@ class RepositoryOwnerViewController: NSViewController {
                 
                 DispatchQueue.main.async {
                     self.working = false
+                    self.btnClose.title = "即将关闭"
+                    self.closingCountdown = self.idleSeconds
+                    self.btnScanDuplicate.isEnabled = true
+                    self.btnClose.isEnabled = true
+                    self.btnStop.isHidden = true
+                    self.workingTaskId = ""
                     if(self.forceStop) {
                         self.lblMessage.stringValue = "用户已中止扫描和标记."
                     }else{

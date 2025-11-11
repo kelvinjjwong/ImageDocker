@@ -103,6 +103,10 @@ class RepositoryDao {
         self.impl.linkRepositoryToDevice(id: id, deviceId: deviceId)
     }
     
+    func unlinkRepositoryToDevice(id:Int) {
+        self.impl.unlinkRepositoryToDevice(id: id)
+    }
+    
     /// - caller:
     ///   - EditRepositoryViewController.onRemoveClicked()
     /// - version: legacy version
