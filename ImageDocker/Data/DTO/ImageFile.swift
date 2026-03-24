@@ -204,7 +204,7 @@ class ImageFile {
             self.rawPath = repository.storagePath
             
             let imagePath = "\(repository.repositoryVolume.removeLastStash())\(repository.repositoryPath.withLastStash())\(image.subPath)"
-            self.logger.log(.trace, "image full path: \(imagePath)")
+            self.logger.log(.info, "🏞️ image full path: \(imagePath)")
             
             self.url = URL(fileURLWithPath: imagePath)
             

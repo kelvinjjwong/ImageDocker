@@ -39,6 +39,10 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var txtFacePath: NSTextField!
     @IBOutlet weak var txtCropPath: NSTextField!
     @IBOutlet weak var btnOK: NSButton!
+    
+    @IBOutlet weak var chkCloneFiles: NSButton!
+    
+    
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var btnBrowseHomePath: NSButton!
     @IBOutlet weak var btnBrowseStoragePath: NSButton!
@@ -186,7 +190,9 @@ class EditRepositoryViewController: NSViewController {
     // MARK: - refresh volumes drop down
     
     func refreshMountedVolumes(dropdown list:TextListViewPopupController, append items:[String] = []) {
-        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        var mountedVolumes:[String] = []
+        mountedVolumes.append(contentsOf: Setting.localEnvironment.localDiskMountPoints())
+        mountedVolumes.append(contentsOf: LocalDirectory.bridge.listMountedVolumes())
         
         for item in items {
             if !mountedVolumes.contains(item) {
@@ -198,7 +204,9 @@ class EditRepositoryViewController: NSViewController {
     
     func refreshMountedVolumes(append items:[String] = []) {
         
-        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        var mountedVolumes:[String] = []
+        mountedVolumes.append(contentsOf: Setting.localEnvironment.localDiskMountPoints())
+        mountedVolumes.append(contentsOf: LocalDirectory.bridge.listMountedVolumes())
         
         for item in items {
             if !mountedVolumes.contains(item) {
@@ -218,52 +226,100 @@ class EditRepositoryViewController: NSViewController {
     
     func setupUIDisplay() {
 //        self.btnFindFaces.title = Words.findFaces.word()
+        
+        // TAB - PATH
+        
+        // BOX - GENERAL
         self.lblName.stringValue = Words.repository_name.word()
         self.lblHomePath.stringValue = Words.repository_home_path.word()
-        self.lblEditableImagesPath.stringValue = Words.repository_editable_images_path.word()
-        self.lblRawImagesPath.stringValue = Words.repository_raw_images_path.word()
-        self.lblFacesImagesPath.stringValue = Words.repository_faces_images_path.word()
-        self.lblCropsImagesPath.stringValue = Words.repository_crops_images_path.word()
-        self.boxRepository.title = Words.repository_box_store_images.word()
-        self.boxFaces.title = Words.repository_box_store_faces.word()
-        self.boxDevice.title = Words.repository_box_link_to_device.word()
+        self.btnFindHomePath.title = Words.viewInFinder.word()
+        self.btnBrowseHomePath.title = Words.browsePath.word()
         
         self.btnOK.title = Words.saveRepository.word()
-        self.btnStat.title = Words.stat.word()
-        self.btnRemove.title = Words.deleteAllImages.word()
-        self.btnShowHide.title = Words.disableRepository.word()
-        self.btnCopyToRaw.title = Words.copyEditableImagesToRaw.word()
-        self.btnNormalize.title = Words.normalizeDuplicatedHiddens.word()
+        
+        // BOX - Where to store images
+        
+        self.boxRepository.title = Words.repository_box_store_images.word()
+        
+        self.lblEditableImagesPath.stringValue = Words.repository_editable_images_path.word()
+        self.btnFindRepositoryPath.title = Words.viewInFinder.word()
+        self.btnBrowseRepositoryPath.title = Words.browsePath.word()
+        
+        self.btnBrowseStoragePath.title = Words.browsePath.word()
+        
+        self.lblRawImagesPath.stringValue = Words.repository_raw_images_path.word()
+        
+        // BOX - Where to store faces
+        
+        self.boxFaces.title = Words.repository_box_store_faces.word()
+        
+        self.lblFacesImagesPath.stringValue = Words.repository_faces_images_path.word()
+        self.btnFindFacePath.title = Words.viewInFinder.word()
+        self.btnBrowseFacePath.title = Words.browsePath.word()
+        
+        self.lblCropsImagesPath.stringValue = Words.repository_crops_images_path.word()
+        self.btnFindCropPath.title = Words.viewInFinder.word()
+        self.btnBrowseCropPath.title = Words.browsePath.word()
+        
+        // TAB - DEVICE
+        
+        // BOX - DEVICE
+        
         self.btnCleanDevice.title = Words.clean.word()
         self.btnLoadDevices.title = Words.link.word()
-        self.btnFindCropPath.title = Words.viewInFinder.word()
-        self.btnFindFacePath.title = Words.viewInFinder.word()
-        self.btnFindHomePath.title = Words.viewInFinder.word()
-        self.btnBrowseCropPath.title = Words.browsePath.word()
-        self.btnBrowseFacePath.title = Words.browsePath.word()
-        self.btnBrowseHomePath.title = Words.browsePath.word()
-        self.btnFaceFollowHome.title = Words.followHome.word()
-        self.btnFollowHomePath.title = Words.followHome.word()
-        self.btnFindStoragePath.title = Words.viewInFinder.word()
-        self.btnRestoreOriginal.title = Words.backToOrigin.word()
-        self.btnFaceBackToOrigin.title = Words.backToOrigin.word()
-        self.btnUpdateCropImages.title = Words.update.word()
-        self.btnUpdateFaceImages.title = Words.update.word()
-        self.btnBrowseStoragePath.title = Words.browsePath.word()
         self.btnCompareDevicePath.title = Words.checkPaths.word()
-        self.btnPathsFollowDevice.title = Words.pathFollowDevicePath.word()
-        self.btnFindRepositoryPath.title = Words.viewInFinder.word()
-        self.btnUpdateStorageImages.title = Words.update.word()
-        self.btnBrowseRepositoryPath.title = Words.browsePath.word()
+        
+//        self.btnFaceFollowHome.title = Words.followHome.word()
+//        self.btnFollowHomePath.title = Words.followHome.word()
+        self.btnFindStoragePath.title = Words.viewInFinder.word()
+//        self.btnRestoreOriginal.title = Words.backToOrigin.word()
+//        self.btnFaceBackToOrigin.title = Words.backToOrigin.word()
+//        self.btnPathsFollowDevice.title = Words.pathFollowDevicePath.word()
+        
+        
+        // TAB - MOVE FILES
+        
+        // BOX - Editable Storage
+        
         self.btnUpdateRepositoryImages.title = Words.update.word()
-        self.btnUpdateEmptyEvent.title = Words.updateEmptyEvents.word()
-        self.btnUpdateAllEvents.title = Words.updateAllEvents.word()
+        
+        // BOX - Raw Storage
+        self.btnUpdateStorageImages.title = Words.update.word()
+        
+        // BOX - Faces Storage
+        self.btnUpdateFaceImages.title = Words.update.word()
+        
+        // BOX - Crops Storage
+        self.btnUpdateCropImages.title = Words.update.word()
+        
+        // BOX - ADVANCE
+        
+        
+        self.btnCopyToRaw.title = Words.copyEditableImagesToRaw.word()
+        self.btnNormalize.title = Words.normalizeDuplicatedHiddens.word()
+        
+        // BOX - DEVICE
+        
+        self.boxDevice.title = Words.repository_box_link_to_device.word()
+        
+        // TAB - BRIEF
+        self.chkFolderAsBrief.title = Words.useFolderAsBrief.word()
+        self.btnPreviewBriefFolders.title = Words.preview.word()
         self.btnUpdateEmptyBrief.title = Words.updateEmptyBriefs.word()
         self.btnUpdateAllBrief.title = Words.updateAllBriefs.word()
-        self.btnPreviewEventFolders.title = Words.preview.word()
-        self.btnPreviewBriefFolders.title = Words.preview.word()
-        self.chkFolderAsBrief.title = Words.useFolderAsBrief.word()
+        
+        // TAB - EVENT
         self.chkFolderAsEvent.title = Words.useFolderAsEvent.word()
+        self.btnPreviewEventFolders.title = Words.preview.word()
+        self.btnUpdateEmptyEvent.title = Words.updateEmptyEvents.word()
+        self.btnUpdateAllEvents.title = Words.updateAllEvents.word()
+        
+        // TAB - STAT
+        self.btnStat.title = Words.stat.word()
+        
+        // TAB - HIDE & DELETE
+        self.btnRemove.title = Words.deleteAllImages.word()
+        self.btnShowHide.title = Words.disableRepository.word()
     }
     
     fileprivate func toggleButtons(_ show:Bool){
@@ -283,11 +339,11 @@ class EditRepositoryViewController: NSViewController {
             self.btnBrowseCropPath.isEnabled = show
             self.btnBrowseFacePath.isEnabled = show
             self.btnBrowseHomePath.isEnabled = show
-            self.btnFaceFollowHome.isEnabled = show
-            self.btnFollowHomePath.isEnabled = show
+//            self.btnFaceFollowHome.isEnabled = show
+//            self.btnFollowHomePath.isEnabled = show
             self.btnFindStoragePath.isEnabled = show
-            self.btnRestoreOriginal.isEnabled = show
-            self.btnFaceBackToOrigin.isEnabled = show
+//            self.btnRestoreOriginal.isEnabled = show
+//            self.btnFaceBackToOrigin.isEnabled = show
             self.btnUpdateCropImages.isEnabled = show
             self.btnUpdateFaceImages.isEnabled = show
             self.btnBrowseStoragePath.isEnabled = show
@@ -330,7 +386,7 @@ class EditRepositoryViewController: NSViewController {
             self.lblStoragePathRemark.stringValue = ""
             self.txtRepository.stringValue = ""
             self.lblRepositoryPathRemark.stringValue = ""
-            self.btnRestoreOriginal.isHidden = true
+//            self.btnRestoreOriginal.isHidden = true
             self.btnCopyToRaw.isHidden = true
             self.btnUpdateStorageImages.isHidden = true
             self.btnUpdateRepositoryImages.isHidden = true
@@ -368,12 +424,12 @@ class EditRepositoryViewController: NSViewController {
         self.btnBrowseRepositoryPath.title = Words.assign.word()
         self.btnBrowseFacePath.title = Words.assign.word()
         self.btnBrowseCropPath.title = Words.assign.word()
-        self.btnFaceBackToOrigin.isHidden = true
+//        self.btnFaceBackToOrigin.isHidden = true
         self.btnNormalize.isHidden = true
 //        self.btnFindFaces.isHidden = true
         self.btnShowHide.isHidden = true
         self.btnStat.isHidden = true
-        self.btnRestoreOriginal.isHidden = true
+//        self.btnRestoreOriginal.isHidden = true
         self.btnCopyToRaw.isHidden = true
         self.btnUpdateStorageImages.isHidden = true
         self.btnUpdateRepositoryImages.isHidden = true
@@ -451,12 +507,12 @@ class EditRepositoryViewController: NSViewController {
             self.lstVolumesOfCrops.selectItem(withObjectValue: repository.cropVolume)
             self.lstVolumesOfHome.selectItem(withObjectValue: repository.homeVolume)
             
-            self.btnFaceBackToOrigin.isHidden = false
+//            self.btnFaceBackToOrigin.isHidden = false
             self.btnNormalize.isHidden = false
 //            self.btnFindFaces.isHidden = false
             self.btnShowHide.isHidden = false
             self.btnStat.isHidden = false
-            self.btnRestoreOriginal.isHidden = false
+//            self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
             self.btnUpdateStorageImages.isHidden = false
             self.btnUpdateRepositoryImages.isHidden = false
@@ -554,6 +610,7 @@ class EditRepositoryViewController: NSViewController {
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
         var pass = true
         let trimPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.logger.log(.info, "🗃️ checkDirectory: \(path) - dirExist:\(trimPath.isDirectoryExists()) / volExist:\(trimPath.isVolumeExists())")
         if trimPath.isDirectoryExists() || trimPath.isVolumeExists() {
             if trimPath.isFileExists() {
                 if !trimPath.isDirectoryExists() {
@@ -570,6 +627,7 @@ class EditRepositoryViewController: NSViewController {
             return pass
         }else{
             messageBox.stringValue = "Volume is not mounted, please mount it first."
+            self.logger.log(.error, "🗃️ checkDirectory: \(path) - Volume is not mounted")
             return false
         }
     }
@@ -724,7 +782,7 @@ class EditRepositoryViewController: NSViewController {
                                   volumeDropdown: self.lstVolumesOfRawImages,
                                   volumeController: self.volumesOfRawImagesListController,
                                   pathField: self.txtStoragePath)
-            self.btnRestoreOriginal.isHidden = false
+//            self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
         }
     }
@@ -1193,24 +1251,31 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onUpdateStorageImagesClicked()
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
+        
+        let shouldCloneFiles = false
+        
         if let repoContainer = self.originalContainer {
             
             var originalRawVolume = ""
             if let repository = RepositoryDao.default.getRepository(id: repoContainer.repositoryId) {
                 originalRawVolume = repository.storageVolume
             }
-            if originalRawVolume == "" || !originalRawVolume.isVolumeExists() {
-                self.lblStoragePathRemark.stringValue = "Original volume disk of raw version is empty or not mounted: \(originalRawVolume)"
-                return
+            if shouldCloneFiles {
+                if originalRawVolume == "" || !originalRawVolume.isVolumeExists() {
+                    self.lblStoragePathRemark.stringValue = "Original volume disk of raw version is empty or not mounted: \(originalRawVolume)"
+                    return
+                }
             }
             
             let (_, _originalRawPath) = repoContainer.storagePath.getVolumeFromThisPath()
             
             let originalRawPath = "\(originalRawVolume)\(_originalRawPath)".withLastStash()
             
-            if !originalRawPath.isDirectoryExists() {
-                self.lblStoragePathRemark.stringValue = "Original path of raw version does not exist: \(originalRawPath)"
-                return
+            if shouldCloneFiles {
+                if !originalRawPath.isDirectoryExists() {
+                    self.lblStoragePathRemark.stringValue = "Original path of raw version does not exist: \(originalRawPath)"
+                    return
+                }
             }
             
             let newRawPath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath).withLastStash()
@@ -1241,40 +1306,42 @@ class EditRepositoryViewController: NSViewController {
             
             DispatchQueue.global().async {
             
-                if originalRawPath != "/" && originalRawPath != "" { // clone from original RAW path
-                    let oldBaseUrl = URL(fileURLWithPath: originalRawPath)
-                    let newBaseUrl = URL(fileURLWithPath: newRawPath)
-                    let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
-                    let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
-                    if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = oldBaseUrl.walkthruDirectory()  // FIXME: load from database instead?
-                        
-                        let total = oldFiles.allObjects.count
-                        
-                        DispatchQueue.main.async {
-                            self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-                        }
-                        
-                        for case let oldUrl as URL in oldFiles {
-                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
-                            let newUrl = URL(fileURLWithPath: newFilePath)
-                            let containerUrl = newUrl.deletingLastPathComponent()
-                            if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
-                                do {
-                                    try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log(.error, error)
-                                }
-                                do { // copy file
-                                    try FileManager.default.copyItem(at: oldUrl, to: newUrl)
-                                }catch{
-                                    self.logger.log(.error, error)
-                                }
-                            }
+                if shouldCloneFiles {
+                    if originalRawPath != "/" && originalRawPath != "" { // clone from original RAW path
+                        let oldBaseUrl = URL(fileURLWithPath: originalRawPath)
+                        let newBaseUrl = URL(fileURLWithPath: newRawPath)
+                        let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
+                        let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
+                        if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
+                            let oldFiles = oldBaseUrl.walkthruDirectory()  // FIXME: load from database instead?
                             
+                            let total = oldFiles.allObjects.count
                             
                             DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Updating RAW images ...")
+                                self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
+                            }
+                            
+                            for case let oldUrl as URL in oldFiles {
+                                let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
+                                let newUrl = URL(fileURLWithPath: newFilePath)
+                                let containerUrl = newUrl.deletingLastPathComponent()
+                                if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
+                                    do {
+                                        try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
+                                    do { // copy file
+                                        try FileManager.default.copyItem(at: oldUrl, to: newUrl)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
+                                }
+                                
+                                
+                                DispatchQueue.main.async {
+                                    let _ = self.accumulator?.add("Updating RAW images ...")
+                                }
                             }
                         }
                     }
@@ -1303,6 +1370,9 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onUpdateRepositoryImagesClicked()
     @IBAction func onUpdateRepositoryImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
+        
+        let shouldCloneFiles = false
+        
         if let repoContainer = self.originalContainer {
             
             
@@ -1310,18 +1380,22 @@ class EditRepositoryViewController: NSViewController {
             if let repository = RepositoryDao.default.getRepository(id: repoContainer.repositoryId) {
                 originalRepoVolume = repository.repositoryVolume
             }
-            if originalRepoVolume == "" || !originalRepoVolume.isVolumeExists() {
-                self.lblRepositoryPathRemark.stringValue = "Original volume disk of editable version is empty or not mounted: \(originalRepoVolume)"
-                return
+            if shouldCloneFiles {
+                if originalRepoVolume == "" || !originalRepoVolume.isVolumeExists() {
+                    self.lblRepositoryPathRemark.stringValue = "Original volume disk of editable version is empty or not mounted: \(originalRepoVolume)"
+                    return
+                }
             }
             
             let (_, _originalRepoPath) = repoContainer.repositoryPath.getVolumeFromThisPath()
             
             let originalRepoPath = "\(originalRepoVolume)\(_originalRepoPath)".withLastStash()
             
-            if !originalRepoPath.isDirectoryExists() {
-                self.lblRepositoryPathRemark.stringValue = "Original path of editable version does not exist: \(originalRepoPath)"
-                return
+            if shouldCloneFiles {
+                if !originalRepoPath.isDirectoryExists() {
+                    self.lblRepositoryPathRemark.stringValue = "Original path of editable version does not exist: \(originalRepoPath)"
+                    return
+                }
             }
             
             let newRepoPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository).withLastStash()
@@ -1349,101 +1423,104 @@ class EditRepositoryViewController: NSViewController {
             self.lblMessage.stringValue = "Loading editable image files ..."
             
             DispatchQueue.global().async {
-            
-                // save images' path, save images' repository path to new repository path (base path)
-                let images = ImageSearchDao.default.getImages(repositoryId: repoContainer.repositoryId)
                 
-                if images.count > 0 {
+                if shouldCloneFiles {
                     
-                    let total = images.count
+                    // save images' path, save images' repository path to new repository path (base path)
+                    let images = ImageSearchDao.default.getImages(repositoryId: repoContainer.repositoryId)
+                    
+                    if images.count > 0 {
+                        
+                        let total = images.count
+                        
+                        DispatchQueue.main.async {
+                            self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
+                        }
+                        
+                        for image in images {
+                            
+                            DispatchQueue.main.async {
+                                let _ = self.accumulator?.add("Updating editable image files ...")
+                            }
+                            
+                            // fix unmatched repository path: fix physically inequal
+                            let newPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
+                            let containerUrl = URL(fileURLWithPath: newPath).deletingLastPathComponent()
+                            
+                            let newUrl = URL(fileURLWithPath: newPath).resolvingSymlinksInPath()
+                            let oldUrl = URL(fileURLWithPath: image.path).resolvingSymlinksInPath()
+                            
+                            if newUrl.path != oldUrl.path { // physically inequal
+                                if !FileManager.default.fileExists(atPath: newUrl.path) { // no folder in new place, create folder
+                                    do {
+                                        try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
+                                    do { // no file in new place, copy file
+                                        try FileManager.default.copyItem(at: oldUrl, to: newUrl)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
+                                }
+                            }
+                            
+                            // fix empty repository path
+                            let containerPath = containerUrl.path
+                            
+                            // fix empty sub path
+                            let subPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
+                            
+                            // fix unmatched repository path: fix logically inequal
+                            // change image path to new place
+                            let oldPath = image.path
+                            
+                            // fix empty id
+                            if let imageId = image.id {
+                                let _ = ImageRecordDao.default.updateImagePaths(id: imageId, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath)
+                            }else {
+                                // old logic, can be demised in future
+                                let id = image.id ?? UUID().uuidString
+                                
+                                let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                            }
+                        }
+                    }
+                    
+                    // save sub-containers' path
+                    
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Loading sub-folders ..."
+                    }
+                    
+                    let subContainers = RepositoryDao.default.getContainers(repositoryId: repoContainer.repositoryId)
+                    
+                    let total = subContainers.count
                     
                     DispatchQueue.main.async {
                         self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
                     }
                     
-                    for image in images {
+                    for subContainer in subContainers {
                         
                         DispatchQueue.main.async {
-                            let _ = self.accumulator?.add("Updating editable image files ...")
+                            let _ = self.accumulator?.add("Updating sub-containers ...")
                         }
                         
-                        // fix unmatched repository path: fix physically inequal
-                        let newPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                        let containerUrl = URL(fileURLWithPath: newPath).deletingLastPathComponent()
-                        
-                        let newUrl = URL(fileURLWithPath: newPath).resolvingSymlinksInPath()
-                        let oldUrl = URL(fileURLWithPath: image.path).resolvingSymlinksInPath()
-                        
-                        if newUrl.path != oldUrl.path { // physically inequal
-                            if !FileManager.default.fileExists(atPath: newUrl.path) { // no folder in new place, create folder
-                                do {
-                                    try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log(.error, error)
-                                }
-                                do { // no file in new place, copy file
-                                    try FileManager.default.copyItem(at: oldUrl, to: newUrl)
-                                }catch{
-                                    self.logger.log(.error, error)
-                                }
-                            }
+                        let sub = subContainer
+                        let oldPath = sub.path
+                        if sub.subPath == "" {
+                            sub.subPath = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                         }
-                        
-                        // fix empty repository path
-                        let containerPath = containerUrl.path
-                        
-                        // fix empty sub path
-                        let subPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
-                        
-                        // fix unmatched repository path: fix logically inequal
-                        // change image path to new place
-                        let oldPath = image.path
-                        
-                        // fix empty id
-                        if let imageId = image.id {
-                            let _ = ImageRecordDao.default.updateImagePaths(id: imageId, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath)
-                        }else {
-                            // old logic, can be demised in future
-                            let id = image.id ?? UUID().uuidString
-                            
-                            let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                        if sub.parentPath == "" {
+                            sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                         }
+                        sub.repositoryPath = newRepoPath
+                        sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPath.removeLastStash()) // without stash
+                        sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
+                        
+                        let _ = RepositoryDao.default.updateImageContainerPaths(containerId: subContainer.id, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                     }
-                }
-                
-                // save sub-containers' path
-                
-                DispatchQueue.main.async {
-                    self.lblMessage.stringValue = "Loading sub-folders ..."
-                }
-                
-                let subContainers = RepositoryDao.default.getContainers(repositoryId: repoContainer.repositoryId)
-                
-                let total = subContainers.count
-                
-                DispatchQueue.main.async {
-                    self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-                }
-                
-                for subContainer in subContainers {
-                    
-                    DispatchQueue.main.async {
-                        let _ = self.accumulator?.add("Updating sub-containers ...")
-                    }
-                    
-                    let sub = subContainer
-                    let oldPath = sub.path
-                    if sub.subPath == "" {
-                        sub.subPath = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
-                    }
-                    if sub.parentPath == "" {
-                        sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
-                    }
-                    sub.repositoryPath = newRepoPath
-                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPath.removeLastStash()) // without stash
-                    sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    
-                    let _ = RepositoryDao.default.updateImageContainerPaths(containerId: subContainer.id, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }
                 
                 // save repo's path
@@ -1477,6 +1554,9 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onUpdateFaceImagesClicked()
     @IBAction func onUpdateFaceImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
+        
+        let shouldCloneFiles = false
+        
         if let repoContainer = self.originalContainer {
             
             
@@ -1524,41 +1604,43 @@ class EditRepositoryViewController: NSViewController {
             
             DispatchQueue.global().async {
             
-                if originalFacePath != "/" { // clone from original FACE path
-                    let oldBaseUrl = URL(fileURLWithPath: originalFacePath)
-                    let newBaseUrl = URL(fileURLWithPath: newFacePath)
-                    let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
-                    let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
-                    
-                    // copy physical files
-                    if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = oldBaseUrl.walkthruDirectory()
+                if shouldCloneFiles {
+                    if originalFacePath != "/" { // clone from original FACE path
+                        let oldBaseUrl = URL(fileURLWithPath: originalFacePath)
+                        let newBaseUrl = URL(fileURLWithPath: newFacePath)
+                        let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
+                        let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
                         
-                        let total = oldFiles.allObjects.count
-                        
-                        DispatchQueue.main.async {
-                            self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-                        }
-                        
-                        for case let oldUrl as URL in oldFiles {
+                        // copy physical files
+                        if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
+                            let oldFiles = oldBaseUrl.walkthruDirectory()
+                            
+                            let total = oldFiles.allObjects.count
                             
                             DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Copying face file ...")
+                                self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
                             }
                             
-                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
-                            let newUrl = URL(fileURLWithPath: newFilePath)
-                            let containerUrl = newUrl.deletingLastPathComponent()
-                            if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
-                                do {
-                                    try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log(.error, error)
+                            for case let oldUrl as URL in oldFiles {
+                                
+                                DispatchQueue.main.async {
+                                    let _ = self.accumulator?.add("Copying face file ...")
                                 }
-                                do { // copy file
-                                    try FileManager.default.copyItem(at: oldUrl, to: newUrl)
-                                }catch{
-                                    self.logger.log(.error, error)
+                                
+                                let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
+                                let newUrl = URL(fileURLWithPath: newFilePath)
+                                let containerUrl = newUrl.deletingLastPathComponent()
+                                if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
+                                    do {
+                                        try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
+                                    do { // copy file
+                                        try FileManager.default.copyItem(at: oldUrl, to: newUrl)
+                                    }catch{
+                                        self.logger.log(.error, error)
+                                    }
                                 }
                             }
                         }
@@ -1590,6 +1672,8 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.onUpdateCropImagesClicked()
     @IBAction func onUpdateCropImagesClicked(_ sender: NSButton) {
         // FIXME: DEMISE
+        
+        let shouldCloneFiles = self.chkCloneFiles.state == .on
        
     }
     

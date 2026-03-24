@@ -187,7 +187,7 @@ extension Words {
     
     static let update = Localize(
         eng: "Update",
-        chs: "保存新存储点"
+        chs: "转移照片到新存储点"
     )
     
     static let backToOrigin = Localize(
