@@ -266,6 +266,8 @@ class RepositoryDetailViewController: NSViewController {
                 
                 self._repositoryName = repository.name
                 
+                var lastDateCopiedFromDevice = ImageCountDao.default.lastDateCopiedFromDevice(deviceId: repository.deviceId)
+                
                 var isAndroid = false
                 if repository.deviceId != "" {
                     if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
@@ -338,6 +340,21 @@ class RepositoryDetailViewController: NSViewController {
                         
                         DispatchQueue.main.async {
                             self.deviceInfoTableController.load(deviceInfo)
+                        }
+                        
+                        if lastDateCopiedFromDevice == nil {
+                            if device.type == "iPhone" {
+                                let storagePath = Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repository.storageVolume, repositoryPath: repository.storagePath)
+                                let path = URL(fileURLWithPath: storagePath).appending(path: "Camera")
+                                if let latestSubFolder = LocalDirectory.bridge.getLatestSubFolder(path: path.path()) {
+                                    let folderPath = path.appending(path: latestSubFolder)
+                                    if let latestFile = LocalDirectory.bridge.getLatestFile(path: folderPath.path()) {
+            
+                                        lastDateCopiedFromDevice = latestFile.0
+                                        
+                                    }
+                                }
+                            }
                         }
                         
                     }else{
@@ -413,8 +430,6 @@ class RepositoryDetailViewController: NSViewController {
                 let countExtractedExif = ImageCountDao.default.countExtractedExif(repositoryId: repository.id)
                 let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryId: repository.id)
                 let countRecognizedFaces = ImageCountDao.default.countRecognizedFaces(repositoryId: repository.id)
-                
-                let lastDateCopiedFromDevice = ImageCountDao.default.lastDateCopiedFromDevice(deviceId: repository.deviceId)
                 
                 DispatchQueue.main.async {
                     self.lblCopiedFromDevice.stringValue = "\(countCopiedFromDevice)"

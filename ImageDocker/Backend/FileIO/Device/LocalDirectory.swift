@@ -528,4 +528,67 @@ struct LocalDirectory {
         
         return (repoSize, backupSize, faceSize, totalSize, usage)
     }
+    
+    public func getLatestFile(path: String) -> (Date, String)? {
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/bin/bash"
+            command.arguments = ["-c", """
+                cd \(path); find . -type f -exec stat -f "%m %N" "{}" \\; | sort -nr | head -1
+                """.trimmingCharacters(in: .whitespacesAndNewlines)]
+            do {
+                try command.run()
+            }catch{
+                self.logger.log(.error, error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        let part = string.components(separatedBy: " ")
+        if part.count != 2 || part[1] == "." {
+            return nil
+        }else{
+            if let time = Double(part[0]) {
+                let date = Date(timeIntervalSince1970: time)
+                return (date, part[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingFirstOccurrence(of: "./", with: ""))
+            }
+            return nil
+        }
+    }
+    
+    public func getLatestSubFolder(path: String) -> String? {
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/bin/bash"
+            let cmd = """
+                cd \(path); find . -type d -exec stat -f "%m %N" "{}" \\;  | sort -nr | head -1
+                """.trimmingCharacters(in: .whitespacesAndNewlines)
+            print(cmd) //
+            command.arguments = ["-c", cmd]
+            do {
+                try command.run()
+                command.waitUntilExit()
+            }catch{
+                self.logger.log(.error, error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        let part = string.components(separatedBy: " ")
+        if part.count != 2 || part[1] == "." {
+            return nil
+        }else{
+            return part[1].trimmingCharacters(in: .whitespacesAndNewlines).replacingFirstOccurrence(of: "./", with: "")
+        }
+    }
 }
