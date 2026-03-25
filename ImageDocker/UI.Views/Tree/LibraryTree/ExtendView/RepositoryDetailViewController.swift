@@ -78,6 +78,13 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var btnDetailOfBackupStorage: NSButton!  /// - Tag: RepositoryDetailViewController.btnDetailOfBackupStorage
     @IBOutlet weak var btnDetailOfFacesStorage: NSButton!  /// - Tag: RepositoryDetailViewController.btnDetailOfFacesStorage
     
+    @IBOutlet weak var lblLastDateCopiedFromDevice: NSTextField!
+    @IBOutlet weak var lblLastDateImageShouldImport: NSTextField!
+    @IBOutlet weak var lblLastDateImportedEditable: NSTextField!
+    @IBOutlet weak var lblLastDateExtractedEXIF: NSTextField!
+    @IBOutlet weak var lblLastDateRecognizedLocation: NSTextField!
+    
+    
     @IBOutlet weak var lblCaptionFolder: NSTextField!
     
     
@@ -214,6 +221,12 @@ class RepositoryDetailViewController: NSViewController {
         self.lblExif.stringValue = "0"
         self.lblLocation.stringValue = "0"
         self.lblFaces.stringValue = "0"
+        
+        self.lblLastDateExtractedEXIF.stringValue = ""
+        self.lblLastDateImportedEditable.stringValue = ""
+        self.lblLastDateRecognizedLocation.stringValue = ""
+        self.lblLastDateCopiedFromDevice.stringValue = ""
+        self.lblLastDateImageShouldImport.stringValue = ""
 
         self.indCopiedFromDevice.maxValue = 100.0
         self.indCopiedFromDevice.minValue = 0.0
@@ -401,6 +414,8 @@ class RepositoryDetailViewController: NSViewController {
                 let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryId: repository.id)
                 let countRecognizedFaces = ImageCountDao.default.countRecognizedFaces(repositoryId: repository.id)
                 
+                let lastDateCopiedFromDevice = ImageCountDao.default.lastDateCopiedFromDevice(deviceId: repository.deviceId)
+                
                 DispatchQueue.main.async {
                     self.lblCopiedFromDevice.stringValue = "\(countCopiedFromDevice)"
                     self.lblShouldImport.stringValue = "\(countShouldImport)"
@@ -408,6 +423,16 @@ class RepositoryDetailViewController: NSViewController {
                     self.lblExif.stringValue = "\(countExtractedExif)"
                     self.lblLocation.stringValue = "\(countRecognizedLocation)"
                     self.lblFaces.stringValue = "\(countRecognizedFaces)"
+                    
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    
+                    if let lastDateCopiedFromDevice = lastDateCopiedFromDevice {
+                        self.lblLastDateCopiedFromDevice.stringValue = "\(dateFormatter.string(from: lastDateCopiedFromDevice))"
+                    }else{
+                        self.lblLastDateCopiedFromDevice.stringValue = ""
+                    }
                     
                     var rateCopied = 0.0
                     var rateShouldImport = 0.0

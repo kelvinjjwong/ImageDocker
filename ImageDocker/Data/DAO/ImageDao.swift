@@ -571,6 +571,10 @@ class ImageCountDao {
         return self.impl.countCopiedFromDevice(deviceId: deviceId)
     }
     
+    func lastDateCopiedFromDevice(deviceId:String) -> Date? {
+        return self.impl.lastDateCopiedFromDevice(deviceId: deviceId)
+    }
+    
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
     /// - attention: will be deprecated

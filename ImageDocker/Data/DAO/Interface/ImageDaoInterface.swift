@@ -242,6 +242,8 @@ protocol ImageCountDaoInterface {
     
     func countCopiedFromDevice(deviceId:String) -> Int
     
+    func lastDateCopiedFromDevice(deviceId:String) -> Date? 
+    
     func countImagesShouldImport(deviceId:String) -> Int
     
     func countImportedAsEditable(repositoryPath:String) -> Int

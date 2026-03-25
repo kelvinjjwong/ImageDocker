@@ -8,6 +8,7 @@
 
 import Foundation
 import LoggerFactory
+import PostgresModelFactory
 
 class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
@@ -24,6 +25,37 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
             self.logger.log(.error, error)
             return -1
         }
+    }
+    
+    func lastDateCopiedFromDevice(deviceId:String) -> Date? {
+        final class TempRecord : DatabaseRecord {
+            var theDateTime: Date?
+            public init() {}
+        }
+        let sql = """
+select max("fileDateTime") as "theDateTime" FROM
+(
+select "fileId","deviceId",
+CASE 
+    WHEN "fileDateTime" ~ '^\\d{4}-\\d{2}-\\d{2}' THEN to_timestamp("fileDateTime", 'YYYY-MM-DD HH24:MI:SS')
+    ELSE NULL
+END
+as "fileDateTime","importDate" from "ImageDeviceFile" order by "fileDateTime" desc
+) t
+where "deviceId" = '\(deviceId)'
+GROUP BY "deviceId"
+"""
+        let db = PostgresConnection.database()
+        var record:TempRecord? = nil
+        do {
+            record = try TempRecord.fetchOne(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
+        if let record = record, let theDateTime = record.theDateTime {
+            return theDateTime
+        }
+        return nil
     }
     
     func countImagesShouldImport(deviceId:String) -> Int {
