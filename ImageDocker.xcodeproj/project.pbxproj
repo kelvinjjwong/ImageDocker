@@ -152,6 +152,11 @@
 		8E7D4F852D1DD55A00EC77F8 /* DSFPasswordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoDelegate.swift */; };
+		8E846BC42F7555090079CC29 /* RepositoryDetailViewController+ImportStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC32F7554FE0079CC29 /* RepositoryDetailViewController+ImportStatus.swift */; };
+		8E846BC62F7555210079CC29 /* RepositoryDetailViewController+DiskSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC52F75551E0079CC29 /* RepositoryDetailViewController+DiskSize.swift */; };
+		8E846BC82F7555440079CC29 /* RepositoryDetailViewController+Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC72F7555400079CC29 /* RepositoryDetailViewController+Device.swift */; };
+		8E846BCA2F755EEE0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC92F755EE10079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift */; };
+		8E846BCD2F7563420079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BCC2F75633B0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
 		8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */; };
 		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
@@ -556,6 +561,11 @@
 		8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSFPasswordButton.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoDelegate.swift; sourceTree = "<group>"; };
+		8E846BC32F7554FE0079CC29 /* RepositoryDetailViewController+ImportStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+ImportStatus.swift"; sourceTree = "<group>"; };
+		8E846BC52F75551E0079CC29 /* RepositoryDetailViewController+DiskSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+DiskSize.swift"; sourceTree = "<group>"; };
+		8E846BC72F7555400079CC29 /* RepositoryDetailViewController+Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+Device.swift"; sourceTree = "<group>"; };
+		8E846BC92F755EE10079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift"; sourceTree = "<group>"; };
+		8E846BCC2F75633B0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+ImportStatus+CopyToRepository.swift"; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
 		8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCollectionViewController.swift; sourceTree = "<group>"; };
 		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
@@ -1617,6 +1627,11 @@
 				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
 				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
 				8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */,
+				8E846BC32F7554FE0079CC29 /* RepositoryDetailViewController+ImportStatus.swift */,
+				8E846BC92F755EE10079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift */,
+				8E846BCC2F75633B0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift */,
+				8E846BC52F75551E0079CC29 /* RepositoryDetailViewController+DiskSize.swift */,
+				8E846BC72F7555400079CC29 /* RepositoryDetailViewController+Device.swift */,
 				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
 				8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */,
 				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
@@ -2028,6 +2043,7 @@
 				5C511758297C3ABE00F64CF6 /* FontAwesomeEnum.swift in Sources */,
 				8EEAF6922CED23440007D3A9 /* DatabaseProfileFlowListItemController.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
+				8E846BCD2F7563420079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
@@ -2087,6 +2103,7 @@
 				5C5117492972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
 				8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */,
+				8E846BC42F7555090079CC29 /* RepositoryDetailViewController+ImportStatus.swift in Sources */,
 				8EB271752340D7B0003BF3AF /* ViewController+Menu+Face.swift in Sources */,
 				8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */,
 				8E15E73823AC74DC0094240A /* NSView+BorderBounder.swift in Sources */,
@@ -2198,6 +2215,8 @@
 				8EB9C0112507736000507CA7 /* DataStructures.swift in Sources */,
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
 				8EF8C560266032730060D2E0 /* SelectionViewController.swift in Sources */,
+				8E846BC82F7555440079CC29 /* RepositoryDetailViewController+Device.swift in Sources */,
+				8E846BC62F7555210079CC29 /* RepositoryDetailViewController+DiskSize.swift in Sources */,
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
 				8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */,
@@ -2252,6 +2271,7 @@
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
 				8E5B76852ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
+				8E846BCA2F755EEE0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,

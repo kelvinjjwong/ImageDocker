@@ -16,6 +16,7 @@ enum ImageType : Int {
 }
 
 struct Naming {
+    static let Device = ImageDeviceRecognizer()
     static let Camera = CameraModelRecognizer()
     static let Image = ImagePropertyRules()
     static let Source = ImageSourceRecognizer()
@@ -24,6 +25,14 @@ struct Naming {
     static let FileType = FileTypeRecognizer()
     static let Event = EventRecognizer()
     static let Export = NamingForExporting()
+}
+
+public class ImageDeviceRecognizer {
+    
+    public let iPhone = "iPhone"
+    public let Android = "Android"
+    
+    
 }
 
 struct ImagePropertyRules {
