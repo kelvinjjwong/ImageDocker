@@ -1,0 +1,105 @@
+{
+  "originHash" : "a41eca4edb32d1be3b9101738758604fad091f1b1c99bbe73ace8321e5985abe",
+  "pins" : [
+    {
+      "identity" : "androiddevicereader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/AndroidDeviceReader",
+      "state" : {
+        "revision" : "d75b64f234ce197e973c837808da03dad8eb66f3",
+        "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "bluesocket",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kitura/BlueSocket.git",
+      "state" : {
+        "revision" : "7b23a867008e0027bfd6f4d398d44720707bc8ca",
+        "version" : "2.0.4"
+      }
+    },
+    {
+      "identity" : "bluesslservice",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kitura/BlueSSLService",
+      "state" : {
+        "revision" : "b27a94d063962dfa1bba9f79814c4ef202cf33a4",
+        "version" : "2.0.2"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift",
+      "state" : {
+        "revision" : "f2a627b84c1ff96f21ac2fcb623ab36142dd5512",
+        "version" : "1.10.0"
+      }
+    },
+    {
+      "identity" : "diskutilinforeader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/DiskUtilInfoReader",
+      "state" : {
+        "revision" : "16f1d2a43685e227253450c412320fd808a05b7b",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "iphonedevicereader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/IPhoneDeviceReader",
+      "state" : {
+        "revision" : "048ccb2ec93b1703eb75ca0ec2787256ea8d44f3",
+        "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "loggerfactory",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/LoggerFactory",
+      "state" : {
+        "revision" : "11f9948717978ff74bd03c297012ae2c27280d09",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "nonamecat-swift-commons",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/nonamecat-swift-commons",
+      "state" : {
+        "revision" : "f756d2f73cb825d8d506a83a7323c1ab509ecc7d",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "postgresclientkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/codewinsdotcom/PostgresClientKit",
+      "state" : {
+        "revision" : "356ffe0c43722f192d796300557b3b530a0baebc",
+        "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "postgresmodelfactory",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/PostgresModelFactory",
+      "state" : {
+        "revision" : "8bd6d4a81157d0481b882aa99b80398b552df188",
+        "version" : "1.0.20"
+      }
+    },
+    {
+      "identity" : "shareddevicelib",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/SharedDeviceLib",
+      "state" : {
+        "revision" : "0566d80d3095678bed09336ff3109ea3988c2d86",
+        "version" : "1.0.3"
+      }
+    }
+  ],
+  "version" : 3
+}

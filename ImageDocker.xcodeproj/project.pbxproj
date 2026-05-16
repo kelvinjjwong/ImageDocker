@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		061B8A9A21C94180D64C2094 /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */; };
 		5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */; };
 		5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007849289FB70900919826 /* Words+NotesModifier.swift */; };
 		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
@@ -37,6 +36,18 @@
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
 		8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E08D86F25DB6932009A365F /* TextListComboController.swift */; };
+		8E0907592FB8FD38006B00D4 /* LoggerFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907582FB8FD38006B00D4 /* LoggerFactory */; };
+		8E09075C2FB8FE46006B00D4 /* PostgresModelFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09075B2FB8FE46006B00D4 /* PostgresModelFactory */; };
+		8E09075F2FB8FE9D006B00D4 /* DiskUtilInfoReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09075E2FB8FE9D006B00D4 /* DiskUtilInfoReader */; };
+		8E0907622FB8FECA006B00D4 /* SharedDeviceLib in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907612FB8FECA006B00D4 /* SharedDeviceLib */; };
+		8E0907652FB8FF18006B00D4 /* AndroidDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907642FB8FF18006B00D4 /* AndroidDeviceReader */; };
+		8E0907682FB8FF7A006B00D4 /* IPhoneDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907672FB8FF7A006B00D4 /* IPhoneDeviceReader */; };
+		8E09076B2FB900E5006B00D4 /* nonamecat-swift-commons in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09076A2FB900E5006B00D4 /* nonamecat-swift-commons */; };
+		8E09076E2FB90139006B00D4 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09076D2FB90139006B00D4 /* CryptoSwift */; };
+		8E0907752FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */; };
+		8E0907762FB90FDF006B00D4 /* SwiftyGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */; };
+		8E0907772FB90FDF006B00D4 /* NSImage+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */; };
+		8E0907782FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */; };
 		8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */; };
 		8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */; };
 		8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA42208BDEA100CE8B68 /* Main.storyboard */; };
@@ -290,7 +301,6 @@
 		8ECA200223E5AF2700F56895 /* MomentsTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200123E5AF2700F56895 /* MomentsTree+CollectionView.swift */; };
 		8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200523E5B09200F56895 /* PlacesTree+CollectionView.swift */; };
 		8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200723E5B0AA00F56895 /* EventsTree+CollectionView.swift */; };
-		8ECB50F82761F6C0004DFDD7 /* Pods_ImageDocker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB8D6FD22E456160096DD75 /* WebKit.framework */; };
 		8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */; };
 		8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */; };
@@ -405,7 +415,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8ECB50F82761F6C0004DFDD7 /* Pods_ImageDocker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,7 +422,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
 		5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+DateTimeModifier.swift"; sourceTree = "<group>"; };
 		5C007849289FB70900919826 /* Words+NotesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+NotesModifier.swift"; sourceTree = "<group>"; };
 		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
@@ -436,7 +444,6 @@
 		5CA18B5529EB296000C5502E /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationMessageManager.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
-		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
 		8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+EventManagement.swift"; sourceTree = "<group>"; };
 		8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLHelper.swift; sourceTree = "<group>"; };
@@ -444,6 +451,10 @@
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
 		8E08D86F25DB6932009A365F /* TextListComboController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListComboController.swift; sourceTree = "<group>"; };
+		8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+SwiftyGif.swift"; sourceTree = "<group>"; };
+		8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+SwiftyGif.swift"; sourceTree = "<group>"; };
+		8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcAssociatedWeakObject.swift; sourceTree = "<group>"; };
+		8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyGifManager.swift; sourceTree = "<group>"; };
 		8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -793,8 +804,6 @@
 		8EFAF1FE20CAE422007A7783 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		8EFE763B2094AF6B00B7CFCA /* TreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeController.swift; sourceTree = "<group>"; };
 		8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageDocker-Bridging-Header.h"; sourceTree = "<group>"; };
-		CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -802,8 +811,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E09076B2FB900E5006B00D4 /* nonamecat-swift-commons in Frameworks */,
 				8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */,
-				061B8A9A21C94180D64C2094 /* Pods_ImageDocker.framework in Frameworks */,
+				8E09076E2FB90139006B00D4 /* CryptoSwift in Frameworks */,
+				8E0907622FB8FECA006B00D4 /* SharedDeviceLib in Frameworks */,
+				8E09075C2FB8FE46006B00D4 /* PostgresModelFactory in Frameworks */,
+				8E0907652FB8FF18006B00D4 /* AndroidDeviceReader in Frameworks */,
+				8E09075F2FB8FE9D006B00D4 /* DiskUtilInfoReader in Frameworks */,
+				8E0907682FB8FF7A006B00D4 /* IPhoneDeviceReader in Frameworks */,
+				8E0907592FB8FD38006B00D4 /* LoggerFactory in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,14 +851,6 @@
 			path = UI.SystemMenu;
 			sourceTree = "<group>";
 		};
-		5C25892429E96236008DE450 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		5C511756297C3AA500F64CF6 /* FontAwesome */ = {
 			isa = PBXGroup;
 			children = (
@@ -870,15 +878,6 @@
 				5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */,
 			);
 			path = NotificationMessage;
-			sourceTree = "<group>";
-		};
-		891C048F0A2717E11DC7AB76 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */,
-				43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */,
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		8E014A882AE21136004B062F /* Event */ = {
@@ -927,6 +926,17 @@
 			path = MainMenu;
 			sourceTree = "<group>";
 		};
+		8E0907702FB90FBB006B00D4 /* SwiftyGifMac */ = {
+			isa = PBXGroup;
+			children = (
+				8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */,
+				8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */,
+				8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */,
+				8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */,
+			);
+			path = SwiftyGifMac;
+			sourceTree = "<group>";
+		};
 		8E0AFA30208BDEA000CE8B68 = {
 			isa = PBXGroup;
 			children = (
@@ -935,8 +945,6 @@
 				8E0AFA59208BDEA100CE8B68 /* ImageDockerUITests */,
 				8E0AFA3A208BDEA000CE8B68 /* Products */,
 				BF292D703FDC467A9B710F29 /* Frameworks */,
-				891C048F0A2717E11DC7AB76 /* Pods */,
-				5C25892429E96236008DE450 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1513,6 +1521,7 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				8E0907702FB90FBB006B00D4 /* SwiftyGifMac */,
 				8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */,
 				8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */,
 				5C511756297C3AA500F64CF6 /* FontAwesome */,
@@ -1760,7 +1769,6 @@
 			isa = PBXGroup;
 			children = (
 				8EB8D6FD22E456160096DD75 /* WebKit.framework */,
-				CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1772,12 +1780,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8E0AFA5F208BDEA100CE8B68 /* Build configuration list for PBXNativeTarget "ImageDocker" */;
 			buildPhases = (
-				975D0840D6665E8461B7AA4A /* [CP] Check Pods Manifest.lock */,
 				8E0AFA35208BDEA000CE8B68 /* Sources */,
 				8E0AFA36208BDEA000CE8B68 /* Frameworks */,
 				8E0AFA37208BDEA000CE8B68 /* Resources */,
 				8ECB50F92761F6C0004DFDD7 /* Embed Frameworks */,
-				26D12066167A45437F882260 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1864,6 +1870,17 @@
 				Base,
 			);
 			mainGroup = 8E0AFA30208BDEA000CE8B68;
+			packageReferences = (
+				8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */,
+				8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */,
+				8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */,
+				8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */,
+				8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */,
+				8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */,
+				8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */,
+				8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+				8E09076F2FB90F46006B00D4 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */,
+			);
 			productRefGroup = 8E0AFA3A208BDEA000CE8B68 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1966,52 +1983,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		26D12066167A45437F882260 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ImageDocker/Pods-ImageDocker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ImageDocker/Pods-ImageDocker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ImageDocker/Pods-ImageDocker-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		975D0840D6665E8461B7AA4A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ImageDocker-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8E0AFA35208BDEA000CE8B68 /* Sources */ = {
@@ -2185,6 +2156,10 @@
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
 				8E3614FD2AC5933B001DF482 /* Words+People.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
+				8E0907752FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift in Sources */,
+				8E0907762FB90FDF006B00D4 /* SwiftyGifManager.swift in Sources */,
+				8E0907772FB90FDF006B00D4 /* NSImage+SwiftyGif.swift in Sources */,
+				8E0907782FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift in Sources */,
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
@@ -2482,7 +2457,6 @@
 		};
 		8E0AFA60208BDEA100CE8B68 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2508,7 +2482,6 @@
 		};
 		8E0AFA61208BDEA100CE8B68 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2653,6 +2626,124 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/LoggerFactory";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+		8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/PostgresModelFactory";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.20;
+			};
+		};
+		8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/DiskUtilInfoReader";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+		8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/SharedDeviceLib";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
+		8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/AndroidDeviceReader";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
+		8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/IPhoneDeviceReader";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
+		8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/nonamecat-swift-commons";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+		8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.0;
+			};
+		};
+		8E09076F2FB90F46006B00D4 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/SwiftyGifMac";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.10;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8E0907582FB8FD38006B00D4 /* LoggerFactory */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */;
+			productName = LoggerFactory;
+		};
+		8E09075B2FB8FE46006B00D4 /* PostgresModelFactory */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */;
+			productName = PostgresModelFactory;
+		};
+		8E09075E2FB8FE9D006B00D4 /* DiskUtilInfoReader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */;
+			productName = DiskUtilInfoReader;
+		};
+		8E0907612FB8FECA006B00D4 /* SharedDeviceLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */;
+			productName = SharedDeviceLib;
+		};
+		8E0907642FB8FF18006B00D4 /* AndroidDeviceReader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */;
+			productName = AndroidDeviceReader;
+		};
+		8E0907672FB8FF7A006B00D4 /* IPhoneDeviceReader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */;
+			productName = IPhoneDeviceReader;
+		};
+		8E09076A2FB900E5006B00D4 /* nonamecat-swift-commons */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */;
+			productName = "nonamecat-swift-commons";
+		};
+		8E09076D2FB90139006B00D4 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8E0AFA31208BDEA000CE8B68 /* Project object */;
 }

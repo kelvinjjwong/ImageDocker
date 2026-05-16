@@ -5,6 +5,7 @@
 //  Created by Kelvin Wong on 2026/3/28.
 //  Copyright © 2026 nonamecat. All rights reserved.
 //
+import Cocoa
 import LoggerFactory
 
 public protocol LogSettingFinder {

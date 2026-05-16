@@ -8,7 +8,7 @@
 
 import Cocoa
 import LoggerFactory
-import SwiftyGifMac
+//import SwiftyGifMac
 
 class SplashViewController: NSViewController {
     
