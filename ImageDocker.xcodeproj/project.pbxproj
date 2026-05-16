@@ -157,6 +157,11 @@
 		8E846BC82F7555440079CC29 /* RepositoryDetailViewController+Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC72F7555400079CC29 /* RepositoryDetailViewController+Device.swift */; };
 		8E846BCA2F755EEE0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BC92F755EE10079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift */; };
 		8E846BCD2F7563420079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BCC2F75633B0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift */; };
+		8E846BEC2F77B40C0079CC29 /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BEB2F77B4070079CC29 /* LoggerFactory.swift */; };
+		8E846BEE2F77B87D0079CC29 /* ConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BED2F77B8770079CC29 /* ConsoleLogger.swift */; };
+		8E846BF02F77B90D0079CC29 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BEF2F77B9090079CC29 /* Logger.swift */; };
+		8E846BF22F77BC580079CC29 /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BF12F77BC530079CC29 /* FileLogger.swift */; };
+		8E846BF42F77C37D0079CC29 /* LoggerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E846BF32F77C3790079CC29 /* LoggerSetting.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
 		8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */; };
 		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
@@ -566,6 +571,11 @@
 		8E846BC72F7555400079CC29 /* RepositoryDetailViewController+Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+Device.swift"; sourceTree = "<group>"; };
 		8E846BC92F755EE10079CC29 /* RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+ImportStatus+CopyFromDevice.swift"; sourceTree = "<group>"; };
 		8E846BCC2F75633B0079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryDetailViewController+ImportStatus+CopyToRepository.swift"; sourceTree = "<group>"; };
+		8E846BEB2F77B4070079CC29 /* LoggerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
+		8E846BED2F77B8770079CC29 /* ConsoleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogger.swift; sourceTree = "<group>"; };
+		8E846BEF2F77B9090079CC29 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		8E846BF12F77BC530079CC29 /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
+		8E846BF32F77C3790079CC29 /* LoggerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerSetting.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
 		8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCollectionViewController.swift; sourceTree = "<group>"; };
 		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
@@ -943,6 +953,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E846BE92F77B3B50079CC29 /* LogFactory2 */,
 				8ECA1FF123E3294A00F56895 /* Commons */,
 				8E481479277CB0AF0097493E /* UI.Languages */,
 				8E48147A277CB1110097493E /* UI.Icons_Colors */,
@@ -1226,6 +1237,18 @@
 				8E74194F24225728002BAAAE /* ExportDaoInterface.swift */,
 			);
 			path = Interface;
+			sourceTree = "<group>";
+		};
+		8E846BE92F77B3B50079CC29 /* LogFactory2 */ = {
+			isa = PBXGroup;
+			children = (
+				8E846BF32F77C3790079CC29 /* LoggerSetting.swift */,
+				8E846BF12F77BC530079CC29 /* FileLogger.swift */,
+				8E846BEF2F77B9090079CC29 /* Logger.swift */,
+				8E846BED2F77B8770079CC29 /* ConsoleLogger.swift */,
+				8E846BEB2F77B4070079CC29 /* LoggerFactory.swift */,
+			);
+			path = LogFactory2;
 			sourceTree = "<group>";
 		};
 		8E85B7D020B91E9E005A9845 /* Selection */ = {
@@ -2010,6 +2033,7 @@
 				8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */,
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
 				8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */,
+				8E846BF42F77C37D0079CC29 /* LoggerSetting.swift in Sources */,
 				8E15E73723AC74DC0094240A /* StackBodyViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
@@ -2045,6 +2069,7 @@
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8E846BCD2F7563420079CC29 /* RepositoryDetailViewController+ImportStatus+CopyToRepository.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
+				8E846BEC2F77B40C0079CC29 /* LoggerFactory.swift in Sources */,
 				8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
@@ -2205,12 +2230,14 @@
 				8E481481277DAE940097493E /* Words+MainMenu.swift in Sources */,
 				8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */,
 				8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */,
+				8E846BF22F77BC580079CC29 /* FileLogger.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8E481499278A3C8E0097493E /* CellPhoneResolution.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8E99DBFB2284A18600654C03 /* SearchCondition.swift in Sources */,
+				8E846BEE2F77B87D0079CC29 /* ConsoleLogger.swift in Sources */,
 				8E741948242256F0002BAAAE /* PlaceDaoInterface.swift in Sources */,
 				8EB9C0112507736000507CA7 /* DataStructures.swift in Sources */,
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
@@ -2241,6 +2268,7 @@
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
 				8EFA02F3243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
+				8E846BF02F77B90D0079CC29 /* Logger.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
 				5C511752297C388000F64CF6 /* FontAwesome.swift in Sources */,
 				8E9CF30D26489EAA00558423 /* Words.swift in Sources */,
