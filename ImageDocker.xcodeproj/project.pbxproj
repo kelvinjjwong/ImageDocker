@@ -36,18 +36,18 @@
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
 		8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E08D86F25DB6932009A365F /* TextListComboController.swift */; };
-		8E0907592FB8FD38006B00D4 /* LoggerFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907582FB8FD38006B00D4 /* LoggerFactory */; };
-		8E09075C2FB8FE46006B00D4 /* PostgresModelFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09075B2FB8FE46006B00D4 /* PostgresModelFactory */; };
-		8E09075F2FB8FE9D006B00D4 /* DiskUtilInfoReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09075E2FB8FE9D006B00D4 /* DiskUtilInfoReader */; };
-		8E0907622FB8FECA006B00D4 /* SharedDeviceLib in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907612FB8FECA006B00D4 /* SharedDeviceLib */; };
-		8E0907652FB8FF18006B00D4 /* AndroidDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907642FB8FF18006B00D4 /* AndroidDeviceReader */; };
-		8E0907682FB8FF7A006B00D4 /* IPhoneDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907672FB8FF7A006B00D4 /* IPhoneDeviceReader */; };
-		8E09076B2FB900E5006B00D4 /* nonamecat-swift-commons in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09076A2FB900E5006B00D4 /* nonamecat-swift-commons */; };
-		8E09076E2FB90139006B00D4 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09076D2FB90139006B00D4 /* CryptoSwift */; };
 		8E0907752FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */; };
 		8E0907762FB90FDF006B00D4 /* SwiftyGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */; };
 		8E0907772FB90FDF006B00D4 /* NSImage+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */; };
 		8E0907782FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */; };
+		8E09077B2FBA020C006B00D4 /* LoggerFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09077A2FBA020C006B00D4 /* LoggerFactory */; };
+		8E09077E2FBA0224006B00D4 /* PostgresModelFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09077D2FBA0224006B00D4 /* PostgresModelFactory */; };
+		8E0907812FBA0246006B00D4 /* DiskUtilInfoReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907802FBA0246006B00D4 /* DiskUtilInfoReader */; };
+		8E0907842FBA0259006B00D4 /* SharedDeviceLib in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907832FBA0259006B00D4 /* SharedDeviceLib */; };
+		8E0907872FBA026D006B00D4 /* AndroidDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907862FBA026D006B00D4 /* AndroidDeviceReader */; };
+		8E09078A2FBA029F006B00D4 /* IPhoneDeviceReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907892FBA029F006B00D4 /* IPhoneDeviceReader */; };
+		8E09078D2FBA02BB006B00D4 /* nonamecat-swift-commons in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09078C2FBA02BB006B00D4 /* nonamecat-swift-commons */; };
+		8E0907902FBA02F0006B00D4 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09078F2FBA02F0006B00D4 /* CryptoSwift */; };
 		8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */; };
 		8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */; };
 		8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA42208BDEA100CE8B68 /* Main.storyboard */; };
@@ -811,15 +811,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E09076B2FB900E5006B00D4 /* nonamecat-swift-commons in Frameworks */,
+				8E09078D2FBA02BB006B00D4 /* nonamecat-swift-commons in Frameworks */,
 				8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */,
-				8E09076E2FB90139006B00D4 /* CryptoSwift in Frameworks */,
-				8E0907622FB8FECA006B00D4 /* SharedDeviceLib in Frameworks */,
-				8E09075C2FB8FE46006B00D4 /* PostgresModelFactory in Frameworks */,
-				8E0907652FB8FF18006B00D4 /* AndroidDeviceReader in Frameworks */,
-				8E09075F2FB8FE9D006B00D4 /* DiskUtilInfoReader in Frameworks */,
-				8E0907682FB8FF7A006B00D4 /* IPhoneDeviceReader in Frameworks */,
-				8E0907592FB8FD38006B00D4 /* LoggerFactory in Frameworks */,
+				8E0907902FBA02F0006B00D4 /* CryptoSwift in Frameworks */,
+				8E0907842FBA0259006B00D4 /* SharedDeviceLib in Frameworks */,
+				8E09077E2FBA0224006B00D4 /* PostgresModelFactory in Frameworks */,
+				8E0907872FBA026D006B00D4 /* AndroidDeviceReader in Frameworks */,
+				8E0907812FBA0246006B00D4 /* DiskUtilInfoReader in Frameworks */,
+				8E09078A2FBA029F006B00D4 /* IPhoneDeviceReader in Frameworks */,
+				8E09077B2FBA020C006B00D4 /* LoggerFactory in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1836,8 +1836,9 @@
 		8E0AFA31208BDEA000CE8B68 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1340;
+				LastUpgradeCheck = 2640;
 				ORGANIZATIONNAME = nonamecat;
 				TargetAttributes = {
 					8E0AFA38208BDEA000CE8B68 = {
@@ -1871,15 +1872,14 @@
 			);
 			mainGroup = 8E0AFA30208BDEA000CE8B68;
 			packageReferences = (
-				8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */,
-				8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */,
-				8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */,
-				8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */,
-				8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */,
-				8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */,
-				8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */,
-				8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
-				8E09076F2FB90F46006B00D4 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */,
+				8E0907792FBA020C006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */,
+				8E09077C2FBA0224006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */,
+				8E09077F2FBA0246006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */,
+				8E0907822FBA0259006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */,
+				8E0907852FBA026D006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */,
+				8E0907882FBA029F006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */,
+				8E09078B2FBA02BB006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */,
+				8E09078E2FBA02F0006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
 			);
 			productRefGroup = 8E0AFA3A208BDEA000CE8B68 /* Products */;
 			projectDirPath = "";
@@ -2373,9 +2373,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZU637G36U2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2394,6 +2397,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -2435,9 +2439,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZU637G36U2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2449,6 +2456,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -2464,14 +2472,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
@@ -2489,14 +2497,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
@@ -2507,17 +2515,17 @@
 		8E0AFA63208BDEA100CE8B68 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = ImageDockerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -2528,17 +2536,17 @@
 		8E0AFA64208BDEA100CE8B68 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = ImageDockerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -2549,16 +2557,16 @@
 		8E0AFA66208BDEA100CE8B68 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = ImageDockerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -2569,16 +2577,16 @@
 		8E0AFA67208BDEA100CE8B68 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = ZU637G36U2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = ImageDockerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -2628,7 +2636,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */ = {
+		8E0907792FBA020C006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/LoggerFactory";
 			requirement = {
@@ -2636,7 +2644,7 @@
 				minimumVersion = 1.2.0;
 			};
 		};
-		8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */ = {
+		8E09077C2FBA0224006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/PostgresModelFactory";
 			requirement = {
@@ -2644,7 +2652,7 @@
 				minimumVersion = 1.0.20;
 			};
 		};
-		8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */ = {
+		8E09077F2FBA0246006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/DiskUtilInfoReader";
 			requirement = {
@@ -2652,7 +2660,7 @@
 				minimumVersion = 1.0.1;
 			};
 		};
-		8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */ = {
+		8E0907822FBA0259006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/SharedDeviceLib";
 			requirement = {
@@ -2660,7 +2668,7 @@
 				minimumVersion = 1.0.3;
 			};
 		};
-		8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */ = {
+		8E0907852FBA026D006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/AndroidDeviceReader";
 			requirement = {
@@ -2668,7 +2676,7 @@
 				minimumVersion = 1.0.3;
 			};
 		};
-		8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */ = {
+		8E0907882FBA029F006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/IPhoneDeviceReader";
 			requirement = {
@@ -2676,7 +2684,7 @@
 				minimumVersion = 1.0.6;
 			};
 		};
-		8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */ = {
+		8E09078B2FBA02BB006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kelvinjjwong/nonamecat-swift-commons";
 			requirement = {
@@ -2684,7 +2692,7 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
+		8E09078E2FBA02F0006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
 			requirement = {
@@ -2692,55 +2700,47 @@
 				minimumVersion = 1.10.0;
 			};
 		};
-		8E09076F2FB90F46006B00D4 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kelvinjjwong/SwiftyGifMac";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.4.10;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8E0907582FB8FD38006B00D4 /* LoggerFactory */ = {
+		8E09077A2FBA020C006B00D4 /* LoggerFactory */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E0907572FB8FD38006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */;
+			package = 8E0907792FBA020C006B00D4 /* XCRemoteSwiftPackageReference "LoggerFactory" */;
 			productName = LoggerFactory;
 		};
-		8E09075B2FB8FE46006B00D4 /* PostgresModelFactory */ = {
+		8E09077D2FBA0224006B00D4 /* PostgresModelFactory */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E09075A2FB8FE46006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */;
+			package = 8E09077C2FBA0224006B00D4 /* XCRemoteSwiftPackageReference "PostgresModelFactory" */;
 			productName = PostgresModelFactory;
 		};
-		8E09075E2FB8FE9D006B00D4 /* DiskUtilInfoReader */ = {
+		8E0907802FBA0246006B00D4 /* DiskUtilInfoReader */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E09075D2FB8FE9D006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */;
+			package = 8E09077F2FBA0246006B00D4 /* XCRemoteSwiftPackageReference "DiskUtilInfoReader" */;
 			productName = DiskUtilInfoReader;
 		};
-		8E0907612FB8FECA006B00D4 /* SharedDeviceLib */ = {
+		8E0907832FBA0259006B00D4 /* SharedDeviceLib */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E0907602FB8FECA006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */;
+			package = 8E0907822FBA0259006B00D4 /* XCRemoteSwiftPackageReference "SharedDeviceLib" */;
 			productName = SharedDeviceLib;
 		};
-		8E0907642FB8FF18006B00D4 /* AndroidDeviceReader */ = {
+		8E0907862FBA026D006B00D4 /* AndroidDeviceReader */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E0907632FB8FF18006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */;
+			package = 8E0907852FBA026D006B00D4 /* XCRemoteSwiftPackageReference "AndroidDeviceReader" */;
 			productName = AndroidDeviceReader;
 		};
-		8E0907672FB8FF7A006B00D4 /* IPhoneDeviceReader */ = {
+		8E0907892FBA029F006B00D4 /* IPhoneDeviceReader */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E0907662FB8FF7A006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */;
+			package = 8E0907882FBA029F006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */;
 			productName = IPhoneDeviceReader;
 		};
-		8E09076A2FB900E5006B00D4 /* nonamecat-swift-commons */ = {
+		8E09078C2FBA02BB006B00D4 /* nonamecat-swift-commons */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E0907692FB900E5006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */;
+			package = 8E09078B2FBA02BB006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */;
 			productName = "nonamecat-swift-commons";
 		};
-		8E09076D2FB90139006B00D4 /* CryptoSwift */ = {
+		8E09078F2FBA02F0006B00D4 /* CryptoSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8E09076C2FB90139006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			package = 8E09078E2FBA02F0006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -1,1 +1,0 @@
-ABC="";while [[ $ABC != *"Pod installation complete"* ]]; do pod update;ABC=`pod update`;sleep 2; done
