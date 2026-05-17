@@ -36,10 +36,6 @@
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
 		8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E08D86F25DB6932009A365F /* TextListComboController.swift */; };
-		8E0907752FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */; };
-		8E0907762FB90FDF006B00D4 /* SwiftyGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */; };
-		8E0907772FB90FDF006B00D4 /* NSImage+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */; };
-		8E0907782FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */; };
 		8E09077B2FBA020C006B00D4 /* LoggerFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09077A2FBA020C006B00D4 /* LoggerFactory */; };
 		8E09077E2FBA0224006B00D4 /* PostgresModelFactory in Frameworks */ = {isa = PBXBuildFile; productRef = 8E09077D2FBA0224006B00D4 /* PostgresModelFactory */; };
 		8E0907812FBA0246006B00D4 /* DiskUtilInfoReader in Frameworks */ = {isa = PBXBuildFile; productRef = 8E0907802FBA0246006B00D4 /* DiskUtilInfoReader */; };
@@ -89,6 +85,7 @@
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
 		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
 		8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B06B21792EDC00646EA5 /* CustomRowView.swift */; };
+		8E3ACB0D2FBA10E0005E8B46 /* SwiftyGifMac in Frameworks */ = {isa = PBXBuildFile; productRef = 8E3ACB0C2FBA10E0005E8B46 /* SwiftyGifMac */; };
 		8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */; };
 		8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */; };
 		8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */; };
@@ -451,10 +448,6 @@
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
 		8E08D86F25DB6932009A365F /* TextListComboController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListComboController.swift; sourceTree = "<group>"; };
-		8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+SwiftyGif.swift"; sourceTree = "<group>"; };
-		8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+SwiftyGif.swift"; sourceTree = "<group>"; };
-		8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcAssociatedWeakObject.swift; sourceTree = "<group>"; };
-		8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyGifManager.swift; sourceTree = "<group>"; };
 		8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -814,6 +807,7 @@
 				8E09078D2FBA02BB006B00D4 /* nonamecat-swift-commons in Frameworks */,
 				8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */,
 				8E0907902FBA02F0006B00D4 /* CryptoSwift in Frameworks */,
+				8E3ACB0D2FBA10E0005E8B46 /* SwiftyGifMac in Frameworks */,
 				8E0907842FBA0259006B00D4 /* SharedDeviceLib in Frameworks */,
 				8E09077E2FBA0224006B00D4 /* PostgresModelFactory in Frameworks */,
 				8E0907872FBA026D006B00D4 /* AndroidDeviceReader in Frameworks */,
@@ -924,17 +918,6 @@
 				8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */,
 			);
 			path = MainMenu;
-			sourceTree = "<group>";
-		};
-		8E0907702FB90FBB006B00D4 /* SwiftyGifMac */ = {
-			isa = PBXGroup;
-			children = (
-				8E0907712FB90FDF006B00D4 /* NSImage+SwiftyGif.swift */,
-				8E0907722FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift */,
-				8E0907732FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift */,
-				8E0907742FB90FDF006B00D4 /* SwiftyGifManager.swift */,
-			);
-			path = SwiftyGifMac;
 			sourceTree = "<group>";
 		};
 		8E0AFA30208BDEA000CE8B68 = {
@@ -1521,7 +1504,6 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
-				8E0907702FB90FBB006B00D4 /* SwiftyGifMac */,
 				8E7D4F842D1DD55800EC77F8 /* DSFPasswordButton.swift */,
 				8E7D4F822D1DD52500EC77F8 /* DSFSecureTextField.swift */,
 				5C511756297C3AA500F64CF6 /* FontAwesome */,
@@ -1880,6 +1862,7 @@
 				8E0907882FBA029F006B00D4 /* XCRemoteSwiftPackageReference "IPhoneDeviceReader" */,
 				8E09078B2FBA02BB006B00D4 /* XCRemoteSwiftPackageReference "nonamecat-swift-commons" */,
 				8E09078E2FBA02F0006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+				8E3ACB0B2FBA10E0005E8B46 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */,
 			);
 			productRefGroup = 8E0AFA3A208BDEA000CE8B68 /* Products */;
 			projectDirPath = "";
@@ -2156,10 +2139,6 @@
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
 				8E3614FD2AC5933B001DF482 /* Words+People.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
-				8E0907752FB90FDF006B00D4 /* NSImageView+SwiftyGif.swift in Sources */,
-				8E0907762FB90FDF006B00D4 /* SwiftyGifManager.swift in Sources */,
-				8E0907772FB90FDF006B00D4 /* NSImage+SwiftyGif.swift in Sources */,
-				8E0907782FB90FDF006B00D4 /* ObjcAssociatedWeakObject.swift in Sources */,
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
@@ -2700,6 +2679,14 @@
 				minimumVersion = 1.10.0;
 			};
 		};
+		8E3ACB0B2FBA10E0005E8B46 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kelvinjjwong/SwiftyGifMac";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.12;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2742,6 +2729,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8E09078E2FBA02F0006B00D4 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
+		};
+		8E3ACB0C2FBA10E0005E8B46 /* SwiftyGifMac */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E3ACB0B2FBA10E0005E8B46 /* XCRemoteSwiftPackageReference "SwiftyGifMac" */;
+			productName = SwiftyGifMac;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

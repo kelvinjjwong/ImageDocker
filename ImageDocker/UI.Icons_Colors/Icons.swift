@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-//import SwiftyGifMac
+import SwiftyGifMac
 
 struct Icons {
     static func get(name:String) -> NSImage {

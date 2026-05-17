@@ -1,5 +1,5 @@
 {
-  "originHash" : "a41eca4edb32d1be3b9101738758604fad091f1b1c99bbe73ace8321e5985abe",
+  "originHash" : "3595202f38a1ed3c78406f020cc46b6081c5de3d696cf5aea86e5ed976796c30",
   "pins" : [
     {
       "identity" : "androiddevicereader",
@@ -98,6 +98,15 @@
       "state" : {
         "revision" : "0566d80d3095678bed09336ff3109ea3988c2d86",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "swiftygifmac",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kelvinjjwong/SwiftyGifMac",
+      "state" : {
+        "revision" : "07d76bb4fb32505fb60724f6cf006a75afc54ab0",
+        "version" : "5.4.12"
       }
     }
   ],
